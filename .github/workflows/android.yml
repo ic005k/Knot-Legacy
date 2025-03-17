@@ -1,17 +1,13 @@
-# 文件名: .github/workflows/android-qt.yml
-name: Android Qt Build
+name: Qt Android CI
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 env:
-  QT_VERSION: "6.7.0"           # 使用的Qt版本
-  ANDROID_API: 33               # Android API Level
-  BUILD_DIR: "android-build"    # 构建目录
-  NDK_VERSION: "25.1.8937393"   # NDK版本
+  QT_VERSION: "6.7.0"
+  ANDROID_API: 33
+  NDK_VERSION: "25.1.8937393"
 
 jobs:
   build:
@@ -22,32 +18,28 @@ jobs:
     # ----------------------------------
     # 1. 代码检出
     # ----------------------------------
-    - name: Checkout repository
+    - name: Checkout code
       uses: actions/checkout@v4
       with:
         submodules: recursive
 
     # ----------------------------------
-    # 2. 安装Qt环境
+    # 2. 安装Qt（使用直接镜像参数）
     # ----------------------------------
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.10"
-
     - name: Install Qt with mirror
       run: |
         pip install aqtinstall==3.1.9
-        aqt config --base-url https://mirrors.ustc.edu.cn/qtproject
-        aqt install-qt linux android ${{ env.QT_VERSION }} \
+        aqt install-qt \
+          linux android ${{ env.QT_VERSION }} \
           --outputdir /opt/qt \
-          arm64_v8a \
-          -m qtbase qtmqtt qtquick3d
+          --architectures arm64_v8a \
+          --modules qtbase qtmqtt \
+          --mirror https://mirrors.ustc.edu.cn/qtproject
 
     # ----------------------------------
     # 3. 配置Android环境
     # ----------------------------------
-    - name: Setup Android SDK
+    - name: Setup Android
       uses: android-actions/setup-android@v2
       with:
         ndk-version: ${{ env.NDK_VERSION }}
@@ -57,42 +49,35 @@ jobs:
     # ----------------------------------
     # 4. 环境变量配置
     # ----------------------------------
-    - name: Set environment variables
+    - name: Configure environment
       shell: bash
       run: |
-        echo "QT_ROOT=/opt/qt/${{ env.QT_VERSION }}/android_arm64_v8a" >> $GITHUB_ENV
+        echo "QT_DIR=/opt/qt/${{ env.QT_VERSION }}/android_arm64_v8a" >> $GITHUB_ENV
         echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
-        echo "ANDROID_NDK_ROOT=$ANDROID_NDK_ROOT" >> $GITHUB_ENV
-        echo "PATH=$QT_ROOT/bin:$PATH" >> $GITHUB_ENV
+        echo "PATH=$QT_DIR/bin:$PATH" >> $GITHUB_ENV
 
     # ----------------------------------
     # 5. 项目构建
     # ----------------------------------
-    - name: Configure project
-      working-directory: ./android  # 如果项目在子目录需要修改
+    - name: Build project
+      working-directory: ./android  # 根据实际项目路径调整
       run: |
-        mkdir -p ${{ env.BUILD_DIR }}
-        cd ${{ env.BUILD_DIR }}
+        mkdir build && cd build
         qt-cmake .. \
           -DCMAKE_SYSTEM_NAME=Android \
-          -DCMAKE_ANDROID_ARCH_ABI=arm64-v8a \
-          -DCMAKE_ANDROID_NDK=$ANDROID_NDK_ROOT
-
-    - name: Build project
-      working-directory: ./android/${{ env.BUILD_DIR }}
-      run: cmake --build . --parallel 4
+          -DCMAKE_ANDROID_ARCH_ABI=arm64-v8a
+        cmake --build . -j4
 
     # ----------------------------------
     # 6. 生成APK
     # ----------------------------------
-    - name: Package APK
-      working-directory: ./android/${{ env.BUILD_DIR }}
+    - name: Generate APK
+      working-directory: ./android/build
       run: |
         androiddeployqt \
           --input android-libKnot-deployment-settings.json \
-          --output android-output \
-          --gradle \
-          --verbose
+          --output apk-output \
+          --gradle
 
     # ----------------------------------
     # 7. 上传产物
@@ -101,23 +86,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: android-apk
-        path: |
-          android/${{ env.BUILD_DIR }}/android-output/build/outputs/apk/debug/*.apk
-          android/${{ env.BUILD_DIR }}/android-output/build/outputs/apk/release/*.apk
-
-    # ----------------------------------
-    # 8. 缓存优化 (可选)
-    # ----------------------------------
-    - name: Cache Qt
-      uses: actions/cache@v3
-      with:
-        path: /opt/qt
-        key: qt-${{ env.QT_VERSION }}-android-arm64
-
-    - name: Cache Android SDK
-      uses: actions/cache@v3
-      with:
-        path: |
-          ${{ env.ANDROID_SDK_ROOT }}
-          ${{ env.ANDROID_NDK_ROOT }}
-        key: android-sdk-${{ runner.os }}
+        path: android/build/apk-output/build/outputs/apk/debug/*.apk
