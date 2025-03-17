@@ -14,45 +14,78 @@ jobs:
     timeout-minutes: 40
 
     steps:
-    - name: Checkout code
+    # ----------------------------------
+    # 1. 代码检出（包含子模块）
+    # ----------------------------------
+    - name: Checkout repository
       uses: actions/checkout@v4
       with:
         submodules: recursive
 
-    - name: Install Qt dependencies
-      run: |
-        sudo apt-get -qq install libgl1-mesa-dev
-
-    - name: Install Qt (correct syntax)
+    # ----------------------------------
+    # 2. 安装Qt（最新正确语法）
+    # ----------------------------------
+    - name: Install Qt with correct syntax
       run: |
         pip install aqtinstall==3.2.0
+        
+        # 新版本参数格式
         aqt install-qt linux android ${{ env.QT_VERSION }} \
+          android_arm64_v8a \  # 架构作为位置参数
           --outputdir /opt/qt \
-          --architectures android_arm64_v8a \
-          -m qtbase qtsvg
+          -m qtbase qtsvg \
+          --autodesktop
 
-    - name: Setup Android NDK
+    # ----------------------------------
+    # 3. 配置Android环境
+    # ----------------------------------
+    - name: Setup Android SDK
       uses: android-actions/setup-android@v2
       with:
-        ndk-version: 25.1.8937393
+        ndk-version: "25.1.8937393"  # Qt 6.7官方验证版本
         sdk-platform: android-${{ env.ANDROID_API }}
+        sdk-build-tools: "34.0.0"
 
-    - name: Configure build environment
+    # ----------------------------------
+    # 4. 环境变量配置
+    # ----------------------------------
+    - name: Configure environment
       shell: bash
       run: |
-        echo "QT_DIR=/opt/qt/${{ env.QT_VERSION }}/android_arm64_v8a" >> $GITHUB_ENV
-        echo "PATH=$QT_DIR/bin:$PATH" >> $GITHUB_ENV
+        QT_PATH="/opt/qt/${{ env.QT_VERSION }}/android_arm64_v8a"
+        echo "QT_DIR=$QT_PATH" >> $GITHUB_ENV
+        echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
+        echo "PATH=$QT_PATH/bin:$PATH" >> $GITHUB_ENV
 
-    - name: Build project
+    # ----------------------------------
+    # 5. 项目构建（qmake流程）
+    # ----------------------------------
+    - name: Build with qmake
       run: |
         qmake Knot.pro -spec android-clang \
           "ANDROID_ABIS=arm64-v8a" \
           "ANDROID_MIN_SDK_VERSION=$ANDROID_API"
+        
         make -j4
-        androiddeployqt --input android-Knot-deployment-settings.json --output build
+        androiddeployqt \
+          --input android-Knot-deployment-settings.json \
+          --output build \
+          --gradle
 
+    # ----------------------------------
+    # 6. 上传APK产物
+    # ----------------------------------
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: android-app
+        name: knot-apk
         path: build/build/outputs/apk/debug/*.apk
+
+    # ----------------------------------
+    # 7. 缓存优化
+    # ----------------------------------
+    - name: Cache Qt
+      uses: actions/cache@v3
+      with:
+        path: /opt/qt
+        key: qt-${{ env.QT_VERSION }}-android-arm64
