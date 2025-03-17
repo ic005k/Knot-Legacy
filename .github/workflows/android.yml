@@ -1,71 +1,55 @@
-name: Android CI with Secure Signing
+name: Android Qt CI
 
 on: [push]
 
-env:
-  QT_VERSION: '6.7.0'
-  ANDROID_ARCH: 'android_arm64_v8a'
-
 jobs:
   build:
-    name: Build and Sign
     runs-on: windows-latest
-    environment: production
+    timeout-minutes: 30
 
     steps:
     - name: Checkout
       uses: actions/checkout@v4
 
-    
+    # 使用Python 3.10+环境
+    - name: Setup Python 3.10
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
 
-    # 安卓环境
-    - name: Setup Android
+    # 安装兼容版本的aqtinstall
+    - name: Install Qt Tools
+      run: |
+        python -m pip install "aqtinstall<3.2.0"
+        aqt install-qt windows android 6.7.0 android_arm64_v8a --autodesktop
+
+    # 配置NDK路径
+    - name: Setup Android NDK
       uses: android-actions/setup-android@v2
       with:
         ndk-version: '27.2.12479018'
-        sdk-platform: 'android-34'
 
-    # Qt安装
-    - name: Install Qt
-      run: |
-        python -m pip install aqtinstall
-        aqt install-qt windows android ${{ env.QT_VERSION }} ${{ env.ANDROID_ARCH }}
-        aqt install-tool windows desktop tools_mingw
-
-    # 构建签名
-    - name: Build with Signing
+    # 构建步骤
+    - name: Build Project
       shell: pwsh
+      env:
+        QTDIR: C:\Qt\6.7.0\android_arm64_v8a
+        ANDROID_NDK_ROOT: ${{ env.ANDROID_NDK_ROOT }}
       run: |
-        $qtBin = "C:\Qt\${{ env.QT_VERSION }}\${{ env.ANDROID_ARCH }}\bin"
-        
-        # 生成Makefile
-        & "$qtBin\qmake" -spec android-clang "CONFIG += release" Knot.pro
-        
-        # 编译
-        jom -j 8 install INSTALL_ROOT=android-build
-        
-        # 签名部署
-        & "$qtBin\androiddeployqt" `
-          --gradle `
-          --release `
-          --input android-libKnot.so-deployment-settings.json `
-          --output android-build `
-          --sign "$env:KEYSTORE_PATH" `
-          --storepass "${{ secrets.KEYSTORE_PASSWORD }}" `
-          --alias "${{ secrets.KEY_ALIAS }}" `
-          --keypass "${{ secrets.KEY_PASSWORD }}"
+        # 验证工具链
+        Get-Command qmake
+        Get-Command clang++
 
-    # 上传产物 (修复v3到v4版本问题)
-    - name: Upload Artifact
+        # 生成构建文件
+        qmake -spec android-clang "CONFIG += release" Knot.pro
+        
+        # 使用ninja替代jom
+        cmake --build . --parallel 8
+
+    # 产物上传
+    - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: signed-apk
+        name: android-build
         path: |
-          android-build/build/outputs/apk/release/*.apk
-        retention-days: 3
-
-    # 安全清理
-    - name: Clean Keystore
-      if: always()
-      shell: pwsh
-      run: Remove-Item -Path $env:KEYSTORE_PATH -Force
+          android-build/outputs/apk/*.apk
