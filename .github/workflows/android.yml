@@ -16,15 +16,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    # 密钥库解码 (安全处理)
-    - name: Prepare Keystore
-      shell: pwsh
-      run: |
-        $keystorePath = "release_${env:GITHUB_RUN_NUMBER}.jks"
-        [Convert]::FromBase64String("${{ secrets.ANDROID_KEYSTORE_B64 }}") | Set-Content $keystorePath -Encoding Byte
-        echo "KEYSTORE_PATH=$keystorePath" >> $env:GITHUB_ENV
-      env:
-        ANDROID_KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE }}
+    
 
     # 安卓环境
     - name: Setup Android
