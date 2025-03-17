@@ -1,4 +1,4 @@
-name: Android Qt Build
+name: Android Qt Build (64-bit)
 
 on:
   push:
@@ -7,16 +7,16 @@ on:
     branches: [ main ]
 
 env:
-  QT_VERSION: 5.15.2
-  ANDROID_API: android-30
-  NDK_VERSION: 21.3.6528147
+  QT_VERSION: 5.15.13
+  ANDROID_API: android-33
+  NDK_VERSION: 25.2.9519653
   QT_HOST: linux
   QT_TARGET: android
-  QT_ARCH: android_armv7
+  QT_ARCH: android_arm64_v8a
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
     - name: Checkout code
@@ -31,10 +31,10 @@ jobs:
     - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libgl1-mesa-dev
+        sudo apt-get install -y libgl1-mesa-dev ninja-build
 
     - name: Install aqtinstall
-      run: pip install aqtinstall==2.1.0
+      run: pip install aqtinstall==3.1.11
 
     - name: Install Qt and Android components
       run: |
@@ -44,13 +44,13 @@ jobs:
           --outputdir /opt/qt
 
         aqt install-sdk --rootdir /opt/android-sdk ${{ env.QT_HOST }} ${{ env.QT_TARGET }} \
-          tools platform-tools platform:${{ env.ANDROID_API }} ndk:${{ env.NDK_VERSION }} build-tools:30.0.3
+          tools platform-tools platform:${{ env.ANDROID_API }} ndk:${{ env.NDK_VERSION }} build-tools:34.0.0
 
     - name: Setup environment
       run: |
         echo "ANDROID_SDK_ROOT=/opt/android-sdk" >> $GITHUB_ENV
         echo "ANDROID_NDK_ROOT=/opt/android-sdk/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
-        echo "PATH=$PATH:/opt/qt/${{ env.QT_VERSION }}/android_armv7/bin" >> $GITHUB_ENV
+        echo "PATH=$PATH:/opt/qt/${{ env.QT_VERSION }}/android_arm64_v8a/bin" >> $GITHUB_ENV
 
     - name: Generate debug keystore
       if: github.event_name == 'push'
@@ -64,8 +64,8 @@ jobs:
       run: |
         mkdir build
         cd build
-        qmake ../Knot.pro -spec android-clang CONFIG+=release ANDROID_ABIS=armeabi-v7a
-        make -j2
+        qmake ../Knot.pro -spec android-clang CONFIG+=release ANDROID_ABIS=arm64-v8a
+        make -j4
         make apk
 
     - name: Sign APK
@@ -86,7 +86,7 @@ jobs:
             android-build-release-unsigned.apk \
             "$KEY_ALIAS"
           
-          $ANDROID_SDK_ROOT/build-tools/30.0.3/zipalign -v 4 android-build-release-unsigned.apk Knot-signed.apk
+          $ANDROID_SDK_ROOT/build-tools/34.0.0/zipalign -v 4 android-build-release-unsigned.apk Knot-signed.apk
         else
           echo "Signing with debug keystore"
           cd build/android-build/build/outputs/apk/release/
@@ -99,9 +99,9 @@ jobs:
         fi
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: Android APK
+        name: Android-64-APK
         path: |
           build/android-build/build/outputs/apk/release/*-signed.apk
           build/android-build/build/outputs/apk/release/android-build-release-unsigned.apk
