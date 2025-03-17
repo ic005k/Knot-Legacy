@@ -7,7 +7,6 @@ on:
 env:
   QT_VERSION: "6.7.0"
   ANDROID_API: 33
-  NDK_VERSION: "25.1.8937393"
 
 jobs:
   build:
@@ -20,33 +19,40 @@ jobs:
       with:
         submodules: recursive
 
-    # 使用官方源的标准安装方式
-    - name: Install Qt
+    - name: Install Qt dependencies
+      run: |
+        sudo apt-get -qq install libgl1-mesa-dev
+
+    - name: Install Qt (correct syntax)
       run: |
         pip install aqtinstall==3.2.0
-        aqt install-qt linux android $QT_VERSION \
+        aqt install-qt linux android ${{ env.QT_VERSION }} \
           --outputdir /opt/qt \
-          android_arm64_v8a \
-          -m qtbase qtsvg qtdeclarative
+          --architectures android_arm64_v8a \
+          -m qtbase qtsvg
 
-    - name: Setup Android
+    - name: Setup Android NDK
       uses: android-actions/setup-android@v2
       with:
-        ndk-version: ${{ env.NDK_VERSION }}
+        ndk-version: 25.1.8937393
         sdk-platform: android-${{ env.ANDROID_API }}
 
-    - name: Build with qmake
+    - name: Configure build environment
+      shell: bash
       run: |
-        export PATH="/opt/qt/$QT_VERSION/android_arm64_v8a/bin:$PATH"
+        echo "QT_DIR=/opt/qt/${{ env.QT_VERSION }}/android_arm64_v8a" >> $GITHUB_ENV
+        echo "PATH=$QT_DIR/bin:$PATH" >> $GITHUB_ENV
+
+    - name: Build project
+      run: |
         qmake Knot.pro -spec android-clang \
-          ANDROID_ABIS=arm64-v8a \
-          ANDROID_MIN_SDK_VERSION=$ANDROID_API
-        
+          "ANDROID_ABIS=arm64-v8a" \
+          "ANDROID_MIN_SDK_VERSION=$ANDROID_API"
         make -j4
-        androiddeployqt --input android-Knot-deployment-settings.json --output build --gradle
+        androiddeployqt --input android-Knot-deployment-settings.json --output build
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: knot-apk
+        name: android-app
         path: build/build/outputs/apk/debug/*.apk
