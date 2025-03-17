@@ -1,55 +1,76 @@
-name: Android Qt CI
+name: Android Qt Build
 
 on: [push]
 
 jobs:
   build:
     runs-on: windows-latest
-    timeout-minutes: 30
+    timeout-minutes: 25
 
     steps:
-    - name: Checkout
+    - name: Checkout code
       uses: actions/checkout@v4
 
-    # 使用Python 3.10+环境
-    - name: Setup Python 3.10
+    # 使用Python 3.10环境
+    - name: Setup Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
-    # 安装兼容版本的aqtinstall
-    - name: Install Qt Tools
+    # 安装Qt (指定完整路径)
+    - name: Install Qt
       run: |
-        python -m pip install "aqtinstall<3.2.0"
-        aqt install-qt windows android 6.7.0 android_arm64_v8a --autodesktop
+        python -m pip install "aqtinstall==3.1.0"
+        aqt install-qt windows android 6.7.0 android_arm64_v8a \
+          --outputdir "C:/Qt" \
+          --autodesktop \
+          -m qtcharts qtmqtt
 
-    # 配置NDK路径
-    - name: Setup Android NDK
+    # 配置环境变量
+    - name: Setup Paths
+      shell: pwsh
+      run: |
+        $qtPath = "C:\Qt\6.7.0\android_arm64_v8a"
+        $qtBinPath = "$qtPath\bin"
+        
+        # 永久添加PATH
+        $env:PATH = "$qtBinPath;" + $env:PATH
+        echo "QTDIR=$qtPath" >> $env:GITHUB_ENV
+        echo "PATH=$env:PATH" >> $env:GITHUB_ENV
+        
+        # 验证安装
+        echo "=== Qt目录结构 ==="
+        ls "$qtPath/bin"
+        where.exe qmake
+
+    # 安装Android NDK
+    - name: Setup Android
       uses: android-actions/setup-android@v2
       with:
         ndk-version: '27.2.12479018'
 
     # 构建步骤
-    - name: Build Project
+    - name: Build with Qt
       shell: pwsh
-      env:
-        QTDIR: C:\Qt\6.7.0\android_arm64_v8a
-        ANDROID_NDK_ROOT: ${{ env.ANDROID_NDK_ROOT }}
       run: |
-        # 验证工具链
-        Get-Command qmake
-        Get-Command clang++
-
-        # 生成构建文件
-        qmake -spec android-clang "CONFIG += release" Knot.pro
+        # 显式使用完整路径
+        $qmake = "C:\Qt\6.7.0\android_arm64_v8a\bin\qmake"
         
-        # 使用ninja替代jom
-        cmake --build . --parallel 8
+        # 生成Makefile
+        & $qmake -spec android-clang "CONFIG += release" Knot.pro
+        
+        # 使用jom编译
+        jom -j 8 install INSTALL_ROOT=android-build
+        
+        # 部署APK
+        & "C:\Qt\6.7.0\android_arm64_v8a\bin\androiddeployqt" \
+          --gradle \
+          --release \
+          --input android-libKnot.so-deployment-settings.json \
+          --output android-build
 
-    # 产物上传
-    - name: Upload APK
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: android-build
-        path: |
-          android-build/outputs/apk/*.apk
+        name: android-apk
+        path: android-build/build/outputs/apk/release/*.apk
