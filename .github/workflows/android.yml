@@ -39,7 +39,7 @@ jobs:
     - name: Install Qt and Android components
       run: |
         aqt install-qt ${{ env.QT_HOST }} ${{ env.QT_TARGET }} ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
-          -m qtbase qtsvg qtdeclarative qtquickcontrols2 qtgraphicaleffects \
+          --autodesktop \
           --outputdir /opt/qt
 
         aqt install-sdk --rootdir /opt/android-sdk ${{ env.QT_HOST }} ${{ env.QT_TARGET }} \
