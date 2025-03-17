@@ -1,65 +1,103 @@
-name: Android Build
+name: Android CI with Signing
 
-on:
-  push:
-    branches:
-      - main  # 根据实际情况修改分支名称
+on: [push, pull_request]
+
+env:
+  KEYSTORE_NAME: release.jks
+  APK_NAME: KnotApp
 
 jobs:
-  build-android:
+  build:
+    name: Qt Build & Sign
     runs-on: windows-latest
+    environment: production
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
+    # 密钥库解码（安全处理）
+    - name: Decode Keystore
+      id: sign_apk
+      shell: pwsh
+      run: |
+        $keystoreB64 = "${{ secrets.ANDROID_KEYSTORE }}"
+        $bytes = [Convert]::FromBase64String($keystoreB64)
+        [IO.File]::WriteAllBytes("$env:KEYSTORE_NAME", $bytes)
+        echo "KEYSTORE_PATH=$env:KEYSTORE_NAME" >> $env:GITHUB_ENV
+      env:
+        ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
 
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v3
-        with:
-          version: '5.15.2'
-          target: 'android'
-          arch: 'android_armv7'  # 根据实际需求选择架构
+    # 基础环境配置
+    - name: Setup environments
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: '11'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v2
+    - name: Install Android
+      uses: android-actions/setup-android@v2
+      with:
+        ndk-version: '27.2.12479018'
+        sdk-platform: 'android-34'
 
-      - name: Configure Qt project
-        run: |
-          qmake -spec android-clang "CONFIG+=qtquickcompiler" Knot.pro
-        shell: cmd
+    # Qt工具链安装
+    - name: Install Qt
+      run: |
+        python -m pip install aqtinstall
+        aqt install-qt windows android 6.7.0 android_arm64_v8a --autodesktop
+        aqt install-tool windows desktop tools_mingw
 
-      - name: Build project
-        run: |
-          nmake
-        shell: cmd
+    # 路径配置
+    - name: Configure Paths
+      shell: pwsh
+      run: |
+        $qtPath = "C:\Qt\6.7.0\android_arm64_v8a"
+        echo "QTDIR=$qtPath" >> $env:GITHUB_ENV
+        echo "PATH=$env:PATH;$qtPath\bin;C:\Qt\Tools\mingw1120_64\bin" >> $env:GITHUB_ENV
 
-      - name: Sign APK
-        env:
-          KEYSTORE_PATH: 'your_keystore.jks'  # 替换为你的密钥库路径
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}  # 在 GitHub 仓库的 Secrets 中设置
-          KEY_ALIAS: 'your_key_alias'  # 替换为你的密钥别名
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}  # 在 GitHub 仓库的 Secrets 中设置
-          APK_PATH: 'path/to/your/app-debug.apk'  # 替换为生成的 APK 路径
-        run: |
-          jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore %KEYSTORE_PATH% -storepass %KEYSTORE_PASSWORD% -keypass %KEY_PASSWORD% %APK_PATH% %KEY_ALIAS%
-        shell: cmd
+    # 构建阶段
+    - name: Build APK
+      shell: pwsh
+      run: |
+        qmake -spec android-clang "CONFIG += release" Knot.pro
+        jom -j 8 install INSTALL_ROOT=android-build
+        
+        # 带签名参数的部署命令
+        $signParams = @(
+          "--sign",
+          "--keystore $env:KEYSTORE_PATH",
+          "--storepass ${{ secrets.KEYSTORE_PASSWORD }}",
+          "--alias ${{ secrets.KEY_ALIAS }}",
+          "--keypass ${{ secrets.KEY_PASSWORD }}"
+        ) -join ' '
 
-      - name: Align APK
-        env:
-          APK_PATH: 'path/to/your/app-debug.apk'  # 替换为生成的 APK 路径
-          ALIGNED_APK_PATH: 'path/to/your/app-debug-aligned.apk'  # 替换为对齐后的 APK 路径
-        run: |
-          zipalign -v 4 %APK_PATH% %ALIGNED_APK_PATH%
-        shell: cmd
+        C:\Qt\6.7.0\android_arm64_v8a\bin\androiddeployqt `
+          --gradle `
+          --release `
+          --input android-libKnot.so-deployment-settings.json `
+          --output android-build `
+          $signParams
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v3
-        with:
-          name: android-apk
-          path: path/to/your/app-debug-aligned.apk  # 替换为对齐后的 APK 路径
+    # 重命名带版本号的APK
+    - name: Rename Artifact
+      shell: pwsh
+      run: |
+        $version = (Get-Content package.json | ConvertFrom-Json).version
+        $apk = Get-Item "android-build/build/outputs/apk/release/*.apk"
+        Rename-Item $apk.FullName -NewName "$env:APK_NAME-v$version.apk"
+
+    # 安全上传
+    - name: Upload Signed APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: signed-apk
+        path: |
+          android-build/build/outputs/apk/release/*.apk
+          $env:KEYSTORE_PATH
+        retention-days: 1
+
+    # 自动清理密钥库
+    - name: Cleanup Keystore
+      if: always()
+      run: del $env:KEYSTORE_NAME
