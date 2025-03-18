@@ -44,6 +44,7 @@ class CloudBackup : public QDialog {
   QString aesDecrypt(QString cipherText, QByteArray key, QByteArray iv);
 
   QString getWebDAVArgument();
+  void uploadFilesToWebDAV(QStringList files);
   signals:
 
  protected:

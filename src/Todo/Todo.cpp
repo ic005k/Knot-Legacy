@@ -14,6 +14,8 @@ extern QString iniFile, iniDir;
 extern bool loading, isBreak, zh_cn, isDark, isAndroid;
 extern int fontSize;
 
+bool isNeedSync = false;
+
 Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
   ui->setupUi(this);
 
@@ -192,10 +194,9 @@ void Todo::closeTodo() {
 
   if (isNeedSync && mw_one->ui->chkAutoSync->isChecked()) {
     QString todoFile = iniDir + "todo.ini";
-    QString url = mw_one->m_CloudBackup->getWebDAVArgument();
-    mw_one->m_CloudBackup->createDirectory(url, "KnotData/");
-    mw_one->m_CloudBackup->uploadFileToWebDAV(
-        url, todoFile, "KnotData/" + QFileInfo(todoFile).fileName());
+    QStringList files;
+    files.append(todoFile);
+    mw_one->m_CloudBackup->uploadFilesToWebDAV(files);
     isNeedSync = false;
   }
 }

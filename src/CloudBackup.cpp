@@ -628,3 +628,54 @@ QString CloudBackup::aesDecrypt(QString cipherText, QByteArray key,
 
   return QString::fromUtf8(decrypted);
 }
+
+void CloudBackup::uploadFilesToWebDAV(QStringList files) {
+  QNetworkAccessManager *manager = new QNetworkAccessManager();
+  QString url = getWebDAVArgument();
+
+  foreach (QString m_file, files) {
+    QString localFile = m_file;
+    QString remoteFile = m_file;
+    remoteFile = remoteFile.replace(iniDir, "KnotData/");
+    qDebug() << "remoteFile=" << remoteFile;
+    QString remoteUrl = url + remoteFile;
+
+    QString remotePath = QFileInfo(m_file).path() + "/";
+    remotePath = remotePath.replace(iniDir, "KnotData/");
+    qDebug() << "remotePath=" << remotePath;
+    createDirectory(url, remotePath);
+
+    QFile *file = new QFile(localFile);
+    if (!file->open(QIODevice::ReadOnly)) {
+      qDebug() << "Failed to open file:" << localFile;
+      delete file;
+      continue;
+    }
+
+    QNetworkRequest request;
+    request.setUrl(QUrl(remoteUrl));
+    QString auth = QString("%1:%2").arg(USERNAME).arg(APP_PASSWORD);
+    request.setRawHeader("Authorization",
+                         "Basic " + auth.toLocal8Bit().toBase64());
+
+    QNetworkReply *reply = manager->put(request, file);
+    file->setParent(reply);  // 确保文件在请求完成后被释放
+
+    // 可选：跟踪上传进度
+    QObject::connect(reply, &QNetworkReply::uploadProgress,
+                     [=](qint64 bytesSent, qint64 bytesTotal) {
+                       qDebug() << "Uploading" << m_file << bytesSent << "/"
+                                << bytesTotal;
+                     });
+
+    // 处理完成/错误
+    QObject::connect(reply, &QNetworkReply::finished, [=]() {
+      if (reply->error() == QNetworkReply::NoError) {
+        qDebug() << "Upload succeeded:" << m_file;
+      } else {
+        qDebug() << "Error uploading" << m_file << ":" << reply->errorString();
+      }
+      reply->deleteLater();
+    });
+  }
+}

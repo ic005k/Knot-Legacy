@@ -13,7 +13,7 @@
 extern MainWindow *mw_one;
 extern Method *m_Method;
 extern QString iniFile, iniDir, privateDir, currentMDFile, imgFileName;
-extern bool isAndroid, isIOS, isDark;
+extern bool isAndroid, isIOS, isDark, isNeedSync;
 extern int fontSize;
 extern QRegularExpression regxNumber;
 
@@ -294,6 +294,7 @@ void Notes::saveMainNotes() {
 
   isNeedSave = false;
   isTextChange = false;
+  isNeedSync = true;
 }
 
 void Notes::init_MainNotes() { loadNoteToQML(); }
@@ -1340,6 +1341,14 @@ void Notes::closeEvent(QCloseEvent *event) {
         new_title = strNoteText;
       mw_one->ui->btnRename->click();
     }
+  }
+
+  if (isNeedSync && mw_one->ui->chkAutoSync->isChecked()) {
+    QStringList files;
+    files.append(iniDir + "mainnotes.ini");
+    files.append(currentMDFile);
+    mw_one->m_CloudBackup->uploadFilesToWebDAV(files);
+    isNeedSync = false;
   }
 }
 

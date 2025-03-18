@@ -23,7 +23,6 @@ class Todo : public QDialog {
   Ui::Todo *ui;
   ~Todo();
 
-  bool isNeedSync = false;
   int nInterval = 500;
   QTimer *tmePlayProgress;
   bool isNeedSave = false;
@@ -137,7 +136,7 @@ class Todo : public QDialog {
   void goCurrentTodoItem(QString curItem);
   void addToList(QString str);
   void closeTodo();
-  private slots:
+ private slots:
   void on_ShowRecordTime();
 
   void on_ShowPlayProgress();
