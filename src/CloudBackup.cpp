@@ -712,14 +712,23 @@ WebDavHelper *listWebDavFiles(const QString &url, const QString &username,
   // 构造请求
   QNetworkRequest request;
   request.setUrl(QUrl(url));
-  request.setRawHeader("Depth", "1");
-  request.setRawHeader("Brief", "t");  // 关键：坚果云需要此头
+  request.setRawHeader("Depth", "1");  // 仅获取当前目录的直接子项
+  // request.setRawHeader("Depth",
+  //                      "infinity");  // 递归获取子目录，但有的webdav不支持
+  if (url.contains(mw_one->ui->editWebDAV->text().trimmed()))
+    request.setRawHeader("Brief", "t");  // 坚果云需要此头
   request.setHeader(QNetworkRequest::ContentTypeHeader,
                     "text/xml; charset=utf-8");
 
-  // 严格格式的XML
-  const QByteArray body =
-      R"(<?xml version="1.0" encoding="utf-8"?><d:propfind xmlns:d="DAV:"><d:prop><d:displayname/><d:getlastmodified/><d:resourcetype/></d:prop></d:propfind>)";
+  // 严格格式的XML请求体
+  const QByteArray body = R"(<?xml version="1.0" encoding="utf-8"?>
+        <d:propfind xmlns:d="DAV:">
+            <d:prop>
+                <d:displayname/>
+                <d:getlastmodified/>
+                <d:resourcetype/>
+            </d:prop>
+        </d:propfind>)";
 
   // 发送请求
   QNetworkReply *reply = manager->sendCustomRequest(request, "PROPFIND", body);
@@ -734,39 +743,6 @@ WebDavHelper *listWebDavFiles(const QString &url, const QString &username,
               .arg(reply->errorString());
       emit helper->errorOccurred(error);
     } else {
-      /*QList<QPair<QString, QDateTime>> files;
-      QXmlStreamReader xml(reply->readAll());
-
-      QString currentPath;
-      QDateTime currentModified;
-      bool isCollection = false;
-
-      while (!xml.atEnd()) {
-        xml.readNext();
-
-        if (xml.isStartElement()) {
-          if (xml.name() == QLatin1String("href")) {
-            currentPath = xml.readElementText();
-          } else if (xml.name() == QLatin1String("getlastmodified")) {
-            currentModified = QDateTime::fromString(
-                xml.readElementText(), "ddd, dd MMM yyyy hh:mm:ss 'GMT'");
-          } else if (xml.name() == QLatin1String("resourcetype")) {
-            isCollection = xml.readNextStartElement() &&
-                           xml.name() == QLatin1String("collection");
-          }
-        }
-
-        if (xml.isEndElement() && xml.name() == QLatin1String("response")) {
-          if (!currentPath.endsWith('/')) {  // 过滤目录自身
-            files.append({currentPath, currentModified});
-          }
-          currentPath.clear();
-          isCollection = false;
-        }
-      }
-
-      emit helper->listCompleted(files);*/
-
       QByteArray responseData = reply->readAll();
       QList<QPair<QString, QDateTime>> files =
           parseWebDavResponse(responseData);  // 调用解析函数
@@ -802,15 +778,20 @@ QList<QPair<QString, QDateTime>> parseWebDavResponse(const QByteArray &data) {
     if (xml.isStartElement()) {
       if (xml.name() == QLatin1String("href")) {
         currentHref = xml.readElementText();
+        // 规范化路径（去除URL编码）
+        currentHref = QUrl::fromPercentEncoding(currentHref.toUtf8());
       } else if (xml.name() == QLatin1String("getlastmodified")) {
-        currentModified = QDateTime::fromString(
-            xml.readElementText(), "ddd, dd MMM yyyy hh:mm:ss 'GMT'");
+        QString rawTime = xml.readElementText();
+        currentModified = QDateTime::fromString(rawTime, Qt::RFC2822Date);
+        if (!currentModified.isValid()) {
+          qWarning() << "时间解析失败:" << rawTime;
+        }
       } else if (xml.name() == QLatin1String("resourcetype")) {
-        // 深度解析资源类型
+        // 检测是否为目录
         while (xml.readNextStartElement()) {
           if (xml.name() == QLatin1String("collection")) {
             isDirectory = true;
-            xml.skipCurrentElement();  // 跳过子元素
+            xml.skipCurrentElement();
           }
         }
       }
@@ -818,12 +799,127 @@ QList<QPair<QString, QDateTime>> parseWebDavResponse(const QByteArray &data) {
 
     // 结束处理资源项
     if (xml.isEndElement() && xml.name() == QLatin1String("response")) {
-      // 排除目录项和根路径
-      if (!isDirectory && !currentHref.endsWith('/')) {
-        files.append({currentHref, currentModified});
+      // 排除目录项
+      if (!isDirectory && !currentHref.isEmpty()) {
+        files.append({currentHref, currentModified.toLocalTime()});
       }
     }
   }
 
   return files;
+}
+
+WebDavDownloader::WebDavDownloader(const QString &username,
+                                   const QString &password, QObject *parent)
+    : QObject(parent), m_username(username), m_password(password) {
+  // 连接认证信号
+  connect(&manager, &QNetworkAccessManager::authenticationRequired, this,
+          &WebDavDownloader::handleAuthentication);
+}
+
+void WebDavDownloader::downloadFiles(const QList<QString> &remotePaths,
+                                     const QString &localBaseDir,
+                                     int maxConcurrent) {
+  // 清空队列
+  downloadQueue.clear();
+  activeDownloads.clear();
+
+  // 初始化队列
+  for (const QString &remotePath : remotePaths) {
+    QString localPath = QDir(localBaseDir).absoluteFilePath(remotePath);
+    downloadQueue.enqueue({remotePath, localPath});
+  }
+
+  totalFiles = downloadQueue.size();
+  completedFiles = 0;
+  this->maxConcurrent = qMax(1, maxConcurrent);
+
+  // 启动初始下载
+  for (int i = 0; i < qMin(this->maxConcurrent, downloadQueue.size()); ++i) {
+    startNextDownload();
+  }
+}
+
+void WebDavDownloader::handleAuthentication(QNetworkReply *reply,
+                                            QAuthenticator *auth) {
+  auth->setUser(m_username);
+  auth->setPassword(m_password);
+}
+
+void WebDavDownloader::startNextDownload() {
+  if (downloadQueue.isEmpty()) return;
+
+  auto [remotePath, localPath] = downloadQueue.dequeue();
+
+  // 创建本地目录
+  QFileInfo fileInfo(localPath);
+  if (!QDir().mkpath(fileInfo.absolutePath())) {
+    qWarning() << "无法创建目录:" << fileInfo.absolutePath();
+    emit downloadFinished(false, "目录创建失败");
+    return;
+  }
+
+  // 构造请求URL
+  QUrl url("https://dav.jianguoyun.com/dav/" + remotePath);
+  if (!url.isValid()) {
+    qWarning() << "无效的URL:" << url.toString();
+    return;
+  }
+
+  QNetworkRequest request(url);
+  QNetworkReply *reply = manager.get(request);
+
+  // 记录活动下载
+  activeDownloads[reply] = localPath;
+
+  // 连接信号
+  connect(reply, &QNetworkReply::finished, this,
+          [this, reply]() { onDownloadFinished(reply); });
+  connect(reply, &QNetworkReply::downloadProgress, this,
+          [this, reply](qint64 bytesReceived, qint64 bytesTotal) {
+            emit progressChanged(completedFiles, totalFiles,
+                                 activeDownloads[reply]);
+          });
+
+  qDebug() << "开始下载:" << url.toString() << "->" << localPath;
+}
+
+void WebDavDownloader::onDownloadFinished(QNetworkReply *reply) {
+  QString localPath = activeDownloads.value(reply);
+  bool success = false;
+  QString error;
+
+  if (reply->error() == QNetworkReply::NoError) {
+    QFile file(localPath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+      file.write(reply->readAll());
+      file.close();
+      success = true;
+      emit fileSaved(localPath);
+      qDebug() << "文件保存成功:" << localPath;
+    } else {
+      error = QString("文件写入失败: %1").arg(file.errorString());
+    }
+  } else {
+    error = QString("网络错误: %1").arg(reply->errorString());
+  }
+
+  // 清理
+  activeDownloads.remove(reply);
+  reply->deleteLater();
+  completedFiles++;
+
+  // 进度更新
+  emit progressChanged(completedFiles, totalFiles, localPath);
+
+  // 启动下一个下载
+  if (!downloadQueue.isEmpty()) {
+    startNextDownload();
+  }
+
+  // 全部完成
+  if (completedFiles >= totalFiles) {
+    emit downloadFinished(success, error);
+    qDebug() << "所有下载任务完成";
+  }
 }

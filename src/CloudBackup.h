@@ -2,7 +2,11 @@
 #define CLOUDBACKUP_H
 
 #include <QDialog>
+#include <QDir>
+#include <QFile>
 #include <QNetworkAccessManager>
+#include <QObject>
+#include <QQueue>
 #include <QQuickWidget>
 
 namespace Ui {
@@ -10,6 +14,7 @@ class CloudBackup;
 }
 
 class WebDavHelper;
+class WebDavDownloader;
 
 class QtOneDrive;
 class CloudBackup : public QDialog {
@@ -88,7 +93,7 @@ class CloudBackup : public QDialog {
   QHash<QNetworkReply *, QFile *> m_activeDownloads;  // 必须声明为类成员
 };
 
-// 声明一个轻量级信号发射器
+// 声明一个轻量级信号发射器,列出WebDAV上某个目录下的所有文件
 class WebDavHelper : public QObject {
   Q_OBJECT
  public:
@@ -97,6 +102,36 @@ class WebDavHelper : public QObject {
  signals:
   void listCompleted(const QList<QPair<QString, QDateTime>> &files);
   void errorOccurred(const QString &error);
+};
+
+class WebDavDownloader : public QObject {
+  Q_OBJECT
+ public:
+  explicit WebDavDownloader(const QString &username, const QString &password,
+                            QObject *parent = nullptr);
+
+  void downloadFiles(const QList<QString> &remotePaths,
+                     const QString &localBaseDir, int maxConcurrent = 3);
+
+ signals:
+  void progressChanged(int current, int total, QString currentFile);
+  void downloadFinished(bool success, const QString &error);
+  void fileSaved(QString localPath);
+
+ private slots:
+  void handleAuthentication(QNetworkReply *reply, QAuthenticator *auth);
+  void startNextDownload();
+  void onDownloadFinished(QNetworkReply *reply);
+
+ private:
+  QNetworkAccessManager manager;
+  QQueue<QPair<QString, QString>> downloadQueue;
+  QHash<QNetworkReply *, QString> activeDownloads;
+  QString m_username;
+  QString m_password;
+  int maxConcurrent;
+  int totalFiles;
+  int completedFiles;
 };
 
 #endif  // CLOUDBACKUP_H
