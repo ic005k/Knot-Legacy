@@ -924,8 +924,10 @@ void WebDavDownloader::onDownloadFinished(QNetworkReply *reply) {
   }
 }
 
-QStringList CloudBackup::getFileList(QString url) {
+void CloudBackup::getRemoteFileList(QString url) {
   webdavFileList.clear();
+  webdavDateTimeList.clear();
+  isGetRemoteFileListEnd = false;
 
   WebDavHelper *helper = listWebDavFiles(url, USERNAME, APP_PASSWORD);
   // 连接信号
@@ -939,18 +941,15 @@ QStringList CloudBackup::getFileList(QString url) {
                    << "修改时间:" << mtime.toString("yyyy-MM-dd hh:mm:ss");
           QString remoteFile = path;
           remoteFile = remoteFile.replace("/dav/", "");  // 此处需注意
-          webdavFileList.append(remoteFile + "-==-" +
-                                mtime.toString("yyyy-MM-dd hh:mm:ss"));
+          webdavFileList.append(remoteFile);
+          webdavDateTimeList.append(mtime);
         }
-
-        return webdavFileList;
+        isGetRemoteFileListEnd = true;
       });
 
   QObject::connect(helper, &WebDavHelper::errorOccurred,
                    [=](const QString &error) {
                      qDebug() << "操作失败:" << error;
-                     return webdavFileList;
+                     isGetRemoteFileListEnd = true;
                    });
-
-  return webdavFileList;
 }

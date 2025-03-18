@@ -3381,9 +3381,33 @@ void MainWindow::on_btnNotes_clicked() {
   if (ui->chkAutoSync->isChecked()) {
     showProgress();
 
-    QList<QString> remoteFiles;
-
+    orgRemoteDateTime.clear();
+    orgRemoteFiles.clear();
+    remoteFiles.clear();
     QString url = m_CloudBackup->getWebDAVArgument();
+
+    // get md files
+    m_CloudBackup->getRemoteFileList(url + "KnotData/memo/");
+    while (!m_CloudBackup->isGetRemoteFileListEnd)
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    qDebug() << m_CloudBackup->webdavFileList
+             << m_CloudBackup->webdavDateTimeList;
+    for (int i = 0; i < m_CloudBackup->webdavFileList.count(); i++) {
+      orgRemoteFiles.append(m_CloudBackup->webdavFileList.at(i));
+      orgRemoteDateTime.append(m_CloudBackup->webdavDateTimeList.at(i));
+    }
+
+    // get md image files
+    m_CloudBackup->getRemoteFileList(url + "KnotData/memo/images");
+    while (!m_CloudBackup->isGetRemoteFileListEnd)
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    qDebug() << m_CloudBackup->webdavFileList
+             << m_CloudBackup->webdavDateTimeList;
+    for (int i = 0; i < m_CloudBackup->webdavFileList.count(); i++) {
+      orgRemoteFiles.append(m_CloudBackup->webdavFileList.at(i));
+      orgRemoteDateTime.append(m_CloudBackup->webdavDateTimeList.at(i));
+    }
+
     WebDavHelper *helper =
         listWebDavFiles(url + "KnotData/", m_CloudBackup->USERNAME,
                         m_CloudBackup->APP_PASSWORD);
@@ -3391,18 +3415,32 @@ void MainWindow::on_btnNotes_clicked() {
     // 连接信号
     QObject::connect(
         helper, &WebDavHelper::listCompleted,
-        [&](const QList<QPair<QString, QDateTime>> &files) {
+        [=](const QList<QPair<QString, QDateTime>> &files) {
           qDebug() << "获取到文件列表:";
           qDebug() << "共找到" << files.size() << "个文件:";
           for (const auto &[path, mtime] : files) {
             qDebug() << "路径:" << path
                      << "修改时间:" << mtime.toString("yyyy-MM-dd hh:mm:ss");
-            QString remoteFile = path;
-            remoteFile = remoteFile.replace("/dav/", "");  // 此处需注意
-            if (remoteFile.contains("mainnotes.ini")) {
-              QString localFile = iniDir + "mainnotes.ini";
-              QDateTime localModi = QFileInfo(localFile).lastModified();
-              if (mtime > localModi || !QFile::exists(localFile)) {
+            QString remote_f = path;
+            remote_f = remote_f.replace("/dav/", "");  // 此处需注意
+            if (remote_f.contains("mainnotes.ini")) {
+              orgRemoteFiles.append(remote_f);
+              orgRemoteDateTime.append(mtime);
+
+              for (int j = 0; j < orgRemoteFiles.count(); j++) {
+                QString or_file = orgRemoteFiles.at(j);
+                QDateTime or_datetime = orgRemoteDateTime.at(j);
+
+                QString local_file = or_file;
+                local_file = iniDir + local_file.replace("KnotData/", "");
+                QDateTime local_datetime = QFileInfo(local_file).lastModified();
+                if (or_datetime > local_datetime ||
+                    !QFile::exists(local_file)) {
+                  remoteFiles.append(or_file);
+                }
+              }
+
+              if (remoteFiles.count() > 0) {
                 // 初始化下载器
                 WebDavDownloader *downloader =
                     new WebDavDownloader(mw_one->m_CloudBackup->USERNAME,
@@ -3425,17 +3463,14 @@ void MainWindow::on_btnNotes_clicked() {
                       mw_one->m_Notes->openNotesUI();
                     });
 
-                // 需要下载的文件列表
-                remoteFiles = {remoteFile};
-
                 // 开始下载（1并发,根据文件的下载个数）
                 QString lf = iniDir;
                 lf = lf.replace("/KnotData/", "");
                 qDebug() << "lf=" << lf;
-                downloader->downloadFiles(remoteFiles, lf, 1);
+                downloader->downloadFiles(remoteFiles, lf, remoteFiles.count());
               }
 
-              if (mtime <= localModi) mw_one->m_Notes->openNotesUI();
+              if (remoteFiles.count() == 0) mw_one->m_Notes->openNotesUI();
               break;
             }
           }

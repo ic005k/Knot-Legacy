@@ -830,6 +830,10 @@ class MainWindow : public QMainWindow {
   void on_chkOneDrive_clicked();
 
  private:
+  QStringList orgRemoteFiles;
+  QList<QDateTime> orgRemoteDateTime;
+  QList<QString> remoteFiles;
+
   bool isMoveEntry;
   QTimer *tmeFlash;
   int nFlashCount = 0;

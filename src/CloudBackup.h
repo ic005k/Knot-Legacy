@@ -24,6 +24,9 @@ class CloudBackup : public QDialog {
   ~CloudBackup();
   Ui::CloudBackup *ui;
 
+  bool isGetRemoteFileListEnd = false;
+  QStringList webdavFileList;
+  QList<QDateTime> webdavDateTimeList;
   QQuickWidget *quickWidget;
   void init();
 
@@ -53,7 +56,7 @@ class CloudBackup : public QDialog {
   QString getWebDAVArgument();
   void uploadFilesToWebDAV(QStringList files);
 
-  QStringList getFileList(QString url);
+  void getRemoteFileList(QString url);
  signals:
 
  protected:
@@ -92,7 +95,6 @@ class CloudBackup : public QDialog {
 
   QNetworkAccessManager *m_manager = nullptr;
   QHash<QNetworkReply *, QFile *> m_activeDownloads;  // 必须声明为类成员
-  QStringList webdavFileList;
 };
 
 // 声明一个轻量级信号发射器,列出WebDAV上某个目录下的所有文件

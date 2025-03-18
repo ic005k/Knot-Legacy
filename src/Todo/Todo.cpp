@@ -182,8 +182,6 @@ int Todo::getEditTextHeight(QTextEdit* edit) {
 void Todo::closeEvent(QCloseEvent* event) { Q_UNUSED(event); }
 
 void Todo::closeTodo() {
-  if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
-
   m_Method->closeKeyboard();
   stopPlayVoice();
   saveTodo();
