@@ -310,13 +310,18 @@ void CloudBackup::uploadData() {
   }
 
   if (mw_one->ui->chkWebDAV->isChecked()) {
-    QString url = mw_one->ui->editWebDAV->text().trimmed();
-    USERNAME = mw_one->ui->editWebDAVUsername->text().trimmed();
-    APP_PASSWORD = mw_one->ui->editWebDAVPassword->text().trimmed();
+    QString url = getWebDAVArgument();
     QString file = iniDir + "memo.zip";
     createDirectory(url, "Knot/");
     uploadFileToWebDAV(url, file, "Knot/memo.zip");
   }
+}
+
+QString CloudBackup::getWebDAVArgument() {
+  QString url = mw_one->ui->editWebDAV->text().trimmed();
+  USERNAME = mw_one->ui->editWebDAVUsername->text().trimmed();
+  APP_PASSWORD = mw_one->ui->editWebDAVPassword->text().trimmed();
+  return url;
 }
 
 void CloudBackup::on_pushButton_storageInfo_clicked() {

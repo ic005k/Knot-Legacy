@@ -6,7 +6,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.2.16";
+QString ver = "1.2.17";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -3762,6 +3762,7 @@ void MainWindow::init_UIWidget() {
 
   ui->chkOneDrive->setStyleSheet(m_Preferences->chkStyle);
   ui->chkWebDAV->setStyleSheet(m_Preferences->chkStyle);
+  ui->chkAutoSync->setStyleSheet(m_Preferences->chkStyle);
 
   ui->editPassword1->setEchoMode(QLineEdit::EchoMode::Password);
   ui->editPassword2->setEchoMode(QLineEdit::EchoMode::Password);
@@ -4193,6 +4194,8 @@ void MainWindow::init_CloudBacup() {
       iniPreferences->value("/cloudbak/onedrive", 0).toBool());
   ui->chkWebDAV->setChecked(
       iniPreferences->value("/cloudbak/webdav", 1).toBool());
+  ui->chkAutoSync->setChecked(
+      iniPreferences->value("/cloudbak/autosync", 0).toBool());
 }
 
 void MainWindow::on_actionOneDriveBackupData() {
@@ -4763,6 +4766,7 @@ void MainWindow::on_btnBack_One_clicked() {
 
   iniPreferences->setValue("/cloudbak/onedrive", ui->chkOneDrive->isChecked());
   iniPreferences->setValue("/cloudbak/webdav", ui->chkWebDAV->isChecked());
+  iniPreferences->setValue("/cloudbak/autosync", ui->chkAutoSync->isChecked());
 }
 
 void MainWindow::on_btnRefreshToken_clicked() {
@@ -5106,16 +5110,7 @@ void MainWindow::on_KVChanged() {}
 void MainWindow::on_btnAddTodo_clicked() { m_Todo->on_btnAdd_clicked(); }
 
 void MainWindow::on_btnBackTodo_clicked() {
-  m_Method->closeKeyboard();
-  m_Todo->stopPlayVoice();
-  m_Todo->saveTodo();
-  ui->frameTodo->hide();
-  ui->frameMain->show();
-
-  m_Todo->refreshTableLists();
-  m_Todo->refreshAlarm();
-  ui->qwTodo->rootContext()->setContextProperty("isBtnVisible", false);
-  isSelf = false;
+  m_Todo->closeTodo();
   addFilesWatch();
 }
 

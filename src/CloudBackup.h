@@ -43,7 +43,8 @@ class CloudBackup : public QDialog {
   QString aesEncrypt(QString plainText, QByteArray key, QByteArray iv);
   QString aesDecrypt(QString cipherText, QByteArray key, QByteArray iv);
 
- signals:
+  QString getWebDAVArgument();
+  signals:
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;

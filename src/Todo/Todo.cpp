@@ -74,7 +74,8 @@ void Todo::saveTodo() {
 
   int count_items = getCount();
 
-  iniTodo = new QSettings(iniDir + "todo.ini", QSettings::IniFormat, this);
+  QString todoFile = iniDir + "todo.ini";
+  iniTodo = new QSettings(todoFile, QSettings::IniFormat, this);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   iniTodo->setIniCodec("utf-8");
 #endif
@@ -98,6 +99,8 @@ void Todo::saveTodo() {
     iniTodo->setValue("/Todo/ItemRecycleDoneTime" + QString::number(i),
                       doneTime);
   }
+
+  isNeedSync = true;
 }
 
 void Todo::init_Todo() {
@@ -171,9 +174,30 @@ int Todo::getEditTextHeight(QTextEdit* edit) {
   return height;
 }
 
-void Todo::closeEvent(QCloseEvent* event) {
-  Q_UNUSED(event);
+void Todo::closeEvent(QCloseEvent* event) { Q_UNUSED(event); }
+
+void Todo::closeTodo() {
   if (mw_one->isHardStepSensor == 1) mw_one->updateHardSensorSteps();
+
+  m_Method->closeKeyboard();
+  stopPlayVoice();
+  saveTodo();
+  mw_one->ui->frameTodo->hide();
+  mw_one->ui->frameMain->show();
+
+  refreshTableLists();
+  refreshAlarm();
+  mw_one->ui->qwTodo->rootContext()->setContextProperty("isBtnVisible", false);
+  mw_one->isSelf = false;
+
+  if (isNeedSync && mw_one->ui->chkAutoSync->isChecked()) {
+    QString todoFile = iniDir + "todo.ini";
+    QString url = mw_one->m_CloudBackup->getWebDAVArgument();
+    mw_one->m_CloudBackup->createDirectory(url, "KnotData/");
+    mw_one->m_CloudBackup->uploadFileToWebDAV(
+        url, todoFile, "KnotData/" + QFileInfo(todoFile).fileName());
+    isNeedSync = false;
+  }
 }
 
 bool Todo::eventFilter(QObject* watch, QEvent* evn) {

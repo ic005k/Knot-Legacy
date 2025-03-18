@@ -2884,6 +2884,13 @@ QTabBar::scroller {width:0}
            </layout>
           </item>
           <item>
+           <widget class="QCheckBox" name="chkAutoSync">
+            <property name="text">
+             <string>Automatic Synchronization when Todo or Notes is Opened</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_71">
             <item>
              <widget class="QToolButton" name="btnWebDAVBackup">
