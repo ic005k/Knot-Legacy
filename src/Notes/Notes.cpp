@@ -613,7 +613,7 @@ void Notes::on_btnPic_clicked() {
 
 QString Notes::insertImage(QString fileName, bool isToAndroidView) {
   QFileInfo fi(fileName);
-  QString strImage;
+  QString strImage, tarImageFile;
   if (fi.exists()) {
     QDir dir;
     dir.mkpath(iniDir + "memo/images/");
@@ -660,6 +660,7 @@ QString Notes::insertImage(QString fileName, bool isToAndroidView) {
     pix =
         pix.scaled(new_w, new_h, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     pix.save(strTar);
+    tarImageFile = strTar;
 
     // strTar = strTar.replace(iniDir, imgDir);
     // strImage = "\n\n![image](file://" + strTar + ")\n\n";
@@ -676,6 +677,14 @@ QString Notes::insertImage(QString fileName, bool isToAndroidView) {
     }
 
     qDebug() << "pic=" << strTar << nLeftMargin;
+  }
+
+  isNeedSync = true;
+  if (isNeedSync && mw_one->ui->chkAutoSync->isChecked()) {
+    QStringList files;
+    files.append(tarImageFile);
+    mw_one->m_CloudBackup->uploadFilesToWebDAV(files);
+    isNeedSync = false;
   }
 
   return strImage;
@@ -1343,6 +1352,10 @@ void Notes::closeEvent(QCloseEvent *event) {
     }
   }
 
+  syncToWebDAV();
+}
+
+void Notes::syncToWebDAV() {
   if (isNeedSync && mw_one->ui->chkAutoSync->isChecked()) {
     QStringList files;
     files.append(iniDir + "mainnotes.ini");
@@ -1874,6 +1887,9 @@ void Notes::javaNoteToQMLNote() {
     mw_one->ui->btnOpenNote->click();
   }
 #endif
+
+  isNeedSync = true;
+  syncToWebDAV();
 }
 
 QString Notes::formatMDText(QString text) {

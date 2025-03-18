@@ -5,6 +5,7 @@
 
 #include <QAbstractButton>
 #include <QAccelerometerReading>
+#include <QCheckBox>
 #include <QClipboard>
 #include <QGeoServiceProvider>
 #include <QGeoServiceProviderFactory>

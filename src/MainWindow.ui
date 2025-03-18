@@ -2886,7 +2886,23 @@ QTabBar::scroller {width:0}
           <item>
            <widget class="QCheckBox" name="chkAutoSync">
             <property name="text">
-             <string>Automatic Synchronization when Todo or Notes is Opened</string>
+             <string>Automatic Synchronization</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_9">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Note: Data synchronization is performed automatically when Todo and Notes are opened and closed.</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
            </widget>
           </item>

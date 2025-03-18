@@ -283,6 +283,7 @@ class Notes : public QDialog {
   void wheelEvent(QWheelEvent *e) override;
   QString imgDir = "==Image==";
   QColor StringToColor(QString mRgbStr);
+  void syncToWebDAV();
 };
 
 #endif  // NOTES_H
