@@ -136,7 +136,8 @@ class Todo : public QDialog {
   void goCurrentTodoItem(QString curItem);
   void addToList(QString str);
   void closeTodo();
- private slots:
+  void openTodoUI();
+  private slots:
   void on_ShowRecordTime();
 
   void on_ShowPlayProgress();

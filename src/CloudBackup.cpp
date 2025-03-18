@@ -1,12 +1,17 @@
 ﻿#include "CloudBackup.h"
 
+#include <QAuthenticator>
 #include <QFile>
 #include <QFileDialog>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMessageBox>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QObject>
 #include <QRandomGenerator>
 #include <QTimer>
+#include <QXmlStreamReader>
 
 #include "Comm/qaesencryption.h"
 #include "src/MainWindow.h"
@@ -21,6 +26,10 @@ extern QString iniFile, iniDir, zipfile;
 extern QtOneDriveAuthorizationDialog *dialog_;
 extern bool isUpData;
 extern bool isZipOK, isMenuImport, isDownData;
+
+WebDavHelper *listWebDavFiles(const QString &url, const QString &username,
+                              const QString &password);
+QList<QPair<QString, QDateTime>> parseWebDavResponse(const QByteArray &data);
 
 CloudBackup::CloudBackup(QWidget *parent)
     : QDialog(parent), ui(new Ui::CloudBackup) {
@@ -678,4 +687,143 @@ void CloudBackup::uploadFilesToWebDAV(QStringList files) {
       reply->deleteLater();
     });
   }
+}
+
+// 核心函数：列出目录文件（认证信息直接作为参数）
+WebDavHelper *listWebDavFiles(const QString &url, const QString &username,
+                              const QString &password
+
+) {
+  // 创建信号发射器对象
+  WebDavHelper *helper = new WebDavHelper();
+
+  // 每个请求使用独立的NetworkManager
+  QNetworkAccessManager *manager = new QNetworkAccessManager(helper);
+
+  // 连接认证信号（Lambda捕获当前请求的账号密码）
+  QObject::connect(
+      manager, &QNetworkAccessManager::authenticationRequired,
+      [username, password](QNetworkReply *reply, QAuthenticator *auth) {
+        qDebug() << "正在认证:" << reply->url().toString();
+        auth->setUser(username);
+        auth->setPassword(password);
+      });
+
+  // 构造请求
+  QNetworkRequest request;
+  request.setUrl(QUrl(url));
+  request.setRawHeader("Depth", "1");
+  request.setRawHeader("Brief", "t");  // 关键：坚果云需要此头
+  request.setHeader(QNetworkRequest::ContentTypeHeader,
+                    "text/xml; charset=utf-8");
+
+  // 严格格式的XML
+  const QByteArray body =
+      R"(<?xml version="1.0" encoding="utf-8"?><d:propfind xmlns:d="DAV:"><d:prop><d:displayname/><d:getlastmodified/><d:resourcetype/></d:prop></d:propfind>)";
+
+  // 发送请求
+  QNetworkReply *reply = manager->sendCustomRequest(request, "PROPFIND", body);
+
+  // 处理响应
+  QObject::connect(reply, &QNetworkReply::finished, [manager, helper, reply]() {
+    if (reply->error() != QNetworkReply::NoError) {
+      const QString error =
+          QString("[HTTP %1] %2")
+              .arg(reply->attribute(QNetworkRequest::HttpStatusCodeAttribute)
+                       .toInt())
+              .arg(reply->errorString());
+      emit helper->errorOccurred(error);
+    } else {
+      /*QList<QPair<QString, QDateTime>> files;
+      QXmlStreamReader xml(reply->readAll());
+
+      QString currentPath;
+      QDateTime currentModified;
+      bool isCollection = false;
+
+      while (!xml.atEnd()) {
+        xml.readNext();
+
+        if (xml.isStartElement()) {
+          if (xml.name() == QLatin1String("href")) {
+            currentPath = xml.readElementText();
+          } else if (xml.name() == QLatin1String("getlastmodified")) {
+            currentModified = QDateTime::fromString(
+                xml.readElementText(), "ddd, dd MMM yyyy hh:mm:ss 'GMT'");
+          } else if (xml.name() == QLatin1String("resourcetype")) {
+            isCollection = xml.readNextStartElement() &&
+                           xml.name() == QLatin1String("collection");
+          }
+        }
+
+        if (xml.isEndElement() && xml.name() == QLatin1String("response")) {
+          if (!currentPath.endsWith('/')) {  // 过滤目录自身
+            files.append({currentPath, currentModified});
+          }
+          currentPath.clear();
+          isCollection = false;
+        }
+      }
+
+      emit helper->listCompleted(files);*/
+
+      QByteArray responseData = reply->readAll();
+      QList<QPair<QString, QDateTime>> files =
+          parseWebDavResponse(responseData);  // 调用解析函数
+      emit helper->listCompleted(files);
+    }
+
+    // 清理资源
+    reply->deleteLater();
+    manager->deleteLater();
+  });
+
+  return helper;
+}
+
+QList<QPair<QString, QDateTime>> parseWebDavResponse(const QByteArray &data) {
+  QList<QPair<QString, QDateTime>> files;
+  QXmlStreamReader xml(data);
+  QString currentHref;
+  QDateTime currentModified;
+  bool isDirectory = false;
+
+  while (!xml.atEnd()) {
+    xml.readNext();
+
+    // 开始处理每个资源项
+    if (xml.isStartElement() && xml.name() == QLatin1String("response")) {
+      currentHref.clear();
+      currentModified = QDateTime();
+      isDirectory = false;
+    }
+
+    // 提取关键属性
+    if (xml.isStartElement()) {
+      if (xml.name() == QLatin1String("href")) {
+        currentHref = xml.readElementText();
+      } else if (xml.name() == QLatin1String("getlastmodified")) {
+        currentModified = QDateTime::fromString(
+            xml.readElementText(), "ddd, dd MMM yyyy hh:mm:ss 'GMT'");
+      } else if (xml.name() == QLatin1String("resourcetype")) {
+        // 深度解析资源类型
+        while (xml.readNextStartElement()) {
+          if (xml.name() == QLatin1String("collection")) {
+            isDirectory = true;
+            xml.skipCurrentElement();  // 跳过子元素
+          }
+        }
+      }
+    }
+
+    // 结束处理资源项
+    if (xml.isEndElement() && xml.name() == QLatin1String("response")) {
+      // 排除目录项和根路径
+      if (!isDirectory && !currentHref.endsWith('/')) {
+        files.append({currentHref, currentModified});
+      }
+    }
+  }
+
+  return files;
 }

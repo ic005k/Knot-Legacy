@@ -9,6 +9,8 @@ namespace Ui {
 class CloudBackup;
 }
 
+class WebDavHelper;
+
 class QtOneDrive;
 class CloudBackup : public QDialog {
   Q_OBJECT
@@ -45,7 +47,8 @@ class CloudBackup : public QDialog {
 
   QString getWebDAVArgument();
   void uploadFilesToWebDAV(QStringList files);
-  signals:
+
+ signals:
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
@@ -83,6 +86,17 @@ class CloudBackup : public QDialog {
 
   QNetworkAccessManager *m_manager = nullptr;
   QHash<QNetworkReply *, QFile *> m_activeDownloads;  // 必须声明为类成员
+};
+
+// 声明一个轻量级信号发射器
+class WebDavHelper : public QObject {
+  Q_OBJECT
+ public:
+  explicit WebDavHelper(QObject *parent = nullptr) : QObject(parent) {}
+
+ signals:
+  void listCompleted(const QList<QPair<QString, QDateTime>> &files);
+  void errorOccurred(const QString &error);
 };
 
 #endif  // CLOUDBACKUP_H

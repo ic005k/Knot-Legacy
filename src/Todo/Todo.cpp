@@ -14,6 +14,9 @@ extern QString iniFile, iniDir;
 extern bool loading, isBreak, zh_cn, isDark, isAndroid;
 extern int fontSize;
 
+extern void listWebDavFiles(QString url, QString username, QString password,
+                            WebDavHelper* helper);
+
 bool isNeedSync = false;
 
 Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
@@ -1358,4 +1361,16 @@ void Todo::on_ShowPlayProgress() {
   if (!m_Method->getPlaying()) {
     stopPlayVoice();
   }
+}
+
+void Todo::openTodoUI() {
+  mw_one->ui->qwTodo->rootContext()->setContextProperty("m_width",
+                                                        mw_one->width());
+  mw_one->ui->frameMain->hide();
+  mw_one->ui->frameTodo->show();
+  init_Todo();
+
+  refreshAlarm();
+  setCurrentIndex(0);
+  stopPlayVoice();
 }

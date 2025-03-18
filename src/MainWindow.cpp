@@ -55,6 +55,10 @@ extern QString getTextEditLineText(QTextEdit *txtEdit, int i);
 extern void TextEditToFile(QTextEdit *txtEdit, QString fileName);
 extern void StringToFile(QString buffers, QString fileName);
 
+extern WebDavHelper *listWebDavFiles(const QString &url,
+                                     const QString &username,
+                                     const QString &password);
+
 void RegJni(const char *myClassName);
 
 #ifdef Q_OS_ANDROID
@@ -3079,14 +3083,31 @@ void MainWindow::on_btnTodo_clicked() {
   m_Notes->m_TextSelector->close();
   m_Notes->m_TextSelector = new TextSelector(mw_one);
 
-  ui->qwTodo->rootContext()->setContextProperty("m_width", mw_one->width());
-  ui->frameMain->hide();
-  ui->frameTodo->show();
-  m_Todo->init_Todo();
+  if (ui->chkAutoSync->isChecked()) {
+    QString url = m_CloudBackup->getWebDAVArgument();
+    WebDavHelper *helper =
+        listWebDavFiles(url + "KnotData/", m_CloudBackup->USERNAME,
+                        m_CloudBackup->APP_PASSWORD);
 
-  m_Todo->refreshAlarm();
-  m_Todo->setCurrentIndex(0);
-  m_Todo->stopPlayVoice();
+    // 连接信号
+    QObject::connect(helper, &WebDavHelper::listCompleted,
+                     [](const QList<QPair<QString, QDateTime>> &files) {
+                       qDebug() << "获取到文件列表:";
+                       for (const auto &file : files) {
+                         qDebug() << "路径:" << file.first << "修改时间:"
+                                  << file.second.toString(Qt::ISODate);
+                         mw_one->m_Todo->openTodoUI();
+                       }
+                     });
+
+    QObject::connect(helper, &WebDavHelper::errorOccurred,
+                     [](const QString &error) {
+                       qDebug() << "操作失败:" << error;
+                       mw_one->m_Todo->openTodoUI();
+                     });
+
+  } else
+    m_Todo->openTodoUI();
 }
 
 void MainWindow::on_rbFreq_clicked() {
