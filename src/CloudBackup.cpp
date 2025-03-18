@@ -923,3 +923,34 @@ void WebDavDownloader::onDownloadFinished(QNetworkReply *reply) {
     qDebug() << "所有下载任务完成";
   }
 }
+
+QStringList CloudBackup::getFileList(QString url) {
+  webdavFileList.clear();
+
+  WebDavHelper *helper = listWebDavFiles(url, USERNAME, APP_PASSWORD);
+  // 连接信号
+  QObject::connect(
+      helper, &WebDavHelper::listCompleted,
+      [=](const QList<QPair<QString, QDateTime>> &files) {
+        qDebug() << "获取到文件列表:";
+        qDebug() << "共找到" << files.size() << "个文件:";
+        for (const auto &[path, mtime] : files) {
+          qDebug() << "路径:" << path
+                   << "修改时间:" << mtime.toString("yyyy-MM-dd hh:mm:ss");
+          QString remoteFile = path;
+          remoteFile = remoteFile.replace("/dav/", "");  // 此处需注意
+          webdavFileList.append(remoteFile + "-==-" +
+                                mtime.toString("yyyy-MM-dd hh:mm:ss"));
+        }
+
+        return webdavFileList;
+      });
+
+  QObject::connect(helper, &WebDavHelper::errorOccurred,
+                   [=](const QString &error) {
+                     qDebug() << "操作失败:" << error;
+                     return webdavFileList;
+                   });
+
+  return webdavFileList;
+}

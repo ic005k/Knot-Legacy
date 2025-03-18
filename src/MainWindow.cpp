@@ -2895,8 +2895,11 @@ void MainWindow::showProgress() {
 
 void MainWindow::closeProgress() {
   if (!initMain) {
+    if (dlgProg == nullptr) return;
+
     dlgProg->close();
     delete dlgProg;
+    dlgProg = nullptr;
   }
 }
 
@@ -3084,6 +3087,8 @@ void MainWindow::on_btnTodo_clicked() {
   m_Notes->m_TextSelector = new TextSelector(mw_one);
 
   if (ui->chkAutoSync->isChecked()) {
+    showProgress();
+
     QString url = m_CloudBackup->getWebDAVArgument();
     WebDavHelper *helper =
         listWebDavFiles(url + "KnotData/", m_CloudBackup->USERNAME,
@@ -3373,67 +3378,78 @@ void MainWindow::on_btnNotes_clicked() {
   removeFilesWatch();
   isSelf = true;
 
-  m_Notes->init_all_notes();
+  if (ui->chkAutoSync->isChecked()) {
+    showProgress();
 
-  if (ui->editFindNote->text().trimmed().length() > 0) {
-    on_btnFindNotes_clicked();
-  }
+    QList<QString> remoteFiles;
 
-  QSettings *iniNotes =
-      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, NULL);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  iniNotes->setIniCodec("utf-8");
-#endif
+    QString url = m_CloudBackup->getWebDAVArgument();
+    WebDavHelper *helper =
+        listWebDavFiles(url + "KnotData/", m_CloudBackup->USERNAME,
+                        m_CloudBackup->APP_PASSWORD);
 
-  QString strPw = iniNotes->value("/MainNotes/UserKey").toString();
-  if (strPw != "") {
-    bool ok = false;
-    QString text;
+    // 连接信号
+    QObject::connect(
+        helper, &WebDavHelper::listCompleted,
+        [&](const QList<QPair<QString, QDateTime>> &files) {
+          qDebug() << "获取到文件列表:";
+          qDebug() << "共找到" << files.size() << "个文件:";
+          for (const auto &[path, mtime] : files) {
+            qDebug() << "路径:" << path
+                     << "修改时间:" << mtime.toString("yyyy-MM-dd hh:mm:ss");
+            QString remoteFile = path;
+            remoteFile = remoteFile.replace("/dav/", "");  // 此处需注意
+            if (remoteFile.contains("mainnotes.ini")) {
+              QString localFile = iniDir + "mainnotes.ini";
+              QDateTime localModi = QFileInfo(localFile).lastModified();
+              if (mtime > localModi || !QFile::exists(localFile)) {
+                // 初始化下载器
+                WebDavDownloader *downloader =
+                    new WebDavDownloader(mw_one->m_CloudBackup->USERNAME,
+                                         mw_one->m_CloudBackup->APP_PASSWORD);
 
-    QInputDialog *idlg = m_Method->inputDialog(
-        tr("Please enter your password : "), tr("Password : "), "");
-    idlg->setTextEchoMode(QLineEdit::Password);
+                // 连接信号
+                QObject::connect(downloader, &WebDavDownloader::progressChanged,
+                                 [](int current, int total, QString file) {
+                                   qDebug()
+                                       << QString("进度: %1/%2  当前文件: %3")
+                                              .arg(current)
+                                              .arg(total)
+                                              .arg(file);
+                                 });
 
-    if (QDialog::Accepted == idlg->exec()) {
-      ok = true;
-      text = idlg->textValue();
-      idlg->close();
-    } else {
-      idlg->close();
-      return;
-    }
+                QObject::connect(
+                    downloader, &WebDavDownloader::downloadFinished,
+                    [=](bool success, QString error) {
+                      qDebug() << (success ? "下载成功" : "下载失败: " + error);
+                      mw_one->m_Notes->openNotesUI();
+                    });
 
-    if (ok && !text.isEmpty()) {
-      if (text.trimmed() == strPw) {
-        showNotes();
+                // 需要下载的文件列表
+                remoteFiles = {remoteFile};
 
-      } else {
-        m_Method->m_widget = new QWidget(mw_one);
-        ShowMessage *msg = new ShowMessage(this);
-        msg->showMsg("Knot", tr("The entered password does not match."), 0);
+                // 开始下载（1并发,根据文件的下载个数）
+                QString lf = iniDir;
+                lf = lf.replace("/KnotData/", "");
+                qDebug() << "lf=" << lf;
+                downloader->downloadFiles(remoteFiles, lf, 1);
+              }
 
-        return;
-      }
-    }
+              if (mtime <= localModi) mw_one->m_Notes->openNotesUI();
+              break;
+            }
+          }
+        });
 
-  } else {
-    showNotes();
-  }
-}
+    QObject::connect(helper, &WebDavHelper::errorOccurred,
+                     [=](const QString &error) {
+                       qDebug() << "操作失败:" << error;
+                       mw_one->m_Notes->openNotesUI();
+                     });
 
-void MainWindow::showNotes() {
-  isMemoVisible = true;
-  isReaderVisible = false;
+  } else
 
-  m_Notes->ui->btnUndo->setEnabled(false);
-  m_Notes->ui->btnRedo->setEnabled(false);
-
-  ui->frameMain->hide();
-  ui->f_SetKey->hide();
-  ui->frameNotes->show();
-  m_Notes->setVPos();
-
-  ui->btnNotesList->click();
+    mw_one->m_Notes->openNotesUI();
 }
 
 QString MainWindow::decMemos(QString strDec, QString file) {
@@ -3957,6 +3973,9 @@ void MainWindow::init_UIWidget() {
   ui->btnFind->setFont(f);
   ui->btnModifyRecord->setFont(f);
   ui->btnMove->setFont(f);
+
+  f.setBold(true);
+  ui->lblSyncNote->setFont(f);
 
   QString lblStyle = ui->lblTitleEditRecord->styleSheet();
   ui->lblTotal->setStyleSheet(lblStyle);

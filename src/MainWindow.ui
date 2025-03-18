@@ -2891,7 +2891,7 @@ QTabBar::scroller {width:0}
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_9">
+           <widget class="QLabel" name="lblSyncNote">
             <property name="font">
              <font>
               <pointsize>12</pointsize>

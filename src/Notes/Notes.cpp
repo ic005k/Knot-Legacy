@@ -2106,3 +2106,26 @@ QString markdownToHtmlWithMath(const QString &md) {
 
   return html;
 }
+
+void Notes::openNotesUI() {
+  init_all_notes();
+
+  if (mw_one->ui->editFindNote->text().trimmed().length() > 0) {
+    mw_one->on_btnFindNotes_clicked();
+  }
+
+  mw_one->isMemoVisible = true;
+  mw_one->isReaderVisible = false;
+
+  ui->btnUndo->setEnabled(false);
+  ui->btnRedo->setEnabled(false);
+
+  mw_one->ui->frameMain->hide();
+  mw_one->ui->f_SetKey->hide();
+  mw_one->ui->frameNotes->show();
+  setVPos();
+
+  mw_one->ui->btnNotesList->click();
+
+  mw_one->closeProgress();
+}

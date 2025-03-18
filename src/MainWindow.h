@@ -153,7 +153,7 @@ class MainWindow : public QMainWindow {
   bool isNeedAutoBackup = false;
   QString strLatestModify = tr("None");
 
-  QDialog *dlgProg;
+  QDialog *dlgProg = nullptr;
 
   void setMini();
   bool isSelf = false;
@@ -505,10 +505,16 @@ class MainWindow : public QMainWindow {
 
  public slots:
   void on_btnEditNote_clicked();
+
   void on_btnOpenNote_clicked();
+
   void on_btnStartDate_clicked();
+
   void on_btnEndDate_clicked();
+
   void on_ExecShortcut();
+
+  void on_btnFindNotes_clicked();
 
   void on_btnShowBookmark_clicked();
 
@@ -615,8 +621,6 @@ class MainWindow : public QMainWindow {
   void on_btnDelNoteRecycle_clicked();
 
   void on_btnRestoreNoteRecycle_clicked();
-
-  void on_btnFindNotes_clicked();
 
   void on_editFindNote_textChanged(const QString &arg1);
 
@@ -852,7 +856,7 @@ class MainWindow : public QMainWindow {
 
   QString decMemos(QString strDec, QString file);
   void initHardStepSensor();
-  void showNotes();
+
   void resetWinPos();
 
   void initQW();

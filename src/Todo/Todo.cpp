@@ -1373,4 +1373,6 @@ void Todo::openTodoUI() {
   refreshAlarm();
   setCurrentIndex(0);
   stopPlayVoice();
+
+  mw_one->closeProgress();
 }

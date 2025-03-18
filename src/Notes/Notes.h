@@ -150,6 +150,8 @@ class Notes : public QDialog {
 
   void saveWebScrollPos(QString mdfilename);
 
+  void openNotesUI();
+
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
