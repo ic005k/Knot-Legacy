@@ -469,7 +469,7 @@ void CloudBackup::updateUploadProgress(qint64 bytesSent, qint64 bytesTotal) {
 }
 
 void CloudBackup::createDirectory(QString webdavUrl, QString remoteDirPath) {
-  QNetworkAccessManager manager;
+  QNetworkAccessManager *m_manager = new QNetworkAccessManager();
   QEventLoop loop;
   QUrl url(webdavUrl + remoteDirPath);
   QNetworkRequest request(url);
@@ -478,7 +478,7 @@ void CloudBackup::createDirectory(QString webdavUrl, QString remoteDirPath) {
   QString auth = USERNAME + ":" + APP_PASSWORD;
   request.setRawHeader("Authorization", "Basic " + auth.toUtf8().toBase64());
 
-  QNetworkReply *reply = manager.sendCustomRequest(request, "MKCOL");
+  QNetworkReply *reply = m_manager->sendCustomRequest(request, "MKCOL");
 
   QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
   loop.exec();  // 阻塞直到请求完成

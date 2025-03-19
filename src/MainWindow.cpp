@@ -39,7 +39,7 @@ QRegularExpression regxNumber("^-?\[0-9.]*$");
 QSettings *iniPreferences;
 
 extern bool isAndroid, isIOS, zh_cn, isEpub, isEpubError, isText, isPDF,
-    isWholeMonth, isDateSection;
+    isWholeMonth, isDateSection, isNeedSync;
 extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
     fileName, strOpfPath, catalogueFile, strShowMsg;
 extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
@@ -4923,6 +4923,8 @@ void MainWindow::on_btnBackNotes_clicked() {
   ui->frameNoteList->show();
   isSelf = false;
   addFilesWatch();
+
+  m_Notes->notes_sync_files.clear();
 }
 
 void MainWindow::on_btnSetKey_clicked() {
@@ -5724,6 +5726,9 @@ void MainWindow::on_btnBackNoteList_clicked() {
   ui->frameMain->show();
   m_NotesList->saveNoteBookVPos();
   m_NotesList->saveNotesList();
+
+  isNeedSync = true;
+  m_Notes->syncToWebDAV();
 }
 
 void MainWindow::on_btnBackNoteRecycle_clicked() {

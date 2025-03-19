@@ -1260,7 +1260,7 @@ color: rgb(255, 255, 255);</string>
          </widget>
         </item>
         <item>
-         <widget class="QToolButton" name="btnHideKey">
+         <widget class="QToolButton" name="btnSyncToWebDAV">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>

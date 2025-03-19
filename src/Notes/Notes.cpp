@@ -76,7 +76,7 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
 
 #ifdef Q_OS_ANDROID
 #else
-  ui->btnHideKey->hide();
+  ui->btnSyncToWebDAV->hide();
   mw_one->set_ToolButtonStyle(this);
 #endif
 
@@ -295,6 +295,10 @@ void Notes::saveMainNotes() {
   isNeedSave = false;
   isTextChange = false;
   isNeedSync = true;
+
+  notes_sync_files.removeOne(iniDir + "mainnotes.ini");
+  notes_sync_files.append(iniDir + "mainnotes.ini");
+  notes_sync_files.append(currentMDFile);
 }
 
 void Notes::init_MainNotes() { loadNoteToQML(); }
@@ -679,13 +683,7 @@ QString Notes::insertImage(QString fileName, bool isToAndroidView) {
     qDebug() << "pic=" << strTar << nLeftMargin;
   }
 
-  isNeedSync = true;
-  if (isNeedSync && mw_one->ui->chkAutoSync->isChecked()) {
-    QStringList files;
-    files.append(tarImageFile);
-    mw_one->m_CloudBackup->uploadFilesToWebDAV(files);
-    isNeedSync = false;
-  }
+  notes_sync_files.append(tarImageFile);
 
   return strImage;
 }
@@ -1351,16 +1349,12 @@ void Notes::closeEvent(QCloseEvent *event) {
       mw_one->ui->btnRename->click();
     }
   }
-
-  syncToWebDAV();
 }
 
 void Notes::syncToWebDAV() {
   if (isNeedSync && mw_one->ui->chkAutoSync->isChecked()) {
-    QStringList files;
-    files.append(iniDir + "mainnotes.ini");
-    files.append(currentMDFile);
-    mw_one->m_CloudBackup->uploadFilesToWebDAV(files);
+    if (notes_sync_files.count() > 0)
+      mw_one->m_CloudBackup->uploadFilesToWebDAV(notes_sync_files);
     isNeedSync = false;
   }
 }
@@ -1623,13 +1617,7 @@ void Notes::on_btnGetShare_clicked() {
 #endif
 }
 
-void Notes::on_btnHideKey_clicked() {
-  if (pAndroidKeyboard->isVisible()) {
-    pAndroidKeyboard->hide();
-    setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), width(),
-                mw_one->mainHeight);
-  }
-}
+void Notes::on_btnSyncToWebDAV_clicked() { syncToWebDAV(); }
 
 void Notes::on_btnShowTools_clicked() {
   bool old = isNeedSave;
@@ -1888,8 +1876,7 @@ void Notes::javaNoteToQMLNote() {
   }
 #endif
 
-  isNeedSync = true;
-  syncToWebDAV();
+  notes_sync_files.append(currentMDFile);
 }
 
 QString Notes::formatMDText(QString text) {

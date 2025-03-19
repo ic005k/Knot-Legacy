@@ -819,6 +819,9 @@ void NotesList::saveNotesList() {
   Reg1.setValue("/MainNotes/NoteName", mw_one->ui->lblNoteName->text());
 
   isNeedSave = false;
+
+  mw_one->m_Notes->notes_sync_files.removeOne(iniDir + "mainnotes.ini");
+  mw_one->m_Notes->notes_sync_files.append(iniDir + "mainnotes.ini");
 }
 
 void NotesList::saveRecycle() {
@@ -853,6 +856,9 @@ void NotesList::saveRecycle() {
   }
 
   isNeedSave = false;
+
+  mw_one->m_Notes->notes_sync_files.removeOne(iniDir + "mainnotes.ini");
+  mw_one->m_Notes->notes_sync_files.append(iniDir + "mainnotes.ini");
 }
 
 void NotesList::initNotesList() {

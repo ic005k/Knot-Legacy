@@ -152,6 +152,10 @@ class Notes : public QDialog {
 
   void openNotesUI();
 
+  void syncToWebDAV();
+
+  QStringList notes_sync_files;
+
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
@@ -161,7 +165,7 @@ class Notes : public QDialog {
 
  public slots:
   void setVPos();
-  void on_btnHideKey_clicked();
+  void on_btnSyncToWebDAV_clicked();
 
   void on_btnShowTools_clicked();
 
@@ -285,7 +289,6 @@ class Notes : public QDialog {
   void wheelEvent(QWheelEvent *e) override;
   QString imgDir = "==Image==";
   QColor StringToColor(QString mRgbStr);
-  void syncToWebDAV();
 };
 
 #endif  // NOTES_H
