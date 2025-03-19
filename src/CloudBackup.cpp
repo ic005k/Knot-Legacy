@@ -652,7 +652,6 @@ void CloudBackup::uploadFilesToWebDAV(QStringList files) {
     QString remotePath = QFileInfo(m_file).path() + "/";
     remotePath = remotePath.replace(iniDir, "KnotData/");
     qDebug() << "remotePath=" << remotePath;
-    createDirectory(url, remotePath);
 
     QFile *file = new QFile(localFile);
     if (!file->open(QIODevice::ReadOnly)) {

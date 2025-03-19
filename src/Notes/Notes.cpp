@@ -1353,8 +1353,13 @@ void Notes::closeEvent(QCloseEvent *event) {
 
 void Notes::syncToWebDAV() {
   if (isNeedSync && mw_one->ui->chkAutoSync->isChecked()) {
-    if (notes_sync_files.count() > 0)
+    if (notes_sync_files.count() > 0) {
+      QString url = mw_one->m_CloudBackup->getWebDAVArgument();
+      mw_one->m_CloudBackup->createDirectory(url, "KnotData/");
+      mw_one->m_CloudBackup->createDirectory(url, "KnotData/memo/");
+      mw_one->m_CloudBackup->createDirectory(url, "KnotData/memo/images");
       mw_one->m_CloudBackup->uploadFilesToWebDAV(notes_sync_files);
+    }
     isNeedSync = false;
   }
 }

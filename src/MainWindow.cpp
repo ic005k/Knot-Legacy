@@ -3094,6 +3094,11 @@ void MainWindow::on_btnTodo_clicked() {
     showProgress();
 
     QString url = m_CloudBackup->getWebDAVArgument();
+
+    mw_one->m_CloudBackup->createDirectory(url, "KnotData/");
+    mw_one->m_CloudBackup->createDirectory(url, "KnotData/memo/");
+    mw_one->m_CloudBackup->createDirectory(url, "KnotData/memo/images");
+
     WebDavHelper *helper =
         listWebDavFiles(url + "KnotData/", m_CloudBackup->USERNAME,
                         m_CloudBackup->APP_PASSWORD);
@@ -3379,6 +3384,7 @@ void MainWindow::updateHardSensorSteps() {
 }
 
 void MainWindow::on_btnNotes_clicked() {
+  m_Notes->notes_sync_files.clear();
   removeFilesWatch();
   isSelf = true;
 
@@ -4923,8 +4929,6 @@ void MainWindow::on_btnBackNotes_clicked() {
   ui->frameNoteList->show();
   isSelf = false;
   addFilesWatch();
-
-  m_Notes->notes_sync_files.clear();
 }
 
 void MainWindow::on_btnSetKey_clicked() {
@@ -5159,7 +5163,7 @@ void MainWindow::on_btnNotesList_clicked() {
   m_NotesList->localNotesItem();
   m_NotesList->setNoteLabel();
 
-  m_NotesList->setNoteBookVPos();
+  // m_NotesList->setNoteBookVPos();
 
   return;
 

@@ -42,6 +42,7 @@ Rectangle {
 
     function setCurrentItem(currentIndex) {
         view.currentIndex = currentIndex
+        // view.positionViewAtIndex(currentIndex, ListView.Beginning)
     }
 
     function getCurrentIndex() {
