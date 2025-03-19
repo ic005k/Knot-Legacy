@@ -3093,11 +3093,9 @@ void MainWindow::on_btnTodo_clicked() {
   if (ui->chkAutoSync->isChecked()) {
     showProgress();
 
-    QString url = m_CloudBackup->getWebDAVArgument();
+    m_CloudBackup->createRemoteWebDAVDir();
 
-    mw_one->m_CloudBackup->createDirectory(url, "KnotData/");
-    mw_one->m_CloudBackup->createDirectory(url, "KnotData/memo/");
-    mw_one->m_CloudBackup->createDirectory(url, "KnotData/memo/images");
+    QString url = m_CloudBackup->getWebDAVArgument();
 
     WebDavHelper *helper =
         listWebDavFiles(url + "KnotData/", m_CloudBackup->USERNAME,
@@ -3390,6 +3388,8 @@ void MainWindow::on_btnNotes_clicked() {
 
   if (ui->chkAutoSync->isChecked()) {
     showProgress();
+
+    m_CloudBackup->createRemoteWebDAVDir();
 
     orgRemoteDateTime.clear();
     orgRemoteFiles.clear();

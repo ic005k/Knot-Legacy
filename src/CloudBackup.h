@@ -57,7 +57,8 @@ class CloudBackup : public QDialog {
   void uploadFilesToWebDAV(QStringList files);
 
   void getRemoteFileList(QString url);
- signals:
+  void createRemoteWebDAVDir();
+  signals:
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;

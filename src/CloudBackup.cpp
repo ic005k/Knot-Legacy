@@ -952,3 +952,10 @@ void CloudBackup::getRemoteFileList(QString url) {
                      isGetRemoteFileListEnd = true;
                    });
 }
+
+void CloudBackup::createRemoteWebDAVDir() {
+  QString url = getWebDAVArgument();
+  createDirectory(url, "KnotData/");
+  createDirectory(url, "KnotData/memo/");
+  createDirectory(url, "KnotData/memo/images");
+}
