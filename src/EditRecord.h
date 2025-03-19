@@ -33,7 +33,8 @@ class EditRecord : public QDialog {
 
   void init();
 
-  static void saveOne();
+  static void saveAdded();
+  static void saveModified();
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;

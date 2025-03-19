@@ -254,7 +254,7 @@ class MainWindow : public QMainWindow {
   QList<QTreeWidgetItem *> findItemList;
   bool isFindTextChange = false;
   int findPos = 0;
-  bool isAdd = false;
+
   QTimer *timer;
   QTimer *timerStep;
   QTimer *timerMousePress;

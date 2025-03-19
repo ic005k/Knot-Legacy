@@ -11,6 +11,7 @@ QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
 bool isEBook, isReport, isUpData, isZipOK, isMenuImport, isDownData;
+bool isAdd = false;
 
 QString appName = "Knot";
 QString iniFile, iniDir, privateDir, strDate, readDate, noteText, strStats,
@@ -303,7 +304,10 @@ void MainWindow::saveDone() {
 
 void MainWindow::SaveFile(QString SaveType) {
   if (SaveType == "tab") {
-    EditRecord::saveOne();
+    if (isAdd)
+      EditRecord::saveAdded();
+    else
+      EditRecord::saveModified();
     saveTab();
     if (!isDelData)
       EditRecord::saveMyClassification();

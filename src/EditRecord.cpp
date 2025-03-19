@@ -9,7 +9,8 @@ extern Method *m_Method;
 extern QTabWidget *tabData;
 extern QString iniFile, iniDir, privateDir, btnYearText, btnMonthText;
 extern QRegularExpression regxNumber;
-extern bool isBreak, isDark, isReport, isWholeMonth, isDateSection, isDark;
+extern bool isBreak, isDark, isReport, isWholeMonth, isDateSection, isDark,
+    isAdd;
 extern int fontSize;
 
 extern QString loadText(QString textFile);
@@ -91,7 +92,7 @@ void EditRecord::init() {
   setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), mw_one->width(),
               mw_one->height());
 
-  if (mw_one->isAdd) {
+  if (isAdd) {
     mw_one->ui->editCategory->setText("");
     mw_one->ui->editAmount->setText("");
   }
@@ -108,7 +109,7 @@ void EditRecord::keyReleaseEvent(QKeyEvent *event) { Q_UNUSED(event); }
 void EditRecord::on_btnOk_clicked() {
   mw_one->on_btnBackEditRecord_clicked();
 
-  if (!mw_one->isAdd) {
+  if (!isAdd) {
     mw_one->modify_Data();
 
     mw_one->isNeedAutoBackup = true;
@@ -152,9 +153,9 @@ void EditRecord::on_btnOk_clicked() {
     m_CategoryList->ui->listWidget->insertItem(0, item);
   }
 
-  mw_one->startSave("tab");
-
   writeToLog(mw_one->strLatestModify);
+
+  mw_one->startSave("tab");
 }
 
 void EditRecord::on_btn7_clicked() { set_Amount("7"); }
@@ -430,7 +431,7 @@ void EditRecord::on_editDetails_textChanged() {
   }
 }
 
-void EditRecord::saveOne() {
+void EditRecord::saveAdded() {
   QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
 
   QString name = tw->objectName();
@@ -442,7 +443,7 @@ void EditRecord::saveOne() {
   Reg.setIniCodec("utf-8");
 #endif
 
-  qDebug() << "ini_file=" << ini_file;
+  qDebug() << "save added: ini_file=" << ini_file;
 
   QString flag;
   if (QFile::exists(ini_file)) {
@@ -476,6 +477,78 @@ void EditRecord::saveOne() {
                tw->topLevelItem(i)->text(1));
   Reg.setValue(flag + QString::number(Sn) + "-topAmount",
                tw->topLevelItem(i)->text(2));
+
+  int childCount = tw->topLevelItem(i)->childCount();
+
+  if (childCount > 0) {
+    for (int j = 0; j < childCount; j++) {
+      if (isBreak) return;
+      Reg.setValue(
+          flag + QString::number(Sn) + "-childTime" + QString::number(j),
+          tw->topLevelItem(i)->child(j)->text(0));
+      Reg.setValue(
+          flag + QString::number(Sn) + "-childAmount" + QString::number(j),
+          tw->topLevelItem(i)->child(j)->text(1));
+      Reg.setValue(
+          flag + QString::number(Sn) + "-childDesc" + QString::number(j),
+          tw->topLevelItem(i)->child(j)->text(2));
+      Reg.setValue(
+          flag + QString::number(Sn) + "-childDetails" + QString::number(j),
+          tw->topLevelItem(i)->child(j)->text(3));
+    }
+  }
+
+  Reg.setValue(flag + QString::number(Sn) + "-childCount", childCount);
+}
+
+void EditRecord::saveModified() {
+  QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
+
+  QString name = tw->objectName();
+  QString iniName = QString::number(QDate::currentDate().year()) + "-" + name;
+
+  QString ini_file = iniDir + iniName + ".ini";
+  QSettings Reg(ini_file, QSettings::IniFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  Reg.setIniCodec("utf-8");
+#endif
+
+  qDebug() << "save modified: ini_file=" << ini_file;
+
+  QString flag;
+  if (QFile::exists(ini_file)) {
+    QString group = Reg.childGroups().at(0);
+    if (group.trimmed().length() == 0)
+      flag = "/" + name + "/";
+    else
+      flag = "/" + group + "/";
+  } else
+    flag = "/" + name + "/";
+
+  int top_count = tw->topLevelItemCount();
+  if (top_count == 0) return;
+
+  int count = Reg.value(flag + "TopCount", 0).toInt();
+  // Reg.setValue(flag + "TopCount", count + 1);
+
+  QTreeWidgetItem *item = tw->currentItem();
+  int i = 0;
+  if (item->parent() == NULL)
+    i = tw->indexOfTopLevelItem(item);
+  else
+    i = tw->indexOfTopLevelItem(item->parent());
+  int Sn = count - (top_count - i) + 1;
+
+  Reg.setValue(flag + QString::number(Sn) + "-topDate",
+               tw->topLevelItem(i)->text(0));
+  Reg.setValue(flag + QString::number(Sn) + "-topYear",
+               tw->topLevelItem(i)->text(3));
+  Reg.setValue(flag + QString::number(Sn) + "-topFreq",
+               tw->topLevelItem(i)->text(1));
+  Reg.setValue(flag + QString::number(Sn) + "-topAmount",
+               tw->topLevelItem(i)->text(2));
+
+  qDebug() << "i=" << i << Sn << tw->topLevelItem(i)->text(0);
 
   int childCount = tw->topLevelItem(i)->childCount();
 
