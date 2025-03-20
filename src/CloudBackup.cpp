@@ -959,3 +959,12 @@ void CloudBackup::createRemoteWebDAVDir() {
   createDirectory(url, "KnotData/memo/");
   createDirectory(url, "KnotData/memo/images");
 }
+
+void CloudBackup::deleteWebDAVFiles(QStringList filesToDelete) {
+  if (filesToDelete.count() > 0) {
+    QString url = getWebDAVArgument();
+    CloudDeleter deleter(USERNAME, APP_PASSWORD);
+    deleter.baseUrl = url;
+    deleter.deleteFiles(filesToDelete);
+  }
+}

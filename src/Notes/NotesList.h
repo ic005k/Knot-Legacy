@@ -4,11 +4,15 @@
 #include <QApplication>
 #include <QDialog>
 #include <QDirIterator>
+#include <QFile>
 #include <QInputMethod>
 #include <QKeyEvent>
 #include <QListWidget>
 #include <QListWidgetItem>
 #include <QRandomGenerator>
+#include <QRegularExpression>
+#include <QStringList>
+#include <QTextStream>
 #include <QTreeWidgetItem>
 
 #include "src/Notes/MoveTo.h"
@@ -26,6 +30,8 @@ class NotesList : public QDialog {
   explicit NotesList(QWidget *parent = nullptr);
   ~NotesList();
   Ui::NotesList *ui;
+
+  QStringList needDelWebDAVFiles;
 
   QStringList listRecentOpen;
   QList<QTreeWidgetItem *> pNoteBookItems;
@@ -111,7 +117,9 @@ class NotesList : public QDialog {
   void genCursorText();
   void renameCurrentItem(QString title);
   void setCurrentItemFromMDFile(QString mdFile);
-  protected:
+  QStringList extractLocalImagesFromMarkdown(const QString &filePath);
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;

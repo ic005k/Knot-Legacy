@@ -6,7 +6,7 @@
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.2.17";
+QString ver = "1.2.18";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
@@ -3383,6 +3383,7 @@ void MainWindow::updateHardSensorSteps() {
 
 void MainWindow::on_btnNotes_clicked() {
   m_Notes->notes_sync_files.clear();
+  m_NotesList->needDelWebDAVFiles.clear();
   removeFilesWatch();
   isSelf = true;
 
@@ -5739,6 +5740,17 @@ void MainWindow::on_btnBackNoteRecycle_clicked() {
   m_NotesList->saveRecycle();
   ui->frameNoteRecycle->hide();
   ui->frameNoteList->show();
+
+  int count = m_NotesList->needDelWebDAVFiles.count();
+  if (count > 0) {
+    QStringList files;
+    for (int i = 0; i < count; i++) {
+      QString file = m_NotesList->needDelWebDAVFiles.at(i);
+      file = file.replace(iniDir, "KnotData/");
+      files.append(file);
+    }
+    m_CloudBackup->deleteWebDAVFiles(files);
+  }
 }
 
 void MainWindow::on_btnNoteRecycle_clicked() {

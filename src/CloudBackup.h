@@ -1,10 +1,17 @@
 ﻿#ifndef CLOUDBACKUP_H
 #define CLOUDBACKUP_H
 
+#include <QAuthenticator>
+#include <QCoreApplication>
+#include <QDebug>
 #include <QDialog>
 #include <QDir>
+#include <QEventLoop>
 #include <QFile>
+#include <QList>
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QObject>
 #include <QQueue>
 #include <QQuickWidget>
@@ -15,6 +22,7 @@ class CloudBackup;
 
 class WebDavHelper;
 class WebDavDownloader;
+class CloudDeleter;
 
 class QtOneDrive;
 class CloudBackup : public QDialog {
@@ -58,7 +66,8 @@ class CloudBackup : public QDialog {
 
   void getRemoteFileList(QString url);
   void createRemoteWebDAVDir();
-  signals:
+  void deleteWebDAVFiles(QStringList filesToDelete);
+ signals:
 
  protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
@@ -137,6 +146,61 @@ class WebDavDownloader : public QObject {
   int maxConcurrent;
   int totalFiles;
   int completedFiles;
+};
+
+class CloudDeleter : public QObject {
+  Q_OBJECT
+ public:
+  CloudDeleter(const QString &user, const QString &appPassword,
+               QObject *parent = nullptr)
+      : QObject(parent), username(user), password(appPassword) {}
+
+  QString baseUrl = "https://dav.jianguoyun.com/dav/";
+
+  void deleteFiles(const QList<QString> &filePaths) {
+    QEventLoop loop;
+    int remaining = filePaths.count();
+
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+
+    connect(
+        manager, &QNetworkAccessManager::finished, [&](QNetworkReply *reply) {
+          remaining--;
+          if (reply->error() == QNetworkReply::NoError) {
+            qInfo() << "Deleted:" << reply->request().url().path();
+          } else {
+            qWarning() << "Failed to delete" << reply->request().url().path()
+                       << ":" << reply->errorString();
+          }
+          reply->deleteLater();
+          if (remaining <= 0) loop.quit();
+        });
+
+    connect(manager, &QNetworkAccessManager::authenticationRequired,
+            [this](QNetworkReply *, QAuthenticator *auth) {
+              auth->setUser(this->username);
+              auth->setPassword(this->password);
+            });
+
+    foreach (const QString &path, filePaths) {
+      QUrl url(baseUrl + path);
+      QNetworkRequest request(url);
+      request.setAttribute(QNetworkRequest::User, path);  // 保存原始路径
+
+      QNetworkReply *reply = manager->deleteResource(request);
+      connect(reply, &QNetworkReply::sslErrors,
+              [](const QList<QSslError> &errors) {
+                qWarning() << "SSL Errors:" << errors;
+              });
+    }
+
+    loop.exec();
+    manager->deleteLater();
+  }
+
+ private:
+  QString username;
+  QString password;
 };
 
 #endif  // CLOUDBACKUP_H

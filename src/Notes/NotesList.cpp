@@ -1056,6 +1056,8 @@ void NotesList::on_btnDel_Recycle_clicked() {
     }
 
     QString md = iniDir + curItem->text(1);
+    needDelWebDAVFiles.append(md);
+    QStringList imagesInMD = extractLocalImagesFromMarkdown(md);
     delFile(md);
     curItem->parent()->removeChild(curItem);
   }
@@ -2332,4 +2334,43 @@ void NotesList::genCursorText() {
       QString::number(curPos) + "  (\"" + str0 + "|" + str1 + "\"" + ")";
   StringToFile(curText, privateDir + "cursor_text.txt");
   qDebug() << "cursor_text=" << curText;
+}
+
+QStringList NotesList::extractLocalImagesFromMarkdown(const QString &filePath) {
+  QStringList images;
+  QFile file(filePath);
+
+  // 打开文件
+  if (!file.open(QIODevice::ReadOnly)) {
+    return images;  // 返回空列表如果打开失败
+  }
+
+  QTextStream in(&file);
+  QString content = in.readAll();
+  file.close();
+
+  // 正则表达式匹配所有图片路径
+  QRegularExpression re("!\\[.*?\\]\\((.*?)\\)");
+  QRegularExpressionMatchIterator matchIterator = re.globalMatch(content);
+
+  while (matchIterator.hasNext()) {
+    QRegularExpressionMatch match = matchIterator.next();
+    QString captured = match.captured(1).trimmed();  // 去除首尾空格
+
+    // 提取第一个空格前的部分作为路径（处理可能存在的标题）
+    QString path = captured.section(' ', 0, 0);
+
+    // 过滤网络路径并检查非空
+    if (!path.startsWith("http://") && !path.startsWith("https://") &&
+        !path.isEmpty()) {
+      images.append(path);
+    }
+  }
+
+  // 可选：去重
+  images.removeDuplicates();
+
+  qDebug() << "images=" << images;
+
+  return images;
 }
