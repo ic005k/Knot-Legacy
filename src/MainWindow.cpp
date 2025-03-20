@@ -3090,7 +3090,7 @@ void MainWindow::on_btnTodo_clicked() {
   m_Notes->m_TextSelector->close();
   m_Notes->m_TextSelector = new TextSelector(mw_one);
 
-  if (ui->chkAutoSync->isChecked()) {
+  if (ui->chkAutoSync->isChecked() && ui->chkWebDAV->isChecked()) {
     showProgress();
 
     m_CloudBackup->createRemoteWebDAVDir();
@@ -3387,7 +3387,7 @@ void MainWindow::on_btnNotes_clicked() {
   removeFilesWatch();
   isSelf = true;
 
-  if (ui->chkAutoSync->isChecked()) {
+  if (ui->chkAutoSync->isChecked() && ui->chkWebDAV->isChecked()) {
     showProgress();
 
     m_CloudBackup->createRemoteWebDAVDir();
@@ -5741,15 +5741,17 @@ void MainWindow::on_btnBackNoteRecycle_clicked() {
   ui->frameNoteRecycle->hide();
   ui->frameNoteList->show();
 
-  int count = m_NotesList->needDelWebDAVFiles.count();
-  if (count > 0) {
-    QStringList files;
-    for (int i = 0; i < count; i++) {
-      QString file = m_NotesList->needDelWebDAVFiles.at(i);
-      file = file.replace(iniDir, "KnotData/");
-      files.append(file);
+  if (ui->chkAutoSync->isChecked() && ui->chkWebDAV->isChecked()) {
+    int count = m_NotesList->needDelWebDAVFiles.count();
+    if (count > 0) {
+      QStringList files;
+      for (int i = 0; i < count; i++) {
+        QString file = m_NotesList->needDelWebDAVFiles.at(i);
+        file = file.replace(iniDir, "KnotData/");
+        files.append(file);
+      }
+      m_CloudBackup->deleteWebDAVFiles(files);
     }
-    m_CloudBackup->deleteWebDAVFiles(files);
   }
 }
 

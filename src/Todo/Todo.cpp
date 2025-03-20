@@ -193,7 +193,8 @@ void Todo::closeTodo() {
   mw_one->ui->qwTodo->rootContext()->setContextProperty("isBtnVisible", false);
   mw_one->isSelf = false;
 
-  if (isNeedSync && mw_one->ui->chkAutoSync->isChecked()) {
+  if (isNeedSync && mw_one->ui->chkAutoSync->isChecked() &&
+      mw_one->ui->chkWebDAV->isChecked()) {
     QString todoFile = iniDir + "todo.ini";
     QStringList files;
     files.append(todoFile);

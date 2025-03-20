@@ -1058,7 +1058,13 @@ void NotesList::on_btnDel_Recycle_clicked() {
     QString md = iniDir + curItem->text(1);
     needDelWebDAVFiles.append(md);
     QStringList imagesInMD = extractLocalImagesFromMarkdown(md);
+    for (int i = 0; i < imagesInMD.count(); i++) {
+      QString image_file = imagesInMD.at(i);
+      image_file = "KnotData/memo/" + image_file;
+      needDelWebDAVFiles.append(image_file);
+    }
     delFile(md);
+
     curItem->parent()->removeChild(curItem);
   }
 
