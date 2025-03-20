@@ -1,12 +1,17 @@
 #ifndef METHOD_H
 #define METHOD_H
 
+#include <QConicalGradient>
 #include <QDialog>
 #include <QFileInfoList>
 #include <QInputDialog>
 #include <QLabel>
+#include <QPainter>
+#include <QPropertyAnimation>
 #include <QQuickWidget>
 #include <QTableWidget>
+#include <QTimer>
+#include <QWidget>
 
 namespace Ui {
 class Method;
@@ -85,11 +90,11 @@ class Method : public QDialog {
   QString vsbarStyle =
       "QScrollBar:vertical{"  // 垂直滑块整体
       "width:30px;"
-      "background:#FFFFFF;"   // 背景色
-      "padding-top:25px;"     // 上预留位置（放置向上箭头）
-      "padding-bottom:25px;"  // 下预留位置（放置向下箭头）
-      "padding-left:3px;"     // 左预留位置（美观）
-      "padding-right:3px;"    // 右预留位置（美观）
+      "background:#FFFFFF;"                 // 背景色
+      "padding-top:25px;"                   // 上预留位置（放置向上箭头）
+      "padding-bottom:25px;"                // 下预留位置（放置向下箭头）
+      "padding-left:3px;"                   // 左预留位置（美观）
+      "padding-right:3px;"                  // 右预留位置（美观）
       "border-left:1px solid #d7d7d7;}"     // 左分割线
       "QScrollBar::handle:vertical{"        // 滑块样式
       "background:#dbdbdb;"                 // 滑块颜色
@@ -105,11 +110,11 @@ class Method : public QDialog {
   QString vsbarStyleSmall =
       "QScrollBar:vertical{"  // 垂直滑块整体
       "width:6px;"
-      "background:rgb(255,255,255);"  // 背景色
-      "padding-top:0px;"              // 上预留位置（放置向上箭头）
-      "padding-bottom:0px;"           // 下预留位置（放置向下箭头）
-      "padding-left:1px;"             // 左预留位置（美观）
-      "padding-right:1px;"            // 右预留位置（美观）
+      "background:rgb(255,255,255);"        // 背景色
+      "padding-top:0px;"                    // 上预留位置（放置向上箭头）
+      "padding-bottom:0px;"                 // 下预留位置（放置向下箭头）
+      "padding-left:1px;"                   // 左预留位置（美观）
+      "padding-right:1px;"                  // 右预留位置（美观）
       "border-left:0px solid #d7d7d7;}"     // 左分割线
       "QScrollBar::handle:vertical{"        // 滑块样式
       "background:rgb(202,197,191);"        // 滑块颜色
@@ -263,7 +268,8 @@ class Method : public QDialog {
   void setMDTitle(QString strTitle);
   void setMDFile(QString strMDFile);
   void setAndroidFontSize(int nSize);
-  protected:
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:
@@ -287,6 +293,97 @@ class Method : public QDialog {
   int x, y, w, h;
 
   void setMainTabCurrentIndex();
+};
+
+class IOSCircularProgress : public QWidget {
+  Q_OBJECT
+  Q_PROPERTY(int rotationAngle READ rotationAngle WRITE setRotationAngle)
+  Q_PROPERTY(qreal progress READ progress WRITE setProgress)
+ public:
+  explicit IOSCircularProgress(QWidget *parent = nullptr)
+      : QWidget(parent), m_rotation(0), m_progress(0), m_penWidth(4) {
+    setFixedSize(60, 60);
+
+    // 旋转动画
+    m_rotateAnimation = new QPropertyAnimation(this, "rotationAngle", this);
+    m_rotateAnimation->setDuration(1500);
+    m_rotateAnimation->setLoopCount(-1);
+    m_rotateAnimation->setStartValue(0);
+    m_rotateAnimation->setEndValue(360);
+    m_rotateAnimation->start();
+
+    // 进度动画（示例用）
+    QPropertyAnimation *progressAnim =
+        new QPropertyAnimation(this, "progress", this);
+    progressAnim->setDuration(3000);
+    progressAnim->setLoopCount(-1);
+    progressAnim->setStartValue(0);
+    progressAnim->setEndValue(1);
+    progressAnim->start();
+  }
+
+  int rotationAngle() const { return m_rotation; }
+  void setRotationAngle(int angle) {
+    m_rotation = angle;
+    update();
+  }
+
+  qreal progress() const { return m_progress; }
+  void setProgress(qreal p) {
+    m_progress = qBound<qreal>(0, p, 1);
+    update();
+  }
+
+ protected:
+  void paintEvent(QPaintEvent *) override {
+    QPainter p(this);
+    p.setRenderHint(QPainter::Antialiasing);
+
+    const qreal outerRadius = qMin(width(), height()) * 0.5 - m_penWidth;
+    const QPointF center = rect().center();
+
+    // 绘制背景环
+    QPen bgPen(QColor("#E5E5E5"));
+    bgPen.setWidth(m_penWidth);
+    bgPen.setCapStyle(Qt::RoundCap);
+    p.setPen(bgPen);
+    p.drawEllipse(center, outerRadius, outerRadius);
+
+    // 绘制进度环
+    if (m_progress > 0) {
+      QConicalGradient gradient(center, -m_rotation);
+      gradient.setColorAt(0.0, QColor("#007AFF"));
+      gradient.setColorAt(0.5, QColor("#34C759"));
+      gradient.setColorAt(1.0, QColor("#007AFF"));
+
+      QPen progressPen(QBrush(gradient), m_penWidth);
+      progressPen.setCapStyle(Qt::RoundCap);
+      p.setPen(progressPen);
+
+      int startAngle = (-m_rotation + 90) * 16;
+      int spanAngle = -m_progress * 360 * 16;
+
+      p.drawArc(QRectF(center.x() - outerRadius, center.y() - outerRadius,
+                       outerRadius * 2, outerRadius * 2),
+                startAngle, spanAngle);
+    }
+
+    // 绘制高光
+    QRadialGradient highlight(center, outerRadius * 2);
+    highlight.setColorAt(0.0, QColor(255, 255, 255, 150));
+    highlight.setColorAt(0.3, QColor(255, 255, 255, 50));
+    highlight.setColorAt(1.0, Qt::transparent);
+    p.setBrush(highlight);
+    p.setPen(Qt::NoPen);
+    p.drawEllipse(center, outerRadius + m_penWidth / 2,
+                  outerRadius + m_penWidth / 2);
+  }
+
+ private:
+  QPropertyAnimation *m_rotateAnimation;
+  int m_rotation;
+  qreal m_progress;
+  int m_penWidth;
 };
 
 #endif  // METHOD_H

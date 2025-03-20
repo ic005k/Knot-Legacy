@@ -715,9 +715,9 @@ QDialog *Method::getProgBar() {
   }
 
   if (nProgressBarType == 2) {
-    QtMaterialCircularProgress *qmProgress =
-        new QtMaterialCircularProgress(this);
-    vbox->addWidget(qmProgress);
+    IOSCircularProgress *progress = new IOSCircularProgress(this);
+    progress->setProgress(0.00);  // 设置进度值0~1
+    vbox->addWidget(progress, 0, Qt::AlignHCenter);
   }
 
   dlg->setGeometry(

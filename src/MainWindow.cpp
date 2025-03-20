@@ -3,17 +3,18 @@
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
 #include "ui_MainWindow.h"
 
+QString ver = "1.2.18";
+QString appName = "Knot";
+
 QList<QPointF> PointList;
 QList<double> doubleList;
 
-QString ver = "1.2.18";
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
 bool isEBook, isReport, isUpData, isZipOK, isMenuImport, isDownData;
 bool isAdd = false;
 
-QString appName = "Knot";
 QString iniFile, iniDir, privateDir, strDate, readDate, noteText, strStats,
     SaveType, strY, strM, btnYText, btnMText, btnDText, CurrentYearMonth,
     zipfile, txt, infoStr, searchStr, currentMDFile, copyText, imgFileName,

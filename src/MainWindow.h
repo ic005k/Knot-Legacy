@@ -98,8 +98,6 @@
 #include "src/SyncInfo.h"
 #include "src/Todo/Todo.h"
 #include "src/Todo/TodoAlarm.h"
-#include "src/components/qtmaterialcircularprogress.h"
-#include "src/components/qtmaterialdialog.h"
 #include "ui_AboutThis.h"
 #include "ui_CategoryList.h"
 #include "ui_CloudBackup.h"

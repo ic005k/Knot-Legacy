@@ -140,17 +140,6 @@ SOURCES += \
     src/cmark-gfm/src/syntax_extension.c \
     src/cmark-gfm/src/utf8.c \
     src/cmark-gfm/src/xml.c \
-    src/components/lib/qtmaterialoverlaywidget.cpp \
-    src/components/lib/qtmaterialripple.cpp \
-    src/components/lib/qtmaterialrippleoverlay.cpp \
-    src/components/lib/qtmaterialstatetransition.cpp \
-    src/components/lib/qtmaterialstyle.cpp \
-    src/components/lib/qtmaterialtheme.cpp \
-    src/components/qtmaterialcircularprogress.cpp \
-    src/components/qtmaterialcircularprogress_internal.cpp \
-    src/components/qtmaterialdialog.cpp \
-    src/components/qtmaterialdialog_internal.cpp \
-    src/components/qtmaterialprogress_internal.cpp \
     src/main.cpp \
     src/md4c/entity.c \
     src/md4c/md4c-html.c \
@@ -202,23 +191,6 @@ HEADERS += \
     src/SyncInfo.h \
     src/Todo/Todo.h \
     src/Todo/TodoAlarm.h \
-    src/components/lib/qtmaterialoverlaywidget.h \
-    src/components/lib/qtmaterialripple.h \
-    src/components/lib/qtmaterialrippleoverlay.h \
-    src/components/lib/qtmaterialstatetransition.h \
-    src/components/lib/qtmaterialstatetransitionevent.h \
-    src/components/lib/qtmaterialstyle.h \
-    src/components/lib/qtmaterialstyle_p.h \
-    src/components/lib/qtmaterialtheme.h \
-    src/components/lib/qtmaterialtheme_p.h \
-    src/components/qtmaterialcircularprogress.h \
-    src/components/qtmaterialcircularprogress_internal.h \
-    src/components/qtmaterialcircularprogress_p.h \
-    src/components/qtmaterialdialog.h \
-    src/components/qtmaterialdialog_internal.h \
-    src/components/qtmaterialdialog_p.h \
-    src/components/qtmaterialprogress_internal.h \
-    src/components/qtmaterialprogress_p.h \
     src/md4c/entity.h \
     src/md4c/md4c-html.h \
     src/md4c/md4c.h \
