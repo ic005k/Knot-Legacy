@@ -987,6 +987,7 @@ void NotesList::on_btnRestore_clicked() {
 
   if (moveItem(twrb)) {
     resetQML_List();
+    clickNoteList();
     if (!ui->frame1->isHidden()) {
       on_btnBack_clicked();
     }
@@ -1270,7 +1271,8 @@ void NotesList::onSearchFinished() {
     //   m_Method->addItemToQW(mw_one->ui->qwNotesSearchResult, note_name,
     //                         filePath, strLineSn, "", 0);
 
-    searchResultList.append(filePath + "-==-" + strLineSn);
+    if (!recycleNotesList.contains(filePath))
+      searchResultList.append(filePath + "-==-" + strLineSn);
   }
 
   // ▶️ 释放资源
@@ -1293,6 +1295,7 @@ void NotesList::startFind(QString strFind) {
   QString directory = iniDir + "memo/";
   QString keyword = strFind;
   searchResultList.clear();
+  findCount = 0;
 
   // 老方法，会阻塞主线程，导致进度条无法显示
   // ResultsMap results = performSearch(directory, keyword);
@@ -1303,38 +1306,6 @@ void NotesList::startFind(QString strFind) {
   watcher->setFuture(future);
   connect(watcher, &QFutureWatcher<ResultsMap>::finished, this,
           &NotesList::onSearchFinished);
-
-  return;
-
-  strFind = strFind.trimmed();
-  strFind = strFind.toLower();
-  findResult.clear();
-  if (strFind.length() == 0) return;
-
-  int count = m_Method->getCountFromQW(mw_one->ui->qwNoteBook);
-  for (int i = 0; i < count; i++) {
-    setNoteBookCurrentIndex(i);
-    QString str0 = m_Method->getText0(mw_one->ui->qwNoteBook, i);
-    if (str0.toLower().contains(strFind)) {
-      findResult.append(QString::number(i) + "===" + "NoteBook");
-    }
-
-    clickNoteBook();
-    int count1 = m_Method->getCountFromQW(mw_one->ui->qwNoteList);
-    for (int j = 0; j < count1; j++) {
-      QString str0 = m_Method->getText0(mw_one->ui->qwNoteList, j);
-      if (str0.toLower().contains(strFind)) {
-        findResult.append(QString::number(i) + "===" + QString::number(j));
-      }
-    }
-  }
-
-  if (findResult.count() > 0) {
-    mw_one->ui->btnFindNextNote->setEnabled(true);
-    mw_one->ui->btnFindPreviousNote->setEnabled(true);
-  }
-
-  goFindResult(0);
 }
 
 void NotesList::goPrevious() {
@@ -1345,6 +1316,7 @@ void NotesList::goPrevious() {
   QString md_file = list.at(0);
   mw_one->ui->lblShowLineSn->setText(list.at(1));
   setCurrentItemFromMDFile(md_file);
+  clickNoteList();
 
   mw_one->ui->lblFindNoteCount->setText(
       QString::number(findCount + 1) + " -> " +
@@ -1362,6 +1334,7 @@ void NotesList::goNext() {
   QString md_file = list.at(0);
   mw_one->ui->lblShowLineSn->setText(list.at(1));
   setCurrentItemFromMDFile(md_file);
+  clickNoteList();
 
   mw_one->ui->lblFindNoteCount->setText(
       QString::number(findCount + 1) + " -> " +

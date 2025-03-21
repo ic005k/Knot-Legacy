@@ -3,7 +3,7 @@
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
 #include "ui_MainWindow.h"
 
-QString ver = "1.2.18";
+QString ver = "1.2.19";
 QString appName = "Knot";
 
 QList<QPointF> PointList;
@@ -5827,6 +5827,16 @@ void MainWindow::on_btnClearNoteFindText_clicked() {
 }
 
 void MainWindow::on_btnShowFindNotes_clicked() {
+  m_NotesList->recycleNotesList.clear();
+  int count = m_NotesList->ui->treeWidgetRecycle->topLevelItem(0)->childCount();
+  for (int i = 0; i < count; i++) {
+    QString file =
+        iniDir +
+        m_NotesList->ui->treeWidgetRecycle->topLevelItem(0)->child(i)->text(1);
+    m_NotesList->recycleNotesList.append(file);
+  }
+  qDebug() << m_NotesList->recycleNotesList;
+
   if (ui->f_FindNotes->isHidden()) {
     ui->f_FindNotes->show();
     ui->editFindNote->setFocus();

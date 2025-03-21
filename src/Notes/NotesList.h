@@ -53,6 +53,8 @@ class NotesList : public QDialog {
 
   QStringList searchResultList;
 
+  QStringList recycleNotesList;
+
   QString getCurrentNoteNameFromMDFile(QString mdFile);
 
   QStringList listRecentOpen;
