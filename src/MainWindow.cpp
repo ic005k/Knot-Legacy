@@ -344,6 +344,7 @@ void MainWindow::SaveFile(QString SaveType) {
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
+
   initMain = true;
 
   if (!isAndroid) {
@@ -1556,6 +1557,12 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     return;
   }
 
+  if (!ui->frameNotesSearchResult->isHidden()) {
+    on_btnBack_NotesSearchResult_clicked();
+    event->ignore();
+    return;
+  }
+
   if (!ui->frameNoteList->isHidden()) {
     on_btnBackNoteList_clicked();
     event->ignore();
@@ -2579,6 +2586,11 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 
       if (!ui->frameNoteRecycle->isHidden()) {
         on_btnBackNoteRecycle_clicked();
+        return true;
+      }
+
+      if (!ui->frameNotesSearchResult->isHidden()) {
+        on_btnBack_NotesSearchResult_clicked();
         return true;
       }
 
@@ -3621,6 +3633,11 @@ void MainWindow::initQW() {
   ui->qwNoteList->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/notelist.qml")));
 
+  ui->qwNotesSearchResult->rootContext()->setContextProperty("m_NotesList",
+                                                             m_NotesList);
+  ui->qwNotesSearchResult->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/notes_search_result.qml")));
+
   ui->qwNoteRecycle->rootContext()->setContextProperty("m_Method", m_Method);
   ui->qwNoteRecycle->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/noterecycle.qml")));
@@ -3848,6 +3865,7 @@ void MainWindow::init_UIWidget() {
   ui->frameViewCate->hide();
   ui->frameTabRecycle->hide();
   ui->frameNoteList->hide();
+  ui->frameNotesSearchResult->hide();
   ui->frameNoteRecycle->hide();
   ui->f_FindNotes->hide();
   ui->btnFindNextNote->setEnabled(false);
@@ -6406,4 +6424,9 @@ void MainWindow::on_chkOneDrive_clicked() {
     ui->chkWebDAV->setChecked(false);
   else
     ui->chkWebDAV->setChecked(true);
+}
+
+void MainWindow::on_btnBack_NotesSearchResult_clicked() {
+  ui->frameNotesSearchResult->hide();
+  ui->frameNoteList->show();
 }

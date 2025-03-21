@@ -32,6 +32,8 @@ bool isAndroid, isIOS;
 int main(int argc, char* argv[]) {
   QtWebView::initialize();
 
+  QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
   {
 #ifdef Q_OS_ANDROID

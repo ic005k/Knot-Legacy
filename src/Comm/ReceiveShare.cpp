@@ -257,6 +257,10 @@ void ReceiveShare::closeAllChildWindows() {
     mw_one->ui->btnBackNotes->click();
   }
 
+  if (mw_one->ui->frameNotesSearchResult->isVisible()) {
+    mw_one->ui->btnBack_NotesSearchResult->click();
+  }
+
   if (mw_one->ui->frameNoteList->isVisible()) {
     mw_one->ui->btnBackNoteList->click();
   }

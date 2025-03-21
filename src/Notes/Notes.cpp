@@ -1966,7 +1966,7 @@ QString markdownToHtmlWithMath(const QString &md) {
   // 创建解析器并启用关键选项
   cmark_parser *parser = cmark_parser_new(
       CMARK_OPT_TABLE_PREFER_STYLE_ATTRIBUTES |  // 表格样式优化
-      CMARK_OPT_UNSAFE  // 保留原始字符（如 $）
+      CMARK_OPT_UNSAFE                           // 保留原始字符（如 $）
   );
 
   // 附加所有需要的扩展
@@ -2098,10 +2098,6 @@ QString markdownToHtmlWithMath(const QString &md) {
 
 void Notes::openNotesUI() {
   init_all_notes();
-
-  if (mw_one->ui->editFindNote->text().trimmed().length() > 0) {
-    mw_one->on_btnFindNotes_clicked();
-  }
 
   mw_one->isMemoVisible = true;
   mw_one->isReaderVisible = false;

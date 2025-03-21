@@ -218,8 +218,6 @@ class NotesList : public QDialog {
   void goFindResult(int index);
 
   bool moveItem(QTreeWidget *tw);
-
-  QWindow *qmlWindow = nullptr;
 };
 
 class SearchMapper {

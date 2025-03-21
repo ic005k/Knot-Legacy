@@ -827,6 +827,8 @@ class MainWindow : public QMainWindow {
 
   void on_chkOneDrive_clicked();
 
+  void on_btnBack_NotesSearchResult_clicked();
+
  private:
   QStringList orgRemoteFiles;
   QList<QDateTime> orgRemoteDateTime;

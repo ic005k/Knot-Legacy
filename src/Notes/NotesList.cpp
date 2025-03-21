@@ -1220,31 +1220,8 @@ void displayResults(const ResultsMap &results) {
 void NotesList::showNotesSearchResult() {
   if (searchResultList.count() == 0) return;
 
-  if (!qmlWindow) {
-    QQmlApplicationEngine *engine = new QQmlApplicationEngine;
-    engine->rootContext()->setContextProperty("bridge", mw_one->m_NotesList);
-
-    // 同步初始窗口位置
-    engine->rootContext()->setContextProperty("initialX", x());
-    engine->rootContext()->setContextProperty("initialY", y());
-    engine->rootContext()->setContextProperty("initialWidth", width());
-    engine->rootContext()->setContextProperty("initialHeight", height());
-
-    engine->load(QUrl("qrc:/src/qmlsrc/notes_search_result.qml"));
-
-    // 获取QML窗口对象
-    if (!engine->rootObjects().isEmpty()) {
-      qmlWindow = qobject_cast<QWindow *>(engine->rootObjects().first());
-      // connect(qmlWindow, &QWindow::visibilityChanged,
-      //         [this](QWindow::Visibility visibility) {
-      //           if (visibility == QWindow::Hidden) {
-      //             handleQmlWindowClosed();
-      //           }
-      //         });
-    }
-  }
-  // syncWindowGeometry();
-  qmlWindow->show();
+  mw_one->ui->frameNoteList->hide();
+  mw_one->ui->frameNotesSearchResult->show();
 }
 
 void NotesList::startFind(QString strFind) {

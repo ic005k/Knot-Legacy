@@ -4,7 +4,7 @@ import QtQml 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
-Window {
+Rectangle {
 
 
     width: 500
@@ -411,4 +411,6 @@ Window {
             return "black"
         }
     }
+
+
 }
