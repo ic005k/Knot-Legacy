@@ -1286,6 +1286,8 @@ void NotesList::onSearchFinished() {
     mw_one->ui->btnFindPreviousNote->setEnabled(true);
     mw_one->ui->lblFindNoteCount->setText(
         QString::number(searchResultList.count()));
+
+    goNext();
   }
 
   mw_one->closeProgress();
@@ -1295,7 +1297,7 @@ void NotesList::startFind(QString strFind) {
   QString directory = iniDir + "memo/";
   QString keyword = strFind;
   searchResultList.clear();
-  findCount = 0;
+  findCount = -1;
 
   // 老方法，会阻塞主线程，导致进度条无法显示
   // ResultsMap results = performSearch(directory, keyword);
