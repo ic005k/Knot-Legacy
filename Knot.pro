@@ -16,6 +16,9 @@ win32 {
 greaterThan(QT_MAJOR_VERSION, 5): QT += core5compat statemachine
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+# 添加concurrent模块支持
+QT += concurrent
+
 CONFIG += c++17
 CONFIG+=sdk_no_version_check
 
@@ -287,6 +290,7 @@ DISTFILES += \
     src/qmlsrc/notelist.qml \
     src/qmlsrc/noterecycle.qml \
     src/qmlsrc/notes.qml \
+    src/qmlsrc/notes_search_result.qml \
     src/qmlsrc/pdf.qml \
     src/qmlsrc/reader.qml \
     src/qmlsrc/report.qml \

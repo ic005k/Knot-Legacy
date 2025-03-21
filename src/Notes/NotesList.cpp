@@ -1152,7 +1152,113 @@ void NotesList::getAllFiles(const QString &foldPath, QStringList &folds,
   }
 }
 
+// 文件搜索实现
+QStringList findMarkdownFiles(const QString &dirPath) {
+  QStringList mdFiles;
+  QDirIterator it(dirPath, {"*.md"}, QDir::Files, QDirIterator::Subdirectories);
+  while (it.hasNext()) mdFiles.append(it.next());
+  return mdFiles;
+}
+
+SearchResult searchInFile(const QString &filePath,
+                          const QRegularExpression &regex) {
+  SearchResult result;
+  QFile file(filePath);
+  if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    QTextStream in(&file);
+    int lineNum = 0;
+    while (!in.atEnd()) {
+      ++lineNum;
+      if (regex.match(in.readLine()).hasMatch()) {
+        result.filePath = filePath;
+        result.lineNumbers.append(lineNum);
+      }
+    }
+  }
+  return result;
+}
+
+// 结果归并
+void reduceResults(ResultsMap &result, const SearchResult &partial) {
+  if (!partial.filePath.isEmpty()) {
+    result[partial.filePath] = partial;
+  }
+}
+
+// 主搜索函数
+ResultsMap performSearch(const QString &dirPath, const QString &keyword) {
+  QStringList files = findMarkdownFiles(dirPath);
+  QRegularExpression regex(keyword,
+                           QRegularExpression::CaseInsensitiveOption |
+                               QRegularExpression::UseUnicodePropertiesOption);
+
+  return QtConcurrent::blockingMappedReduced<ResultsMap>(
+      files,
+      SearchMapper(regex),  // 使用函数对象替代lambda
+      reduceResults,
+      QtConcurrent::ReduceOptions(QtConcurrent::UnorderedReduce));
+}
+
+void displayResults(const ResultsMap &results) {
+  for (auto it = results.begin(); it != results.end(); ++it) {
+    qDebug() << "文件：" << it.key();
+    qDebug() << "匹配行号：" << it.value().lineNumbers;
+    QString file = it.key();
+    QList<int> lineNumbersList = it.value().lineNumbers;
+    QString strLine;
+    for (int i = 0; i < lineNumbersList.count(); i++) {
+      strLine = strLine + " " + QString::number(lineNumbersList.at(i));
+    }
+    mw_one->m_NotesList->searchResultList.append(file + "-==-" +
+                                                 strLine.trimmed());
+  }
+  qDebug() << mw_one->m_NotesList->searchResultList;
+  mw_one->m_NotesList->showNotesSearchResult();
+  mw_one->closeProgress();
+}
+
+void NotesList::showNotesSearchResult() {
+  if (searchResultList.count() == 0) return;
+
+  if (!qmlWindow) {
+    QQmlApplicationEngine *engine = new QQmlApplicationEngine;
+    engine->rootContext()->setContextProperty("bridge", mw_one->m_NotesList);
+
+    // 同步初始窗口位置
+    engine->rootContext()->setContextProperty("initialX", x());
+    engine->rootContext()->setContextProperty("initialY", y());
+    engine->rootContext()->setContextProperty("initialWidth", width());
+    engine->rootContext()->setContextProperty("initialHeight", height());
+
+    engine->load(QUrl("qrc:/src/qmlsrc/notes_search_result.qml"));
+
+    // 获取QML窗口对象
+    if (!engine->rootObjects().isEmpty()) {
+      qmlWindow = qobject_cast<QWindow *>(engine->rootObjects().first());
+      // connect(qmlWindow, &QWindow::visibilityChanged,
+      //         [this](QWindow::Visibility visibility) {
+      //           if (visibility == QWindow::Hidden) {
+      //             handleQmlWindowClosed();
+      //           }
+      //         });
+    }
+  }
+  // syncWindowGeometry();
+  qmlWindow->show();
+}
+
 void NotesList::startFind(QString strFind) {
+  mw_one->closeProgress();
+  mw_one->showProgress();
+
+  QString directory = iniDir + "memo/";
+  QString keyword = strFind;
+  searchResultList.clear();
+  ResultsMap results = performSearch(directory, keyword);
+  displayResults(results);
+
+  return;
+
   strFind = strFind.trimmed();
   strFind = strFind.toLower();
   findResult.clear();

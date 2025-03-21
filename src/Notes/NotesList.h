@@ -9,15 +9,30 @@
 #include <QKeyEvent>
 #include <QListWidget>
 #include <QListWidgetItem>
+#include <QQmlContext>
+#include <QQuickWidget>
 #include <QRandomGenerator>
 #include <QRegularExpression>
 #include <QStringList>
 #include <QTextStream>
 #include <QTreeWidgetItem>
+#include <QtConcurrent/QtConcurrent>
 
 #include "src/Notes/MoveTo.h"
 #include "src/Notes/NewNoteBook.h"
 #include "ui_MoveTo.h"
+
+struct SearchResult {
+  QString filePath;
+  QList<int> lineNumbers;
+};
+using ResultsMap = QMap<QString, SearchResult>;
+SearchResult searchInFile(const QString &filePath,
+                          const QRegularExpression &regex);
+QStringList findMarkdownFiles(const QString &dirPath);
+void reduceResults(ResultsMap &result, const SearchResult &partial);
+ResultsMap performSearch(const QString &dirPath, const QString &keyword);
+void displayResults(const ResultsMap &results);
 
 namespace Ui {
 class NotesList;
@@ -32,6 +47,8 @@ class NotesList : public QDialog {
   Ui::NotesList *ui;
 
   QStringList needDelWebDAVFiles;
+
+  QStringList searchResultList;
 
   QStringList listRecentOpen;
   QList<QTreeWidgetItem *> pNoteBookItems;
@@ -119,6 +136,8 @@ class NotesList : public QDialog {
   void setCurrentItemFromMDFile(QString mdFile);
   QStringList extractLocalImagesFromMarkdown(const QString &filePath);
 
+  void showNotesSearchResult();
+
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
@@ -199,6 +218,22 @@ class NotesList : public QDialog {
   void goFindResult(int index);
 
   bool moveItem(QTreeWidget *tw);
+
+  QWindow *qmlWindow = nullptr;
+};
+
+class SearchMapper {
+ public:
+  using result_type = SearchResult;  // 必须声明result_type
+
+  explicit SearchMapper(const QRegularExpression &regex) : m_regex(regex) {}
+
+  SearchResult operator()(const QString &filePath) const {
+    return searchInFile(filePath, m_regex);
+  }
+
+ private:
+  QRegularExpression m_regex;
 };
 
 #endif  // NOTESLIST_H
