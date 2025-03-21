@@ -829,6 +829,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnBack_NotesSearchResult_clicked();
 
+  void on_editFindNote_returnPressed();
+
  private:
   QStringList orgRemoteFiles;
   QList<QDateTime> orgRemoteDateTime;

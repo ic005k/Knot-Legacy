@@ -5911,6 +5911,18 @@ QRadioButton::indicator:checked {
             </item>
            </layout>
           </item>
+          <item>
+           <widget class="QLabel" name="lblShowLineSn">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>

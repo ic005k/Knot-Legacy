@@ -2511,11 +2511,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       return true;
     }
 
-    if (watch == ui->editFindNote && keyEvent->key() == Qt::Key_Return) {
-      on_btnFindNextNote_clicked();
-      return true;
-    }
-
     if (keyEvent->key() == Qt::Key_Escape) {
       if (ui->frameReader->isVisible()) on_btnBackReader_clicked();
       return true;
@@ -4042,6 +4037,9 @@ void MainWindow::init_UIWidget() {
 
   f.setBold(true);
   ui->lblSyncNote->setFont(f);
+  ui->lblShowLineSn->setFont(f);
+  ui->lblShowLineSn->setWordWrap(true);
+  ui->lblShowLineSn->adjustSize();
 
   QString lblStyle = ui->lblTitleEditRecord->styleSheet();
   ui->lblTotal->setStyleSheet(lblStyle);
@@ -5825,6 +5823,7 @@ void MainWindow::on_btnClearNoteFindText_clicked() {
   ui->lblFindNoteCount->setText("0");
   ui->btnFindNextNote->setEnabled(false);
   ui->btnFindPreviousNote->setEnabled(false);
+  ui->lblShowLineSn->setText("0");
 }
 
 void MainWindow::on_btnShowFindNotes_clicked() {
@@ -6432,3 +6431,5 @@ void MainWindow::on_btnBack_NotesSearchResult_clicked() {
   ui->frameNotesSearchResult->hide();
   ui->frameNoteList->show();
 }
+
+void MainWindow::on_editFindNote_returnPressed() { on_btnFindNotes_clicked(); }

@@ -26,22 +26,6 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   tw = ui->treeWidget;
   twrb = ui->treeWidgetRecycle;
 
-  if (!isDark) {
-#ifdef Q_OS_ANDROID
-    // tw->setStyleSheet("selection-background-color: lightblue");
-#else
-    // tw->setStyleSheet(mw_one->treeStyle);
-#endif
-
-    ui->editName->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
-
-    // twrb->setStyleSheet(tw->styleSheet());
-    // tw->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
-    // twrb->verticalScrollBar()->setStyleSheet(m_Method->vsbarStyleSmall);
-
-  } else {
-  }
-
   mw_one->ui->f_FindNotes->setStyleSheet(
       "QFrame{background-color: #455364;color: #FFFFFF;border-radius:10px; "
       "border:0px solid gray;}");
@@ -67,16 +51,11 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
 
   set_memo_dir();
 
-  ui->btnPrev->setEnabled(false);
-  ui->btnNext->setEnabled(false);
-
   QFont font = this->font();
   font.setPointSize(fontSize - 1);
   font.setBold(true);
   ui->lblCount->setFont(font);
 
-  ui->btnPrev->hide();
-  ui->btnNext->hide();
   ui->btnFind->hide();
   ui->editFind->hide();
   ui->lblCount->hide();
@@ -89,9 +68,6 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->editName->hide();
 
   mw_one->ui->btnManagement->setHidden(true);
-  mw_one->ui->btnFindPreviousNote->hide();
-  mw_one->ui->btnFindNextNote->hide();
-  mw_one->ui->lblFindNoteCount->hide();
 
   QScroller::grabGesture(ui->editName, QScroller::LeftMouseButtonGesture);
   m_Method->setSCrollPro(ui->editName);
@@ -1261,8 +1237,14 @@ void NotesList::onSearchFinished() {
   // ▶️ 数据安全检查
   if (results.isEmpty()) {
     mw_one->closeProgress();
+    searchResultList.clear();
+    mw_one->ui->btnFindNextNote->setEnabled(false);
+    mw_one->ui->btnFindPreviousNote->setEnabled(false);
+    mw_one->ui->lblShowLineSn->setText("0");
+    mw_one->ui->lblFindNoteCount->setText("0");
     ShowMessage *msg = new ShowMessage(this);
     msg->showMsg("Knot", tr("No match was found."), 1);
+
     return;
   }
 
@@ -1281,18 +1263,28 @@ void NotesList::onSearchFinished() {
     for (int i = 0; i < lines.count(); i++) {
       strLineSn = strLineSn + " " + QString::number(lines.at(i));
     }
+    strLineSn = strLineSn.trimmed();
 
-    QString note_name = getCurrentNoteNameFromMDFile(filePath);
-    if (note_name != "")
-      m_Method->addItemToQW(mw_one->ui->qwNotesSearchResult, note_name,
-                            filePath, strLineSn.trimmed(), "", 0);
+    // QString note_name = getCurrentNoteNameFromMDFile(filePath);
+    // if (note_name != "")
+    //   m_Method->addItemToQW(mw_one->ui->qwNotesSearchResult, note_name,
+    //                         filePath, strLineSn, "", 0);
+
+    searchResultList.append(filePath + "-==-" + strLineSn);
   }
 
   // ▶️ 释放资源
   watcher->deleteLater();
 
-  mw_one->ui->frameNoteList->hide();
-  mw_one->ui->frameNotesSearchResult->show();
+  // mw_one->ui->frameNoteList->hide();
+  // mw_one->ui->frameNotesSearchResult->show();
+
+  if (searchResultList.count() > 0) {
+    mw_one->ui->btnFindNextNote->setEnabled(true);
+    mw_one->ui->btnFindPreviousNote->setEnabled(true);
+    mw_one->ui->lblFindNoteCount->setText(
+        QString::number(searchResultList.count()));
+  }
 
   mw_one->closeProgress();
 }
@@ -1347,18 +1339,33 @@ void NotesList::startFind(QString strFind) {
 
 void NotesList::goPrevious() {
   findCount = findCount - 1;
-  if (findCount < 0) findCount = findResult.count() - 1;
+  if (findCount < 0) findCount = searchResultList.count() - 1;
 
-  goFindResult(findCount);
+  QStringList list = searchResultList.at(findCount).split("-==-");
+  QString md_file = list.at(0);
+  mw_one->ui->lblShowLineSn->setText(list.at(1));
+  setCurrentItemFromMDFile(md_file);
+
+  mw_one->ui->lblFindNoteCount->setText(
+      QString::number(findCount + 1) + " -> " +
+      QString::number(searchResultList.count()));
 
   if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->hide();
 }
 
 void NotesList::goNext() {
   findCount = findCount + 1;
-  if (findCount > findResult.count() - 1) findCount = 0;
 
-  goFindResult(findCount);
+  if (findCount > searchResultList.count() - 1) findCount = 0;
+
+  QStringList list = searchResultList.at(findCount).split("-==-");
+  QString md_file = list.at(0);
+  mw_one->ui->lblShowLineSn->setText(list.at(1));
+  setCurrentItemFromMDFile(md_file);
+
+  mw_one->ui->lblFindNoteCount->setText(
+      QString::number(findCount + 1) + " -> " +
+      QString::number(searchResultList.count()));
 
   if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->hide();
 }
@@ -1391,8 +1398,6 @@ void NotesList::goFindResult(int index) {
 void NotesList::on_btnFind_clicked() {
   QString strFind = ui->editFind->text().trimmed().toLower();
   if (strFind == "") {
-    ui->btnPrev->hide();
-    ui->btnNext->hide();
     mw_one->ui->btnFindNextNote->setEnabled(false);
     mw_one->ui->btnFindPreviousNote->setEnabled(false);
     return;
@@ -1428,8 +1433,6 @@ void NotesList::on_btnFind_clicked() {
   }
 
   if (findResultList.count() > 0) {
-    ui->btnPrev->setEnabled(true);
-    ui->btnNext->setEnabled(true);
     tw->setCurrentItem(findResultList.at(0));
     tw->scrollToItem(tw->currentItem());
 
@@ -1441,15 +1444,9 @@ void NotesList::on_btnFind_clicked() {
 
     mw_one->ui->lblFindNoteCount->setText(ui->lblCount->text());
 
-    ui->btnPrev->show();
-    ui->btnNext->show();
-
     mw_one->ui->btnFindNextNote->setEnabled(true);
     mw_one->ui->btnFindPreviousNote->setEnabled(true);
   } else {
-    ui->btnPrev->hide();
-    ui->btnNext->hide();
-
     mw_one->ui->btnFindNextNote->setEnabled(false);
     mw_one->ui->btnFindPreviousNote->setEnabled(false);
 
@@ -1533,43 +1530,6 @@ void NotesList::modifyNotesListText0(QString text0, int index) {
   m_Method->modifyItemText0(mw_one->ui->qwNoteList, index, text0);
 }
 
-void NotesList::on_btnPrev_clicked() {
-  findCount--;
-  if (findCount < 0) findCount = findResultList.count() - 1;  // findCount = 0;
-  tw->setCurrentItem(findResultList.at(findCount));
-  tw->scrollToItem(tw->currentItem());
-  ui->lblCount->setText(QString::number(findCount + 1) + "->" +
-                        QString::number(findResultList.count()));
-
-  mw_one->ui->lblFindNoteCount->setText(ui->lblCount->text());
-
-  if (isAndroid) {
-    if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->setVisible(false);
-  }
-
-  localItem();
-}
-
-void NotesList::on_btnNext_clicked() {
-  if (ui->btnNext->isHidden()) return;
-
-  findCount++;
-  if (findCount >= findResultList.count())
-    findCount = 0;  // findResultList.count() - 1;
-  tw->setCurrentItem(findResultList.at(findCount));
-  tw->scrollToItem(tw->currentItem());
-  ui->lblCount->setText(QString::number(findCount + 1) + "->" +
-                        QString::number(findResultList.count()));
-
-  mw_one->ui->lblFindNoteCount->setText(ui->lblCount->text());
-
-  if (isAndroid) {
-    if (pAndroidKeyboard->isVisible()) pAndroidKeyboard->setVisible(false);
-  }
-
-  localItem();
-}
-
 void NotesList::on_editFind_textChanged(const QString &arg1) {
   if (arg1.trimmed() == "") {
     ui->lblCount->setText("0");
@@ -1578,9 +1538,7 @@ void NotesList::on_editFind_textChanged(const QString &arg1) {
   on_btnFind_clicked();
 }
 
-void NotesList::on_editFind_returnPressed() {
-  if (ui->btnNext->isEnabled()) on_btnNext_clicked();
-}
+void NotesList::on_editFind_returnPressed() {}
 
 void NotesList::on_KVChanged() {
   if (!pAndroidKeyboard->isVisible()) {

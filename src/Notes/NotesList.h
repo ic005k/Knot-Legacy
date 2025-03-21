@@ -180,10 +180,6 @@ class NotesList : public QDialog {
 
   void on_btnFind_clicked();
 
-  void on_btnPrev_clicked();
-
-  void on_btnNext_clicked();
-
   void on_btnUp_clicked();
 
   void on_btnDown_clicked();
