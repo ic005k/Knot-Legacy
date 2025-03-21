@@ -5,6 +5,7 @@
 #include <QDialog>
 #include <QDirIterator>
 #include <QFile>
+#include <QFutureWatcher>
 #include <QInputMethod>
 #include <QKeyEvent>
 #include <QListWidget>
@@ -51,6 +52,8 @@ class NotesList : public QDialog {
   QStringList needDelWebDAVFiles;
 
   QStringList searchResultList;
+
+  QString getCurrentNoteNameFromMDFile(QString mdFile);
 
   QStringList listRecentOpen;
   QList<QTreeWidgetItem *> pNoteBookItems;
@@ -195,6 +198,8 @@ class NotesList : public QDialog {
 
   void on_actionShareNoteFile();
 
+  void onSearchFinished();
+
  private:
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
   QStringList files;
@@ -220,7 +225,8 @@ class NotesList : public QDialog {
   void goFindResult(int index);
 
   bool moveItem(QTreeWidget *tw);
-  QString getCurrentNoteNameFromMDFile(QString mdFile);
+
+  QFutureWatcher<ResultsMap> *watcher;
 };
 
 class SearchMapper {

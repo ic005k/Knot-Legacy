@@ -1227,6 +1227,7 @@ void displayResults(const ResultsMap &results) {
                                                  strLine.trimmed());
   }
   qDebug() << mw_one->m_NotesList->searchResultList;
+
   mw_one->m_NotesList->showNotesSearchResult();
 }
 
@@ -1245,8 +1246,53 @@ void NotesList::showNotesSearchResult() {
     QString note_name = getCurrentNoteNameFromMDFile(list.at(0));
     if (note_name != "")
       m_Method->addItemToQW(mw_one->ui->qwNotesSearchResult, note_name,
-                            list.at(1), "", "", 0);
+                            list.at(0), list.at(1), "", 0);
   }
+
+  mw_one->closeProgress();
+}
+
+void NotesList::onSearchFinished() {
+  if (!watcher) return;
+
+  // ▶️ 正式获取结果
+  const ResultsMap results = watcher->result();
+
+  // ▶️ 数据安全检查
+  if (results.isEmpty()) {
+    mw_one->closeProgress();
+    ShowMessage *msg = new ShowMessage(this);
+    msg->showMsg("Knot", tr("No match was found."), 1);
+    return;
+  }
+
+  m_Method->clearAllBakList(mw_one->ui->qwNotesSearchResult);
+
+  // ▶️ 处理搜索结果
+
+  for (auto it = results.constBegin(); it != results.constEnd(); ++it) {
+    const QString &filePath = it.key();
+    const QList<int> lines = it.value().lineNumbers;
+
+    qDebug() << "文件：" << it.key();
+    qDebug() << "匹配行号：" << it.value().lineNumbers;
+
+    QString strLineSn;
+    for (int i = 0; i < lines.count(); i++) {
+      strLineSn = strLineSn + " " + QString::number(lines.at(i));
+    }
+
+    QString note_name = getCurrentNoteNameFromMDFile(filePath);
+    if (note_name != "")
+      m_Method->addItemToQW(mw_one->ui->qwNotesSearchResult, note_name,
+                            filePath, strLineSn.trimmed(), "", 0);
+  }
+
+  // ▶️ 释放资源
+  watcher->deleteLater();
+
+  mw_one->ui->frameNoteList->hide();
+  mw_one->ui->frameNotesSearchResult->show();
 
   mw_one->closeProgress();
 }
@@ -1255,8 +1301,16 @@ void NotesList::startFind(QString strFind) {
   QString directory = iniDir + "memo/";
   QString keyword = strFind;
   searchResultList.clear();
-  ResultsMap results = performSearchAsync(directory, keyword);
-  displayResults(results);
+
+  // 老方法，会阻塞主线程，导致进度条无法显示
+  // ResultsMap results = performSearch(directory, keyword);
+  // displayResults(results);
+
+  watcher = new QFutureWatcher<ResultsMap>(this);
+  auto future = performSearchAsync(directory, keyword);
+  watcher->setFuture(future);
+  connect(watcher, &QFutureWatcher<ResultsMap>::finished, this,
+          &NotesList::onSearchFinished);
 
   return;
 
@@ -2511,3 +2565,5 @@ QStringList NotesList::extractLocalImagesFromMarkdown(const QString &filePath) {
 
   return images;
 }
+
+template class QFutureWatcher<ResultsMap>;
