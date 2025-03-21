@@ -32,6 +32,8 @@ SearchResult searchInFile(const QString &filePath,
 QStringList findMarkdownFiles(const QString &dirPath);
 void reduceResults(ResultsMap &result, const SearchResult &partial);
 ResultsMap performSearch(const QString &dirPath, const QString &keyword);
+QFuture<ResultsMap> performSearchAsync(const QString &dirPath,
+                                       const QString &keyword);
 void displayResults(const ResultsMap &results);
 
 namespace Ui {
@@ -218,6 +220,7 @@ class NotesList : public QDialog {
   void goFindResult(int index);
 
   bool moveItem(QTreeWidget *tw);
+  QString getCurrentNoteNameFromMDFile(QString mdFile);
 };
 
 class SearchMapper {

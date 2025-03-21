@@ -3698,6 +3698,7 @@ void MainWindow::init_Theme() {
   ui->qwNoteBook->rootContext()->setContextProperty("isDark", isDark);
   ui->qwNoteList->rootContext()->setContextProperty("isDark", isDark);
   ui->qwNotes->rootContext()->setContextProperty("isDark", isDark);
+  ui->qwNotesSearchResult->rootContext()->setContextProperty("isDark", isDark);
   ui->qwSearch->rootContext()->setContextProperty("isDark", isDark);
   ui->qwBakList->rootContext()->setContextProperty("isDark", isDark);
   ui->qwViewCate->rootContext()->setContextProperty("isDark", isDark);
@@ -5806,12 +5807,13 @@ void MainWindow::on_btnRestoreNoteRecycle_clicked() {
 }
 
 void MainWindow::on_btnFindNotes_clicked() {
+  showProgress();
   m_NotesList->startFind(ui->editFindNote->text().trimmed());
 }
 
 void MainWindow::on_editFindNote_textChanged(const QString &arg1) {
-  m_NotesList->startFind(arg1.trimmed());
-  if (arg1.trimmed() == "") on_btnClearNoteFindText_clicked();
+  // m_NotesList->startFind(arg1.trimmed());
+  // if (arg1.trimmed() == "") on_btnClearNoteFindText_clicked();
 }
 
 void MainWindow::on_btnFindPreviousNote_clicked() { m_NotesList->goPrevious(); }

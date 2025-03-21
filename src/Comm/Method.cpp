@@ -692,7 +692,7 @@ QDialog *Method::getProgBar() {
   font.setPointSize(size + 2);
   lbl->setFont(font);
   lbl->setText(tr("Reading, please wait..."));
-  lbl->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+  lbl->setAlignment(Qt::AlignHCenter);  // | Qt::AlignVCenter);
   vbox->addWidget(lbl);
 
   if (nProgressBarType == 1) {
@@ -717,7 +717,7 @@ QDialog *Method::getProgBar() {
   if (nProgressBarType == 2) {
     IOSCircularProgress *progress = new IOSCircularProgress(this);
     progress->setProgress(0.00);  // 设置进度值0~1
-    vbox->addWidget(progress, 0, Qt::AlignHCenter);
+    vbox->addWidget(progress, 0, Qt::AlignHCenter | Qt::AlignVCenter);
   }
 
   dlg->setGeometry(

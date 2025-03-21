@@ -89,7 +89,9 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->editName->hide();
 
   mw_one->ui->btnManagement->setHidden(true);
-  mw_one->ui->btnFindNotes->hide();
+  mw_one->ui->btnFindPreviousNote->hide();
+  mw_one->ui->btnFindNextNote->hide();
+  mw_one->ui->lblFindNoteCount->hide();
 
   QScroller::grabGesture(ui->editName, QScroller::LeftMouseButtonGesture);
   m_Method->setSCrollPro(ui->editName);
@@ -1199,6 +1201,18 @@ ResultsMap performSearch(const QString &dirPath, const QString &keyword) {
       QtConcurrent::ReduceOptions(QtConcurrent::UnorderedReduce));
 }
 
+QFuture<ResultsMap> performSearchAsync(const QString &dirPath,
+                                       const QString &keyword) {
+  QStringList files = findMarkdownFiles(dirPath);
+  QRegularExpression regex(keyword,
+                           QRegularExpression::CaseInsensitiveOption |
+                               QRegularExpression::UseUnicodePropertiesOption);
+
+  return QtConcurrent::mappedReduced(  // 注意改用 mappedReduced 非阻塞版本
+      files, SearchMapper(regex), reduceResults,
+      QtConcurrent::ReduceOption::UnorderedReduce);
+}
+
 void displayResults(const ResultsMap &results) {
   for (auto it = results.begin(); it != results.end(); ++it) {
     qDebug() << "文件：" << it.key();
@@ -1214,24 +1228,34 @@ void displayResults(const ResultsMap &results) {
   }
   qDebug() << mw_one->m_NotesList->searchResultList;
   mw_one->m_NotesList->showNotesSearchResult();
-  mw_one->closeProgress();
 }
 
 void NotesList::showNotesSearchResult() {
-  if (searchResultList.count() == 0) return;
+  if (searchResultList.count() == 0) {
+    mw_one->closeProgress();
+    return;
+  }
 
   mw_one->ui->frameNoteList->hide();
   mw_one->ui->frameNotesSearchResult->show();
+
+  m_Method->clearAllBakList(mw_one->ui->qwNotesSearchResult);
+  for (int i = 0; i < searchResultList.count(); i++) {
+    QStringList list = searchResultList.at(i).split("-==-");
+    QString note_name = getCurrentNoteNameFromMDFile(list.at(0));
+    if (note_name != "")
+      m_Method->addItemToQW(mw_one->ui->qwNotesSearchResult, note_name,
+                            list.at(1), "", "", 0);
+  }
+
+  mw_one->closeProgress();
 }
 
 void NotesList::startFind(QString strFind) {
-  mw_one->closeProgress();
-  mw_one->showProgress();
-
   QString directory = iniDir + "memo/";
   QString keyword = strFind;
   searchResultList.clear();
-  ResultsMap results = performSearch(directory, keyword);
+  ResultsMap results = performSearchAsync(directory, keyword);
   displayResults(results);
 
   return;
@@ -2393,6 +2417,30 @@ void NotesList::setCurrentItemFromMDFile(QString mdFile) {
 
     if (isBreak) break;
   }
+}
+
+QString NotesList::getCurrentNoteNameFromMDFile(QString mdFile) {
+  QString note_name;
+  int count = getNoteBookCount();
+  bool isBreak = false;
+  for (int i = 0; i < count; i++) {
+    setNoteBookCurrentIndex(i);
+    clickNoteBook();
+    int count1 = getNotesListCount();
+    for (int j = 0; j < count1; j++) {
+      setNotesListCurrentIndex(j);
+      QString strMD = iniDir + m_Method->getText3(mw_one->ui->qwNoteList, j);
+      if (mdFile == strMD) {
+        note_name = m_Method->getText0(mw_one->ui->qwNoteList, j);
+        isBreak = true;
+        break;
+      }
+    }
+
+    if (isBreak) break;
+  }
+
+  return note_name;
 }
 
 void NotesList::genCursorText() {
