@@ -56,6 +56,7 @@ extern QString loadText(QString textFile);
 extern QString getTextEditLineText(QTextEdit *txtEdit, int i);
 extern void TextEditToFile(QTextEdit *txtEdit, QString fileName);
 extern void StringToFile(QString buffers, QString fileName);
+extern void unzip(QString zipFile, QString unzipDir);
 
 extern WebDavHelper *listWebDavFiles(const QString &url,
                                      const QString &username,

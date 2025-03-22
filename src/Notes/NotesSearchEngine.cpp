@@ -4,13 +4,7 @@
 #include <QFile>
 #include <QRegularExpression>
 
-// 需要配置 jieba 词典路径（需自行下载或修改路径）
-const char *const DICT_PATH = "dict/jieba.dict.utf8";
-const char *const HMM_PATH = "dict/hmm_model.utf8";
-const char *const USER_DICT_PATH = "dict/user.dict.utf8";
-
-NotesSearchEngine::NotesSearchEngine(QObject *parent)
-    : QObject(parent), m_jieba(DICT_PATH, HMM_PATH, USER_DICT_PATH) {
+NotesSearchEngine::NotesSearchEngine(QObject *parent) : QObject(parent) {
   // 注册 KeywordPosition 以便与 Qt 信号槽兼容
   qRegisterMetaType<KeywordPosition>("KeywordPosition");
   qRegisterMetaTypeStreamOperators<KeywordPosition>("KeywordPosition");
@@ -58,19 +52,16 @@ QStringList NotesSearchEngine::tokenize(const QString &text) const {
     tokens = text.toLower().split(QRegularExpression("[^\\p{L}0-9_]+"),
                                   QString::SkipEmptyParts);
   } else {
-    // 中文：使用精确模式分词（默认最常用模式）
-    std::vector<std::string> words;
-    m_jieba.Cut(text.toStdString(), words,
-                true);  // true 表示使用 HMM 模型提升准确率
-
-    // 过滤空词项并保留单字词
-    for (const auto &word : words) {
-      QString token = QString::fromStdString(word).trimmed();
-      if (!token.isEmpty()) {
-        tokens.append(token);
+    // 中文：按单字切分（过滤标点和空格）
+    for (QChar ch : text) {
+      if (ch.isLetter() && (ch.script() == QChar::Script_Han ||
+                            ch.script() == QChar::Script_Katakana ||
+                            ch.script() == QChar::Script_Hiragana)) {
+        tokens.append(ch);
       }
     }
   }
+
   return tokens;
 }
 

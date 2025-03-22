@@ -8,8 +8,6 @@
 #include <QSet>
 #include <QtConcurrent>
 
-#include "cppjieba/Jieba.hpp"
-
 // 定义位置信息结构体
 struct KeywordPosition {
   int paragraphIndex;
@@ -95,7 +93,6 @@ class NotesSearchEngine : public QObject {
 
   // 异步索引构建
   QFutureWatcher<void> m_indexWatcher;
-  cppjieba::Jieba m_jieba;
 
   QMutex m_mutex;
 };

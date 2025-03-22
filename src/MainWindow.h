@@ -85,6 +85,7 @@
 #include "src/Notes/MarkdownHighlighter.h"
 #include "src/Notes/Notes.h"
 #include "src/Notes/NotesList.h"
+#include "src/Notes/NotesSearchEngine.h"
 #include "src/Preferences.h"
 #include "src/Reader/File.h"
 #include "src/Reader/PageIndicator.h"
