@@ -60,7 +60,9 @@ class NotesSearchEngine : public QObject {
   void indexDocument(const QString &path, const QString &content);
 
   // 异步批量构建索引
-  void buildIndexAsync(const QList<QString> &notePaths);
+  // fullRebuild 参数（默认 false 表示增量索引）
+  void buildIndexAsync(const QList<QString> &notePaths,
+                       bool fullRebuild = false);
 
   // 执行搜索
   QList<SearchResult> search(const QString &query);

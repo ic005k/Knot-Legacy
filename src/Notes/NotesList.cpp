@@ -1180,19 +1180,6 @@ void reduceResults(ResultsMap &result, const MySearchResult &partial) {
 }
 
 // 主搜索函数
-ResultsMap performSearch(const QString &dirPath, const QString &keyword) {
-  QStringList files = findMarkdownFiles(dirPath);
-  QRegularExpression regex(keyword,
-                           QRegularExpression::CaseInsensitiveOption |
-                               QRegularExpression::UseUnicodePropertiesOption);
-
-  return QtConcurrent::blockingMappedReduced<ResultsMap>(
-      files,
-      SearchMapper(regex),  // 使用函数对象替代lambda
-      reduceResults,
-      QtConcurrent::ReduceOptions(QtConcurrent::UnorderedReduce));
-}
-
 QFuture<ResultsMap> performSearchAsync(const QString &dirPath,
                                        const QString &keyword) {
   QStringList files = findMarkdownFiles(dirPath);
@@ -1313,10 +1300,6 @@ void NotesList::startFind(QString strFind) {
   QString keyword = strFind;
   searchResultList.clear();
   findCount = -1;
-
-  // 老方法，会阻塞主线程，导致进度条无法显示
-  // ResultsMap results = performSearch(directory, keyword);
-  // displayResults(results);
 
   watcher = new QFutureWatcher<ResultsMap>(this);
   auto future = performSearchAsync(directory, keyword);
@@ -2517,20 +2500,18 @@ QStringList NotesList::extractLocalImagesFromMarkdown(const QString &filePath) {
 void NotesList::onSearchIndexReady() {
   qDebug() << "索引构建完成，共索引文档：" << m_searchEngine->documentCount();
 
-  m_searchEngine->saveIndex(privateDir + "MyNotesIndex");
-
   // 更新最后索引时间,如果 m_lastIndexTime 在多个线程中被访问，需添加互斥锁
   QMutexLocker locker(&m_indexTimeMutex);
   m_lastIndexTime = QDateTime::currentDateTime();
   saveIndexTimestamp();
+
+  m_searchEngine->saveIndex(privateDir + "MyNotesIndex");
 
   m_isIndexing = false;
 }
 
 void NotesList::onSearchTextChanged(const QString &text) {
   QList<SearchResult> results = m_searchEngine->search(text);
-  // updateSearchResults(results);  // 更新 UI 显示结果
-  // qDebug() << "results=" << results;
 
   // 打印调试信息
   qDebug() << "===== 搜索开始 =====";
@@ -2564,8 +2545,10 @@ void NotesList::openSearch() {
   notePaths = result;
 
   QStringList newPaths = findUnindexedFiles(notePaths);
-  if (!QFile::exists(privateDir + "MyNotesIndex")) newPaths = notePaths;
-  m_searchEngine->buildIndexAsync(newPaths);
+  if (!QFile::exists(privateDir + "MyNotesIndex"))
+    m_searchEngine->buildIndexAsync(notePaths, true);
+  else
+    m_searchEngine->buildIndexAsync(newPaths, false);
 }
 
 // 增量索引更新
@@ -2573,12 +2556,15 @@ QList<QString> NotesList::findUnindexedFiles(const QList<QString> &allPaths) {
   QList<QString> newPaths;
   for (const QString &path : allPaths) {
     QFileInfo fileInfo(path);
+
     // 检查文件最后修改时间是否晚于索引保存时间
-    if (!m_searchEngine->hasDocument(path) ||
+    if (!m_searchEngine->hasDocument(path) &&
         fileInfo.lastModified() > m_lastIndexTime) {
       newPaths.append(path);
     }
   }
+
+  qDebug() << "newPaths=" << newPaths;
   return newPaths;
 }
 

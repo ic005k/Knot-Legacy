@@ -33,7 +33,6 @@ MySearchResult searchInFile(const QString &filePath,
                             const QRegularExpression &regex);
 QStringList findMarkdownFiles(const QString &dirPath);
 void reduceResults(ResultsMap &result, const MySearchResult &partial);
-ResultsMap performSearch(const QString &dirPath, const QString &keyword);
 QFuture<ResultsMap> performSearchAsync(const QString &dirPath,
                                        const QString &keyword);
 void displayResults(const ResultsMap &results);

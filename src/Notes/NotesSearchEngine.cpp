@@ -26,16 +26,25 @@ NotesSearchEngine::NotesSearchEngine(QObject *parent)
           &NotesSearchEngine::indexBuildFinished);
 }
 
+// NotesSearchEngine.cpp
 QString NotesSearchEngine::preprocessMarkdown(const QString &content) const {
-  // 移除代码块
+  // 移除代码块（匹配多行）
   static QRegularExpression codeBlockRegex(R"(```[\s\S]*?```)");
   QString cleaned = content;
   cleaned.remove(codeBlockRegex);
 
-  // 移除行内格式和链接
-  cleaned.remove(QRegularExpression(R"((\*\*|__|\*|_|~~|`|!?\[.*?\]\(.*?\)))"));
+  // 移除行内格式符号（粗体、斜体、删除线、行内代码）
+  QRegularExpression inlineFormatRegex(R"((\*\*|__|\*|_|~~|`))");
+  if (!inlineFormatRegex.isValid()) {
+    qCritical() << "正则表达式无效：" << inlineFormatRegex.errorString();
+    return cleaned;
+  }
+  cleaned.replace(inlineFormatRegex, "");
 
-  // 合并空白字符
+  // 移除链接和图片
+  cleaned.remove(QRegularExpression(R"(!?\[.*?\]\(.*?\))"));
+
+  // 合并连续空白字符
   return cleaned.simplified();
 }
 
@@ -43,43 +52,69 @@ QStringList NotesSearchEngine::tokenize(const QString &text) const {
   QStringList tokens;
 
   // 判断是否为非中文（包含任意非CJK字符）
-  bool isNonChinese = std::any_of(text.begin(), text.end(), [](QChar ch) {
+  bool hasNonChinese = std::any_of(text.begin(), text.end(), [](QChar ch) {
     return ch.script() != QChar::Script_Han &&
            ch.script() != QChar::Script_Katakana &&
            ch.script() != QChar::Script_Hiragana;
   });
 
-  if (isNonChinese) {
-    // 英文/德文等：按非字母数字字符切分
+  if (hasNonChinese) {
+    // 英文/德文等：按非字母数字字符切分，并转为小写
     tokens = text.toLower().split(QRegularExpression("[^\\p{L}0-9_]+"),
                                   QString::SkipEmptyParts);
   } else {
-    // 中文：使用分词库
+    // 中文：使用精确模式分词（默认最常用模式）
     std::vector<std::string> words;
-    m_jieba.Cut(text.toStdString(), words);
+    m_jieba.Cut(text.toStdString(), words,
+                true);  // true 表示使用 HMM 模型提升准确率
+
+    // 过滤空词项并保留单字词
     for (const auto &word : words) {
-      tokens.append(QString::fromStdString(word));
+      QString token = QString::fromStdString(word).trimmed();
+      if (!token.isEmpty()) {
+        tokens.append(token);
+      }
     }
   }
-
   return tokens;
 }
 
 // 在索引文档时，将内容分割为段落，并记录每个关键词的位置
 void NotesSearchEngine::indexDocument(const QString &path,
                                       const QString &content) {
+  QMutexLocker locker(&m_mutex);
   QString cleaned = preprocessMarkdown(content);
-  QStringList paragraphs =
-      cleaned.split("\n", QString::SkipEmptyParts);  // 按换行符分割段落
-  m_documentParagraphs.insert(path, paragraphs);
-  m_documents.insert(path, cleaned);
 
+  // 1. 移除旧索引
+  if (m_documents.contains(path)) {
+    QString oldContent = m_documents[path];
+    QStringList oldKeywords = tokenize(oldContent);
+    for (const QString &keyword : oldKeywords) {
+      // 确保从倒排索引中完全移除路径
+      if (m_invertedIndex.contains(keyword)) {
+        QHash<QString, QList<KeywordPosition>> &docMap =
+            m_invertedIndex[keyword];
+        docMap.remove(path);  // 删除该路径的所有位置信息
+        if (docMap.isEmpty()) {
+          m_invertedIndex.remove(keyword);  // 清理空关键词
+        }
+      }
+    }
+    m_documents.remove(path);
+    m_documentParagraphs.remove(path);
+  }
+
+  // 2. 预处理并插入新内容
+  m_documents[path] = cleaned;
+  QStringList paragraphs = cleaned.split("\n", QString::SkipEmptyParts);
+  m_documentParagraphs[path] = paragraphs;
+
+  // 3. 构建新索引
   for (int paraIndex = 0; paraIndex < paragraphs.size(); ++paraIndex) {
     const QString paragraph = paragraphs[paraIndex];
     QStringList keywords = tokenize(paragraph);
-
     for (const QString &keyword : keywords) {
-      // 查找关键词在段落中的所有出现位置
+      // 查找关键词在段落中的所有位置
       int pos = 0;
       while ((pos = paragraph.indexOf(keyword, pos, Qt::CaseInsensitive)) !=
              -1) {
@@ -87,9 +122,7 @@ void NotesSearchEngine::indexDocument(const QString &path,
         position.paragraphIndex = paraIndex;
         position.charStart = pos;
         position.charEnd = pos + keyword.length();
-        position.context =
-            paragraph.mid(qMax(0, pos - 20), 40);  // 取前后20字符作为上下文
-
+        position.context = paragraph.mid(qMax(0, pos - 20), 40);  // 上下文截取
         m_invertedIndex[keyword][path].append(position);
         pos += keyword.length();
       }
@@ -97,13 +130,15 @@ void NotesSearchEngine::indexDocument(const QString &path,
   }
 }
 
-void NotesSearchEngine::buildIndexAsync(const QList<QString> &notePaths) {
-  // 清空现有索引
-  {
+void NotesSearchEngine::buildIndexAsync(const QList<QString> &notePaths,
+                                        bool fullRebuild) {
+  // 仅在 fullRebuild 为 true 时清空索引
+  if (fullRebuild) {
     QMutexLocker locker(&m_mutex);
     m_invertedIndex.clear();
     m_documents.clear();
     m_documentParagraphs.clear();
+    qDebug() << "已清空旧索引（全量构建）";
   }
 
   QFuture<void> future = QtConcurrent::run([this, notePaths]() {
@@ -111,14 +146,13 @@ void NotesSearchEngine::buildIndexAsync(const QList<QString> &notePaths) {
       QFile file(path);
       if (file.open(QIODevice::ReadOnly)) {
         QString content = QString::fromUtf8(file.readAll());
-        indexDocument(path, content);
+        indexDocument(path, content);  // 新增或更新文档
       }
     }
   });
   m_indexWatcher.setFuture(future);
 }
 
-// NotesSearchEngine.cpp
 QList<SearchResult> NotesSearchEngine::search(const QString &query) {
   QString cleanedQuery = preprocessMarkdown(query);
   QStringList queryKeywords = tokenize(cleanedQuery);
@@ -130,20 +164,24 @@ QList<SearchResult> NotesSearchEngine::search(const QString &query) {
     auto it = m_invertedIndex.find(keyword);
     if (it != m_invertedIndex.end()) {
       for (auto docIt = it->begin(); docIt != it->end(); ++docIt) {
-        combinedResults[docIt.key()].append(docIt.value());
+        // 修正：使用 += 合并位置列表
+        combinedResults[docIt.key()] += docIt.value();
       }
     }
   }
 
-  // 转换为 SearchResult 列表
+  // 转换为 SearchResult 列表（去重）
   QList<SearchResult> results;
+  QSet<QString> seenPaths;  // 去重集合
   for (auto it = combinedResults.begin(); it != combinedResults.end(); ++it) {
-    SearchResult result;
-    result.filePath = it.key();
-    result.positions = it.value();
-    results.append(result);
+    if (!seenPaths.contains(it.key())) {
+      SearchResult result;
+      result.filePath = it.key();
+      result.positions = it.value();
+      results.append(result);
+      seenPaths.insert(it.key());
+    }
   }
-
   return results;
 }
 

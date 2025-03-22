@@ -5809,11 +5809,6 @@ void MainWindow::on_btnFindNotes_clicked() {
   m_NotesList->startFind(ui->editFindNote->text().trimmed());
 }
 
-void MainWindow::on_editFindNote_textChanged(const QString &arg1) {
-  // m_NotesList->startFind(arg1.trimmed());
-  // if (arg1.trimmed() == "") on_btnClearNoteFindText_clicked();
-}
-
 void MainWindow::on_btnFindPreviousNote_clicked() { m_NotesList->goPrevious(); }
 
 void MainWindow::on_btnFindNextNote_clicked() { m_NotesList->goNext(); }
