@@ -5835,7 +5835,7 @@ void MainWindow::on_btnShowFindNotes_clicked() {
         m_NotesList->ui->treeWidgetRecycle->topLevelItem(0)->child(i)->text(1);
     m_NotesList->recycleNotesList.append(file);
   }
-  qDebug() << m_NotesList->recycleNotesList;
+  qDebug() << "recycle notes = " << m_NotesList->recycleNotesList;
 
   if (ui->f_FindNotes->isHidden()) {
     ui->f_FindNotes->show();
@@ -5844,6 +5844,8 @@ void MainWindow::on_btnShowFindNotes_clicked() {
   } else {
     ui->f_FindNotes->hide();
   }
+
+  m_NotesList->startSearch();
 }
 
 void MainWindow::on_btnNoteBookMenu_clicked() {

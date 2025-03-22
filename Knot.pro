@@ -34,6 +34,10 @@ android: {
 
 }
 
+# 添加 cppjieba 和 limonp 头文件路径
+INCLUDEPATH += $$PWD/cppjieba/include
+INCLUDEPATH += $$PWD/cppjieba/limonp/include
+
 ############################ cmark-gfm ########################################
 
 INCLUDEPATH += $$PWD/lib/cmark-gfm/include
@@ -91,6 +95,7 @@ SOURCES += \
     src/Notes/NewNoteBook.cpp \
     src/Notes/Notes.cpp \
     src/Notes/NotesList.cpp \
+    src/Notes/NotesSearchEngine.cpp \
     src/Notes/PrintPDF.cpp \
     src/Notes/QOwnLanguageData.cpp \
     src/Notes/QTextEditHighlighter.cpp \
@@ -176,6 +181,7 @@ HEADERS += \
     src/Notes/NewNoteBook.h \
     src/Notes/Notes.h \
     src/Notes/NotesList.h \
+    src/Notes/NotesSearchEngine.h \
     src/Notes/PrintPDF.h \
     src/Notes/QOwnLanguageData.h \
     src/Notes/QTextEditHighlighter.h \

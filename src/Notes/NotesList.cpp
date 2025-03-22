@@ -74,6 +74,14 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
 
   initNotesList();
   initRecycle();
+
+  m_searchEngine = new NotesSearchEngine(this);
+  connect(m_searchEngine, &NotesSearchEngine::indexBuildFinished, this,
+          &NotesList::onSearchIndexReady);
+
+  // 连接搜索框
+  connect(mw_one->ui->editFindNote, &QLineEdit::textChanged, this,
+          &NotesList::onSearchTextChanged);
 }
 
 NotesList::~NotesList() { delete ui; }
@@ -2497,6 +2505,23 @@ QStringList NotesList::extractLocalImagesFromMarkdown(const QString &filePath) {
   qDebug() << "images=" << images;
 
   return images;
+}
+
+void NotesList::onSearchIndexReady() {
+  qDebug() << "索引构建完成，共索引文档：" << m_searchEngine->documentCount();
+}
+
+void NotesList::onSearchTextChanged(const QString &text) {
+  QList<QString> results = m_searchEngine->search(text);
+  // updateSearchResults(results);  // 更新 UI 显示结果
+  qDebug() << "results=" << results;
+}
+
+void NotesList::startSearch() {
+  // 启动异步索引构建
+  QList<QString> notePaths =
+      findMarkdownFiles(iniDir + "memo/");  // 需要实现文件遍历逻辑
+  m_searchEngine->buildIndexAsync(notePaths);
 }
 
 template class QFutureWatcher<ResultsMap>;

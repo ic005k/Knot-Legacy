@@ -19,6 +19,7 @@
 #include <QTreeWidgetItem>
 #include <QtConcurrent/QtConcurrent>
 
+#include "NotesSearchEngine.h"
 #include "src/Notes/MoveTo.h"
 #include "src/Notes/NewNoteBook.h"
 #include "ui_MoveTo.h"
@@ -145,7 +146,8 @@ class NotesList : public QDialog {
 
   void showNotesSearchResult();
 
- protected:
+  void startSearch();
+  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
@@ -198,9 +200,15 @@ class NotesList : public QDialog {
 
   void onSearchFinished();
 
- private:
+  void onSearchIndexReady();
+  void onSearchTextChanged(const QString &text);
+  private:
+  NotesSearchEngine *m_searchEngine;
+
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
+
   QStringList files;
+
   void clearMD_Pic(QTreeWidget *tw);
   void removePicFromMD(QString mdfile);
   void removeFromFiles(QString str);
