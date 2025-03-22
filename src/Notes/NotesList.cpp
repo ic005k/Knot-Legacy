@@ -1145,13 +1145,20 @@ void NotesList::getAllFiles(const QString &foldPath, QStringList &folds,
 
 // 文件搜索实现
 QStringList findMarkdownFiles(const QString &dirPath) {
-  QStringList mdFiles;
-  QDirIterator it(dirPath, {"*.md"}, QDir::Files, QDirIterator::Subdirectories);
-  while (it.hasNext()) mdFiles.append(it.next());
+  Q_UNUSED(dirPath);
 
-  // 去重处理
-  mdFiles = QSet<QString>(mdFiles.begin(), mdFiles.end()).values();
-  return mdFiles;
+  QList<QString> paths;
+  QDir dir(iniDir + "memo/");
+  QStringList files = dir.entryList(QStringList() << "*.md", QDir::Files);
+  for (const QString &file : files) {
+    QFileInfo info(dir.absoluteFilePath(file));
+    QString canonicalPath = info.canonicalFilePath();  // 规范化路径
+    if (!canonicalPath.isEmpty() && info.exists()) {
+      paths.append(canonicalPath);
+    }
+  }
+  // 使用 QSet 去重
+  return QSet<QString>(paths.begin(), paths.end()).values();
 }
 
 MySearchResult searchInFile(const QString &filePath,

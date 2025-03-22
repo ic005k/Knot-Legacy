@@ -26,25 +26,20 @@ NotesSearchEngine::NotesSearchEngine(QObject *parent)
           &NotesSearchEngine::indexBuildFinished);
 }
 
-// NotesSearchEngine.cpp
 QString NotesSearchEngine::preprocessMarkdown(const QString &content) const {
-  // 移除代码块（匹配多行）
+  // 1. 移除代码块
   static QRegularExpression codeBlockRegex(R"(```[\s\S]*?```)");
   QString cleaned = content;
   cleaned.remove(codeBlockRegex);
 
-  // 移除行内格式符号（粗体、斜体、删除线、行内代码）
-  QRegularExpression inlineFormatRegex(R"((\*\*|__|\*|_|~~|`))");
-  if (!inlineFormatRegex.isValid()) {
-    qCritical() << "正则表达式无效：" << inlineFormatRegex.errorString();
-    return cleaned;
-  }
-  cleaned.replace(inlineFormatRegex, "");
+  // 2. 移除行内格式符号（但保留文本）
+  cleaned.replace(QRegularExpression(R"((\*\*|__|\*|_|~~|`))"), "");
 
-  // 移除链接和图片
-  cleaned.remove(QRegularExpression(R"(!?\[.*?\]\(.*?\))"));
+  // 3. 移除链接（保留链接文字）
+  cleaned.remove(QRegularExpression(R"(!?\[(.*?)\]\(.*?\))"));
+  cleaned.replace(QRegularExpression(R"(\[(.*?)\]\(.*?\))"),
+                  "\\1");  // 保留链接文字
 
-  // 合并连续空白字符
   return cleaned.simplified();
 }
 
@@ -85,16 +80,18 @@ void NotesSearchEngine::indexDocument(const QString &path,
   QMutexLocker locker(&m_mutex);
   QString cleaned = preprocessMarkdown(content);
 
-  // 1. 移除旧索引
+  // 1. 彻底清理旧索引
   if (m_documents.contains(path)) {
+    // 获取旧内容并分词
     QString oldContent = m_documents[path];
     QStringList oldKeywords = tokenize(oldContent);
+
+    // 遍历所有旧关键词，完全移除路径关联
     for (const QString &keyword : oldKeywords) {
-      // 确保从倒排索引中完全移除路径
       if (m_invertedIndex.contains(keyword)) {
         QHash<QString, QList<KeywordPosition>> &docMap =
             m_invertedIndex[keyword];
-        docMap.remove(path);  // 删除该路径的所有位置信息
+        docMap.remove(path);  // 直接删除路径条目
         if (docMap.isEmpty()) {
           m_invertedIndex.remove(keyword);  // 清理空关键词
         }
@@ -159,25 +156,35 @@ QList<SearchResult> NotesSearchEngine::search(const QString &query) {
 
   QHash<QString, QList<KeywordPosition>> combinedResults;
 
-  // 合并所有查询关键词的匹配位置
+  // 合并所有查询关键词的匹配位置（使用 += 展开列表）
   for (const QString &keyword : queryKeywords) {
     auto it = m_invertedIndex.find(keyword);
     if (it != m_invertedIndex.end()) {
       for (auto docIt = it->begin(); docIt != it->end(); ++docIt) {
-        // 修正：使用 += 合并位置列表
-        combinedResults[docIt.key()] += docIt.value();
+        combinedResults[docIt.key()] += docIt.value();  // 合并列表而非嵌套
       }
     }
   }
 
-  // 转换为 SearchResult 列表（去重）
+  // 去重：对每个文档的位置列表按段落和起始位置去重
   QList<SearchResult> results;
-  QSet<QString> seenPaths;  // 去重集合
+  QSet<QString> seenPaths;
   for (auto it = combinedResults.begin(); it != combinedResults.end(); ++it) {
     if (!seenPaths.contains(it.key())) {
       SearchResult result;
       result.filePath = it.key();
-      result.positions = it.value();
+
+      // 去重位置列表
+      QSet<QPair<int, int>> uniquePositions;
+      QList<KeywordPosition> filtered;
+      for (const KeywordPosition &pos : it.value()) {
+        QPair<int, int> key(pos.paragraphIndex, pos.charStart);
+        if (!uniquePositions.contains(key)) {
+          uniquePositions.insert(key);
+          filtered.append(pos);
+        }
+      }
+      result.positions = filtered;
       results.append(result);
       seenPaths.insert(it.key());
     }
