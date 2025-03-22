@@ -24,15 +24,15 @@
 #include "src/Notes/NewNoteBook.h"
 #include "ui_MoveTo.h"
 
-struct SearchResult {
+struct MySearchResult {
   QString filePath;
   QList<int> lineNumbers;
 };
-using ResultsMap = QMap<QString, SearchResult>;
-SearchResult searchInFile(const QString &filePath,
-                          const QRegularExpression &regex);
+using ResultsMap = QMap<QString, MySearchResult>;
+MySearchResult searchInFile(const QString &filePath,
+                            const QRegularExpression &regex);
 QStringList findMarkdownFiles(const QString &dirPath);
-void reduceResults(ResultsMap &result, const SearchResult &partial);
+void reduceResults(ResultsMap &result, const MySearchResult &partial);
 ResultsMap performSearch(const QString &dirPath, const QString &keyword);
 QFuture<ResultsMap> performSearchAsync(const QString &dirPath,
                                        const QString &keyword);
@@ -146,8 +146,9 @@ class NotesList : public QDialog {
 
   void showNotesSearchResult();
 
-  void startSearch();
-  protected:
+  void openSearch();
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
@@ -202,7 +203,8 @@ class NotesList : public QDialog {
 
   void onSearchIndexReady();
   void onSearchTextChanged(const QString &text);
-  private:
+
+ private:
   NotesSearchEngine *m_searchEngine;
 
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
@@ -233,15 +235,21 @@ class NotesList : public QDialog {
   bool moveItem(QTreeWidget *tw);
 
   QFutureWatcher<ResultsMap> *watcher;
+  QList<QString> findUnindexedFiles(const QList<QString> &allPaths);
+  QDateTime m_lastIndexTime;  // 记录最后一次索引构建时间
+  QMutex m_indexTimeMutex;    // 互斥锁
+  void saveIndexTimestamp();
+  void loadIndexTimestamp();
+  bool m_isIndexing = false;  // 标记索引状态
 };
 
 class SearchMapper {
  public:
-  using result_type = SearchResult;  // 必须声明result_type
+  using result_type = MySearchResult;  // 必须声明result_type
 
   explicit SearchMapper(const QRegularExpression &regex) : m_regex(regex) {}
 
-  SearchResult operator()(const QString &filePath) const {
+  MySearchResult operator()(const QString &filePath) const {
     return searchInFile(filePath, m_regex);
   }
 

@@ -11,6 +11,10 @@ const char *const USER_DICT_PATH = "dict/user.dict.utf8";
 
 NotesSearchEngine::NotesSearchEngine(QObject *parent)
     : QObject(parent), m_jieba(DICT_PATH, HMM_PATH, USER_DICT_PATH) {
+  // 注册 KeywordPosition 以便与 Qt 信号槽兼容
+  qRegisterMetaType<KeywordPosition>("KeywordPosition");
+  qRegisterMetaTypeStreamOperators<KeywordPosition>("KeywordPosition");
+
   connect(&m_indexWatcher, &QFutureWatcher<void>::progressValueChanged, this,
           [this](int progress) {
             // 计算当前进度和总任务数
@@ -61,48 +65,117 @@ QStringList NotesSearchEngine::tokenize(const QString &text) const {
   return tokens;
 }
 
+// 在索引文档时，将内容分割为段落，并记录每个关键词的位置
 void NotesSearchEngine::indexDocument(const QString &path,
                                       const QString &content) {
   QString cleaned = preprocessMarkdown(content);
+  QStringList paragraphs =
+      cleaned.split("\n", QString::SkipEmptyParts);  // 按换行符分割段落
+  m_documentParagraphs.insert(path, paragraphs);
   m_documents.insert(path, cleaned);
 
-  QStringList keywords = tokenize(cleaned);
-  for (const QString &keyword : keywords) {
-    m_invertedIndex[keyword].insert(path);
+  for (int paraIndex = 0; paraIndex < paragraphs.size(); ++paraIndex) {
+    const QString paragraph = paragraphs[paraIndex];
+    QStringList keywords = tokenize(paragraph);
+
+    for (const QString &keyword : keywords) {
+      // 查找关键词在段落中的所有出现位置
+      int pos = 0;
+      while ((pos = paragraph.indexOf(keyword, pos, Qt::CaseInsensitive)) !=
+             -1) {
+        KeywordPosition position;
+        position.paragraphIndex = paraIndex;
+        position.charStart = pos;
+        position.charEnd = pos + keyword.length();
+        position.context =
+            paragraph.mid(qMax(0, pos - 20), 40);  // 取前后20字符作为上下文
+
+        m_invertedIndex[keyword][path].append(position);
+        pos += keyword.length();
+      }
+    }
   }
 }
 
 void NotesSearchEngine::buildIndexAsync(const QList<QString> &notePaths) {
-  // 创建可报告进度的 FutureInterface
-  QFutureInterface<void> futureInterface;
-  futureInterface.reportStarted();
-  futureInterface.setProgressRange(0, notePaths.size());
-
-  QFuture<void> future = QtConcurrent::run([=]() mutable {
-    for (int i = 0; i < notePaths.size(); ++i) {
-      QFile file(notePaths[i]);
-      if (file.open(QIODevice::ReadOnly)) {
-        QString content = QString::fromUtf8(file.readAll());
-        indexDocument(notePaths[i], content);
-      }
-      futureInterface.setProgressValue(i + 1);  // 正确设置进度
-    }
-    futureInterface.reportFinished();
-  });
-
-  m_indexWatcher.setFuture(futureInterface.future());
-}
-
-QList<QString> NotesSearchEngine::search(const QString &query) {
-  QString cleanedQuery = preprocessMarkdown(query);
-  QStringList queryTokens = tokenize(cleanedQuery);
-
-  QSet<QString> results;
-  for (const QString &token : queryTokens) {
-    results.unite(m_invertedIndex.value(token, QSet<QString>()));
+  // 清空现有索引
+  {
+    QMutexLocker locker(&m_mutex);
+    m_invertedIndex.clear();
+    m_documents.clear();
+    m_documentParagraphs.clear();
   }
 
-  return results.values();
+  QFuture<void> future = QtConcurrent::run([this, notePaths]() {
+    for (const QString &path : notePaths) {
+      QFile file(path);
+      if (file.open(QIODevice::ReadOnly)) {
+        QString content = QString::fromUtf8(file.readAll());
+        indexDocument(path, content);
+      }
+    }
+  });
+  m_indexWatcher.setFuture(future);
+}
+
+// NotesSearchEngine.cpp
+QList<SearchResult> NotesSearchEngine::search(const QString &query) {
+  QString cleanedQuery = preprocessMarkdown(query);
+  QStringList queryKeywords = tokenize(cleanedQuery);
+
+  QHash<QString, QList<KeywordPosition>> combinedResults;
+
+  // 合并所有查询关键词的匹配位置
+  for (const QString &keyword : queryKeywords) {
+    auto it = m_invertedIndex.find(keyword);
+    if (it != m_invertedIndex.end()) {
+      for (auto docIt = it->begin(); docIt != it->end(); ++docIt) {
+        combinedResults[docIt.key()].append(docIt.value());
+      }
+    }
+  }
+
+  // 转换为 SearchResult 列表
+  QList<SearchResult> results;
+  for (auto it = combinedResults.begin(); it != combinedResults.end(); ++it) {
+    SearchResult result;
+    result.filePath = it.key();
+    result.positions = it.value();
+    results.append(result);
+  }
+
+  return results;
 }
 
 int NotesSearchEngine::documentCount() const { return m_documents.size(); }
+
+void NotesSearchEngine::saveIndex(const QString &path) {
+  QFile file(path);
+  if (file.open(QIODevice::WriteOnly)) {
+    QDataStream stream(&file);
+    stream << m_invertedIndex << m_documentParagraphs;
+  }
+}
+
+void NotesSearchEngine::loadIndex(const QString &path) {
+  QFile file(path);
+  if (file.open(QIODevice::ReadOnly)) {
+    QDataStream stream(&file);
+    stream >> m_invertedIndex >> m_documentParagraphs;
+  }
+}
+
+bool NotesSearchEngine::hasDocument(const QString &path) const {
+  return m_documents.contains(path);
+}
+
+// NotesSearchEngine.cpp
+QDataStream &operator<<(QDataStream &out, const KeywordPosition &pos) {
+  out << pos.paragraphIndex << pos.charStart << pos.charEnd << pos.context;
+  return out;
+}
+
+QDataStream &operator>>(QDataStream &in, KeywordPosition &pos) {
+  in >> pos.paragraphIndex >> pos.charStart >> pos.charEnd >> pos.context;
+  return in;
+}

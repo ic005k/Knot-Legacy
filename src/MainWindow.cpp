@@ -5845,7 +5845,7 @@ void MainWindow::on_btnShowFindNotes_clicked() {
     ui->f_FindNotes->hide();
   }
 
-  m_NotesList->startSearch();
+  m_NotesList->openSearch();
 }
 
 void MainWindow::on_btnNoteBookMenu_clicked() {

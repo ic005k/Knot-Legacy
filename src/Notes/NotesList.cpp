@@ -82,6 +82,10 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   // 连接搜索框
   connect(mw_one->ui->editFindNote, &QLineEdit::textChanged, this,
           &NotesList::onSearchTextChanged);
+
+  // m_lastIndexTime = QDateTime::fromMSecsSinceEpoch(0); // 初始化为无效时间
+  loadIndexTimestamp();
+  m_searchEngine->loadIndex(privateDir + "MyNotesIndex");
 }
 
 NotesList::~NotesList() { delete ui; }
@@ -1144,12 +1148,15 @@ QStringList findMarkdownFiles(const QString &dirPath) {
   QStringList mdFiles;
   QDirIterator it(dirPath, {"*.md"}, QDir::Files, QDirIterator::Subdirectories);
   while (it.hasNext()) mdFiles.append(it.next());
+
+  // 去重处理
+  mdFiles = QSet<QString>(mdFiles.begin(), mdFiles.end()).values();
   return mdFiles;
 }
 
-SearchResult searchInFile(const QString &filePath,
-                          const QRegularExpression &regex) {
-  SearchResult result;
+MySearchResult searchInFile(const QString &filePath,
+                            const QRegularExpression &regex) {
+  MySearchResult result;
   QFile file(filePath);
   if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
     QTextStream in(&file);
@@ -1166,7 +1173,7 @@ SearchResult searchInFile(const QString &filePath,
 }
 
 // 结果归并
-void reduceResults(ResultsMap &result, const SearchResult &partial) {
+void reduceResults(ResultsMap &result, const MySearchResult &partial) {
   if (!partial.filePath.isEmpty()) {
     result[partial.filePath] = partial;
   }
@@ -2509,19 +2516,82 @@ QStringList NotesList::extractLocalImagesFromMarkdown(const QString &filePath) {
 
 void NotesList::onSearchIndexReady() {
   qDebug() << "索引构建完成，共索引文档：" << m_searchEngine->documentCount();
+
+  m_searchEngine->saveIndex(privateDir + "MyNotesIndex");
+
+  // 更新最后索引时间,如果 m_lastIndexTime 在多个线程中被访问，需添加互斥锁
+  QMutexLocker locker(&m_indexTimeMutex);
+  m_lastIndexTime = QDateTime::currentDateTime();
+  saveIndexTimestamp();
+
+  m_isIndexing = false;
 }
 
 void NotesList::onSearchTextChanged(const QString &text) {
-  QList<QString> results = m_searchEngine->search(text);
+  QList<SearchResult> results = m_searchEngine->search(text);
   // updateSearchResults(results);  // 更新 UI 显示结果
-  qDebug() << "results=" << results;
+  // qDebug() << "results=" << results;
+
+  // 打印调试信息
+  qDebug() << "===== 搜索开始 =====";
+  qDebug() << "查询内容:" << text;
+  qDebug() << "共找到" << results.size() << "个匹配文件";
+
+  for (const SearchResult &result : results) {
+    qDebug() << "----------------------------------------";
+    qDebug() << result;  // 直接调用定义好的 operator<<
+  }
+
+  qDebug() << "===== 搜索结束 =====";
 }
 
-void NotesList::startSearch() {
+void NotesList::openSearch() {
+  if (m_isIndexing) return;
+  m_isIndexing = true;
+
   // 启动异步索引构建
   QList<QString> notePaths =
       findMarkdownFiles(iniDir + "memo/");  // 需要实现文件遍历逻辑
-  m_searchEngine->buildIndexAsync(notePaths);
+
+  QSet<QString> set2(recycleNotesList.begin(), recycleNotesList.end());
+  QStringList result;
+  for (const QString &str : notePaths) {
+    if (!set2.contains(str)) {
+      result.append(str);
+    }
+  }
+
+  notePaths = result;
+
+  QStringList newPaths = findUnindexedFiles(notePaths);
+  if (!QFile::exists(privateDir + "MyNotesIndex")) newPaths = notePaths;
+  m_searchEngine->buildIndexAsync(newPaths);
+}
+
+// 增量索引更新
+QList<QString> NotesList::findUnindexedFiles(const QList<QString> &allPaths) {
+  QList<QString> newPaths;
+  for (const QString &path : allPaths) {
+    QFileInfo fileInfo(path);
+    // 检查文件最后修改时间是否晚于索引保存时间
+    if (!m_searchEngine->hasDocument(path) ||
+        fileInfo.lastModified() > m_lastIndexTime) {
+      newPaths.append(path);
+    }
+  }
+  return newPaths;
+}
+
+// 保存到 QSettings
+void NotesList::saveIndexTimestamp() {
+  QSettings settings;
+  settings.setValue("KnotNotes_LastIndexTime", m_lastIndexTime);
+}
+
+// 从 QSettings 加载
+void NotesList::loadIndexTimestamp() {
+  QSettings settings;
+  m_lastIndexTime = settings.value("KnotNotes_LastIndexTime", 0).toDateTime();
 }
 
 template class QFutureWatcher<ResultsMap>;
