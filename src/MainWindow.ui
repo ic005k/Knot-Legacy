@@ -6008,6 +6008,23 @@ QRadioButton::indicator:checked {
               </widget>
              </item>
              <item>
+              <widget class="QToolButton" name="btnFindNotes2">
+               <property name="text">
+                <string>F</string>
+               </property>
+               <property name="icon">
+                <iconset resource="../res.qrc">
+                 <normaloff>:/res/find2_l.svg</normaloff>:/res/find2_l.svg</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>25</width>
+                 <height>25</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QToolButton" name="btnRecentOpen">
                <property name="text">
                 <string>...</string>

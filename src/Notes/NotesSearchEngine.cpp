@@ -333,11 +333,12 @@ NotesSearchEngine::generateHighlightPreview(
     QString fragment = prefix + context;
     std::sort(poses.begin(), poses.end(),
               [](auto &a, auto &b) { return a.charStart > b.charStart; });
-    for (const auto &pos : poses) {
-      int localStart = prefix.length() + (pos.charStart - contextStart);
-      fragment.insert(localStart + 23, "</span>");
-      fragment.insert(localStart, "<span style='color:#e74c3c;'>");
-    }
+
+    // for (const auto &pos : poses) {
+    //   int localStart = prefix.length() + (pos.charStart - contextStart);
+    //   fragment.insert(localStart + 23, "</span>");
+    //   fragment.insert(localStart, "<span style='color:#e74c3c;'>");
+    // }
 
     previewParts.append(fragment);
     globalOffset += fragment.length() + 4;  // 4为<br>标签长度

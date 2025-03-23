@@ -6450,3 +6450,10 @@ void MainWindow::on_btnOpenSearchResult_clicked() {
   currentMDFile = mdFile;
   on_btnEditNote_clicked();
 }
+
+void MainWindow::on_btnFindNotes2_clicked() {
+  if (ui->f_FindNotes->isHidden())
+    ui->f_FindNotes->show();
+  else
+    ui->f_FindNotes->hide();
+}

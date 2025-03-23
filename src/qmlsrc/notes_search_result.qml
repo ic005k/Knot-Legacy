@@ -63,25 +63,20 @@ ListView {
         // 高亮格式化函数
         function formatPreviewText(previewText, highlightPositions) {
             let result = previewText
-
-            // 按结束位置逆序处理
             let sortedPositions = highlightPositions.slice().sort(
-                    (a, b) => b.charEnd - a.charStart)
-
+                    (a, b) => b.charStart - a.charStart)
             sortedPositions.forEach(pos => {
                                         const start = pos.charStart
                                         const end = pos.charEnd
                                         if (start >= 0
                                             && end <= result.length) {
-                                            const original = result.slice(
-                                                start, end)
-                                            result = result.slice(
-                                                0,
-                                                start) + `<span style='background: #fff3b1;'>${original}</span>` + result.slice(
+                                            result = result.slice(0, start)
+                                            + `<span style="background: #fff3b1;">${result.slice(
+                                                start,
+                                                end)}</span>` + result.slice(
                                                 end)
                                         }
                                     })
-
             return result
         }
 
@@ -103,7 +98,7 @@ ListView {
         }
     }
 
-    // 空状态提示（保持不变）
+    // 空状态提示
     Label {
         anchors.centerIn: parent
         visible: listView.count === 0
@@ -112,7 +107,7 @@ ListView {
         font.pixelSize: 18
     }
 
-    // 滚动条（保持不变）
+    // 滚动条
     ScrollBar.vertical: ScrollBar {
         policy: ScrollBar.AsNeeded
         width: 8

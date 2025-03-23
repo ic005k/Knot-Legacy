@@ -162,5 +162,6 @@
         <file>res/move.svg</file>
         <file>res/move_l.svg</file>
         <file>res/marker.png</file>
+        <file>res/find2_l.svg</file>
     </qresource>
 </RCC>
