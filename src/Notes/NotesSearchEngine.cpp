@@ -23,18 +23,18 @@ NotesSearchEngine::NotesSearchEngine(QObject *parent) : QObject(parent) {
 }
 
 QString NotesSearchEngine::preprocessMarkdown(const QString &content) const {
-  // 1. 移除代码块
-  static QRegularExpression codeBlockRegex(R"(```[\s\S]*?```)");
+  // 1. 移除代码块（增强多语言支持）
+  static QRegularExpression codeBlockRegex(
+      R"((?m)^```.*?(\n|$).*?^```.*?(\n|$))");
+
+  // 2. 保留被格式包裹的内容，但移除格式符号
   QString cleaned = content;
-  cleaned.remove(codeBlockRegex);
-
-  // 2. 移除行内格式符号（但保留文本）
-  cleaned.replace(QRegularExpression(R"((\*\*|__|\*|_|~~|`))"), "");
-
-  // 3. 移除链接（保留链接文字）
-  cleaned.remove(QRegularExpression(R"(!?\[(.*?)\]\(.*?\))"));
-  cleaned.replace(QRegularExpression(R"(\[(.*?)\]\(.*?\))"),
-                  "\\1");  // 保留链接文字
+  cleaned.remove(codeBlockRegex)
+      .replace(QRegularExpression(R"((\*\*|__)(.*?)\1)"),
+               "\\2")                                          // 保留加粗内容
+      .replace(QRegularExpression(R"((\*|_)(.*?)\1)"), "\\2")  // 保留斜体内容
+      .remove(QRegularExpression(R"($$.*?$$$.*?$)"))           // 完全移除链接
+      .remove(QRegularExpression(R"(!?$$.*?$$)"));             // 移除图片
 
   return cleaned.simplified();
 }
@@ -148,46 +148,75 @@ QList<SearchResult> NotesSearchEngine::search(const QString &query) {
   QStringList queryKeywords = tokenize(cleanedQuery);
 
   QHash<QString, QList<KeywordPosition>> combinedResults;
+  QHash<QString, int> docScores;
 
-  // 合并所有查询关键词的匹配位置
+  // 收集匹配结果
   for (const QString &keyword : queryKeywords) {
     auto it = m_invertedIndex.find(keyword);
     if (it != m_invertedIndex.end()) {
       for (auto docIt = it->begin(); docIt != it->end(); ++docIt) {
-        combinedResults[docIt.key()] += docIt.value();
+        combinedResults[docIt.key()].append(docIt.value());
+        docScores[docIt.key()] += docIt.value().size();
       }
     }
   }
 
-  // 去重并生成结果
+  // 处理每个文档
   QList<SearchResult> results;
-  QSet<QString> seenPaths;
   for (auto it = combinedResults.begin(); it != combinedResults.end(); ++it) {
-    if (!seenPaths.contains(it.key())) {
-      SearchResult result;
-      result.filePath = it.key();
+    SearchResult result;
+    result.filePath = it.key();
+    result.score = docScores[it.key()];
 
-      // 去重位置列表
-      QSet<QPair<int, int>> uniquePositions;
-      QList<KeywordPosition> filtered;
-      for (const KeywordPosition &pos : it.value()) {
-        QPair<int, int> key(pos.paragraphIndex, pos.charStart);
-        if (!uniquePositions.contains(key)) {
-          uniquePositions.insert(key);
-          filtered.append(pos);
-        }
+    // 位置处理流程
+    QList<KeywordPosition> rawPositions = it.value();
+
+    // 去重
+    QSet<QPair<int, int>> uniquePositions;
+    QList<KeywordPosition> filtered;
+    for (const auto &pos : rawPositions) {
+      QPair<int, int> key(pos.paragraphIndex, pos.charStart);
+      if (!uniquePositions.contains(key)) {
+        uniquePositions.insert(key);
+        filtered.append(pos);
       }
-      result.highlightPos = filtered;
-
-      // 生成预览文本
-      QString content = m_documents.value(it.key());
-      result.previewText = generateHighlightPreview(content, filtered);
-      result.rawPositions = it.value();
-
-      results.append(result);
-      seenPaths.insert(it.key());
     }
+
+    // 合并邻近位置
+    std::sort(filtered.begin(), filtered.end(),
+              [](const KeywordPosition &a, const KeywordPosition &b) {
+                return (a.paragraphIndex < b.paragraphIndex) ||
+                       (a.paragraphIndex == b.paragraphIndex &&
+                        a.charStart < b.charStart);
+              });
+
+    QList<KeywordPosition> merged;
+    for (const auto &pos : filtered) {
+      if (!merged.isEmpty() &&
+          pos.paragraphIndex == merged.last().paragraphIndex &&
+          pos.charStart <= merged.last().charEnd + 3) {
+        merged.last().charEnd = qMax(merged.last().charEnd, pos.charEnd);
+      } else {
+        merged.append(pos);
+      }
+    }
+
+    // 生成带调整位置的预览
+    QPair<QString, QList<KeywordPosition>> previewData =
+        generateHighlightPreview(m_documents[it.key()], merged);
+
+    // 填充结果
+    result.previewText = previewData.first;
+    result.highlightPos = previewData.second;
+    result.rawPositions = merged;
+    results.append(result);
   }
+
+  // 排序结果
+  std::sort(results.begin(), results.end(),
+            [](const SearchResult &a, const SearchResult &b) {
+              return a.score > b.score;
+            });
 
   return results;
 }
@@ -224,24 +253,68 @@ QDataStream &operator>>(QDataStream &in, KeywordPosition &pos) {
   return in;
 }
 
-QString NotesSearchEngine::generateHighlightPreview(
+QPair<QString, QList<KeywordPosition>>
+NotesSearchEngine::generateHighlightPreview(
     const QString &content, const QList<KeywordPosition> &positions) const {
-  QString preview = content.left(200);
-  QList<KeywordPosition> sortedPositions = positions;
+  QStringList paragraphs = content.split('\n');
+  QStringList previewParts;
+  QList<KeywordPosition> adjustedPositions;
 
-  // 按起始位置反向排序（避免插入标签导致偏移）
-  std::sort(sortedPositions.begin(), sortedPositions.end(),
-            [](const KeywordPosition &a, const KeywordPosition &b) {
-              return a.charStart > b.charStart;
-            });
+  int globalOffset = 0;
+  QMap<int, QList<KeywordPosition>> paraPositions;
 
-  for (const KeywordPosition &pos : sortedPositions) {
-    if (pos.charStart < preview.length()) {
-      int start = pos.charStart;
-      int end = pos.charEnd;
-      preview.insert(end, "</span>");
-      preview.insert(start, "<span style='color: #e74c3c; font-weight: 500;'>");
-    }
+  // 按段落分组
+  for (const auto &pos : positions) {
+    paraPositions[pos.paragraphIndex].append(pos);
   }
-  return preview;
+
+  // 处理每个包含高亮的段落
+  foreach (int paraIndex, paraPositions.keys()) {
+    if (paraIndex >= paragraphs.size()) continue;
+
+    const QString &para = paragraphs[paraIndex];
+    QList<KeywordPosition> poses = paraPositions[paraIndex];
+
+    // 计算上下文范围
+    int minStart = INT_MAX, maxEnd = 0;
+    for (const auto &pos : poses) {
+      minStart = qMin(minStart, pos.charStart);
+      maxEnd = qMax(maxEnd, pos.charEnd);
+    }
+
+    // 截取段落上下文
+    int contextStart = qMax(0, minStart - 30);
+    int contextEnd = qMin(para.length(), maxEnd + 30);
+    QString context = para.mid(contextStart, contextEnd - contextStart);
+
+    // 构建段落前缀
+    QString prefix = QString("[Paragraph %1] ").arg(paraIndex + 1);
+    if (contextStart > 0) context.prepend("...");
+    if (contextEnd < para.length()) context.append("...");
+
+    // 调整位置信息
+    for (auto &pos : poses) {
+      KeywordPosition adjusted = pos;
+      adjusted.charStart =
+          prefix.length() + (pos.charStart - contextStart) + globalOffset;
+      adjusted.charEnd =
+          prefix.length() + (pos.charEnd - contextStart) + globalOffset;
+      adjustedPositions.append(adjusted);
+    }
+
+    // 构建带标签的预览文本
+    QString fragment = prefix + context;
+    std::sort(poses.begin(), poses.end(),
+              [](auto &a, auto &b) { return a.charStart > b.charStart; });
+    for (const auto &pos : poses) {
+      int localStart = prefix.length() + (pos.charStart - contextStart);
+      fragment.insert(localStart + 23, "</span>");
+      fragment.insert(localStart, "<span style='color:#e74c3c;'>");
+    }
+
+    previewParts.append(fragment);
+    globalOffset += fragment.length() + 4;  // 4为<br>标签长度
+  }
+
+  return qMakePair(previewParts.join("<br>"), adjustedPositions);
 }

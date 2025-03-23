@@ -5,6 +5,7 @@
 #include <QMutex>
 #include <QMutexLocker>
 #include <QObject>
+#include <QPair>
 #include <QSet>
 #include <QtConcurrent>
 
@@ -33,6 +34,8 @@ struct SearchResult {
   QList<KeywordPosition> highlightPos;  // 高亮位置偏移量
   // 原始搜索结果数据
   QList<KeywordPosition> rawPositions;
+
+  int score = 0;
 };
 
 Q_DECLARE_METATYPE(SearchResult)
@@ -83,7 +86,6 @@ class NotesSearchEngine : public QObject {
 
   // 获取文档原始内容
   QString getDocumentContent(const QString &path) const {
-    // QMutexLocker locker(&m_mutex);
     return m_documents.value(path);
   }
 
@@ -110,6 +112,6 @@ class NotesSearchEngine : public QObject {
 
   QMutex m_mutex;
 
-  QString generateHighlightPreview(
+  QPair<QString, QList<KeywordPosition>> generateHighlightPreview(
       const QString &content, const QList<KeywordPosition> &positions) const;
 };

@@ -6440,3 +6440,9 @@ void MainWindow::on_editFindNote_returnPressed() { on_btnFindNotes_clicked(); }
 void MainWindow::on_btnClearSearchResults_clicked() {
   ui->editNotesSearch->clear();
 }
+
+void MainWindow::on_btnOpenSearchResult_clicked() {
+  if (isAndroid) {
+  } else {
+  }
+}

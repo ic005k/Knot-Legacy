@@ -22,6 +22,8 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
 
   // 注册模型到 QML
   qmlRegisterType<SearchResultModel>("com.example", 1, 0, "SearchResultModel");
+  qRegisterMetaType<KeywordPosition>("KeywordPosition");
+  qRegisterMetaType<QList<KeywordPosition>>("QList<KeywordPosition>");
 
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &NotesList::on_KVChanged);
