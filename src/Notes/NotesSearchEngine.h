@@ -20,14 +20,22 @@ struct KeywordPosition {
   friend QDataStream &operator>>(QDataStream &in, KeywordPosition &pos);
 };
 
+Q_DECLARE_METATYPE(KeywordPosition)
+Q_DECLARE_METATYPE(QList<KeywordPosition>)
+
 // 声明全局操作符重载（必须位于结构体定义之后）
 QDataStream &operator<<(QDataStream &out, const KeywordPosition &pos);
 QDataStream &operator>>(QDataStream &in, KeywordPosition &pos);
 
 struct SearchResult {
-  QString filePath;                  // 文件路径
-  QList<KeywordPosition> positions;  // 匹配位置列表
+  QString filePath;                     // 文件路径
+  QString previewText;                  // 预览文本（带高亮标记）
+  QList<KeywordPosition> highlightPos;  // 高亮位置偏移量
+  // 原始搜索结果数据
+  QList<KeywordPosition> rawPositions;
 };
+
+Q_DECLARE_METATYPE(SearchResult)
 
 // KeywordPosition 的 QDebug 输出支持
 inline QDebug operator<<(QDebug debug, const KeywordPosition &pos) {
@@ -41,8 +49,8 @@ inline QDebug operator<<(QDebug debug, const KeywordPosition &pos) {
 // SearchResult 的 QDebug 输出支持
 inline QDebug operator<<(QDebug debug, const SearchResult &result) {
   debug.nospace() << "File: " << result.filePath << "\n"
-                  << "Matches (" << result.positions.size() << "):\n";
-  for (const auto &pos : result.positions) {
+                  << "Matches (" << result.highlightPos.size() << "):\n";
+  for (const auto &pos : result.highlightPos) {
     debug << "  " << pos << "\n";
   }
   return debug;
@@ -73,6 +81,12 @@ class NotesSearchEngine : public QObject {
 
   bool hasDocument(const QString &path) const;
 
+  // 获取文档原始内容
+  QString getDocumentContent(const QString &path) const {
+    // QMutexLocker locker(&m_mutex);
+    return m_documents.value(path);
+  }
+
  signals:
   void indexBuildProgress(int current, int total);
   void indexBuildFinished();
@@ -95,4 +109,7 @@ class NotesSearchEngine : public QObject {
   QFutureWatcher<void> m_indexWatcher;
 
   QMutex m_mutex;
+
+  QString generateHighlightPreview(
+      const QString &content, const QList<KeywordPosition> &positions) const;
 };

@@ -5833,13 +5833,8 @@ void MainWindow::on_btnShowFindNotes_clicked() {
   }
   qDebug() << "recycle notes = " << m_NotesList->recycleNotesList;
 
-  if (ui->f_FindNotes->isHidden()) {
-    ui->f_FindNotes->show();
-    ui->editFindNote->setFocus();
-
-  } else {
-    ui->f_FindNotes->hide();
-  }
+  ui->frameNoteList->hide();
+  ui->frameNotesSearchResult->show();
 
   m_NotesList->openSearch();
 }
@@ -6441,3 +6436,7 @@ void MainWindow::on_btnBack_NotesSearchResult_clicked() {
 }
 
 void MainWindow::on_editFindNote_returnPressed() { on_btnFindNotes_clicked(); }
+
+void MainWindow::on_btnClearSearchResults_clicked() {
+  ui->editNotesSearch->clear();
+}

@@ -20,6 +20,9 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->setupUi(this);
   this->installEventFilter(this);
 
+  // 注册模型到 QML
+  qmlRegisterType<SearchResultModel>("com.example", 1, 0, "SearchResultModel");
+
   connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
           &NotesList::on_KVChanged);
 
@@ -75,12 +78,15 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   initNotesList();
   initRecycle();
 
+  m_searchResultModel = new SearchResultModel(this);
+  mw_one->ui->qwNotesSearchResult->rootContext()->setContextProperty(
+      "searchResultModel", m_searchResultModel);
   m_searchEngine = new NotesSearchEngine(this);
   connect(m_searchEngine, &NotesSearchEngine::indexBuildFinished, this,
           &NotesList::onSearchIndexReady);
 
   // 连接搜索框
-  connect(mw_one->ui->editFindNote, &QLineEdit::textChanged, this,
+  connect(mw_one->ui->editNotesSearch, &QLineEdit::textChanged, this,
           &NotesList::onSearchTextChanged);
 
   // m_lastIndexTime = QDateTime::fromMSecsSinceEpoch(0); // 初始化为无效时间
@@ -2531,6 +2537,22 @@ void NotesList::onSearchTextChanged(const QString &text) {
   }
 
   qDebug() << "===== 搜索结束 =====";
+
+  // 生成模型数据
+  QList<SearchResult> modelData;
+  for (const SearchResult &result : results) {
+    SearchResult item;
+    item.filePath = result.filePath;
+    item.previewText = generatePreviewText(result);  // 确保此函数已实现
+    item.highlightPos = result.highlightPos;         // 直接使用已处理的位置
+    modelData.append(item);
+  }
+
+  // 更新成员变量模型
+  m_searchResultModel->updateResults(modelData);
+
+  // 调试输出
+  qDebug() << "搜索结果已更新，数量：" << modelData.size();
 }
 
 void NotesList::openSearch() {
@@ -2585,6 +2607,42 @@ void NotesList::saveIndexTimestamp() {
 void NotesList::loadIndexTimestamp() {
   QSettings settings;
   m_lastIndexTime = settings.value("KnotNotes_LastIndexTime", 0).toDateTime();
+}
+
+QString NotesList::generatePreviewText(const SearchResult &result) {
+  // 1. 获取文档原始内容（假设已存储）
+  QString content = m_searchEngine->getDocumentContent(result.filePath);
+
+  // 2. 如果没有原始内容，尝试从文件读取
+  if (content.isEmpty()) {
+    QFile file(result.filePath);
+    if (file.open(QIODevice::ReadOnly)) {
+      content = QString::fromUtf8(file.readAll());
+      file.close();
+    }
+  }
+
+  // 3. 生成带高亮的预览文本
+  QString preview = content.left(200);  // 截取前200字符
+  QList<KeywordPosition> sortedPositions = result.highlightPos;
+
+  // 按起始位置反向排序（避免插入标签导致偏移错乱）
+  std::sort(sortedPositions.begin(), sortedPositions.end(),
+            [](const KeywordPosition &a, const KeywordPosition &b) {
+              return a.charStart > b.charStart;
+            });
+
+  // 插入高亮标签
+  for (const KeywordPosition &pos : sortedPositions) {
+    int start = pos.charStart;
+    int end = pos.charEnd;
+    if (start < preview.length() && end <= preview.length()) {
+      preview.insert(end, "</span>");
+      preview.insert(start, "<span style='color: #e74c3c; font-weight: 500;'>");
+    }
+  }
+
+  return preview;
 }
 
 template class QFutureWatcher<ResultsMap>;

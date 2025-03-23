@@ -7877,7 +7877,27 @@ QSlider::handle:horizontal:disabled {
         </widget>
        </item>
        <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_74">
+         <item>
+          <widget class="QLineEdit" name="editNotesSearch"/>
+         </item>
+         <item>
+          <widget class="QToolButton" name="btnClearSearchResults">
+           <property name="text">
+            <string>Clear</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
         <widget class="QQuickWidget" name="qwNotesSearchResult">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="resizeMode">
           <enum>QQuickWidget::SizeRootObjectToView</enum>
          </property>

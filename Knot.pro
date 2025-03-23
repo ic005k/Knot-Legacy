@@ -99,6 +99,7 @@ SOURCES += \
     src/Notes/PrintPDF.cpp \
     src/Notes/QOwnLanguageData.cpp \
     src/Notes/QTextEditHighlighter.cpp \
+    src/Notes/SearchResultModel.cpp \
     src/Notes/TextSelector.cpp \
     src/Preferences.cpp \
     src/Reader/DocumentHandler.cpp \
@@ -185,6 +186,7 @@ HEADERS += \
     src/Notes/PrintPDF.h \
     src/Notes/QOwnLanguageData.h \
     src/Notes/QTextEditHighlighter.h \
+    src/Notes/SearchResultModel.h \
     src/Notes/TextSelector.h \
     src/Preferences.h \
     src/Reader/DocumentHandler.h \

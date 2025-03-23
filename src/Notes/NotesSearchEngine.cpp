@@ -4,6 +4,8 @@
 #include <QFile>
 #include <QRegularExpression>
 
+#include "SearchResultModel.h"
+
 NotesSearchEngine::NotesSearchEngine(QObject *parent) : QObject(parent) {
   // 注册 KeywordPosition 以便与 Qt 信号槽兼容
   qRegisterMetaType<KeywordPosition>("KeywordPosition");
@@ -147,17 +149,17 @@ QList<SearchResult> NotesSearchEngine::search(const QString &query) {
 
   QHash<QString, QList<KeywordPosition>> combinedResults;
 
-  // 合并所有查询关键词的匹配位置（使用 += 展开列表）
+  // 合并所有查询关键词的匹配位置
   for (const QString &keyword : queryKeywords) {
     auto it = m_invertedIndex.find(keyword);
     if (it != m_invertedIndex.end()) {
       for (auto docIt = it->begin(); docIt != it->end(); ++docIt) {
-        combinedResults[docIt.key()] += docIt.value();  // 合并列表而非嵌套
+        combinedResults[docIt.key()] += docIt.value();
       }
     }
   }
 
-  // 去重：对每个文档的位置列表按段落和起始位置去重
+  // 去重并生成结果
   QList<SearchResult> results;
   QSet<QString> seenPaths;
   for (auto it = combinedResults.begin(); it != combinedResults.end(); ++it) {
@@ -175,11 +177,18 @@ QList<SearchResult> NotesSearchEngine::search(const QString &query) {
           filtered.append(pos);
         }
       }
-      result.positions = filtered;
+      result.highlightPos = filtered;
+
+      // 生成预览文本
+      QString content = m_documents.value(it.key());
+      result.previewText = generateHighlightPreview(content, filtered);
+      result.rawPositions = it.value();
+
       results.append(result);
       seenPaths.insert(it.key());
     }
   }
+
   return results;
 }
 
@@ -205,7 +214,6 @@ bool NotesSearchEngine::hasDocument(const QString &path) const {
   return m_documents.contains(path);
 }
 
-// NotesSearchEngine.cpp
 QDataStream &operator<<(QDataStream &out, const KeywordPosition &pos) {
   out << pos.paragraphIndex << pos.charStart << pos.charEnd << pos.context;
   return out;
@@ -214,4 +222,26 @@ QDataStream &operator<<(QDataStream &out, const KeywordPosition &pos) {
 QDataStream &operator>>(QDataStream &in, KeywordPosition &pos) {
   in >> pos.paragraphIndex >> pos.charStart >> pos.charEnd >> pos.context;
   return in;
+}
+
+QString NotesSearchEngine::generateHighlightPreview(
+    const QString &content, const QList<KeywordPosition> &positions) const {
+  QString preview = content.left(200);
+  QList<KeywordPosition> sortedPositions = positions;
+
+  // 按起始位置反向排序（避免插入标签导致偏移）
+  std::sort(sortedPositions.begin(), sortedPositions.end(),
+            [](const KeywordPosition &a, const KeywordPosition &b) {
+              return a.charStart > b.charStart;
+            });
+
+  for (const KeywordPosition &pos : sortedPositions) {
+    if (pos.charStart < preview.length()) {
+      int start = pos.charStart;
+      int end = pos.charEnd;
+      preview.insert(end, "</span>");
+      preview.insert(start, "<span style='color: #e74c3c; font-weight: 500;'>");
+    }
+  }
+  return preview;
 }

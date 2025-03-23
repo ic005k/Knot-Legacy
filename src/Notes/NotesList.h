@@ -20,6 +20,7 @@
 #include <QtConcurrent/QtConcurrent>
 
 #include "NotesSearchEngine.h"
+#include "SearchResultModel.h"
 #include "src/Notes/MoveTo.h"
 #include "src/Notes/NewNoteBook.h"
 #include "ui_MoveTo.h"
@@ -205,6 +206,7 @@ class NotesList : public QDialog {
 
  private:
   NotesSearchEngine *m_searchEngine;
+  SearchResultModel *m_searchResultModel;
 
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
 
@@ -240,6 +242,7 @@ class NotesList : public QDialog {
   void saveIndexTimestamp();
   void loadIndexTimestamp();
   bool m_isIndexing = false;  // 标记索引状态
+  QString generatePreviewText(const SearchResult &result);
 };
 
 class SearchMapper {
