@@ -9,6 +9,13 @@ ListView {
     spacing: 10 // 增加列表项间距
     model: searchResultModel
 
+    property string mdFile: ""
+
+    function getQmlCurrentMDFile()
+    {
+        return mdFile
+    }
+
     delegate: ItemDelegate {
         width: listView.width
         hoverEnabled: false
@@ -81,6 +88,7 @@ ListView {
 
         // 点击打开文件
         onClicked: {
+            mdFile = filePath
             console.log("Open file:", filePath)
             listView.currentIndex = index
         }

@@ -6442,7 +6442,8 @@ void MainWindow::on_btnClearSearchResults_clicked() {
 }
 
 void MainWindow::on_btnOpenSearchResult_clicked() {
-  if (isAndroid) {
-  } else {
-  }
+  QString mdFile = m_NotesList->getSearchResultQmlFile();
+  if (!QFile::exists(mdFile)) return;
+  currentMDFile = mdFile;
+  on_btnEditNote_clicked();
 }

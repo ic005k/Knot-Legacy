@@ -2647,4 +2647,12 @@ QString NotesList::generatePreviewText(const SearchResult &result) {
   return preview;
 }
 
+QString NotesList::getSearchResultQmlFile() {
+  QQuickItem *root = mw_one->ui->qwNotesSearchResult->rootObject();
+  QVariant item;
+  QMetaObject::invokeMethod((QObject *)root, "getQmlCurrentMDFile",
+                            Q_RETURN_ARG(QVariant, item));
+  return item.toString();
+}
+
 template class QFutureWatcher<ResultsMap>;

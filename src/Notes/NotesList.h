@@ -148,7 +148,8 @@ class NotesList : public QDialog {
 
   void openSearch();
 
- protected:
+  QString getSearchResultQmlFile();
+  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
