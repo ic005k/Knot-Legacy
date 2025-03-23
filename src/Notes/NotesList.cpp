@@ -16,9 +16,16 @@ extern QString getTextEditLineText(QTextEdit *txtEdit, int i);
 extern void TextEditToFile(QTextEdit *txtEdit, QString fileName);
 extern void StringToFile(QString buffers, QString fileName);
 
+QString strNoteNameIndexFile = "";
+
 NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   ui->setupUi(this);
   this->installEventFilter(this);
+
+  strNoteNameIndexFile = privateDir + "MyNoteNameIndex";
+  if (QFile::exists(strNoteNameIndexFile)) {
+    mw_one->m_Notes->m_NoteIndexManager->loadIndex(strNoteNameIndexFile);
+  }
 
   // 注册模型到 QML
   qmlRegisterType<SearchResultModel>("com.example", 1, 0, "SearchResultModel");
@@ -350,6 +357,10 @@ void NotesList::renameCurrentItem(QString title) {
   item->setText(0, title.trimmed());
   if (item->parent() != NULL && !item->text(1).isEmpty()) {
     setNoteName(item->text(0));
+
+    mw_one->m_Notes->m_NoteIndexManager->setNoteTitle(iniDir + item->text(1),
+                                                      item->text(0));
+    mw_one->m_Notes->m_NoteIndexManager->saveIndex(strNoteNameIndexFile);
 
     for (int i = 0; i < listRecentOpen.count(); i++) {
       QString str = listRecentOpen.at(i);
@@ -860,6 +871,8 @@ void NotesList::saveRecycle() {
 }
 
 void NotesList::initNotesList() {
+  bool isExistsNoteNameIndex = QFile::exists(strNoteNameIndexFile);
+
   mw_one->isSelf = true;
   tw->clear();
 
@@ -905,6 +918,11 @@ void NotesList::initNotesList() {
         childItem->setText(0, str0);
         childItem->setText(1, str1);
         childItem->setIcon(0, QIcon(":/res/n.png"));
+
+        if (!isExistsNoteNameIndex) {
+          mw_one->m_Notes->m_NoteIndexManager->setNoteTitle(iniDir + str1,
+                                                            str0);
+        }
       } else {
         QTreeWidgetItem *childItem = new QTreeWidgetItem(topItem);
         childItem->setText(0, str0);
@@ -935,6 +953,11 @@ void NotesList::initNotesList() {
           item->setText(1, str11);
           item->setIcon(0, QIcon(":/res/n.png"));
 
+          if (!isExistsNoteNameIndex) {
+            mw_one->m_Notes->m_NoteIndexManager->setNoteTitle(iniDir + str11,
+                                                              str00);
+          }
+
           notesTotal++;
         }
       }
@@ -946,6 +969,10 @@ void NotesList::initNotesList() {
       0, tr("Notebook") + " : " + QString::number(nNoteBook) + "  " +
              tr("Notes") + " : " + QString::number(notesTotal));
   tw->expandAll();
+
+  if (!isExistsNoteNameIndex) {
+    mw_one->m_Notes->m_NoteIndexManager->saveIndex(strNoteNameIndexFile);
+  }
 
   initRecentOpen();
 }
@@ -2544,9 +2571,18 @@ void NotesList::onSearchTextChanged(const QString &text) {
   QList<SearchResult> modelData;
   for (const SearchResult &result : results) {
     SearchResult item;
-    item.filePath = result.filePath;
+    QString file = result.filePath;
+    item.filePath = file;
     item.previewText = generatePreviewText(result);  // 确保此函数已实现
     item.highlightPos = result.highlightPos;         // 直接使用已处理的位置
+
+    QString title = mw_one->m_Notes->m_NoteIndexManager->getNoteTitle(file);
+    if (title.length() > 0)
+      item.fileTitle = title;
+    else {
+      QFileInfo fi(file);
+      item.fileTitle = fi.baseName();
+    }
     modelData.append(item);
   }
 

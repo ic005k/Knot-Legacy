@@ -9,6 +9,7 @@ class SearchResultModel : public QAbstractListModel {
  public:
   enum Roles {
     FilePathRole = Qt::UserRole + 1,
+    FileTitleRole,
     PreviewTextRole,
     HighlightPositionsRole
   };
@@ -27,6 +28,8 @@ class SearchResultModel : public QAbstractListModel {
     switch (role) {
       case FilePathRole:
         return item.filePath;
+      case FileTitleRole:
+        return item.fileTitle;
       case PreviewTextRole:
         return item.previewText;
       case HighlightPositionsRole:
@@ -38,6 +41,7 @@ class SearchResultModel : public QAbstractListModel {
 
   QHash<int, QByteArray> roleNames() const override {
     return {{FilePathRole, "filePath"},
+            {FileTitleRole, "fileTitle"},
             {PreviewTextRole, "previewText"},
             {HighlightPositionsRole, "highlightPos"}};
   }

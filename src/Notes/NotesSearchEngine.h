@@ -36,6 +36,8 @@ struct SearchResult {
   QList<KeywordPosition> rawPositions;
 
   int score = 0;
+
+  QString fileTitle;
 };
 
 Q_DECLARE_METATYPE(SearchResult)

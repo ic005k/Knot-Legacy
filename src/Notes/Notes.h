@@ -22,9 +22,15 @@
 
 #include <QColorDialog>
 #include <QDialog>
+#include <QFile>
 #include <QFileDialog>
+#include <QHash>
 #include <QImageReader>
 #include <QInputMethod>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
+#include <QObject>
 #include <QPainter>
 #include <QPlainTextEdit>
 #include <QPrinter>
@@ -42,6 +48,8 @@
 #include "ui_PrintPDF.h"
 #include "ui_TextSelector.h"
 
+class NoteIndexManager;
+
 namespace Ui {
 class Notes;
 }
@@ -53,6 +61,8 @@ class Notes : public QDialog {
   explicit Notes(QWidget *parent = nullptr);
   ~Notes();
   Ui::Notes *ui;
+
+  NoteIndexManager *m_NoteIndexManager;
 
   QString new_title;
 
@@ -289,6 +299,24 @@ class Notes : public QDialog {
   void wheelEvent(QWheelEvent *e) override;
   QString imgDir = "==Image==";
   QColor StringToColor(QString mRgbStr);
+};
+
+class NoteIndexManager : public QObject {
+  Q_OBJECT
+ public:
+  explicit NoteIndexManager(QObject *parent = nullptr);
+
+  // 加载/保存索引
+  bool loadIndex(const QString &indexPath);
+  bool saveIndex(const QString &indexPath);
+
+  // 名称操作
+  QString getNoteTitle(const QString &filePath) const;
+  void setNoteTitle(const QString &filePath, const QString &title);
+
+ private:
+  QHash<QString, QString> m_index;  // 内存哈希表加速查询
+  QString m_currentIndexPath;
 };
 
 #endif  // NOTES_H

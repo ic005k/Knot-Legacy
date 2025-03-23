@@ -38,7 +38,8 @@ ListView {
 
             // 文件标题
             Text {
-                text: filePath.split("/").pop()
+                //text: filePath.split("/").pop()
+                text: fileTitle
                 font.pointSize: fontSize
                 color: "#2c3e50"
                 elide: Text.ElideRight
