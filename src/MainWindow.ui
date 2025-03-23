@@ -7864,7 +7864,7 @@ QSlider::handle:horizontal:disabled {
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_49">
        <item>
-        <widget class="QLabel" name="label_9">
+        <widget class="QLabel" name="lblNoteSearchResult">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -7889,6 +7889,13 @@ QSlider::handle:horizontal:disabled {
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblNoteTitle">
+         <property name="text">
+          <string>Note Title</string>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QQuickWidget" name="qwNotesSearchResult">

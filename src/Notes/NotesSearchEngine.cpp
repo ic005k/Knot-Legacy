@@ -23,20 +23,28 @@ NotesSearchEngine::NotesSearchEngine(QObject *parent) : QObject(parent) {
 }
 
 QString NotesSearchEngine::preprocessMarkdown(const QString &content) const {
-  // 1. 移除代码块（增强多语言支持）
-  static QRegularExpression codeBlockRegex(
-      R"((?m)^```.*?(\n|$).*?^```.*?(\n|$))");
+  // 1. 移除代码块（支持嵌套和跨行）
+  static QRegularExpression codeBlockRegex(R"((```[\s\S]*?```)|(`[^`]*?`))");
 
-  // 2. 保留被格式包裹的内容，但移除格式符号
+  // 2. 移除链接和图片
+  static QRegularExpression linkRegex(R"(\[([^\]]+)\]\([^\)]+\))");
+  static QRegularExpression imageRegex(R"(!\[.*?\]\([^\)]+\))");
+
+  // 3. 移除格式符号（**、*、__、_）
+  static QRegularExpression boldRegex(R"(\*\*(.*?)\*\*|__(.*?)__)");
+  static QRegularExpression italicRegex(R"(\*(.*?)\*|_(.*?)_)");
+
   QString cleaned = content;
-  cleaned.remove(codeBlockRegex)
-      .replace(QRegularExpression(R"((\*\*|__)(.*?)\1)"),
-               "\\2")                                          // 保留加粗内容
-      .replace(QRegularExpression(R"((\*|_)(.*?)\1)"), "\\2")  // 保留斜体内容
-      .remove(QRegularExpression(R"($$.*?$$$.*?$)"))           // 完全移除链接
-      .remove(QRegularExpression(R"(!?$$.*?$$)"));             // 移除图片
+  cleaned
+      .replace(codeBlockRegex, "")                    // 移除代码块和内联代码
+      .replace(linkRegex, "\\1")                      // 保留链接文本
+      .replace(imageRegex, "")                        // 完全移除图片
+      .replace(boldRegex, "\\1\\2")                   // 保留加粗内容
+      .replace(italicRegex, "\\1\\2")                 // 保留斜体内容
+      .replace(QRegularExpression("#{1,6}\\s*"), "")  // 移除标题标记
+      .simplified();
 
-  return cleaned.simplified();
+  return cleaned;
 }
 
 QStringList NotesSearchEngine::tokenize(const QString &text) const {
@@ -282,10 +290,26 @@ NotesSearchEngine::generateHighlightPreview(
       maxEnd = qMax(maxEnd, pos.charEnd);
     }
 
-    // 截取段落上下文
+    // --- 新增优化逻辑：动态扩展上下文至句子边界 ---
     int contextStart = qMax(0, minStart - 30);
     int contextEnd = qMin(para.length(), maxEnd + 30);
+
+    // 向左扩展至最近的句号或限制50字符
+    while (contextStart > 0 && para[contextStart] != '。' &&
+           para[contextStart] != '.' && (minStart - contextStart) < 50) {
+      contextStart--;
+    }
+    // 向右扩展至最近的句号或限制50字符
+    while (contextEnd < para.length() && para[contextEnd] != '。' &&
+           para[contextEnd] != '.' && (contextEnd - maxEnd) < 50) {
+      contextEnd++;
+    }
+
+    // 确保扩展后的范围有效
+    contextStart = qMax(0, contextStart);
+    contextEnd = qMin(para.length(), contextEnd);
     QString context = para.mid(contextStart, contextEnd - contextStart);
+    // ------------------------------------------
 
     // 构建段落前缀
     QString prefix = QString("[Paragraph %1] ").arg(paraIndex + 1);

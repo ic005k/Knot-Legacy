@@ -2555,6 +2555,9 @@ void NotesList::onSearchTextChanged(const QString &text) {
 
   // 调试输出
   qDebug() << "搜索结果已更新，数量：" << modelData.size();
+  mw_one->ui->lblNoteTitle->setText("");
+  mw_one->ui->lblNoteSearchResult->setText(tr("Note Search Results:") + " " +
+                                           QString::number(modelData.size()));
 }
 
 void NotesList::openSearch() {
@@ -2653,6 +2656,12 @@ QString NotesList::getSearchResultQmlFile() {
   QMetaObject::invokeMethod((QObject *)root, "getQmlCurrentMDFile",
                             Q_RETURN_ARG(QVariant, item));
   return item.toString();
+}
+
+void NotesList::setNoteTitleForSerachResult() {
+  QString mdFile = getSearchResultQmlFile();
+  QString name = getCurrentNoteNameFromMDFile(mdFile);
+  mw_one->ui->lblNoteTitle->setText(name);
 }
 
 template class QFutureWatcher<ResultsMap>;

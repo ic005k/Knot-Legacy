@@ -192,7 +192,8 @@ class NotesList : public QDialog {
 
   void on_btnMoveTo_clicked();
 
- private slots:
+  void setNoteTitleForSerachResult();
+  private slots:
 
   void on_editFind_textChanged(const QString &arg1);
 

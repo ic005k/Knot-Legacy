@@ -503,6 +503,8 @@ class MainWindow : public QMainWindow {
   void clickData();
 
  public slots:
+  void on_btnOpenSearchResult_clicked();
+
   void on_btnEditNote_clicked();
 
   void on_btnOpenNote_clicked();
@@ -831,8 +833,6 @@ class MainWindow : public QMainWindow {
   void on_editFindNote_returnPressed();
 
   void on_btnClearSearchResults_clicked();
-
-  void on_btnOpenSearchResult_clicked();
 
  private:
   QStringList orgRemoteFiles;

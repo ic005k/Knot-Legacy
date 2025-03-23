@@ -3631,6 +3631,7 @@ void MainWindow::initQW() {
 
   ui->qwNotesSearchResult->rootContext()->setContextProperty("m_NotesList",
                                                              m_NotesList);
+  ui->qwNotesSearchResult->rootContext()->setContextProperty("mw_one", mw_one);
   ui->qwNotesSearchResult->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/notes_search_result.qml")));
 
@@ -5835,6 +5836,7 @@ void MainWindow::on_btnShowFindNotes_clicked() {
 
   ui->frameNoteList->hide();
   ui->frameNotesSearchResult->show();
+  ui->editNotesSearch->setFocus();
 
   m_NotesList->openSearch();
 }
@@ -6439,6 +6441,7 @@ void MainWindow::on_editFindNote_returnPressed() { on_btnFindNotes_clicked(); }
 
 void MainWindow::on_btnClearSearchResults_clicked() {
   ui->editNotesSearch->clear();
+  ui->editNotesSearch->setFocus();
 }
 
 void MainWindow::on_btnOpenSearchResult_clicked() {
