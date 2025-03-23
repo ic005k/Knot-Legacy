@@ -295,12 +295,15 @@ NotesSearchEngine::generateHighlightPreview(
     int contextEnd = qMin(para.length(), maxEnd + 30);
 
     // 向左扩展至最近的句号或限制50字符
-    while (contextStart > 0 && para[contextStart] != '。' &&
+    while (contextStart > 0 &&
+           para[contextStart] != QChar(0x3002) &&  // 中文句号 Unicode: U+3002
            para[contextStart] != '.' && (minStart - contextStart) < 50) {
       contextStart--;
     }
+
     // 向右扩展至最近的句号或限制50字符
-    while (contextEnd < para.length() && para[contextEnd] != '。' &&
+    while (contextEnd < para.length() &&
+           para[contextEnd] != QChar(0x3002) &&  // 中文句号 Unicode: U+3002
            para[contextEnd] != '.' && (contextEnd - maxEnd) < 50) {
       contextEnd++;
     }
