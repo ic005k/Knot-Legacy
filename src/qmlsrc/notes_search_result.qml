@@ -26,7 +26,7 @@ ListView {
         background: Rectangle {
             //color: hovered ? "#f5f6fa" : "transparent"
             color: listView.currentIndex
-                   === index ? "#f5f6fa" : (hovered ? "#e0e0e0" : "transparent")
+                   === index ? "#f0f0f0" : (hovered ? "#e0e0e0" : "transparent") //#f5f6fa
             radius: 4
         }
 
@@ -39,7 +39,7 @@ ListView {
             // 文件标题
             Text {
                 text: filePath.split("/").pop()
-                font.pixelSize: 18
+                font.pointSize: fontSize
                 color: "#2c3e50"
                 elide: Text.ElideRight
                 Layout.fillWidth: true
@@ -49,7 +49,7 @@ ListView {
             // 高亮预览文本
             Text {
                 text: formatPreviewText(previewText, highlightPos)
-                font.pixelSize: 16
+                font.pointSize: fontSize - 1
                 color: "#7f8c8d"
                 wrapMode: Text.Wrap
                 maximumLineCount: 3 // 允许显示更多行

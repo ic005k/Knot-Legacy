@@ -3629,6 +3629,8 @@ void MainWindow::initQW() {
   ui->qwNoteList->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/notelist.qml")));
 
+  ui->qwNotesSearchResult->rootContext()->setContextProperty("fontSize",
+                                                             fontSize);
   ui->qwNotesSearchResult->rootContext()->setContextProperty("m_NotesList",
                                                              m_NotesList);
   ui->qwNotesSearchResult->rootContext()->setContextProperty("mw_one", mw_one);
@@ -3929,6 +3931,9 @@ void MainWindow::init_UIWidget() {
 
   ui->lblStats->adjustSize();
   ui->lblStats->setWordWrap(true);
+
+  ui->lblNoteTitle->adjustSize();
+  ui->lblNoteTitle->setWordWrap(true);
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));

@@ -3,8 +3,12 @@
 #include <QDebug>
 #include <QFile>
 #include <QRegularExpression>
+#include <memory>
 
 #include "SearchResultModel.h"
+#include "cppjieba/Jieba.hpp"
+
+extern std::unique_ptr<cppjieba::Jieba> jieba;
 
 NotesSearchEngine::NotesSearchEngine(QObject *parent) : QObject(parent) {
   // 注册 KeywordPosition 以便与 Qt 信号槽兼容
@@ -49,27 +53,32 @@ QString NotesSearchEngine::preprocessMarkdown(const QString &content) const {
 
 QStringList NotesSearchEngine::tokenize(const QString &text) const {
   QStringList tokens;
+  std::string input = text.toStdString();
+  std::vector<std::string> words;
 
-  // 判断是否为非中文（包含任意非CJK字符）
-  bool hasNonChinese = std::any_of(text.begin(), text.end(), [](QChar ch) {
-    return ch.script() != QChar::Script_Han &&
-           ch.script() != QChar::Script_Katakana &&
-           ch.script() != QChar::Script_Hiragana;
-  });
+  // 判断是否为中文（超过50%字符为CJK）
+  int cjkCount = 0;
+  for (QChar ch : text) {
+    if (ch.script() == QChar::Script_Han ||
+        ch.script() == QChar::Script_Katakana ||
+        ch.script() == QChar::Script_Hiragana) {
+      cjkCount++;
+    }
+  }
+  bool isChinese = (cjkCount * 2 > text.length());
 
-  if (hasNonChinese) {
-    // 英文/德文等：按非字母数字字符切分，并转为小写
-    tokens = text.toLower().split(QRegularExpression("[^\\p{L}0-9_]+"),
-                                  QString::SkipEmptyParts);
-  } else {
-    // 中文：按单字切分（过滤标点和空格）
-    for (QChar ch : text) {
-      if (ch.isLetter() && (ch.script() == QChar::Script_Han ||
-                            ch.script() == QChar::Script_Katakana ||
-                            ch.script() == QChar::Script_Hiragana)) {
-        tokens.append(ch);
+  if (isChinese) {
+    // 中文分词
+    jieba->Cut(input, words);
+    for (const auto &word : words) {
+      if (!word.empty()) {
+        tokens.append(QString::fromStdString(word));
       }
     }
+  } else {
+    // 非中文：按单词切分
+    tokens = text.toLower().split(QRegularExpression("[^\\p{L}0-9_]+"),
+                                  QString::SkipEmptyParts);
   }
 
   return tokens;

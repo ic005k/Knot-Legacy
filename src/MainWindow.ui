@@ -7909,6 +7909,11 @@ QSlider::handle:horizontal:disabled {
        </item>
        <item>
         <widget class="QLabel" name="lblNoteTitle">
+         <property name="font">
+          <font>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
           <string>Note Title</string>
          </property>

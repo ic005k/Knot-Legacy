@@ -70,7 +70,8 @@
 * [Markwon](https://github.com/noties/Markwon)
 * [Prism4j](https://github.com/noties/Prism4j)
 * [cmark-gfm](https://github.com/github/cmark-gfm)
-* [Qt-AES](https://github.com/bricke/Qt-AES)
+* [Qt-AES](https://github.com/bricke/Qt-AES)
+* [cppjieba](https://github.com/yanyiwu/cppjieba)
 
 ---
 

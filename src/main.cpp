@@ -6,7 +6,10 @@
 #include <QtWebView/QtWebView>
 
 #include "MainWindow.h"
+#include "cppjieba/Jieba.hpp"
 #include "src/Comm/qzipfile.h"
+
+std::unique_ptr<cppjieba::Jieba> jieba;
 
 extern QString iniFile, txtFile, appName, iniDir, privateDir, customFontFamily,
     defaultFontFamily;
@@ -23,6 +26,10 @@ QString loadText(QString textFile);
 QString getTextEditLineText(QTextEdit* txtEdit, int i);
 void TextEditToFile(QTextEdit* txtEdit, QString fileName);
 void StringToFile(QString buffers, QString fileName);
+
+QString strJBDict1 = "";
+QString strJBDict2 = "";
+QString strJBDict3 = "";
 
 bool zh_cn = false;
 bool isAndroid, isIOS;
@@ -134,6 +141,25 @@ int main(int argc, char* argv[]) {
   privateDir = QDir::homePath() + "/." + appName + "/";
 
 #endif
+
+  strJBDict1 = privateDir + "dict/jieba.dict.utf8";
+  strJBDict2 = privateDir + "dict/hmm_model.utf8";
+  strJBDict3 = privateDir + "dict/user.dict.utf8";
+
+  if (!QFile::exists(strJBDict1) || !QFile::exists(strJBDict2) ||
+      !QFile::exists(strJBDict3)) {
+    QString resFile = ":/res/jbdict/dict.zip";
+    deleteDirfile(privateDir + "dict");
+    QString zipFile = privateDir + "dict.zip";
+    QFile::remove(zipFile);
+    QFile::copy(resFile, zipFile);
+    unzip(zipFile, privateDir);
+  }
+
+  // 初始化结巴分词
+  jieba = std::make_unique<cppjieba::Jieba>(strJBDict1.toStdString(),
+                                            strJBDict2.toStdString(),
+                                            strJBDict3.toStdString());
 
   QString pdfjsDir;
 #ifdef Q_OS_ANDROID

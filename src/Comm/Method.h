@@ -301,7 +301,7 @@ class IOSCircularProgress : public QWidget {
   Q_PROPERTY(qreal progress READ progress WRITE setProgress)
  public:
   explicit IOSCircularProgress(QWidget *parent = nullptr)
-      : QWidget(parent), m_rotation(0), m_progress(0), m_penWidth(4) {
+      : QWidget(parent), m_rotation(0), m_progress(0), m_penWidth(5) {
     setFixedSize(60, 60);
 
     // 旋转动画
