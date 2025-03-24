@@ -14,8 +14,9 @@ extern QString iniFile, iniDir;
 extern bool loading, isBreak, zh_cn, isDark, isAndroid;
 extern int fontSize;
 
-extern void listWebDavFiles(QString url, QString username, QString password,
-                            WebDavHelper* helper);
+extern WebDavHelper* listWebDavFiles(const QString& url,
+                                     const QString& username,
+                                     const QString& password);
 
 bool isNeedSync = false;
 
@@ -1374,4 +1375,85 @@ void Todo::openTodoUI() {
   stopPlayVoice();
 
   mw_one->closeProgress();
+}
+
+void Todo::openTodo() {
+  mw_one->removeFilesWatch();
+  mw_one->isSelf = true;
+  mw_one->m_Notes->m_TextSelector->close();
+  mw_one->m_Notes->m_TextSelector = new TextSelector(mw_one);
+
+  if (mw_one->ui->chkAutoSync->isChecked() &&
+      mw_one->ui->chkWebDAV->isChecked()) {
+    mw_one->showProgress();
+
+    mw_one->m_CloudBackup->createRemoteWebDAVDir();
+
+    QString url = mw_one->m_CloudBackup->getWebDAVArgument();
+
+    WebDavHelper* helper =
+        listWebDavFiles(url + "KnotData/", mw_one->m_CloudBackup->USERNAME,
+                        mw_one->m_CloudBackup->APP_PASSWORD);
+
+    // 连接信号
+    QObject::connect(
+        helper, &WebDavHelper::listCompleted,
+        [](const QList<QPair<QString, QDateTime>>& files) {
+          qDebug() << "获取到文件列表:";
+          qDebug() << "共找到" << files.size() << "个文件:";
+          for (const auto& [path, mtime] : files) {
+            qDebug() << "路径:" << path
+                     << "修改时间:" << mtime.toString("yyyy-MM-dd hh:mm:ss");
+            QString remoteFile = path;
+            remoteFile = remoteFile.replace("/dav/", "");  // 此处需注意
+            if (remoteFile.contains("todo.ini")) {
+              QString localFile = iniDir + "todo.ini";
+              QDateTime localModi = QFileInfo(localFile).lastModified();
+              if (mtime > localModi || !QFile::exists(localFile)) {
+                // 初始化下载器
+                WebDavDownloader* downloader =
+                    new WebDavDownloader(mw_one->m_CloudBackup->USERNAME,
+                                         mw_one->m_CloudBackup->APP_PASSWORD);
+
+                // 连接信号
+                QObject::connect(downloader, &WebDavDownloader::progressChanged,
+                                 [](int current, int total, QString file) {
+                                   qDebug()
+                                       << QString("进度: %1/%2  当前文件: %3")
+                                              .arg(current)
+                                              .arg(total)
+                                              .arg(file);
+                                 });
+
+                QObject::connect(
+                    downloader, &WebDavDownloader::downloadFinished,
+                    [](bool success, QString error) {
+                      qDebug() << (success ? "下载成功" : "下载失败: " + error);
+                      mw_one->m_Todo->openTodoUI();
+                    });
+
+                // 需要下载的文件列表
+                QList<QString> remoteFiles = {remoteFile};
+
+                // 开始下载（1并发,根据文件的下载个数）
+                QString lf = iniDir;
+                lf = lf.replace("/KnotData/", "");
+                qDebug() << "lf=" << lf;
+                downloader->downloadFiles(remoteFiles, lf, 1);
+              }
+
+              if (mtime <= localModi) mw_one->m_Todo->openTodoUI();
+              break;
+            }
+          }
+        });
+
+    QObject::connect(helper, &WebDavHelper::errorOccurred,
+                     [](const QString& error) {
+                       qDebug() << "操作失败:" << error;
+                       mw_one->m_Todo->openTodoUI();
+                     });
+
+  } else
+    openTodoUI();
 }

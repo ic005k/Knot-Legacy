@@ -137,6 +137,7 @@ class Todo : public QDialog {
   void addToList(QString str);
   void closeTodo();
   void openTodoUI();
+  void openTodo();
   private slots:
   void on_ShowRecordTime();
 
