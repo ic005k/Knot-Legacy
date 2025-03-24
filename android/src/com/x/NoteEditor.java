@@ -484,6 +484,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         initColorValue();
         initTextFormat();
+        openSearchResult();
 
         // pass edittext object to TextViewUndoRedo class
         helper = new TextViewUndoRedo(editNote);
@@ -2132,6 +2133,19 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             // 错误处理
         }
         return image;
+    }
+
+    private void openSearchResult() {
+        if (MyActivity.isOpenSearchResult) {
+            if (!MyActivity.strSearchText.equals("")) {
+                btnFind.performClick();
+                editFind.setText(MyActivity.strSearchText);
+                btnStartFind.performClick();
+                btnNext.performClick();
+                btnPrev.performClick();
+            }
+        }
+        MyActivity.isOpenSearchResult = false;
     }
 
 }

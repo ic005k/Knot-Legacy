@@ -167,7 +167,8 @@ class Notes : public QDialog {
   QStringList notes_sync_files;
 
   void openEditUI();
-  protected:
+
+ protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
@@ -301,7 +302,8 @@ class Notes : public QDialog {
   void wheelEvent(QWheelEvent *e) override;
   QString imgDir = "==Image==";
   QColor StringToColor(QString mRgbStr);
-  void setOpenSearchResultForAndroid(bool isValue);
+
+  void setOpenSearchResultForAndroid(bool isValue, QString strSearchText);
 };
 
 class NoteIndexManager : public QObject {

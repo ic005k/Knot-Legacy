@@ -1685,8 +1685,9 @@ void Notes::showTextSelector() {
                               mw_one->width(), m_TextSelector->height());
 }
 
-void Notes::setOpenSearchResultForAndroid(bool isValue) {
+void Notes::setOpenSearchResultForAndroid(bool isValue, QString strSearchText) {
   Q_UNUSED(isValue);
+  Q_UNUSED(strSearchText);
 #ifdef Q_OS_ANDROID
 
   QAndroidJniObject activity =
@@ -1694,13 +1695,18 @@ void Notes::setOpenSearchResultForAndroid(bool isValue) {
   if (activity.isValid()) {
     // 调用Java方法，注意方法签名(Z)V
     activity.callMethod<void>("setOpenSearchResult", "(Z)V", isValue);
+
+    QAndroidJniObject jFile = QAndroidJniObject::fromString(strSearchText);
+    activity.callMethod<void>("setSearchText", "(Ljava/lang/String;)V",
+                              jFile.object<jstring>());
   }
 
 #endif
 }
 
 void Notes::openNoteEditor() {
-  setOpenSearchResultForAndroid(mw_one->isOpenSearchResult);
+  setOpenSearchResultForAndroid(mw_one->isOpenSearchResult,
+                                mw_one->ui->editNotesSearch->text().trimmed());
 
 #ifdef Q_OS_ANDROID
 

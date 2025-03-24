@@ -157,6 +157,7 @@ public class MyActivity
     implements Application.ActivityLifecycleCallbacks {
 
   public static boolean isOpenSearchResult = false;
+  public static String strSearchText = "";
   public static boolean isEdit = false;
   public static String strMDTitle = "MarkDown";
   public static String strMDFile = "";
@@ -2194,6 +2195,10 @@ public class MyActivity
 
   public void setOpenSearchResult(boolean value) {
     isOpenSearchResult = value;
+  }
+
+  public void setSearchText(String text) {
+    strSearchText = text;
   }
 
 }

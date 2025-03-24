@@ -6375,6 +6375,7 @@ void MainWindow::on_chkOneDrive_clicked() {
 void MainWindow::on_btnBack_NotesSearchResult_clicked() {
   ui->frameNotesSearchResult->hide();
   ui->frameNoteList->show();
+  isOpenSearchResult = false;
 }
 
 void MainWindow::on_editFindNote_returnPressed() { on_btnFindNotes_clicked(); }
