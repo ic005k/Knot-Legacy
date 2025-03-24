@@ -5006,73 +5006,7 @@ void MainWindow::on_btnSetKeyOK_clicked() {
   }
 }
 
-void MainWindow::on_btnEdit_clicked() {
-  qDebug() << "currentMDFile=" << currentMDFile;
-  if (!QFile::exists(currentMDFile)) {
-    ShowMessage *msg = new ShowMessage(mw_one);
-    msg->showMsg(appName,
-                 tr("The current note does not exist. Please select another "
-                    "note or create a new note."),
-                 0);
-    on_btnNotesList_clicked();
-    return;
-  }
-
-  if (isAndroid) {
-    m_Method->setMDFile(currentMDFile);
-    m_Notes->setAndroidNoteConfig("/cpos/currentMDFile",
-                                  QFileInfo(currentMDFile).baseName());
-
-    m_Notes->openNoteEditor();
-    return;
-  }
-
-  isSelf = true;
-
-  m_Notes->saveQMLVPos();
-  QString mdString = loadText(currentMDFile);
-
-  m_Notes->m_TextSelector->close();
-  delete m_Notes->m_TextSelector;
-  m_Notes->m_TextSelector = new TextSelector(m_Notes);
-
-  mainHeight = mw_one->height();
-
-  m_Notes->init();
-  m_Notes->m_EditSource->setPlainText(mdString);
-  new MarkdownHighlighter(m_Notes->m_EditSource->document());
-
-  m_Notes->show();
-
-  QString a = currentMDFile;
-  a.replace(iniDir, "");
-
-  QSettings *iniNotes =
-      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, NULL);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  iniNotes->setIniCodec("utf-8");
-#endif
-
-  int vpos = iniNotes->value("/MainNotes/editVPos" + a).toInt();
-  int cpos = iniNotes->value("/MainNotes/editCPos" + a).toInt();
-  bool isToolBarVisible =
-      iniNotes->value("/MainNotes/toolBarVisible", false).toBool();
-  m_Notes->m_EditSource->verticalScrollBar()->setSliderPosition(vpos);
-  QTextCursor tmpCursor = m_Notes->m_EditSource->textCursor();
-  tmpCursor.setPosition(cpos);
-  m_Notes->m_EditSource->setTextCursor(tmpCursor);
-  m_Notes->m_EditSource->setFocus();
-  if (isToolBarVisible) {
-    if (m_Notes->ui->f_ToolBar->isHidden()) m_Notes->on_btnShowTools_clicked();
-  } else {
-    if (!m_Notes->ui->f_ToolBar->isHidden()) m_Notes->on_btnShowTools_clicked();
-  }
-
-  m_Method->Sleep(200);
-  m_Notes->isNeedSave = false;
-  m_Notes->isDone = false;
-  m_Notes->isTextChange = false;
-}
+void MainWindow::on_btnEdit_clicked() { m_Notes->openEditUI(); }
 
 void MainWindow::on_btnCode_clicked() {
   QString str = ui->editCode->toPlainText().trimmed();
@@ -6453,6 +6387,7 @@ void MainWindow::on_btnClearSearchResults_clicked() {
 void MainWindow::on_btnOpenSearchResult_clicked() {
   QString mdFile = m_NotesList->getSearchResultQmlFile();
   if (!QFile::exists(mdFile)) return;
+  isOpenSearchResult = true;
   currentMDFile = mdFile;
   on_btnEditNote_clicked();
 }

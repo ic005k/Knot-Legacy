@@ -149,7 +149,8 @@ class NotesList : public QDialog {
   void openSearch();
 
   QString getSearchResultQmlFile();
-  protected:
+
+ protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
   void closeEvent(QCloseEvent *event) override;
@@ -192,8 +193,7 @@ class NotesList : public QDialog {
 
   void on_btnMoveTo_clicked();
 
-  void setNoteTitleForSerachResult();
-  private slots:
+ private slots:
 
   void on_editFind_textChanged(const QString &arg1);
 

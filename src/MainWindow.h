@@ -146,6 +146,8 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  bool isOpenSearchResult = false;
+
   bool isEditItem = false;
   bool isDelItem = false;
 

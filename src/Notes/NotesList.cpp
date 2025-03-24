@@ -2436,27 +2436,7 @@ void NotesList::setCurrentItemFromMDFile(QString mdFile) {
 }
 
 QString NotesList::getCurrentNoteNameFromMDFile(QString mdFile) {
-  QString note_name;
-  int count = getNoteBookCount();
-  bool isBreak = false;
-  for (int i = 0; i < count; i++) {
-    setNoteBookCurrentIndex(i);
-    clickNoteBook();
-    int count1 = getNotesListCount();
-    for (int j = 0; j < count1; j++) {
-      setNotesListCurrentIndex(j);
-      QString strMD = iniDir + m_Method->getText3(mw_one->ui->qwNoteList, j);
-      if (mdFile == strMD) {
-        note_name = m_Method->getText0(mw_one->ui->qwNoteList, j);
-        isBreak = true;
-        break;
-      }
-    }
-
-    if (isBreak) break;
-  }
-
-  return note_name;
+  return mw_one->m_Notes->m_NoteIndexManager->getNoteTitle(mdFile);
 }
 
 void NotesList::genCursorText() {
@@ -2681,12 +2661,6 @@ QString NotesList::getSearchResultQmlFile() {
   QMetaObject::invokeMethod((QObject *)root, "getQmlCurrentMDFile",
                             Q_RETURN_ARG(QVariant, item));
   return item.toString();
-}
-
-void NotesList::setNoteTitleForSerachResult() {
-  QString mdFile = getSearchResultQmlFile();
-  QString name = getCurrentNoteNameFromMDFile(mdFile);
-  mw_one->ui->lblNoteTitle->setText(name);
 }
 
 template class QFutureWatcher<ResultsMap>;

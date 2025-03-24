@@ -156,6 +156,7 @@ public class MyActivity
     extends QtActivity
     implements Application.ActivityLifecycleCallbacks {
 
+  public static boolean isOpenSearchResult = false;
   public static boolean isEdit = false;
   public static String strMDTitle = "MarkDown";
   public static String strMDFile = "";
@@ -2189,6 +2190,10 @@ public class MyActivity
 
   public void setFontSize(int nSize) {
     myFontSize = nSize - 3;
+  }
+
+  public void setOpenSearchResult(boolean value) {
+    isOpenSearchResult = value;
   }
 
 }

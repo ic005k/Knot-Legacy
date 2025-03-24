@@ -451,7 +451,7 @@ void CloudBackup::uploadFileToWebDAV(QString webdavUrl, QString localFilePath,
       } else {
         ShowMessage *m_ShowMsg = new ShowMessage(mw_one);
         m_ShowMsg->showMsg(
-            "WebDAV", tr("Download error") + " : " + reply->errorString(), 1);
+            "WebDAV", tr("Upload error") + " : " + reply->errorString(), 1);
       }
     }
     file->close();

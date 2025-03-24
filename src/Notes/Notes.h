@@ -166,7 +166,8 @@ class Notes : public QDialog {
 
   QStringList notes_sync_files;
 
- protected:
+  void openEditUI();
+  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
   bool eventFilter(QObject *obj, QEvent *event) override;
@@ -174,7 +175,10 @@ class Notes : public QDialog {
   void closeEvent(QCloseEvent *event) override;
 
  public slots:
+  void on_btnNext_clicked();
+
   void setVPos();
+
   void on_btnSyncToWebDAV_clicked();
 
   void on_btnShowTools_clicked();
@@ -264,8 +268,6 @@ class Notes : public QDialog {
 
   void on_btnPrev_clicked();
 
-  void on_btnNext_clicked();
-
   void on_editFind_returnPressed();
 
   void on_editFind_textChanged(const QString &arg1);
@@ -299,6 +301,7 @@ class Notes : public QDialog {
   void wheelEvent(QWheelEvent *e) override;
   QString imgDir = "==Image==";
   QColor StringToColor(QString mRgbStr);
+  void setOpenSearchResultForAndroid(bool isValue);
 };
 
 class NoteIndexManager : public QObject {

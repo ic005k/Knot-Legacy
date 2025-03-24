@@ -12,7 +12,7 @@
 
 extern MainWindow *mw_one;
 extern Method *m_Method;
-extern QString iniFile, iniDir, privateDir, currentMDFile, imgFileName;
+extern QString iniFile, iniDir, privateDir, currentMDFile, imgFileName, appName;
 extern bool isAndroid, isIOS, isDark, isNeedSync;
 extern int fontSize;
 extern QRegularExpression regxNumber;
@@ -1685,7 +1685,23 @@ void Notes::showTextSelector() {
                               mw_one->width(), m_TextSelector->height());
 }
 
+void Notes::setOpenSearchResultForAndroid(bool isValue) {
+  Q_UNUSED(isValue);
+#ifdef Q_OS_ANDROID
+
+  QAndroidJniObject activity =
+      QtAndroid::androidActivity();  // 获取当前Activity
+  if (activity.isValid()) {
+    // 调用Java方法，注意方法签名(Z)V
+    activity.callMethod<void>("setOpenSearchResult", "(Z)V", isValue);
+  }
+
+#endif
+}
+
 void Notes::openNoteEditor() {
+  setOpenSearchResultForAndroid(mw_one->isOpenSearchResult);
+
 #ifdef Q_OS_ANDROID
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -2168,4 +2184,83 @@ void NoteIndexManager::setNoteTitle(const QString &filePath,
   }
   // 延迟自动保存（例如定时器触发）
   QTimer::singleShot(2000, this, [this]() { saveIndex(m_currentIndexPath); });
+}
+
+void Notes::openEditUI() {
+  qDebug() << "currentMDFile=" << currentMDFile;
+  if (!QFile::exists(currentMDFile)) {
+    ShowMessage *msg = new ShowMessage(mw_one);
+    msg->showMsg(appName,
+                 tr("The current note does not exist. Please select another "
+                    "note or create a new note."),
+                 0);
+    mw_one->on_btnNotesList_clicked();
+    return;
+  }
+
+  if (isAndroid) {
+    m_Method->setMDFile(currentMDFile);
+    setAndroidNoteConfig("/cpos/currentMDFile",
+                         QFileInfo(currentMDFile).baseName());
+
+    openNoteEditor();
+    return;
+  }
+
+  mw_one->isSelf = true;
+
+  saveQMLVPos();
+  QString mdString = loadText(currentMDFile);
+
+  m_TextSelector->close();
+  delete m_TextSelector;
+  m_TextSelector = new TextSelector(mw_one->m_Notes);
+
+  mw_one->mainHeight = mw_one->height();
+
+  init();
+  m_EditSource->setPlainText(mdString);
+  new MarkdownHighlighter(m_EditSource->document());
+
+  show();
+
+  QString a = currentMDFile;
+  a.replace(iniDir, "");
+
+  QSettings *iniNotes =
+      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, NULL);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+  iniNotes->setIniCodec("utf-8");
+#endif
+
+  int vpos = iniNotes->value("/MainNotes/editVPos" + a).toInt();
+  int cpos = iniNotes->value("/MainNotes/editCPos" + a).toInt();
+  bool isToolBarVisible =
+      iniNotes->value("/MainNotes/toolBarVisible", false).toBool();
+  m_EditSource->verticalScrollBar()->setSliderPosition(vpos);
+  QTextCursor tmpCursor = m_EditSource->textCursor();
+  tmpCursor.setPosition(cpos);
+  m_EditSource->setTextCursor(tmpCursor);
+  m_EditSource->setFocus();
+  if (isToolBarVisible) {
+    if (ui->f_ToolBar->isHidden()) on_btnShowTools_clicked();
+  } else {
+    if (!ui->f_ToolBar->isHidden()) on_btnShowTools_clicked();
+  }
+
+  m_Method->Sleep(200);
+  isNeedSave = false;
+  isDone = false;
+  isTextChange = false;
+
+  if (mw_one->isOpenSearchResult) {
+    QString findText = mw_one->ui->editNotesSearch->text().trimmed();
+    if (findText.length() > 0) {
+      if (ui->f_ToolBar->isHidden()) on_btnShowTools_clicked();
+      m_EditSource->moveCursor(QTextCursor::Start);
+      ui->editFind->setText(findText);
+      on_btnNext_clicked();
+    }
+    mw_one->isOpenSearchResult = false;
+  }
 }
