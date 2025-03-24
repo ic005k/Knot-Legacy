@@ -809,7 +809,8 @@ void MainWindow::execDeskShortcut() {
 void MainWindow::on_ExecShortcut() {
   keyType = m_Method->getKeyType();
   if (keyType == "todo") m_Todo->NewTodo();
-  if (keyType == "note") m_Notes->NewNote();
+  if (keyType == "note") ui->btnNotes->click();
+  ;
   if (keyType == "reader") m_Reader->ContinueReading();
   if (keyType == "add") ui->btnAdd->click();
   if (keyType == "exercise") ui->btnSteps->click();

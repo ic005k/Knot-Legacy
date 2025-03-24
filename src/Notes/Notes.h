@@ -148,8 +148,6 @@ class Notes : public QDialog {
   void init_all_notes();
   void loadEmptyNote();
 
-  void NewNote();
-
   void refreshQMLVPos(qreal newPos);
 
   void setWebViewFile(QString htmlfile);

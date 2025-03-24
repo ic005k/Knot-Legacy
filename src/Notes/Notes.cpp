@@ -1942,11 +1942,6 @@ void Notes::loadEmptyNote() {
   mw_one->ui->lblNoteName->setText("");
 }
 
-void Notes::NewNote() {
-  mw_one->ui->btnNotes->click();
-  mw_one->ui->btnNotesList->click();
-}
-
 void Notes::setWebViewFile(QString htmlfile) {
   QQuickItem *root;
   root = mw_one->ui->qwNotes->rootObject();

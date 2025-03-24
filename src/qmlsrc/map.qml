@@ -53,7 +53,7 @@ Rectangle {
     }
 
     Plugin {
-        id: mapPlugin
+        id: osmPlugin
         name: "osm"
 
         PluginParameter {
@@ -65,7 +65,7 @@ Rectangle {
     Map {
         id: map
         anchors.fill: parent
-        plugin: mapPlugin
+        plugin: osmPlugin
         center: QtPositioning.coordinate(gpsx, gpsy) // 初始中心坐标（奥斯陆）
         zoomLevel: 13
 
