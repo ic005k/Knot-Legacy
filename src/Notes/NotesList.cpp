@@ -23,9 +23,6 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   this->installEventFilter(this);
 
   strNoteNameIndexFile = privateDir + "MyNoteNameIndex";
-  if (QFile::exists(strNoteNameIndexFile)) {
-    mw_one->m_Notes->m_NoteIndexManager->loadIndex(strNoteNameIndexFile);
-  }
 
   // 注册模型到 QML
   qmlRegisterType<SearchResultModel>("com.example", 1, 0, "SearchResultModel");
@@ -871,8 +868,6 @@ void NotesList::saveRecycle() {
 }
 
 void NotesList::initNotesList() {
-  bool isExistsNoteNameIndex = QFile::exists(strNoteNameIndexFile);
-
   mw_one->isSelf = true;
   tw->clear();
 
@@ -919,10 +914,8 @@ void NotesList::initNotesList() {
         childItem->setText(1, str1);
         childItem->setIcon(0, QIcon(":/res/n.png"));
 
-        if (!isExistsNoteNameIndex) {
-          mw_one->m_Notes->m_NoteIndexManager->setNoteTitle(iniDir + str1,
-                                                            str0);
-        }
+        mw_one->m_Notes->m_NoteIndexManager->setNoteTitle(iniDir + str1, str0);
+
       } else {
         QTreeWidgetItem *childItem = new QTreeWidgetItem(topItem);
         childItem->setText(0, str0);
@@ -953,10 +946,8 @@ void NotesList::initNotesList() {
           item->setText(1, str11);
           item->setIcon(0, QIcon(":/res/n.png"));
 
-          if (!isExistsNoteNameIndex) {
-            mw_one->m_Notes->m_NoteIndexManager->setNoteTitle(iniDir + str11,
-                                                              str00);
-          }
+          mw_one->m_Notes->m_NoteIndexManager->setNoteTitle(iniDir + str11,
+                                                            str00);
 
           notesTotal++;
         }
@@ -970,9 +961,7 @@ void NotesList::initNotesList() {
              tr("Notes") + " : " + QString::number(notesTotal));
   tw->expandAll();
 
-  if (!isExistsNoteNameIndex) {
-    mw_one->m_Notes->m_NoteIndexManager->saveIndex(strNoteNameIndexFile);
-  }
+  mw_one->m_Notes->m_NoteIndexManager->saveIndex(strNoteNameIndexFile);
 
   initRecentOpen();
 }

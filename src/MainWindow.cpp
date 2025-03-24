@@ -3934,6 +3934,7 @@ void MainWindow::init_UIWidget() {
 
   ui->lblNoteTitle->adjustSize();
   ui->lblNoteTitle->setWordWrap(true);
+  ui->lblNoteTitle->hide();
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));

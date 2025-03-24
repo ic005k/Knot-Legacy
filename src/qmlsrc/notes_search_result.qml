@@ -84,14 +84,14 @@ ListView {
         // 点击打开文件
         onClicked: {
             mdFile = filePath
-            m_NotesList.setNoteTitleForSerachResult()
+
             console.log("Open file:", filePath)
             listView.currentIndex = index
         }
 
         onDoubleClicked: {
             mdFile = filePath
-            m_NotesList.setNoteTitleForSerachResult()
+
             console.log("Open file:", filePath)
             listView.currentIndex = index
 
