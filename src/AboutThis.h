@@ -34,7 +34,8 @@ class AboutThis : public QDialog {
   void show_download();
   int getAndroidVer();
  public slots:
-  void on_btnBack_clicked();
+
+  void on_btnBack_About_clicked();
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;

@@ -56,13 +56,6 @@ AboutThis::AboutThis(QWidget *parent) : QDialog(parent), ui(new Ui::AboutThis) {
 
 AboutThis::~AboutThis() { delete ui; }
 
-void AboutThis::on_btnBack_clicked() {
-  if (mw_one->m_Notes->m_TextSelector != NULL)
-    mw_one->m_Notes->m_TextSelector->close();
-
-  close();
-}
-
 bool AboutThis::eventFilter(QObject *obj, QEvent *evn) {
   QMouseEvent *event = static_cast<QMouseEvent *>(evn);
   if (obj == ui->lblLogo) {
@@ -82,7 +75,7 @@ bool AboutThis::eventFilter(QObject *obj, QEvent *evn) {
         mw_one->m_Notes->m_TextSelector->close();
         return true;
       } else {
-        on_btnBack_clicked();
+        on_btnBack_About_clicked();
         return true;
       }
     }
@@ -257,6 +250,7 @@ void AboutThis::on_btnDownloadUP_clicked() {
 #else
   // const QUrl url("https://github.com/ic005k/" + appName +
   // "/releases/latest");
+
   QDesktopServices::openUrl(QUrl(s_link));
 #endif
 }
@@ -283,4 +277,11 @@ int AboutThis::getAndroidVer() {
 
 #endif
   return a;
+}
+
+void AboutThis::on_btnBack_About_clicked() {
+  if (mw_one->m_Notes->m_TextSelector != nullptr)
+    mw_one->m_Notes->m_TextSelector->close();
+
+  close();
 }

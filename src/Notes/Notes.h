@@ -80,7 +80,7 @@ class Notes : public QDialog {
   int androidKeyH;
   int start;
   int end;
-  TextSelector *m_TextSelector;
+  TextSelector *m_TextSelector = nullptr;
   qreal textHeight;
 
   QString textMemo;

@@ -246,7 +246,7 @@ void ReceiveShare::closeAllChildWindows() {
   }
 
   if (mw_one->m_AboutThis->isVisible()) {
-    mw_one->m_AboutThis->ui->btnBack->click();
+    mw_one->m_AboutThis->ui->btnBack_About->click();
   }
 
   if (mw_one->ui->frameSetTab->isVisible()) mw_one->ui->btnBackSetTab->click();
@@ -326,7 +326,7 @@ void ReceiveShare::closeAllActiveWindows() {
   }
 
   if (mw_one->m_AboutThis->isVisible()) {
-    mw_one->m_AboutThis->on_btnBack_clicked();
+    mw_one->m_AboutThis->on_btnBack_About_clicked();
   }
 
   if (mw_one->ui->frameMain->isVisible()) return;
@@ -354,7 +354,7 @@ void ReceiveShare::closeAllActiveWindowsKeep(QString frameName) {
   }
 
   if (mw_one->m_AboutThis->isVisible()) {
-    mw_one->m_AboutThis->on_btnBack_clicked();
+    mw_one->m_AboutThis->on_btnBack_About_clicked();
   }
 
   QObjectList frameList;
