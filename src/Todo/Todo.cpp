@@ -17,6 +17,7 @@ extern int fontSize;
 extern WebDavHelper* listWebDavFiles(const QString& url,
                                      const QString& username,
                                      const QString& password);
+extern CloudBackup* m_CloudBackup;
 
 bool isNeedSync = false;
 
@@ -199,7 +200,7 @@ void Todo::closeTodo() {
     QString todoFile = iniDir + "todo.ini";
     QStringList files;
     files.append(todoFile);
-    mw_one->m_CloudBackup->uploadFilesToWebDAV(files);
+    m_CloudBackup->uploadFilesToWebDAV(files);
     isNeedSync = false;
   }
 }
@@ -1387,13 +1388,13 @@ void Todo::openTodo() {
       mw_one->ui->chkWebDAV->isChecked()) {
     mw_one->showProgress();
 
-    mw_one->m_CloudBackup->createRemoteWebDAVDir();
+    m_CloudBackup->createRemoteWebDAVDir();
 
-    QString url = mw_one->m_CloudBackup->getWebDAVArgument();
+    QString url = m_CloudBackup->getWebDAVArgument();
 
     WebDavHelper* helper =
-        listWebDavFiles(url + "KnotData/", mw_one->m_CloudBackup->USERNAME,
-                        mw_one->m_CloudBackup->APP_PASSWORD);
+        listWebDavFiles(url + "KnotData/", m_CloudBackup->USERNAME,
+                        m_CloudBackup->APP_PASSWORD);
 
     // 连接信号
     QObject::connect(
@@ -1411,9 +1412,8 @@ void Todo::openTodo() {
               QDateTime localModi = QFileInfo(localFile).lastModified();
               if (mtime > localModi || !QFile::exists(localFile)) {
                 // 初始化下载器
-                WebDavDownloader* downloader =
-                    new WebDavDownloader(mw_one->m_CloudBackup->USERNAME,
-                                         mw_one->m_CloudBackup->APP_PASSWORD);
+                WebDavDownloader* downloader = new WebDavDownloader(
+                    m_CloudBackup->USERNAME, m_CloudBackup->APP_PASSWORD);
 
                 // 连接信号
                 QObject::connect(downloader, &WebDavDownloader::progressChanged,

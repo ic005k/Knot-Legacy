@@ -168,6 +168,8 @@ class Notes : public QDialog {
 
   void openEditUI();
 
+  void openNotes();
+
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
@@ -282,6 +284,10 @@ class Notes : public QDialog {
   void on_btnS11_clicked();
 
  private:
+  QStringList orgRemoteFiles;
+  QList<QDateTime> orgRemoteDateTime;
+  QList<QString> remoteFiles;
+
   int x_left, x_right, y_left, y_right;
   QString strNoteText;
   int y1;

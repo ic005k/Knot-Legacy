@@ -241,7 +241,7 @@ class MainWindow : public QMainWindow {
   Steps *m_Steps;
   Reader *m_Reader;
   TodoAlarm *m_TodoAlarm;
-  CloudBackup *m_CloudBackup;
+
   PageIndicator *m_PageIndicator;
 
   dlgSetText *mydlgSetText;
@@ -839,10 +839,6 @@ class MainWindow : public QMainWindow {
   void on_btnFindNotes2_clicked();
 
  private:
-  QStringList orgRemoteFiles;
-  QList<QDateTime> orgRemoteDateTime;
-  QList<QString> remoteFiles;
-
   bool isMoveEntry;
   QTimer *tmeFlash;
   int nFlashCount = 0;

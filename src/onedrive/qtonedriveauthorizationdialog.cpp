@@ -22,6 +22,7 @@
 #include "ui_MainWindow.h"
 
 extern MainWindow *mw_one;
+extern CloudBackup *m_CloudBackup;
 
 bool QtOneDriveAuthorizationDialog::isExists_ = false;
 
@@ -80,7 +81,7 @@ void QtOneDriveAuthorizationDialog::on_timer() {
     timer->stop();
     mw_one->ui->f_OneFun->show();
     mw_one->ui->f_FunWeb->hide();
-    mw_one->m_CloudBackup->loadLogQML();
+    m_CloudBackup->loadLogQML();
   }
 }
 

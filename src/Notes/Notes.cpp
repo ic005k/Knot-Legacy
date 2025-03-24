@@ -23,6 +23,11 @@ extern QString getTextEditLineText(QTextEdit *txtEdit, int i);
 extern void TextEditToFile(QTextEdit *txtEdit, QString fileName);
 extern void StringToFile(QString buffers, QString fileName);
 
+extern WebDavHelper *listWebDavFiles(const QString &url,
+                                     const QString &username,
+                                     const QString &password);
+extern CloudBackup *m_CloudBackup;
+
 QString markdownToHtml(const QString &markdown, int options);
 QString markdownToHtmlWithMath(const QString &md);
 
@@ -1359,7 +1364,7 @@ void Notes::syncToWebDAV() {
   if (isNeedSync && mw_one->ui->chkAutoSync->isChecked() &&
       mw_one->ui->chkWebDAV->isChecked()) {
     if (notes_sync_files.count() > 0) {
-      mw_one->m_CloudBackup->uploadFilesToWebDAV(notes_sync_files);
+      m_CloudBackup->uploadFilesToWebDAV(notes_sync_files);
     }
     isNeedSync = false;
   }
@@ -2269,4 +2274,121 @@ void Notes::openEditUI() {
     }
     mw_one->isOpenSearchResult = false;
   }
+}
+
+void Notes::openNotes() {
+  notes_sync_files.clear();
+  mw_one->m_NotesList->needDelWebDAVFiles.clear();
+  mw_one->removeFilesWatch();
+  mw_one->isSelf = true;
+
+  if (mw_one->ui->chkAutoSync->isChecked() &&
+      mw_one->ui->chkWebDAV->isChecked()) {
+    mw_one->showProgress();
+
+    m_CloudBackup->createRemoteWebDAVDir();
+
+    orgRemoteDateTime.clear();
+    orgRemoteFiles.clear();
+    remoteFiles.clear();
+    QString url = m_CloudBackup->getWebDAVArgument();
+
+    // get md files
+    m_CloudBackup->getRemoteFileList(url + "KnotData/memo/");
+    while (!m_CloudBackup->isGetRemoteFileListEnd)
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    qDebug() << m_CloudBackup->webdavFileList
+             << m_CloudBackup->webdavDateTimeList;
+    for (int i = 0; i < m_CloudBackup->webdavFileList.count(); i++) {
+      orgRemoteFiles.append(m_CloudBackup->webdavFileList.at(i));
+      orgRemoteDateTime.append(m_CloudBackup->webdavDateTimeList.at(i));
+    }
+
+    // get md image files
+    m_CloudBackup->getRemoteFileList(url + "KnotData/memo/images");
+    while (!m_CloudBackup->isGetRemoteFileListEnd)
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+    qDebug() << m_CloudBackup->webdavFileList
+             << m_CloudBackup->webdavDateTimeList;
+    for (int i = 0; i < m_CloudBackup->webdavFileList.count(); i++) {
+      orgRemoteFiles.append(m_CloudBackup->webdavFileList.at(i));
+      orgRemoteDateTime.append(m_CloudBackup->webdavDateTimeList.at(i));
+    }
+
+    WebDavHelper *helper =
+        listWebDavFiles(url + "KnotData/", m_CloudBackup->USERNAME,
+                        m_CloudBackup->APP_PASSWORD);
+
+    // 连接信号
+    QObject::connect(
+        helper, &WebDavHelper::listCompleted,
+        [=](const QList<QPair<QString, QDateTime>> &files) {
+          qDebug() << "获取到文件列表:";
+          qDebug() << "共找到" << files.size() << "个文件:";
+          for (const auto &[path, mtime] : files) {
+            qDebug() << "路径:" << path
+                     << "修改时间:" << mtime.toString("yyyy-MM-dd hh:mm:ss");
+            QString remote_f = path;
+            remote_f = remote_f.replace("/dav/", "");  // 此处需注意
+            if (remote_f.contains("mainnotes.ini")) {
+              orgRemoteFiles.append(remote_f);
+              orgRemoteDateTime.append(mtime);
+
+              for (int j = 0; j < orgRemoteFiles.count(); j++) {
+                QString or_file = orgRemoteFiles.at(j);
+                QDateTime or_datetime = orgRemoteDateTime.at(j);
+
+                QString local_file = or_file;
+                local_file = iniDir + local_file.replace("KnotData/", "");
+                QDateTime local_datetime = QFileInfo(local_file).lastModified();
+                if (or_datetime > local_datetime ||
+                    !QFile::exists(local_file)) {
+                  remoteFiles.append(or_file);
+                }
+              }
+
+              if (remoteFiles.count() > 0) {
+                // 初始化下载器
+                WebDavDownloader *downloader = new WebDavDownloader(
+                    m_CloudBackup->USERNAME, m_CloudBackup->APP_PASSWORD);
+
+                // 连接信号
+                QObject::connect(downloader, &WebDavDownloader::progressChanged,
+                                 [](int current, int total, QString file) {
+                                   qDebug()
+                                       << QString("进度: %1/%2  当前文件: %3")
+                                              .arg(current)
+                                              .arg(total)
+                                              .arg(file);
+                                 });
+
+                QObject::connect(
+                    downloader, &WebDavDownloader::downloadFinished,
+                    [=](bool success, QString error) {
+                      qDebug() << (success ? "下载成功" : "下载失败: " + error);
+                      mw_one->m_Notes->openNotesUI();
+                    });
+
+                // 开始下载（1并发,根据文件的下载个数）
+                QString lf = iniDir;
+                lf = lf.replace("/KnotData/", "");
+                qDebug() << "lf=" << lf;
+                downloader->downloadFiles(remoteFiles, lf, remoteFiles.count());
+              }
+
+              if (remoteFiles.count() == 0) mw_one->m_Notes->openNotesUI();
+              break;
+            }
+          }
+        });
+
+    QObject::connect(helper, &WebDavHelper::errorOccurred,
+                     [=](const QString &error) {
+                       qDebug() << "操作失败:" << error;
+                       mw_one->m_Notes->openNotesUI();
+                     });
+
+  } else
+
+    mw_one->m_Notes->openNotesUI();
 }
