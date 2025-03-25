@@ -4362,6 +4362,18 @@ static void JavaNotify_4() {
     QString backMain = Reg.value("/action/backMain", "false").toString();
     Reg.setValue("/action/backMain", "false");
     if (backMain == "false") {
+      // mw_one->setMini();
+    }
+
+    bool isBackMain = false;
+    QAndroidJniObject activity = QtAndroid::androidActivity();
+    if (activity.isValid()) {
+      jboolean result = activity.callMethod<jboolean>("getIsBackMainUI");
+      activity.callMethod<void>("setIsBackMainUI", "(Z)V", false);
+      isBackMain = result;
+    }
+
+    if (!isBackMain) {
       mw_one->setMini();
     }
   }

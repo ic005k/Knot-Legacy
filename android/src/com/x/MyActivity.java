@@ -163,6 +163,7 @@ public class MyActivity
   public static String strMDFile = "";
   public static String strImageFile;
   public static int myFontSize;
+  public static boolean isBackMainUI = false;
 
   public static boolean isDark = false;
   private static MyActivity m_instance = null;
@@ -2199,6 +2200,14 @@ public class MyActivity
 
   public void setSearchText(String text) {
     strSearchText = text;
+  }
+
+  public boolean getIsBackMainUI() {
+    return isBackMainUI;
+  }
+
+  public void setIsBackMainUI(boolean value) {
+    isBackMainUI = value;
   }
 
 }

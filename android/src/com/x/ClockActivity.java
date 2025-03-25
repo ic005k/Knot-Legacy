@@ -165,6 +165,8 @@ public class ClockActivity
           e.printStackTrace();
         }
 
+        MyActivity.isBackMainUI = true;
+
         onBackPressed();
         break;
       case R.id.btn_play_voice:
