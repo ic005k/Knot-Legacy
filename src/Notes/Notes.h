@@ -80,7 +80,7 @@ class Notes : public QDialog {
   int androidKeyH;
   int start;
   int end;
-  TextSelector *m_TextSelector = nullptr;
+
   qreal textHeight;
 
   QString textMemo;
@@ -133,7 +133,7 @@ class Notes : public QDialog {
 
   void setEditorVPos();
 
-  void openNoteEditor();
+  void openAndroidNoteEditor();
 
   void appendNote(QString str);
   void insertNote(QString str);

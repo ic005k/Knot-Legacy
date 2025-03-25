@@ -146,6 +146,8 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  QString mySearchText = "";
+
   bool isOpenSearchResult = false;
 
   bool isEditItem = false;
@@ -837,6 +839,8 @@ class MainWindow : public QMainWindow {
   void on_btnClearSearchResults_clicked();
 
   void on_btnFindNotes2_clicked();
+
+  void on_btnOpenEditFind_clicked();
 
  private:
   bool isMoveEntry;

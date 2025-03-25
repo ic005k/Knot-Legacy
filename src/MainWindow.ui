@@ -5909,6 +5909,19 @@ QRadioButton::indicator:checked {
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QToolButton" name="btnOpenEditFind">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>32</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Open</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
           <item>

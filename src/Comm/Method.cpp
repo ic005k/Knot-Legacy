@@ -14,6 +14,7 @@ extern bool isEpub, isText, isPDF, loading, isDark, isAndroid;
 extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
     s_y2, s_m2, s_d2, fontSize;
 extern QStringList readTextList, htmlFiles, listCategory;
+extern TextSelector *m_TextSelector;
 
 QStringList resultsList;
 
@@ -120,8 +121,8 @@ void Method::closeKeyboard() {
     mw_one->pAndroidKeyboard->hide();
   }
 
-  if (!mw_one->m_Notes->m_TextSelector->isHidden()) {
-    mw_one->m_Notes->m_TextSelector->on_btnClose_clicked();
+  if (!m_TextSelector->isHidden()) {
+    m_TextSelector->on_btnClose_clicked();
   }
 }
 

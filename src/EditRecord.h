@@ -41,7 +41,6 @@ class EditRecord : public QDialog {
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
  public:
-  void on_btnBack_clicked();
   void on_btnOk_clicked();
 
   void on_btn7_clicked();

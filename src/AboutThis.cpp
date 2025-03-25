@@ -71,13 +71,8 @@ bool AboutThis::eventFilter(QObject *obj, QEvent *evn) {
   if (evn->type() == QEvent::KeyRelease) {
     QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
     if (keyEvent->key() == Qt::Key_Back) {
-      if (!mw_one->m_Notes->m_TextSelector->isHidden()) {
-        mw_one->m_Notes->m_TextSelector->close();
-        return true;
-      } else {
-        on_btnBack_About_clicked();
-        return true;
-      }
+      on_btnBack_About_clicked();
+      return true;
     }
   }
 
@@ -279,9 +274,4 @@ int AboutThis::getAndroidVer() {
   return a;
 }
 
-void AboutThis::on_btnBack_About_clicked() {
-  if (mw_one->m_Notes->m_TextSelector != nullptr)
-    mw_one->m_Notes->m_TextSelector->close();
-
-  close();
-}
+void AboutThis::on_btnBack_About_clicked() { close(); }

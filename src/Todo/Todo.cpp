@@ -9,6 +9,7 @@ int highCount;
 QString orgLblStyle;
 
 extern MainWindow* mw_one;
+extern TextSelector* m_TextSelector;
 extern Method* m_Method;
 extern QString iniFile, iniDir;
 extern bool loading, isBreak, zh_cn, isDark, isAndroid;
@@ -1381,8 +1382,8 @@ void Todo::openTodoUI() {
 void Todo::openTodo() {
   mw_one->removeFilesWatch();
   mw_one->isSelf = true;
-  mw_one->m_Notes->m_TextSelector->close();
-  mw_one->m_Notes->m_TextSelector = new TextSelector(mw_one);
+  m_TextSelector->close();
+  m_TextSelector = new TextSelector(mw_one);
 
   if (mw_one->ui->chkAutoSync->isChecked() &&
       mw_one->ui->chkWebDAV->isChecked()) {

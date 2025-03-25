@@ -50,6 +50,7 @@ extern QStringList readTextList, htmlFiles, listCategory;
 extern QtOneDriveAuthorizationDialog *dialog_;
 extern CategoryList *m_CategoryList;
 extern ReaderSet *m_ReaderSet;
+extern TextSelector *m_TextSelector;
 
 extern void setTableNoItemFlags(QTableWidget *t, int row);
 extern int deleteDirfile(QString dirName);
@@ -2272,8 +2273,8 @@ void MainWindow::saveRemarks(int tabIndex) {
 }
 
 void MainWindow::on_btnModifyRecord_clicked() {
-  m_Notes->m_TextSelector->close();
-  m_Notes->m_TextSelector = new TextSelector(mw_one);
+  m_TextSelector->close();
+  m_TextSelector = new TextSelector(mw_one);
 
   m_Method->reeditMainEventData();
 }
@@ -2603,8 +2604,8 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       }
 
       if (!ui->frameTodo->isHidden()) {
-        if (!mw_one->m_Notes->m_TextSelector->isHidden()) {
-          mw_one->m_Notes->m_TextSelector->close();
+        if (!m_TextSelector->isHidden()) {
+          m_TextSelector->close();
           return true;
         } else {
           on_btnBackTodo_clicked();
@@ -2659,8 +2660,8 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
       }
 
       if (!ui->frameEditRecord->isHidden()) {
-        if (!mw_one->m_Notes->m_TextSelector->isHidden()) {
-          mw_one->m_Notes->m_TextSelector->close();
+        if (!m_TextSelector->isHidden()) {
+          m_TextSelector->close();
           return true;
         } else {
           on_btnBackEditRecord_clicked();
@@ -4984,8 +4985,8 @@ void MainWindow::on_btnPasteCode_clicked() {
 }
 
 void MainWindow::on_btnAdd_clicked() {
-  m_Notes->m_TextSelector->close();
-  m_Notes->m_TextSelector = new TextSelector(mw_one);
+  m_TextSelector->close();
+  m_TextSelector = new TextSelector(mw_one);
 
   m_EditRecord->monthSum();
 
@@ -6211,6 +6212,7 @@ void MainWindow::on_btnOpenSearchResult_clicked() {
   if (!QFile::exists(mdFile)) return;
   isOpenSearchResult = true;
   currentMDFile = mdFile;
+  mySearchText = ui->editNotesSearch->text().trimmed();
   on_btnEditNote_clicked();
 }
 
@@ -6219,4 +6221,10 @@ void MainWindow::on_btnFindNotes2_clicked() {
     ui->f_FindNotes->show();
   else
     ui->f_FindNotes->hide();
+}
+
+void MainWindow::on_btnOpenEditFind_clicked() {
+  isOpenSearchResult = true;
+  mySearchText = ui->editFindNote->text().trimmed();
+  on_btnEditNote_clicked();
 }

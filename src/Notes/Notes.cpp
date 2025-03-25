@@ -30,6 +30,7 @@ extern CloudBackup *m_CloudBackup;
 
 QString markdownToHtml(const QString &markdown, int options);
 QString markdownToHtmlWithMath(const QString &md);
+TextSelector *m_TextSelector = nullptr;
 
 NoteIndexManager::NoteIndexManager(QObject *parent) : QObject{parent} {}
 
@@ -1709,9 +1710,9 @@ void Notes::setOpenSearchResultForAndroid(bool isValue, QString strSearchText) {
 #endif
 }
 
-void Notes::openNoteEditor() {
+void Notes::openAndroidNoteEditor() {
   setOpenSearchResultForAndroid(mw_one->isOpenSearchResult,
-                                mw_one->ui->editNotesSearch->text().trimmed());
+                                mw_one->mySearchText);
 
 #ifdef Q_OS_ANDROID
 
@@ -1724,6 +1725,8 @@ void Notes::openNoteEditor() {
 #endif
 
 #endif
+
+  mw_one->isOpenSearchResult = false;
 }
 
 void Notes::openMDWindow() {
@@ -2209,7 +2212,7 @@ void Notes::openEditUI() {
     setAndroidNoteConfig("/cpos/currentMDFile",
                          QFileInfo(currentMDFile).baseName());
 
-    openNoteEditor();
+    openAndroidNoteEditor();
     return;
   }
 
@@ -2260,15 +2263,16 @@ void Notes::openEditUI() {
   isTextChange = false;
 
   if (mw_one->isOpenSearchResult) {
-    QString findText = mw_one->ui->editNotesSearch->text().trimmed();
+    QString findText = mw_one->mySearchText;
     if (findText.length() > 0) {
       if (ui->f_ToolBar->isHidden()) on_btnShowTools_clicked();
       m_EditSource->moveCursor(QTextCursor::Start);
       ui->editFind->setText(findText);
       on_btnNext_clicked();
     }
-    mw_one->isOpenSearchResult = false;
   }
+
+  mw_one->isOpenSearchResult = false;
 }
 
 void Notes::openNotes() {

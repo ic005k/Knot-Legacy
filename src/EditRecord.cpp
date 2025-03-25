@@ -12,6 +12,7 @@ extern QRegularExpression regxNumber;
 extern bool isBreak, isDark, isReport, isWholeMonth, isDateSection, isDark,
     isAdd;
 extern int fontSize;
+extern TextSelector *m_TextSelector;
 
 extern QString loadText(QString textFile);
 extern void TextEditToFile(QTextEdit *txtEdit, QString fileName);
@@ -85,8 +86,8 @@ EditRecord::EditRecord(QWidget *parent) : QDialog(parent) {
 }
 
 void EditRecord::init() {
-  mw_one->m_Notes->m_TextSelector->close();
-  mw_one->m_Notes->m_TextSelector = new TextSelector(this);
+  m_TextSelector->close();
+  m_TextSelector = new TextSelector(mw_one);
 
   setModal(true);
   setGeometry(mw_one->geometry().x(), mw_one->geometry().y(), mw_one->width(),
@@ -101,8 +102,6 @@ void EditRecord::init() {
 }
 
 EditRecord::~EditRecord() {}
-
-void EditRecord::on_btnBack_clicked() { close(); }
 
 void EditRecord::keyReleaseEvent(QKeyEvent *event) { Q_UNUSED(event); }
 
@@ -326,27 +325,6 @@ void EditRecord::getTime(int h, int m) {
 }
 
 bool EditRecord::eventFilter(QObject *watch, QEvent *evn) {
-  if (evn->type() == QEvent::KeyRelease) {
-    QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
-    if (keyEvent->key() == Qt::Key_Back) {
-      if (!mw_one->m_Notes->m_TextSelector->isHidden()) {
-        mw_one->m_Notes->m_TextSelector->close();
-        return true;
-      } else if (!m_CategoryList->isHidden()) {
-        m_CategoryList->close();
-
-        return true;
-      } else if (!mw_one->m_EditRecord->isHidden()) {
-        on_btnBack_clicked();
-        return true;
-      }
-    }
-
-    if (keyEvent->key() == Qt::Key_Return) {
-      return false;
-    }
-  }
-
   return QWidget::eventFilter(watch, evn);
 }
 
