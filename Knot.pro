@@ -38,8 +38,15 @@ android: {
 INCLUDEPATH += $$PWD/src/zlib
 DEFINES += QUAZIP_STATIC
 macx {
-    CONFIG += unix
-    INCLUDEPATH += /usr/include/unistd.h
+    # 强制定义 CMake 检测所需的宏
+    DEFINES += Z_HAVE_UNISTD_H HAVE_FSEEKO
+
+    # 直接指定 macOS SDK 路径（兼容 GitHub Actions 环境）
+    SDK_PATH = $$system(xcrun --show-sdk-path)
+    INCLUDEPATH += $${SDK_PATH}/usr/include
+
+    # 确保链接器能找到系统库
+    LIBS += -L$${SDK_PATH}/usr/lib
 }
 
 ####################### 添加 cppjieba 和 limonp 头文件路径 ######################
