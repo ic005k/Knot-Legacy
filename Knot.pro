@@ -37,6 +37,10 @@ android: {
 ####################### QuaZip ##############################################
 INCLUDEPATH += $$PWD/src/zlib
 DEFINES += QUAZIP_STATIC
+macx {
+    CONFIG += unix
+    INCLUDEPATH += /usr/include/unistd.h
+}
 
 ####################### 添加 cppjieba 和 limonp 头文件路径 ######################
 INCLUDEPATH += $$PWD/cppjieba/include
