@@ -852,6 +852,8 @@ void Todo::changeTodoIcon(bool isToday) {
 
 void Todo::on_editTodo_textChanged() {
   int h = getEditTextHeight(mw_one->ui->editTodo) + 4;
+  int ui_h = mw_one->ui->frameTodo->height();
+  if (h > ui_h / 2) h = ui_h / 2;
   mw_one->ui->editTodo->setFixedHeight(h);
 }
 

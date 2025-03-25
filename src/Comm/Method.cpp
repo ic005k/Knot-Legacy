@@ -2,7 +2,7 @@
 
 #include <QKeyEvent>
 
-#include "src/Comm/qzipfile.h"
+// #include "src/Comm/qzipfile.h"
 #include "src/MainWindow.h"
 #include "ui_MainWindow.h"
 
@@ -1357,50 +1357,6 @@ void Method::stopPlayRecord() {
 #endif
 
 #endif
-}
-
-void Method::m_unzip(QString zipFile, QString targetDir) {
-  qompress::QZipFile zf(zipFile);
-  if (!zf.open(qompress::QZipFile::ReadOnly)) {
-    qDebug() << "Failed to open " << zipFile << ": " << zf.errorString();
-    return;
-  }
-
-  QStringList bufList;
-  do {
-    qompress::QZipFileEntry file = zf.currentEntry();
-    bufList.append(file.name() + "|===|" +
-                   QString::number(file.uncompressedSize()));
-
-  } while (zf.nextEntry());
-
-  QStringList files = zf.filenames();
-  int count = files.count();
-  for (int i = 0; i < count; i++) {
-    QString strFile = files.at(i);
-    QFileInfo fi(targetDir + strFile);
-    QString path = fi.path();
-    QDir dir0(path);
-    if (!dir0.exists()) dir0.mkpath(path);
-
-    qint64 bufSize = 512 * 512;
-    for (int j = 0; j < bufList.count(); j++) {
-      QString item = bufList.at(j);
-      QStringList list0 = item.split("|===|");
-      QString s0, s1;
-      s0 = list0.at(0);
-      if (s0 == strFile) {
-        s1 = list0.at(1);
-        bufSize = s1.toInt();
-        break;
-      }
-    }
-
-    QFile myfile(targetDir + strFile);
-    myfile.open(QIODevice::WriteOnly);
-    zf.extractEntry(myfile, strFile, "", bufSize);
-    myfile.close();
-  }
 }
 
 QString Method::FormatHHMMSS(qint32 total) {

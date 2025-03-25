@@ -7,7 +7,8 @@
 
 #include "MainWindow.h"
 #include "cppjieba/Jieba.hpp"
-#include "src/Comm/qzipfile.h"
+#include "src/quazip/quazip.h"
+#include "src/quazip/quazipfile.h"
 
 std::unique_ptr<cppjieba::Jieba> jieba;
 
@@ -20,7 +21,7 @@ extern MainWindow* mw_one;
 extern QSettings* iniPreferences;
 
 void loadLocal();
-void unzip(QString zipFile, QString unzipDir);
+bool unzipToDir(const QString& zipPath, const QString& destDir);
 int deleteDirfile(QString dirName);
 QString loadText(QString textFile);
 QString getTextEditLineText(QTextEdit* txtEdit, int i);
@@ -153,7 +154,7 @@ int main(int argc, char* argv[]) {
     QString zipFile = privateDir + "dict.zip";
     QFile::remove(zipFile);
     QFile::copy(resFile, zipFile);
-    unzip(zipFile, privateDir);
+    unzipToDir(zipFile, privateDir);
   }
 
   // 初始化结巴分词
@@ -175,7 +176,7 @@ int main(int argc, char* argv[]) {
     QString zipFile = pdfjsDir + "pdfjs.zip";
     QFile::remove(zipFile);
     QFile::copy(resFile, zipFile);
-    unzip(zipFile, pdfjsDir);
+    unzipToDir(zipFile, pdfjsDir);
 
     QFile::copy(":/res/pdf/pdf.viewer.bridge.js",
                 pdfjsDir + "pdfjs/web/pdf.viewer.bridge.js");
@@ -337,31 +338,50 @@ void loadLocal() {
   }
 }
 
-void unzip(QString zipFile, QString unzipDir) {
-  qompress::QZipFile zf(zipFile);
-  if (!zf.open(qompress::QZipFile::ReadOnly)) {
-    qDebug() << "Failed to open " << zipFile << ": " << zf.errorString();
-
-    return;
+bool unzipToDir(const QString& zipPath, const QString& destDir) {
+  QuaZip zip(zipPath);
+  if (!zip.open(QuaZip::mdUnzip)) {
+    qDebug() << "无法打开 ZIP 文件：" << zipPath;
+    return false;
   }
-  do {
-    qompress::QZipFileEntry file = zf.currentEntry();
-    QString strFile = file.name();
-    qDebug() << strFile << ":\t\t" << file.uncompressedSize()
-             << "bytes (uncompressed)";
 
-    QFileInfo fi(strFile);
-    QString path = unzipDir + fi.path();
-    QDir dir0(path);
-    if (!dir0.exists()) dir0.mkpath(path);
+  QDir dir(destDir);
+  if (!dir.exists() && !dir.mkpath(".")) {
+    qDebug() << "无法创建目标目录：" << destDir;
+    return false;
+  }
 
-    QFile myfile(unzipDir + strFile);
-    myfile.open(QIODevice::WriteOnly);
-    zf.extractCurrentEntry(myfile, "", file.uncompressedSize());
-    myfile.close();
+  // 遍历 ZIP 内所有文件
+  for (bool more = zip.goToFirstFile(); more; more = zip.goToNextFile()) {
+    QuaZipFile file(&zip);
+    if (!file.open(QIODevice::ReadOnly)) {
+      qDebug() << "无法打开文件：" << zip.getCurrentFileName();
+      continue;
+    }
 
-  } while (zf.nextEntry());
-  zf.close();
+    QString filePath = destDir + "/" + zip.getCurrentFileName();
+    QFileInfo fileInfo(filePath);
+
+    // 创建子目录（如果需要）
+    if (!fileInfo.dir().exists() && !fileInfo.dir().mkpath(".")) {
+      qDebug() << "无法创建子目录：" << fileInfo.dir().path();
+      continue;
+    }
+
+    // 写入文件内容
+    QFile outputFile(filePath);
+    if (!outputFile.open(QIODevice::WriteOnly)) {
+      qDebug() << "无法写入文件：" << filePath;
+      continue;
+    }
+
+    outputFile.write(file.readAll());
+    outputFile.close();
+    file.close();
+  }
+
+  zip.close();
+  return true;
 }
 
 int deleteDirfile(QString dirName) {

@@ -130,10 +130,25 @@ void TextSelector::on_btnCut_clicked() {
 }
 
 void TextSelector::on_btnPaste_clicked() {
+  strByCopyText = QApplication::clipboard()->text();
+
   if (mw_one->m_Notes->byTextEdit == mw_one->m_Notes->m_EditSource) {
+    QApplication::clipboard()->setText(strByCopyText);
     mw_one->m_Notes->on_btnPaste_clicked();
   } else {
+    QString str = strByCopyText;
+    if (mw_one->m_Notes->byTextEdit == mw_one->ui->editTodo) {
+      if (str.length() > 50) {
+        str = str.mid(0, 50);
+      }
+    } else {
+      if (str.length() > 200) {
+        str = str.mid(0, 200);
+      }
+    }
+    QApplication::clipboard()->setText(str);
     mw_one->m_Notes->byTextEdit->paste();
+    QApplication::clipboard()->setText(strByCopyText);
   }
 
   close();

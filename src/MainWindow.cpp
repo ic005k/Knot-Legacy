@@ -58,7 +58,7 @@ extern QString loadText(QString textFile);
 extern QString getTextEditLineText(QTextEdit *txtEdit, int i);
 extern void TextEditToFile(QTextEdit *txtEdit, QString fileName);
 extern void StringToFile(QString buffers, QString fileName);
-extern void unzip(QString zipFile, QString unzipDir);
+extern bool unzipToDir(const QString &zipPath, const QString &destDir);
 
 extern WebDavHelper *listWebDavFiles(const QString &url,
                                      const QString &username,
@@ -2835,7 +2835,6 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
     }
 
     mw_one->m_Notes->unzip(iniDir + "memo.zip");
-    // m_Method->m_unzip(iniDir + "memo.zip", iniDir);
 
     QFile file(iniDir + "memo/tab.ini");
     if (!file.exists()) {

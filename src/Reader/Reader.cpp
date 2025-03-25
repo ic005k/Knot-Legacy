@@ -2,7 +2,6 @@
 
 #include <QKeyEvent>
 
-#include "src/Comm/qzipfile.h"
 #include "src/MainWindow.h"
 #include "ui_MainWindow.h"
 
@@ -19,6 +18,7 @@ extern QString loadText(QString textFile);
 extern QString getTextEditLineText(QTextEdit *txtEdit, int i);
 extern void TextEditToFile(QTextEdit *txtEdit, QString fileName);
 extern void StringToFile(QString buffers, QString fileName);
+extern bool unzipToDir(const QString &zipPath, const QString &destDir);
 
 bool isOpen = false;
 bool isEpub, isText, isPDF, isEpubError;
@@ -55,7 +55,7 @@ Reader::Reader(QWidget *parent) : QDialog(parent) {
   mw_one->ui->lblCataInfo->hide();
   mw_one->ui->lblCataInfo->adjustSize();
   mw_one->ui->lblCataInfo->setWordWrap(true);
-  mw_one->ui->lblBookName->hide();
+  mw_one->ui->lblBookName->adjustSize();
   mw_one->ui->lblBookName->setWordWrap(true);
 
   mw_one->ui->textBrowser->horizontalScrollBar()->hide();
@@ -337,82 +337,7 @@ void Reader::openFile(QString openfile) {
       }
 
       if (unzipMethod == 3) {
-        qompress::QZipFile zf(temp);
-        if (!zf.open(qompress::QZipFile::ReadOnly)) {
-          qDebug() << "Failed to open " << temp << ": " << zf.errorString();
-          isEpubError = true;
-          return;
-        }
-
-        if (zlibMethod == 1) {
-          QStringList bufList;
-          do {
-            qompress::QZipFileEntry file = zf.currentEntry();
-            bufList.append(file.name() + "|===|" +
-                           QString::number(file.uncompressedSize()));
-
-          } while (zf.nextEntry());
-
-          QStringList files = zf.filenames();
-          int count = files.count();
-          for (int i = 0; i < count; i++) {
-            QString strFile = files.at(i);
-            QFileInfo fi(dirpath + strFile);
-            QString path = fi.path();
-            QDir dir0(path);
-            if (!dir0.exists()) dir0.mkpath(path);
-
-            qint64 bufSize = 512 * 512;
-            for (int j = 0; j < bufList.count(); j++) {
-              QString item = bufList.at(j);
-              QStringList list0 = item.split("|===|");
-              QString s0, s1;
-              s0 = list0.at(0);
-              if (s0 == strFile) {
-                s1 = list0.at(1);
-                bufSize = s1.toInt();
-                break;
-              }
-            }
-
-            QFile myfile(dirpath + strFile);
-            myfile.open(QIODevice::WriteOnly);
-            zf.extractEntry(myfile, strFile, "", bufSize);
-            myfile.close();
-
-            strShowMsg = strFile;
-            if (count > 0) {
-              double percent = (double)i / (double)count;
-              strPercent = QString::number(percent * 100, 'f', 0);
-            }
-          }
-        }
-
-        if (zlibMethod == 2) {
-          int i = 0;
-          do {
-            qompress::QZipFileEntry file = zf.currentEntry();
-            QString strFile = file.name();
-            qDebug() << strFile << ":\t\t" << file.uncompressedSize()
-                     << "bytes (uncompressed)";
-
-            QFileInfo fi(strFile);
-            QString path = dirpath + fi.path();
-            QDir dir0(path);
-            if (!dir0.exists()) dir0.mkpath(path);
-
-            QFile myfile(dirpath + strFile);
-            myfile.open(QIODevice::WriteOnly);
-            zf.extractCurrentEntry(myfile, "", file.uncompressedSize());
-            myfile.close();
-
-            i = i + 1;
-            strShowMsg = QString::number(i) + " " + strFile;
-
-          } while (zf.nextEntry());
-        }
-
-        zf.close();
+        unzipToDir(temp, dirpath);
       }
 
       qDebug() << "openFile:" << openfile << "dirpath=" << dirpath;

@@ -27,19 +27,22 @@ TRANSLATIONS += src/cn.ts
 ICON = res/icon.icns
 RC_FILE +=win.rc
 
-include($$PWD/src/3rdparty/zlib.pri)
+
 
 android: {
     lessThan(QT_MAJOR_VERSION, 6):QT += androidextras
 
 }
 
-# 添加 cppjieba 和 limonp 头文件路径
+####################### QuaZip ##############################################
+INCLUDEPATH += $$PWD/src/zlib
+DEFINES += QUAZIP_STATIC
+
+####################### 添加 cppjieba 和 limonp 头文件路径 ######################
 INCLUDEPATH += $$PWD/cppjieba/include
 INCLUDEPATH += $$PWD/cppjieba/limonp/include
 
 ############################ cmark-gfm ########################################
-
 INCLUDEPATH += $$PWD/lib/cmark-gfm/include
 
 # 强制单线程链接
@@ -82,8 +85,6 @@ SOURCES += \
     src/Comm/RollingBox.cpp \
     src/Comm/ShowMessage.cpp \
     src/Comm/qaesencryption.cpp \
-    src/Comm/qzipfile.cpp \
-    src/Comm/qzipfileentry.cpp \
     src/DateSelector.cpp \
     src/EditRecord.cpp \
     src/LoadPic.cpp \
@@ -155,7 +156,36 @@ SOURCES += \
     src/md4c/md4c.c \
     src/onedrive/qtonedrive.cpp \
     src/onedrive/qtonedriveauthorizationdialog.cpp \
-    src/onedrive/qtonedrivewebview.cpp
+    src/onedrive/qtonedrivewebview.cpp \
+    src/quazip/JlCompress.cpp \
+    src/quazip/qioapi.cpp \
+    src/quazip/quaadler32.cpp \
+    src/quazip/quachecksum32.cpp \
+    src/quazip/quacrc32.cpp \
+    src/quazip/quagzipfile.cpp \
+    src/quazip/quaziodevice.cpp \
+    src/quazip/quazip.cpp \
+    src/quazip/quazipdir.cpp \
+    src/quazip/quazipfile.cpp \
+    src/quazip/quazipfileinfo.cpp \
+    src/quazip/quazipnewinfo.cpp \
+    src/quazip/unzip.c \
+    src/quazip/zip.c \
+    src/zlib/adler32.c \
+    src/zlib/compress.c \
+    src/zlib/crc32.c \
+    src/zlib/deflate.c \
+    src/zlib/gzclose.c \
+    src/zlib/gzlib.c \
+    src/zlib/gzread.c \
+    src/zlib/gzwrite.c \
+    src/zlib/infback.c \
+    src/zlib/inffast.c \
+    src/zlib/inflate.c \
+    src/zlib/inftrees.c \
+    src/zlib/trees.c \
+    src/zlib/uncompr.c \
+    src/zlib/zutil.c
 
 
 HEADERS += \
@@ -169,8 +199,6 @@ HEADERS += \
     src/Comm/RollingBox.h \
     src/Comm/ShowMessage.h \
     src/Comm/qaesencryption.h \
-    src/Comm/qzipfile.h \
-    src/Comm/qzipfileentry.h \
     src/DateSelector.h \
     src/EditRecord.h \
     src/LoadPic.h \
@@ -209,6 +237,34 @@ HEADERS += \
     src/onedrive/qtonedriveauthorizationdialog.h \
     src/onedrive/qtonedrivelib_global.h \
     src/onedrive/qtonedrivewebview.h \
+    src/quazip/JlCompress.h \
+    src/quazip/ioapi.h \
+    src/quazip/minizip_crypt.h \
+    src/quazip/quaadler32.h \
+    src/quazip/quachecksum32.h \
+    src/quazip/quacrc32.h \
+    src/quazip/quagzipfile.h \
+    src/quazip/quaziodevice.h \
+    src/quazip/quazip.h \
+    src/quazip/quazip_global.h \
+    src/quazip/quazip_qt_compat.h \
+    src/quazip/quazipdir.h \
+    src/quazip/quazipfile.h \
+    src/quazip/quazipfileinfo.h \
+    src/quazip/quazipnewinfo.h \
+    src/quazip/unzip.h \
+    src/quazip/zip.h \
+    src/zlib/crc32.h \
+    src/zlib/deflate.h \
+    src/zlib/gzguts.h \
+    src/zlib/inffast.h \
+    src/zlib/inffixed.h \
+    src/zlib/inflate.h \
+    src/zlib/inftrees.h \
+    src/zlib/trees.h \
+    src/zlib/zconf.h \
+    src/zlib/zlib.h \
+    src/zlib/zutil.h \
     win.rc
 
 FORMS += \
@@ -311,6 +367,7 @@ DISTFILES += \
     src/qmlsrc/tree_main.qml \
     src/qmlsrc/type.qml \
     src/qmlsrc/viewcate.qml \
+    src/quazip/quazip.pc.cmakein \
     src/qzip/zlib.pri \
     src/reader.qml \
     src/steps.qml

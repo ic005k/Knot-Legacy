@@ -240,7 +240,6 @@ class Method : public QDialog {
   void stopRecord();
   void playRecord(QString file);
   void stopPlayRecord();
-  void m_unzip(QString zipFile, QString targetDir);
 
   QString FormatHHMMSS(qint32 total);
 

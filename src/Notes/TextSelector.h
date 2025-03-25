@@ -54,6 +54,7 @@ class TextSelector : public QDialog {
   bool isMouseRelease = false;
   bool isMousePress = false;
   bool isMouseMove = false;
+  QString strByCopyText;
 };
 
 #endif  // TEXTSELECTOR_H
