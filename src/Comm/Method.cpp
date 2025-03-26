@@ -18,7 +18,6 @@ extern TextSelector *m_TextSelector;
 QStringList resultsList;
 bool compressDirectory(const QString &zipPath, const QString &sourceDir,
                        const QString &password);
-QString quazipErrorString(int code);
 
 Method::Method(QWidget *parent) : QDialog(parent) {
   mw_one->set_ToolButtonStyle(this);
@@ -70,18 +69,6 @@ void Method::showGrayWindows() {
   m_widget->resize(mw_one->width(), mw_one->height());
   m_widget->move(0, 0);
   m_widget->setStyleSheet("background-color:rgba(0, 0, 0,35%);");
-
-  /*QPropertyAnimation *m_pAnimation = new QPropertyAnimation();
-  m_pAnimation->setTargetObject(m_widget);
-  m_pAnimation->setDuration(50);
-  QGraphicsOpacityEffect *m_pOpacity = new QGraphicsOpacityEffect();
-  m_widget->setGraphicsEffect(m_pOpacity);
-  m_pOpacity->setOpacity(1);
-  m_pAnimation->setTargetObject(m_pOpacity);
-  m_pAnimation->setPropertyName("opacity");
-  m_pAnimation->setStartValue(0);
-  m_pAnimation->setEndValue(1);
-  m_pAnimation->start();*/
 
   m_widget->show();
 }
@@ -1657,7 +1644,7 @@ bool Method::decompressWithPassword(const QString &zipPath,
       break;
     }
 
-    // 关键修复：根据密码选择打开方式
+    // 根据密码选择打开方式
     bool openSuccess;
     if (password.isEmpty()) {
       // 无密码打开方式
@@ -1717,11 +1704,12 @@ bool Method::decompressWithPassword(const QString &zipPath,
     file.close();
     outFile.close();
 
-    if (!readSuccess || totalBytes == 0) {
-      QFile::remove(absPath);
+    if (!readSuccess) {  //|| totalBytes == 0) {
       qWarning() << "[WARN] Removed incomplete file:" << absPath;
-      success = false;
-      break;
+
+      // QFile::remove(absPath);
+      // success = false;
+      // break;
     }
 
     qDebug() << "[SUCCESS] Extracted" << fileName << "Size:" << totalBytes
@@ -1729,6 +1717,9 @@ bool Method::decompressWithPassword(const QString &zipPath,
   }
 
   zip.close();
+
+  qDebug() << "unzip success=" << success;
+
   return success;
 }
 
@@ -1748,6 +1739,13 @@ QString Method::quazipErrorString(int code) {
   }
 }
 
+/* bool ret = zipFile.open(QIODevice::WriteOnly,
+                             newInfo,      // QuaZipNewInfo结构体引用
+                             passwordPtr,  // 密码
+                             0,            // CRC值（默认值是0）
+                             8);           //
+       写入方法（0为文件夹，8为普通文件）*/
+
 bool compressDirectory(const QString &zipPath, const QString &sourceDir,
                        const QString &password) {
   QuaZip zip(zipPath);
@@ -1757,102 +1755,69 @@ bool compressDirectory(const QString &zipPath, const QString &sourceDir,
   }
 
   QDir srcDir(sourceDir);
-  if (!srcDir.exists()) {
-    qWarning() << "Source directory not found:" << sourceDir;
-    return false;
-  }
+  QString parentPath = QFileInfo(srcDir.absolutePath()).path();
 
-  QDirIterator it(sourceDir, QDir::Files | QDir::NoDotAndDotDot,
+  QDirIterator it(sourceDir, QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot,
                   QDirIterator::Subdirectories);
-  bool success = true;
 
-  qDebug() << "it=" << it.hasNext() << sourceDir;
+  while (it.hasNext()) {
+    QString filePath = it.next();
+    QFileInfo fileInfo(filePath);
 
-  // 独立处理每个文件，避免提前退出
-  while (it.hasNext() && success) {
-    const QString filePath = it.next();
-    const QString relativePath = srcDir.relativeFilePath(filePath);
+    // 计算相对路径（包含顶层目录名）
+    QString relativePath = QDir(parentPath).relativeFilePath(filePath);
+    relativePath = QDir::toNativeSeparators(relativePath).replace("\\", "/");
 
-    qDebug() << filePath << relativePath;
+    // 如果是目录，手动添加目录条目
+    if (fileInfo.isDir()) {
+      relativePath += "/";
+      QuaZipFile dirFile(&zip);
+      QuaZipNewInfo dirInfo(relativePath);
+      dirInfo.externalAttr = (0755 << 16) | 0x10;  // UNIX目录权限
 
+      if (!dirFile.open(QIODevice::WriteOnly, dirInfo, 0, 8)) {
+        qWarning() << "Failed to add directory:" << relativePath;
+        return false;
+      }
+      dirFile.close();
+      continue;
+    }
+
+    // 添加文件
     QuaZipFile zipFile(&zip);
     QuaZipNewInfo newInfo(relativePath, filePath);
 
-    // 优化加密参数处理
+    // 设置加密参数
     const bool useEncryption = !password.isEmpty();
-    const char *passwordPtr =
+    const char *passData =
         useEncryption ? password.toUtf8().constData() : nullptr;
 
-    bool ret = zipFile.open(QIODevice::WriteOnly,
-                            newInfo,      // QuaZipNewInfo结构体引用
-                            passwordPtr,  // 密码
-                            0,            // CRC值（默认值是0）
-                            8);           // 写入方法（0为文件夹，8为普通文件）
-
-    /* bool ret = zipFile.open(QIODevice::WriteOnly, newInfo,
-                             passwordPtr,  // 密码
-                             0,            // CRC（自动计算时可设为0）
-                             Z_DEFLATED,   // 压缩方法：必须为8（即Z_DEFLATED）
-                             Z_DEFAULT_COMPRESSION,  // 压缩级别：默认值
-                             QFile::ReadOwner | QFile::WriteOwner,
-                             useEncryption);*/
-
-    if (!ret) {  // 根据密码状态启用加密
-      qWarning() << "Failed to add file:" << relativePath
-                 << "Error:" << zipFile.getZipError();
-      success = false;
-      break;
+    if (!zipFile.open(QIODevice::WriteOnly, newInfo, passData, 0, 8)) {
+      qWarning() << "Failed to add file:" << relativePath;
+      return false;
     }
 
     QFile inFile(filePath);
-    if (!inFile.open(QIODevice::ReadOnly)) {
-      qWarning() << "Failed to open input file:" << filePath;
-      success = false;
-      break;
-    }
+    if (!inFile.open(QIODevice::ReadOnly)) return false;
 
-    // 优化缓冲区读写逻辑
+    // 分块写入
     constexpr qint64 BUFFER_SIZE = 4 * 1024 * 1024;  // 4MB
     QByteArray buffer;
     buffer.resize(BUFFER_SIZE);
 
-    qint64 totalBytes = 0;
-    bool readSuccess = true;
-
-    do {
-      const qint64 bytesRead = inFile.read(buffer.data(), BUFFER_SIZE);
-
-      if (bytesRead == -1) {
-        qWarning() << "Read error in:" << filePath;
-        readSuccess = false;
-        break;
-      } else if (bytesRead == 0) {
-        break;  // 正常结束
+    qint64 bytesRead;
+    while ((bytesRead = inFile.read(buffer.data(), BUFFER_SIZE)) > 0) {
+      if (zipFile.write(buffer.constData(), bytesRead) != bytesRead) {
+        zipFile.close();
+        inFile.close();
+        return false;
       }
-
-      const qint64 bytesWritten = zipFile.write(buffer.constData(), bytesRead);
-      if (bytesWritten != bytesRead) {
-        qWarning() << "Write mismatch in:" << relativePath
-                   << "Read:" << bytesRead << "Written:" << bytesWritten;
-        readSuccess = false;
-        break;
-      }
-
-      totalBytes += bytesWritten;
-    } while (true);
+    }
 
     zipFile.close();
     inFile.close();
-
-    if (!readSuccess) {
-      success = false;
-      break;
-    }
-
-    qDebug() << "Compressed:" << relativePath << "Size:" << totalBytes;
   }
 
-  // 确保最终关闭压缩包
   zip.close();
-  return success;
+  return true;
 }

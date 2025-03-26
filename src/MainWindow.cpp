@@ -2737,7 +2737,8 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
     //  mw_one->m_Notes->zipMemo();
 
     bool isZipResult = false;
-    isZipResult = compressDirectory(zipfile, iniDir + "memo", "");
+    isZipResult = compressDirectory(zipfile, iniDir + "memo",
+                                    m_Preferences->getZipPassword());
     while (isZipResult == false)
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
@@ -2832,17 +2833,27 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
     if (unre) {
     }
 
-    if (fileName != iniDir + "memo.zip") {
-      QFile::remove(iniDir + "memo.zip");
+    QString zipPath = iniDir + "memo.zip";
+    if (fileName != zipPath) {
+      QFile::remove(zipPath);
 
       QString oldPath = iniDir + "memo";
       QDir dirOld(oldPath);
       dirOld.rename(oldPath, iniDir + "memo_bak");
 
-      QFile::copy(fileName, iniDir + "memo.zip");
+      QFile::copy(fileName, zipPath);
     }
 
-    mw_one->m_Notes->unzip(iniDir + "memo.zip");
+    deleteDirfile(iniDir + "memo");
+    QDir::setCurrent(iniDir);
+
+    // mw_one->m_Notes->unzip(zipPath);
+
+    bool unzipResult = false;
+    m_Method->decompressWithPassword(zipPath, iniDir,
+                                     m_Preferences->getZipPassword());
+    while (unzipResult)
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
     QFile file(iniDir + "memo/tab.ini");
     if (!file.exists()) {

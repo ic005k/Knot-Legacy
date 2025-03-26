@@ -43,10 +43,13 @@ class Preferences : public QDialog {
 
   QString setFontDemo(QString customFontPath, QToolButton *btn, int fontSize);
 
+  QString getZipPassword();
+
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
 
   bool eventFilter(QObject *watch, QEvent *evn) override;
+  void closeEvent(QCloseEvent *event) override;
  public slots:
 
  private slots:
