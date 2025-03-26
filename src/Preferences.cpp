@@ -522,12 +522,16 @@ void Preferences::on_editValidate_textChanged(const QString& arg1) {
 void Preferences::closeEvent(QCloseEvent* event) { Q_UNUSED(event); }
 
 QString Preferences::getZipPassword() {
+  QString pass = "";
   if (ui->chkZip->isChecked()) {
     if (ui->editPassword->text().trimmed() != "" &&
         ui->editPassword->text().trimmed() ==
-            ui->editValidate->text().trimmed())
-      return ui->editPassword->text().trimmed();
+            ui->editValidate->text().trimmed()) {
+      pass = ui->editPassword->text().trimmed();
+      return pass;
+    }
   }
 
+  qDebug() << "zip password=" << pass;
   return "";
 }

@@ -18,6 +18,9 @@ extern TextSelector *m_TextSelector;
 QStringList resultsList;
 bool compressDirectory(const QString &zipPath, const QString &sourceDir,
                        const QString &password);
+bool compressSubDirectory(QuaZip *zip, const QString &subDirPath,
+                          const QString &rootDir, const QString &password);
+bool isPasswordError = false;
 
 Method::Method(QWidget *parent) : QDialog(parent) {
   mw_one->set_ToolButtonStyle(this);
@@ -1654,10 +1657,12 @@ bool Method::decompressWithPassword(const QString &zipPath,
     }
 
     // 根据加密状态打开文件
+    isPasswordError = false;
     bool openSuccess;
     if (fileInfo1.isEncrypted()) {
       if (password.isEmpty()) {
         qWarning() << "[ERROR] File is encrypted but password is empty";
+        isPasswordError = true;
         success = false;
         break;
       }

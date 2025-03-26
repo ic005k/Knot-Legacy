@@ -41,7 +41,7 @@ QSettings *iniPreferences;
 CloudBackup *m_CloudBackup;
 
 extern bool isAndroid, isIOS, zh_cn, isEpub, isEpubError, isText, isPDF,
-    isWholeMonth, isDateSection, isNeedSync;
+    isWholeMonth, isDateSection, isNeedSync, isPasswordError;
 extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
     fileName, strOpfPath, catalogueFile, strShowMsg;
 extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
@@ -130,6 +130,14 @@ void ImportDataThread::run() {
 void MainWindow::importDataDone() {
   mw_one->isSelf = true;
 
+  if (isPasswordError) {
+    closeProgress();
+    ShowMessage *msg = new ShowMessage(this);
+    msg->showMsg("Knot", tr("The password of the compressed file is wrong!"),
+                 1);
+    return;
+  }
+
   if (!zipfile.isNull() && isZipOK) {
     m_Notes->init_all_notes();
     m_Todo->init_Todo();
@@ -158,10 +166,10 @@ void MainWindow::importDataDone() {
     if (!isZipOK) {
       m_Method->m_widget = new QWidget(mw_one);
       ShowMessage *m_ShowMsg = new ShowMessage(this);
-      m_ShowMsg->showMsg(
-          "Knot",
-          tr("Invalid data file.") + "\n\n" + tr("Or cancelled by the user."),
-          1);
+      m_ShowMsg->showMsg("Knot",
+                         tr("Invalid data file.") + "\n\n" +
+                             tr("Or the operation is canceled by the user."),
+                         1);
     }
   }
 }
@@ -2822,8 +2830,8 @@ void MainWindow::on_actionImport_Data_triggered() {
   showProgress();
 
   isMenuImport = true;
-
   isDownData = false;
+
   myImportDataThread->start();
 }
 
@@ -2856,8 +2864,12 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
     unzipResult = m_Method->decompressWithPassword(
         zipPath, iniDir, m_Preferences->getZipPassword());
 
-    while (unzipResult == false)
+    while (unzipResult == false && isPasswordError == false)
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+
+    if (isPasswordError) {
+      return false;
+    }
 
     QFile file(iniDir + "memo/tab.ini");
     if (!file.exists()) {
@@ -5394,12 +5406,12 @@ void MainWindow::on_btnImportBakList_clicked() {
   }
 
   isZipOK = true;
-  ui->btnBackBakList->clicked();
+  ui->btnBackBakList->click();
   showProgress();
 
-  isMenuImport = false;
-
+  isMenuImport = true;
   isDownData = false;
+
   myImportDataThread->start();
 }
 
