@@ -158,7 +158,10 @@ void MainWindow::importDataDone() {
     if (!isZipOK) {
       m_Method->m_widget = new QWidget(mw_one);
       ShowMessage *m_ShowMsg = new ShowMessage(this);
-      m_ShowMsg->showMsg("Knot", tr("Invalid data file."), 1);
+      m_ShowMsg->showMsg(
+          "Knot",
+          tr("Invalid data file.") + "\n\n" + tr("Or cancelled by the user."),
+          1);
     }
   }
 }
@@ -2850,9 +2853,10 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
     // mw_one->m_Notes->unzip(zipPath);
 
     bool unzipResult = false;
-    m_Method->decompressWithPassword(zipPath, iniDir,
-                                     m_Preferences->getZipPassword());
-    while (unzipResult)
+    unzipResult = m_Method->decompressWithPassword(
+        zipPath, iniDir, m_Preferences->getZipPassword());
+
+    while (unzipResult == false)
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
     QFile file(iniDir + "memo/tab.ini");

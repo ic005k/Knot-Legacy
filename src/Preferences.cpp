@@ -267,13 +267,14 @@ void Preferences::initOptions() {
       iniPreferences->value("/Options/AutoTimeY", true).toBool());
   ui->chkAniEffects->setChecked(
       iniPreferences->value("/Options/chkAniEffects", true).toBool());
-  bool debugmode = iniPreferences->value("/Options/Zip", false).toBool();
-  ui->chkZip->setChecked(debugmode);
 
   QString aesStr = iniPreferences->value("/zip/password").toString();
   QString password = m_CloudBackup->aesDecrypt(aesStr, aes_key, aes_iv);
   ui->editPassword->setText(password);
   ui->editValidate->setText(password);
+
+  bool isZip = iniPreferences->value("/Options/Zip", false).toBool();
+  ui->chkZip->setChecked(isZip);
 
   devMode = iniPreferences->value("/Options/DevMode", false).toBool();
 #ifdef Q_OS_ANDROID

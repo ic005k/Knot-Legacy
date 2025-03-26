@@ -1644,14 +1644,27 @@ bool Method::decompressWithPassword(const QString &zipPath,
       break;
     }
 
-    // 根据密码选择打开方式
+    // 获取文件信息
+    QuaZipFileInfo64 fileInfo1;
+    if (!zip.getCurrentFileInfo(&fileInfo1)) {
+      qWarning() << "[ERROR] Failed to get file info for"
+                 << zip.getCurrentFileName();
+      success = false;
+      break;
+    }
+
+    // 根据加密状态打开文件
     bool openSuccess;
-    if (password.isEmpty()) {
-      // 无密码打开方式
-      openSuccess = file.open(QIODevice::ReadOnly);
+    if (fileInfo1.isEncrypted()) {
+      if (password.isEmpty()) {
+        qWarning() << "[ERROR] File is encrypted but password is empty";
+        success = false;
+        break;
+      }
+      openSuccess =
+          file.open(QIODevice::ReadOnly, password.toUtf8().constData());
     } else {
-      // 加密文件打开方式
-      openSuccess = file.open(QIODevice::ReadOnly, password.toUtf8());
+      openSuccess = file.open(QIODevice::ReadOnly);
     }
 
     if (!openSuccess) {
@@ -1739,13 +1752,6 @@ QString Method::quazipErrorString(int code) {
   }
 }
 
-/* bool ret = zipFile.open(QIODevice::WriteOnly,
-                             newInfo,      // QuaZipNewInfo结构体引用
-                             passwordPtr,  // 密码
-                             0,            // CRC值（默认值是0）
-                             8);           //
-       写入方法（0为文件夹，8为普通文件）*/
-
 bool compressDirectory(const QString &zipPath, const QString &sourceDir,
                        const QString &password) {
   QuaZip zip(zipPath);
@@ -1773,9 +1779,9 @@ bool compressDirectory(const QString &zipPath, const QString &sourceDir,
       relativePath += "/";
       QuaZipFile dirFile(&zip);
       QuaZipNewInfo dirInfo(relativePath);
-      dirInfo.externalAttr = (0755 << 16) | 0x10;  // UNIX目录权限
-
-      if (!dirFile.open(QIODevice::WriteOnly, dirInfo, 0, 8)) {
+      // 设置目录的外部属性，使其更具兼容性
+      dirInfo.externalAttr = (0755 << 16);
+      if (!dirFile.open(QIODevice::WriteOnly, dirInfo, nullptr, 0, 8)) {
         qWarning() << "Failed to add directory:" << relativePath;
         return false;
       }
