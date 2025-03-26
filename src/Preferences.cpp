@@ -13,6 +13,7 @@ extern bool isBreak, isDark;
 extern int fontSize;
 extern QSettings* iniPreferences;
 extern ReaderSet* m_ReaderSet;
+extern CloudBackup* m_CloudBackup;
 
 QFont::Weight readerFontWeight;
 
@@ -101,6 +102,10 @@ void Preferences::saveOptions() {
   iniPreferences->setValue("/Options/chkUIFont", ui->chkUIFont->isChecked());
   iniPreferences->setValue("/Options/chkAniEffects",
                            ui->chkAniEffects->isChecked());
+
+  QString password = ui->editPassword->text().trimmed();
+  QString aesStr = m_CloudBackup->aesEncrypt(password, aes_key, aes_iv);
+  iniPreferences->setValue("/zip/password", aesStr);
 }
 
 void Preferences::on_sliderFontSize_sliderMoved(int position) {
@@ -264,6 +269,11 @@ void Preferences::initOptions() {
       iniPreferences->value("/Options/chkAniEffects", true).toBool());
   bool debugmode = iniPreferences->value("/Options/Zip", false).toBool();
   ui->chkZip->setChecked(debugmode);
+
+  QString aesStr = iniPreferences->value("/zip/password").toString();
+  QString password = m_CloudBackup->aesDecrypt(aesStr, aes_key, aes_iv);
+  ui->editPassword->setText(password);
+  ui->editValidate->setText(password);
 
   devMode = iniPreferences->value("/Options/DevMode", false).toBool();
 #ifdef Q_OS_ANDROID
@@ -485,3 +495,25 @@ void Preferences::getCheckStatusChange() {
 }
 
 void Preferences::on_chkAniEffects_clicked(bool checked) { Q_UNUSED(checked); }
+
+void Preferences::on_chkZip_clicked() {
+  if (ui->editPassword->text().trimmed() == "" ||
+      ui->editValidate->text().trimmed() == "") {
+    ui->chkZip->setChecked(false);
+  }
+
+  if (ui->editPassword->text().trimmed() !=
+      ui->editValidate->text().trimmed()) {
+    ui->chkZip->setChecked(false);
+    ShowMessage* msg = new ShowMessage(this);
+    msg->showMsg("Knot", tr("Password validation error."), 1);
+  }
+}
+
+void Preferences::on_editPassword_textChanged(const QString& arg1) {
+  if (arg1.length() > 0) ui->chkZip->setChecked(false);
+}
+
+void Preferences::on_editValidate_textChanged(const QString& arg1) {
+  on_editPassword_textChanged(arg1);
+}

@@ -66,6 +66,12 @@ class Preferences : public QDialog {
 
   void on_chkAniEffects_clicked(bool checked);
 
+  void on_chkZip_clicked();
+
+  void on_editPassword_textChanged(const QString &arg1);
+
+  void on_editValidate_textChanged(const QString &arg1);
+
  private:
   QString iniBakFiles = "BakFiles.ini";
   void getCheckStatusChange();
@@ -77,6 +83,9 @@ class Preferences : public QDialog {
   QFontDatabase fontDatabaseUI;
   QFont::Weight uiFontWeight;
   QString setFontDemoUI(QString customFontPath, QToolButton *btn, int fontSize);
+
+  QByteArray aes_key = "MySuperSecretKey1234567890";  // 长度不足32会自动处理
+  QByteArray aes_iv = "InitializationVe";
 };
 
 #endif  // PREFERENCES_H

@@ -337,7 +337,7 @@ void Reader::openFile(QString openfile) {
       }
 
       if (unzipMethod == 3) {
-        unzipToDir(temp, dirpath);
+        m_Method->decompressWithPassword(temp, dirpath, "");
       }
 
       qDebug() << "openFile:" << openfile << "dirpath=" << dirpath;

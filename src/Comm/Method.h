@@ -7,6 +7,7 @@
 #include <src/quazip/unzip.h>
 
 #include <QConicalGradient>
+#include <QCryptographicHash>
 #include <QDialog>
 #include <QDir>
 #include <QDirIterator>
@@ -276,8 +277,6 @@ class Method : public QDialog {
   void setMDFile(QString strMDFile);
   void setAndroidFontSize(int nSize);
 
-  bool compressDirectory(const QString &zipPath, const QString &sourceDir,
-                         const QString &password);
   bool decompressWithPassword(const QString &zipPath, const QString &extractDir,
                               const QString &password);
 

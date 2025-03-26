@@ -155,7 +155,7 @@ int main(int argc, char* argv[]) {
     QString zipFile = privateDir + "dict.zip";
     QFile::remove(zipFile);
     QFile::copy(resFile, zipFile);
-    // unzipToDir(zipFile, privateDir);
+
     m_Method->decompressWithPassword(zipFile, privateDir, "");
   }
 
@@ -178,7 +178,8 @@ int main(int argc, char* argv[]) {
     QString zipFile = pdfjsDir + "pdfjs.zip";
     QFile::remove(zipFile);
     QFile::copy(resFile, zipFile);
-    unzipToDir(zipFile, pdfjsDir);
+
+    m_Method->decompressWithPassword(zipFile, pdfjsDir, "");
 
     QFile::copy(":/res/pdf/pdf.viewer.bridge.js",
                 pdfjsDir + "pdfjs/web/pdf.viewer.bridge.js");

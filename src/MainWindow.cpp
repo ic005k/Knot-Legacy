@@ -64,6 +64,9 @@ extern WebDavHelper *listWebDavFiles(const QString &url,
                                      const QString &username,
                                      const QString &password);
 
+extern bool compressDirectory(const QString &zipPath, const QString &sourceDir,
+                              const QString &password);
+
 void RegJni(const char *myClassName);
 
 #ifdef Q_OS_ANDROID
@@ -2698,6 +2701,7 @@ void MainWindow::on_actionExport_Data_triggered() {
 
   isUpData = false;
   showProgress();
+
   myBakDataThread->start();
 }
 
@@ -2728,7 +2732,14 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
 
     QString zipfile = iniDir + "memo.zip";
     QFile(zipfile).remove();
-    mw_one->m_Notes->zipMemo();
+
+    // old method
+    //  mw_one->m_Notes->zipMemo();
+
+    bool isZipResult = false;
+    isZipResult = compressDirectory(zipfile, iniDir + "memo", "");
+    while (isZipResult == false)
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
     if (fileName != zipfile) {
       if (QFile::exists(fileName)) QFile::remove(fileName);
