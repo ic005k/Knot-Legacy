@@ -457,6 +457,17 @@ QStringList Preferences::getBakFilesList() {
     appendBakFile(str.split("-===-").at(0), str.split("-===-").at(1));
   }
 
+  QStringList uniqueList;
+  QSet<QString> seen;
+
+  for (const QString& str : fileList) {
+    if (!seen.contains(str)) {
+      seen.insert(str);
+      uniqueList.append(str);
+    }
+  }
+  fileList = uniqueList;
+
   return fileList;
 }
 

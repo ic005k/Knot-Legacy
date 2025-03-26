@@ -41,6 +41,15 @@ DEFINES += QUAZIP_STATIC
 #DEFINES += QUAZIP_ENABLE_CRYPTO
 #LIBS += -lquazip -lz
 
+linux {
+    # 强制定义关键宏
+    DEFINES += Z_HAVE_UNISTD_H HAVE_FSEEKO
+
+    # 包含系统头文件路径
+    INCLUDEPATH += /usr/include
+    LIBS += -L/usr/lib
+}
+
 macx {
     # 强制定义 CMake 检测所需的宏
     DEFINES += Z_HAVE_UNISTD_H HAVE_FSEEKO
