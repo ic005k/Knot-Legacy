@@ -1,8 +1,16 @@
 #ifndef METHOD_H
 #define METHOD_H
 
+#include <src/quazip/quazip.h>
+#include <src/quazip/quazipfile.h>
+#include <src/quazip/quazipnewinfo.h>
+#include <src/quazip/unzip.h>
+
 #include <QConicalGradient>
 #include <QDialog>
+#include <QDir>
+#include <QDirIterator>
+#include <QFileInfo>
 #include <QFileInfoList>
 #include <QInputDialog>
 #include <QLabel>
@@ -268,6 +276,11 @@ class Method : public QDialog {
   void setMDFile(QString strMDFile);
   void setAndroidFontSize(int nSize);
 
+  bool compressDirectory(const QString &zipPath, const QString &sourceDir,
+                         const QString &password);
+  bool decompressWithPassword(const QString &zipPath, const QString &extractDir,
+                              const QString &password);
+
  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
@@ -292,6 +305,7 @@ class Method : public QDialog {
   int x, y, w, h;
 
   void setMainTabCurrentIndex();
+  QString quazipErrorString(int code);
 };
 
 class IOSCircularProgress : public QWidget {

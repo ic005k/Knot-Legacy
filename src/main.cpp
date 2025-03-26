@@ -19,6 +19,7 @@ extern void RegJni(const char* myClassName);
 extern bool isDark;
 extern MainWindow* mw_one;
 extern QSettings* iniPreferences;
+extern Method* m_Method;
 
 void loadLocal();
 bool unzipToDir(const QString& zipPath, const QString& destDir);
@@ -154,7 +155,8 @@ int main(int argc, char* argv[]) {
     QString zipFile = privateDir + "dict.zip";
     QFile::remove(zipFile);
     QFile::copy(resFile, zipFile);
-    unzipToDir(zipFile, privateDir);
+    // unzipToDir(zipFile, privateDir);
+    m_Method->decompressWithPassword(zipFile, privateDir, "");
   }
 
   // 初始化结巴分词

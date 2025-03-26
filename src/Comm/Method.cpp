@@ -1615,3 +1615,194 @@ void Method::setAndroidFontSize(int nSize) {
   }
 #endif
 }
+
+bool Method::compressDirectory(const QString &zipPath, const QString &sourceDir,
+                               const QString &password) {
+  QuaZip zip(zipPath);
+  if (!zip.open(QuaZip::mdCreate)) {
+    qWarning("Failed to create zip file");
+    return false;
+  }
+
+  QDir srcDir(sourceDir);
+  QDirIterator it(sourceDir, QDir::Files | QDir::NoDotAndDotDot,
+                  QDirIterator::Subdirectories);
+
+  while (it.hasNext()) {
+    QString filePath = it.next();
+    QFileInfo fileInfo(filePath);
+    QString relativePath = srcDir.relativeFilePath(filePath);
+
+    QuaZipFile zipFile(&zip);
+    QuaZipNewInfo newInfo(relativePath, filePath);
+
+    // 关键修改：直接通过 open 方法启用加密
+    if (!zipFile.open(QIODevice::WriteOnly, newInfo,
+                      password.toUtf8(),  // 密码
+                      Z_DEFLATED,         // 压缩方法
+                      Z_DEFAULT_COMPRESSION,
+                      QFile::ReadOwner | QFile::WriteOwner,
+                      true)) {  // true 表示启用 AES 加密
+      qWarning() << "Failed to add encrypted file:" << relativePath;
+      return false;
+    }
+
+    QFile inFile(filePath);
+    if (!inFile.open(QIODevice::ReadOnly)) return false;
+
+    // 分块写入（避免内存溢出）
+    constexpr qint64 BUFFER_SIZE = 1024 * 1024;  // 1MB
+    QByteArray buffer;
+    buffer.resize(BUFFER_SIZE);
+
+    qint64 bytesRead;
+    while ((bytesRead = inFile.read(buffer.data(), BUFFER_SIZE)) > 0) {
+      if (zipFile.write(buffer.constData(), bytesRead) != bytesRead) {
+        zipFile.close();
+        inFile.close();
+        return false;
+      }
+    }
+
+    zipFile.close();
+    inFile.close();
+  }
+
+  zip.close();
+  return true;
+}
+
+bool Method::decompressWithPassword(const QString &zipPath,
+                                    const QString &extractDir,
+                                    const QString &password) {
+  QuaZip zip(zipPath);
+  if (!zip.open(QuaZip::mdUnzip)) {
+    qWarning() << "[ERROR] Failed to open zip:" << zip.getZipError();
+    return false;
+  }
+
+  QDir outputDir(extractDir);
+  if (!outputDir.mkpath(".")) {
+    qWarning() << "[ERROR] Cannot create output directory";
+    return false;
+  }
+
+  QuaZipFile file(&zip);
+  bool success = true;
+
+  // 遍历所有文件
+  for (bool fileExists = zip.goToFirstFile(); fileExists && success;
+       fileExists = zip.goToNextFile()) {
+    const QString fileName = zip.getCurrentFileName();
+    const QString absPath = outputDir.absoluteFilePath(fileName);
+
+    // 处理目录项
+    if (fileName.endsWith('/')) {
+      QDir().mkpath(absPath);
+      qDebug() << "[INFO] Created directory:" << absPath;
+      continue;
+    }
+
+    // 创建父目录
+    QFileInfo fileInfo(absPath);
+    if (!fileInfo.dir().mkpath(".")) {
+      qWarning() << "[ERROR] Cannot create parent directory for" << absPath;
+      success = false;
+      break;
+    }
+
+    // 关键修复：根据密码选择打开方式
+    bool openSuccess;
+    if (password.isEmpty()) {
+      // 无密码打开方式
+      openSuccess = file.open(QIODevice::ReadOnly);
+    } else {
+      // 加密文件打开方式
+      openSuccess = file.open(QIODevice::ReadOnly, password.toUtf8());
+    }
+
+    if (!openSuccess) {
+      const int errorCode = file.getZipError();
+      qWarning() << "[ERROR] Failed to open file" << fileName
+                 << "Error code:" << errorCode
+                 << "Description:" << quazipErrorString(errorCode);
+      success = false;
+      break;
+    }
+
+    QFile outFile(absPath);
+    if (!outFile.open(QIODevice::WriteOnly)) {
+      qWarning() << "[ERROR] Cannot open output file" << absPath;
+      file.close();
+      success = false;
+      break;
+    }
+
+    // 分块读写（优化缓冲区管理）
+    constexpr qint64 BUFFER_SIZE = 4 * 1024 * 1024;  // 4MB
+    QByteArray buffer;
+    buffer.resize(BUFFER_SIZE);
+
+    qint64 totalBytes = 0;
+    bool readSuccess = true;
+
+    do {
+      const qint64 bytesRead = file.read(buffer.data(), BUFFER_SIZE);
+
+      if (bytesRead == -1) {
+        qWarning() << "[ERROR] Read failed for" << fileName;
+        readSuccess = false;
+        break;
+      } else if (bytesRead == 0) {
+        break;  // 正常结束
+      }
+
+      const qint64 bytesWritten = outFile.write(buffer.constData(), bytesRead);
+      if (bytesWritten != bytesRead) {
+        qWarning() << "[ERROR] Write mismatch for" << fileName
+                   << "Read:" << bytesRead << "Written:" << bytesWritten;
+        readSuccess = false;
+        break;
+      }
+
+      totalBytes += bytesWritten;
+    } while (true);
+
+    file.close();
+    outFile.close();
+
+    if (!readSuccess || totalBytes == 0) {
+      QFile::remove(absPath);
+      qWarning() << "[WARN] Removed incomplete file:" << absPath;
+      success = false;
+      break;
+    }
+
+    qDebug() << "[SUCCESS] Extracted" << fileName << "Size:" << totalBytes
+             << "bytes";
+  }
+
+  zip.close();
+  return success;
+}
+
+// QuaZip错误码转字符串
+// Method.cpp 修改部分
+QString Method::quazipErrorString(int code) {
+  /*switch (code) {
+    case QuaZip::errorNoError:
+      return "No error";
+    case QuaZip::errorFileNotFound:
+      return "File not found";
+    case QuaZip::errorBadPassword:
+      return "Bad password";  // 使用 QuaZip 的错误码
+    case QuaZip::errorFileOpen:
+      return "File open error";
+    case QuaZip::errorFileWrite:
+      return "File write error";
+    default:
+      return QString("Unknown error (%1)").arg(code);
+  }*/
+
+  return 0;
+}

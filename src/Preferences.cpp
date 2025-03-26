@@ -24,7 +24,7 @@ Preferences::Preferences(QWidget* parent)
   ui->btnCustomFont->setFont(font0);
   ui->chkUIFont->setFont(font0);
   ui->chkAutoTime->setFont(font0);
-  ui->chkDebug->setFont(font0);
+  ui->chkZip->setFont(font0);
   ui->btnReStart->setFont(font0);
 
 #ifdef Q_OS_ANDROID
@@ -39,7 +39,6 @@ Preferences::Preferences(QWidget* parent)
   ui->lblFontSize->installEventFilter(this);
 
   ui->chkAutoTime->hide();
-  ui->chkDebug->hide();
   ui->chkAniEffects->hide();
 
   ui->lblFontSize->setText(tr("Font Size") + " : " + QString::number(fontSize));
@@ -47,13 +46,18 @@ Preferences::Preferences(QWidget* parent)
 
   chkStyle = ui->chkAutoTime->styleSheet();
   ui->chkDark->setStyleSheet(chkStyle);
-  ui->chkDebug->setStyleSheet(chkStyle);
+  ui->chkZip->setStyleSheet(chkStyle);
   ui->chkUIFont->setStyleSheet(chkStyle);
   ui->lblFontSize->setFixedHeight(40);
 
   ui->btnCustomFont->adjustSize();
   ui->btnCustomFont->setStyleSheet(
       "background-color: rgb(255, 255, 255);color:black;");
+
+  ui->lblZipTip->adjustSize();
+  ui->lblZipTip->setWordWrap(true);
+  ui->editPassword->setEchoMode(QLineEdit::EchoMode::Password);
+  ui->editValidate->setEchoMode(QLineEdit::EchoMode::Password);
 }
 
 Preferences::~Preferences() { delete ui; }
@@ -93,7 +97,7 @@ void Preferences::saveOptions() {
   iniPreferences->setValue("/Options/FontSize", ui->sliderFontSize->value());
   iniPreferences->setValue("/Options/Dark", ui->chkDark->isChecked());
   iniPreferences->setValue("/Options/AutoTimeY", ui->chkAutoTime->isChecked());
-  iniPreferences->setValue("/Options/Debug", ui->chkDebug->isChecked());
+  iniPreferences->setValue("/Options/Zip", ui->chkZip->isChecked());
   iniPreferences->setValue("/Options/chkUIFont", ui->chkUIFont->isChecked());
   iniPreferences->setValue("/Options/chkAniEffects",
                            ui->chkAniEffects->isChecked());
@@ -258,8 +262,8 @@ void Preferences::initOptions() {
       iniPreferences->value("/Options/AutoTimeY", true).toBool());
   ui->chkAniEffects->setChecked(
       iniPreferences->value("/Options/chkAniEffects", true).toBool());
-  bool debugmode = iniPreferences->value("/Options/Debug", false).toBool();
-  ui->chkDebug->setChecked(debugmode);
+  bool debugmode = iniPreferences->value("/Options/Zip", false).toBool();
+  ui->chkZip->setChecked(debugmode);
 
   devMode = iniPreferences->value("/Options/DevMode", false).toBool();
 #ifdef Q_OS_ANDROID

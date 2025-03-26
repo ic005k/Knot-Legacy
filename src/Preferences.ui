@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>417</width>
-    <height>623</height>
+    <height>699</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -161,7 +161,7 @@
      <property name="title">
       <string/>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
+     <layout class="QVBoxLayout" name="verticalLayout_4">
       <item>
        <widget class="QCheckBox" name="chkAniEffects">
         <property name="styleSheet">
@@ -229,17 +229,70 @@ QCheckBox::indicator:checked{
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="chkDebug">
-        <property name="styleSheet">
-         <string notr="true">QCheckBox::indicator {
+       <widget class="QFrame" name="frame">
+        <property name="frameShape">
+         <enum>QFrame::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QCheckBox" name="chkZip">
+           <property name="styleSheet">
+            <string notr="true">QCheckBox::indicator {
     /* 选择框尺寸 */
     width:22px;
     height:22px;
 }</string>
-        </property>
-        <property name="text">
-         <string>Debug Mode</string>
-        </property>
+           </property>
+           <property name="text">
+            <string>Encrypt with Password</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>Password</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="editPassword"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>Validate</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="editValidate"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="lblZipTip">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Note: Implement password protection when compressing files.</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>

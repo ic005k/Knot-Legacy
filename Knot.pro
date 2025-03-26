@@ -37,6 +37,10 @@ android: {
 ####################### QuaZip ##############################################
 INCLUDEPATH += $$PWD/src/zlib
 DEFINES += QUAZIP_STATIC
+
+#DEFINES += QUAZIP_ENABLE_CRYPTO
+#LIBS += -lquazip -lz
+
 macx {
     # 强制定义 CMake 检测所需的宏
     DEFINES += Z_HAVE_UNISTD_H HAVE_FSEEKO

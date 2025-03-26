@@ -435,9 +435,6 @@ void MainWindow::initHardStepSensor() {
   if (isHardStepSensor == 1) {
     ui->lblSteps->hide();
 
-    m_Preferences->ui->chkDebug->setChecked(false);
-    m_Preferences->ui->chkDebug->hide();
-
     initTodayInitSteps();
     resetSteps = tc;
   }
