@@ -2703,13 +2703,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 void MainWindow::on_actionExport_Data_triggered() {
   if (!isSaveEnd) return;
 
-  /*#ifdef Q_OS_ANDROID
-    zipfile = "android";
-  #else
-    QFileDialog fd;
-    zipfile = fd.getSaveFileName(this, tr("KnotBak"), "", tr("Zip
-  File(*.zip)")); #endif*/
-
   zipfile = "export_data";
 
   isUpData = false;

@@ -1840,3 +1840,65 @@ bool compressDirectory(const QString &zipPath, const QString &sourceDir,
   zip.close();
   return true;
 }
+
+bool Method::compressFile(const QString &zipPath, const QString &filePath,
+                          const QString &password) {
+  QFileInfo fi(zipPath);
+  QString strDir = fi.absolutePath();
+  QDir dir;
+  dir.mkpath(strDir);
+
+  QuaZip zip(zipPath);
+  zip.setFileNameCodec("UTF-8");
+  zip.setZip64Enabled(false);  // 禁用 ZIP64（除非必要）
+
+  if (!zip.open(QuaZip::mdCreate)) {
+    qWarning() << "Failed to create zip:" << zip.getZipError();
+    return false;
+  }
+
+  QString relativePath = QFileInfo(filePath).fileName();
+
+  // 添加文件
+  QuaZipFile zipFile(&zip);
+  QuaZipNewInfo newInfo(relativePath, filePath);
+  newInfo.setFileDateTime(filePath);
+
+  // 设置加密参数
+  const bool useEncryption = !password.isEmpty();
+  const char *passData =
+      useEncryption ? password.toUtf8().constData() : nullptr;
+
+  // 重要：与7zip的压缩参数完全一直，高度兼容，特别是加密的时候
+  if (!zipFile.open(QIODevice::WriteOnly, newInfo, passData, 0, Z_DEFLATED,
+                    Z_DEFAULT_COMPRESSION, false, 15, 9, Z_DEFAULT_STRATEGY)) {
+    qWarning() << "Failed to add file:" << relativePath;
+    return false;
+  }
+
+  QFile inFile(filePath);
+  if (!inFile.open(QIODevice::ReadOnly)) return false;
+
+  // 分块写入
+  constexpr qint64 BUFFER_SIZE = 4 * 1024 * 1024;  // 4MB
+  QByteArray buffer;
+  buffer.resize(BUFFER_SIZE);
+
+  qint64 bytesRead;
+  while ((bytesRead = inFile.read(buffer.data(), BUFFER_SIZE)) > 0) {
+    if (zipFile.write(buffer.constData(), bytesRead) != bytesRead) {
+      zipFile.close();
+      inFile.close();
+      return false;
+    }
+  }
+
+  zipFile.close();
+  inFile.close();
+
+  zip.close();
+
+  qDebug() << "zipPath=" << zipPath << "filePath=" << filePath;
+
+  return true;
+}

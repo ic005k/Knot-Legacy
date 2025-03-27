@@ -280,7 +280,8 @@ class Method : public QDialog {
   bool decompressWithPassword(const QString &zipPath, const QString &extractDir,
                               const QString &password);
 
- protected:
+  bool compressFile(const QString &zipPath, const QString &filePath, const QString &password);
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

@@ -11,8 +11,8 @@ QString orgLblStyle;
 extern MainWindow* mw_one;
 extern TextSelector* m_TextSelector;
 extern Method* m_Method;
-extern QString iniFile, iniDir;
-extern bool loading, isBreak, zh_cn, isDark, isAndroid;
+extern QString iniFile, iniDir, privateDir;
+extern bool loading, isBreak, zh_cn, isDark, isAndroid, isPasswordError;
 extern int fontSize;
 
 extern WebDavHelper* listWebDavFiles(const QString& url,
@@ -199,8 +199,12 @@ void Todo::closeTodo() {
   if (isNeedSync && mw_one->ui->chkAutoSync->isChecked() &&
       mw_one->ui->chkWebDAV->isChecked()) {
     QString todoFile = iniDir + "todo.ini";
+    QString todoZipFile = privateDir + "KnotData/todo.ini.zip";
+    m_Method->compressFile(todoZipFile, todoFile,
+                           mw_one->m_Preferences->getZipPassword());
+
     QStringList files;
-    files.append(todoFile);
+    files.append(todoZipFile);
     m_CloudBackup->uploadFilesToWebDAV(files);
     isNeedSync = false;
   }
@@ -1410,8 +1414,8 @@ void Todo::openTodo() {
                      << "修改时间:" << mtime.toString("yyyy-MM-dd hh:mm:ss");
             QString remoteFile = path;
             remoteFile = remoteFile.replace("/dav/", "");  // 此处需注意
-            if (remoteFile.contains("todo.ini")) {
-              QString localFile = iniDir + "todo.ini";
+            if (remoteFile.contains("todo.ini.zip")) {
+              QString localFile = privateDir + "KnotData/todo.ini.zip";
               QDateTime localModi = QFileInfo(localFile).lastModified();
               if (mtime > localModi || !QFile::exists(localFile)) {
                 // 初始化下载器
@@ -1432,6 +1436,22 @@ void Todo::openTodo() {
                     downloader, &WebDavDownloader::downloadFinished,
                     [](bool success, QString error) {
                       qDebug() << (success ? "下载成功" : "下载失败: " + error);
+                      bool unzipResult = m_Method->decompressWithPassword(
+                          privateDir + "KnotData/todo.ini.zip",
+                          privateDir + "KnotData",
+                          mw_one->m_Preferences->getZipPassword());
+
+                      while (unzipResult == false && isPasswordError == false)
+                        QCoreApplication::processEvents(QEventLoop::AllEvents,
+                                                        100);
+                      QString zipToto = privateDir + "KnotData/todo.ini";
+                      QString localTodo = iniDir + "todo.ini";
+                      if (QFileInfo(zipToto).lastModified() >
+                          QFileInfo(localTodo).lastModified()) {
+                        QFile::remove(localTodo);
+                        QFile::copy(zipToto, localTodo);
+                      }
+
                       mw_one->m_Todo->openTodoUI();
                     });
 
@@ -1439,8 +1459,7 @@ void Todo::openTodo() {
                 QList<QString> remoteFiles = {remoteFile};
 
                 // 开始下载（1并发,根据文件的下载个数）
-                QString lf = iniDir;
-                lf = lf.replace("/KnotData/", "");
+                QString lf = privateDir;
                 qDebug() << "lf=" << lf;
                 downloader->downloadFiles(remoteFiles, lf, 1);
               }

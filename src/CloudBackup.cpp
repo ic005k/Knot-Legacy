@@ -22,7 +22,7 @@
 
 extern MainWindow *mw_one;
 extern Method *m_Method;
-extern QString iniFile, iniDir, zipfile;
+extern QString iniFile, iniDir, zipfile, privateDir;
 extern QtOneDriveAuthorizationDialog *dialog_;
 extern bool isUpData;
 extern bool isZipOK, isMenuImport, isDownData;
@@ -645,12 +645,12 @@ void CloudBackup::uploadFilesToWebDAV(QStringList files) {
   foreach (QString m_file, files) {
     QString localFile = m_file;
     QString remoteFile = m_file;
-    remoteFile = remoteFile.replace(iniDir, "KnotData/");
+    remoteFile = remoteFile.replace(privateDir, "");
     qDebug() << "remoteFile=" << remoteFile;
     QString remoteUrl = url + remoteFile;
 
-    QString remotePath = QFileInfo(m_file).path() + "/";
-    remotePath = remotePath.replace(iniDir, "KnotData/");
+    QString remotePath = "KnotData/";
+
     qDebug() << "remotePath=" << remotePath;
 
     QFile *file = new QFile(localFile);
