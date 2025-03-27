@@ -170,6 +170,9 @@ class Notes : public QDialog {
 
   void openNotes();
 
+  void updateMainnotesIni();
+  QDateTime mainnotesLastModi;
+
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;

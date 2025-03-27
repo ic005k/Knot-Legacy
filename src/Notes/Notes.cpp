@@ -306,13 +306,6 @@ void Notes::saveMainNotes() {
   isTextChange = false;
   isNeedSync = true;
 
-  QString zipMainnotes = privateDir + "KnotData/mainnotes.ini.zip";
-  m_Method->compressFile(zipMainnotes, iniDir + "mainnotes.ini",
-                         mw_one->m_Preferences->getZipPassword());
-
-  notes_sync_files.removeOne(zipMainnotes);
-  notes_sync_files.append(zipMainnotes);
-
   QString zipMD = privateDir + "KnotData/memo/" +
                   QFileInfo(currentMDFile).fileName() + ".zip";
   m_Method->compressFile(zipMD, currentMDFile,
@@ -2294,6 +2287,7 @@ void Notes::openEditUI() {
 void Notes::openNotes() {
   notes_sync_files.clear();
   mw_one->m_NotesList->needDelWebDAVFiles.clear();
+  mainnotesLastModi = QFileInfo(iniDir + "mainnotes.ini").lastModified();
   mw_one->removeFilesWatch();
   mw_one->isSelf = true;
 
@@ -2409,7 +2403,10 @@ void Notes::openNotes() {
                           if (QFileInfo(pFile).lastModified() >
                               QFileInfo(kFile).lastModified()) {
                             QFile::remove(kFile);
-                            QFile::copy(pFile, kFile);
+                            if (QFile::copy(pFile, kFile)) {
+                              qDebug() << "kFile:" << kFile
+                                       << " Update successfully. ";
+                            }
                           }
                         }
 
@@ -2474,4 +2471,15 @@ void Notes::openNotes() {
   } else
 
     mw_one->m_Notes->openNotesUI();
+}
+
+void Notes::updateMainnotesIni() {
+  if (QFileInfo(iniDir + "mainnotes.ini").lastModified() > mainnotesLastModi) {
+    QString zipMainnotes = privateDir + "KnotData/mainnotes.ini.zip";
+    m_Method->compressFile(zipMainnotes, iniDir + "mainnotes.ini",
+                           mw_one->m_Preferences->getZipPassword());
+
+    mw_one->m_Notes->notes_sync_files.removeOne(zipMainnotes);
+    mw_one->m_Notes->notes_sync_files.append(zipMainnotes);
+  }
 }

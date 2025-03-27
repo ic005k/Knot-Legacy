@@ -777,8 +777,13 @@ QList<QPair<QString, QDateTime>> parseWebDavResponse(const QByteArray &data) {
     if (xml.isStartElement()) {
       if (xml.name() == QLatin1String("href")) {
         currentHref = xml.readElementText();
+
         // 规范化路径（去除URL编码）
-        currentHref = QUrl::fromPercentEncoding(currentHref.toUtf8());
+        // currentHref = QUrl::fromPercentEncoding(currentHref.toUtf8());
+        // 一次性完成编码转换
+        currentHref = QString::fromUtf8(
+            QByteArray::fromPercentEncoding(currentHref.toLatin1()));
+
       } else if (xml.name() == QLatin1String("getlastmodified")) {
         QString rawTime = xml.readElementText();
         currentModified = QDateTime::fromString(rawTime, Qt::RFC2822Date);
@@ -790,8 +795,10 @@ QList<QPair<QString, QDateTime>> parseWebDavResponse(const QByteArray &data) {
         while (xml.readNextStartElement()) {
           if (xml.name() == QLatin1String("collection")) {
             isDirectory = true;
-            xml.skipCurrentElement();
+
+            // xml.skipCurrentElement();
           }
+          xml.skipCurrentElement();  // 直接跳过剩余内容
         }
       }
     }

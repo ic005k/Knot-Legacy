@@ -5544,6 +5544,7 @@ void MainWindow::on_btnBackNoteList_clicked() {
   ui->frameMain->show();
   m_NotesList->saveNoteBookVPos();
   m_NotesList->saveNotesList();
+  m_Notes->updateMainnotesIni();
 
   isNeedSync = true;
   m_Notes->syncToWebDAV();
@@ -5551,6 +5552,7 @@ void MainWindow::on_btnBackNoteList_clicked() {
 
 void MainWindow::on_btnBackNoteRecycle_clicked() {
   m_NotesList->saveRecycle();
+  m_Notes->updateMainnotesIni();
   ui->frameNoteRecycle->hide();
   ui->frameNoteList->show();
 

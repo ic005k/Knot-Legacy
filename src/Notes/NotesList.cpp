@@ -825,13 +825,6 @@ void NotesList::saveNotesList() {
   Reg1.setValue("/MainNotes/NoteName", mw_one->ui->lblNoteName->text());
 
   isNeedSave = false;
-
-  QString zipMainnotes = privateDir + "KnotData/mainnotes.ini.zip";
-  m_Method->compressFile(zipMainnotes, iniDir + "mainnotes.ini",
-                         mw_one->m_Preferences->getZipPassword());
-
-  mw_one->m_Notes->notes_sync_files.removeOne(zipMainnotes);
-  mw_one->m_Notes->notes_sync_files.append(zipMainnotes);
 }
 
 void NotesList::saveRecycle() {
@@ -866,13 +859,6 @@ void NotesList::saveRecycle() {
   }
 
   isNeedSave = false;
-
-  QString zipMainnotes = privateDir + "KnotData/mainnotes.ini.zip";
-  m_Method->compressFile(zipMainnotes, iniDir + "mainnotes.ini",
-                         mw_one->m_Preferences->getZipPassword());
-
-  mw_one->m_Notes->notes_sync_files.removeOne(zipMainnotes);
-  mw_one->m_Notes->notes_sync_files.append(zipMainnotes);
 }
 
 void NotesList::initNotesList() {

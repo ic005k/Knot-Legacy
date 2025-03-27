@@ -1847,6 +1847,7 @@ bool Method::compressFile(const QString &zipPath, const QString &filePath,
   QString strDir = fi.absolutePath();
   QDir dir;
   dir.mkpath(strDir);
+  QFile::remove(zipPath);
 
   QuaZip zip(zipPath);
   zip.setFileNameCodec("UTF-8");
