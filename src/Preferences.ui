@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>417</width>
+    <width>574</width>
     <height>699</height>
    </rect>
   </property>
@@ -263,6 +263,13 @@ QCheckBox::indicator:checked{
            <item>
             <widget class="QLineEdit" name="editPassword"/>
            </item>
+           <item>
+            <widget class="QToolButton" name="btnShowPassword">
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </item>
          <item>
@@ -276,6 +283,13 @@ QCheckBox::indicator:checked{
            </item>
            <item>
             <widget class="QLineEdit" name="editValidate"/>
+           </item>
+           <item>
+            <widget class="QToolButton" name="btnShowValidate">
+             <property name="text">
+              <string>...</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>

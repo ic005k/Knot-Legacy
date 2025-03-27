@@ -1801,18 +1801,17 @@ bool compressDirectory(const QString &zipPath, const QString &sourceDir,
     // 添加文件
     QuaZipFile zipFile(&zip);
     QuaZipNewInfo newInfo(relativePath, filePath);
+    newInfo.setFileDateTime(filePath);
 
     // 设置加密参数
     const bool useEncryption = !password.isEmpty();
     const char *passData =
         useEncryption ? password.toUtf8().constData() : nullptr;
 
-    // if (!zipFile.open(QIODevice::WriteOnly, newInfo, passData, 0, 8)) {
-    //   qWarning() << "Failed to add file:" << relativePath;
-    //   return false;
-    // }
-
-    if (!zipFile.open(QIODevice::WriteOnly, newInfo, passData, 0, Z_DEFLATED)) {
+    // 重要：与7zip的压缩参数完全一直，高度兼容，特别是加密的时候
+    if (!zipFile.open(QIODevice::WriteOnly, newInfo, passData, 0, Z_DEFLATED,
+                      Z_DEFAULT_COMPRESSION, false, 15, 9,
+                      Z_DEFAULT_STRATEGY)) {
       qWarning() << "Failed to add file:" << relativePath;
       return false;
     }

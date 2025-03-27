@@ -546,3 +546,19 @@ QString Preferences::getZipPassword() {
   qDebug() << "zip password=" << pass;
   return "";
 }
+
+void Preferences::on_btnShowPassword_pressed() {
+  ui->editPassword->setEchoMode(QLineEdit::EchoMode::Normal);
+}
+
+void Preferences::on_btnShowPassword_released() {
+  ui->editPassword->setEchoMode(QLineEdit::EchoMode::Password);
+}
+
+void Preferences::on_btnShowValidate_pressed() {
+  ui->editValidate->setEchoMode(QLineEdit::EchoMode::Normal);
+}
+
+void Preferences::on_btnShowValidate_released() {
+  ui->editValidate->setEchoMode(QLineEdit::EchoMode::Password);
+}

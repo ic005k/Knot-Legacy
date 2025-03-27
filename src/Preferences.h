@@ -75,6 +75,14 @@ class Preferences : public QDialog {
 
   void on_editValidate_textChanged(const QString &arg1);
 
+  void on_btnShowPassword_pressed();
+
+  void on_btnShowPassword_released();
+
+  void on_btnShowValidate_pressed();
+
+  void on_btnShowValidate_released();
+
  private:
   QString iniBakFiles = "BakFiles.ini";
   void getCheckStatusChange();
