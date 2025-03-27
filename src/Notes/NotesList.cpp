@@ -826,8 +826,12 @@ void NotesList::saveNotesList() {
 
   isNeedSave = false;
 
-  mw_one->m_Notes->notes_sync_files.removeOne(iniDir + "mainnotes.ini");
-  mw_one->m_Notes->notes_sync_files.append(iniDir + "mainnotes.ini");
+  QString zipMainnotes = privateDir + "KnotData/mainnotes.ini.zip";
+  m_Method->compressFile(zipMainnotes, iniDir + "mainnotes.ini",
+                         mw_one->m_Preferences->getZipPassword());
+
+  mw_one->m_Notes->notes_sync_files.removeOne(zipMainnotes);
+  mw_one->m_Notes->notes_sync_files.append(zipMainnotes);
 }
 
 void NotesList::saveRecycle() {
@@ -863,8 +867,12 @@ void NotesList::saveRecycle() {
 
   isNeedSave = false;
 
-  mw_one->m_Notes->notes_sync_files.removeOne(iniDir + "mainnotes.ini");
-  mw_one->m_Notes->notes_sync_files.append(iniDir + "mainnotes.ini");
+  QString zipMainnotes = privateDir + "KnotData/mainnotes.ini.zip";
+  m_Method->compressFile(zipMainnotes, iniDir + "mainnotes.ini",
+                         mw_one->m_Preferences->getZipPassword());
+
+  mw_one->m_Notes->notes_sync_files.removeOne(zipMainnotes);
+  mw_one->m_Notes->notes_sync_files.append(zipMainnotes);
 }
 
 void NotesList::initNotesList() {

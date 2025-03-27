@@ -13,7 +13,7 @@
 extern MainWindow *mw_one;
 extern Method *m_Method;
 extern QString iniFile, iniDir, privateDir, currentMDFile, imgFileName, appName;
-extern bool isAndroid, isIOS, isDark, isNeedSync;
+extern bool isAndroid, isIOS, isDark, isNeedSync, isPasswordError;
 extern int fontSize;
 extern QRegularExpression regxNumber;
 
@@ -306,9 +306,18 @@ void Notes::saveMainNotes() {
   isTextChange = false;
   isNeedSync = true;
 
-  notes_sync_files.removeOne(iniDir + "mainnotes.ini");
-  notes_sync_files.append(iniDir + "mainnotes.ini");
-  notes_sync_files.append(currentMDFile);
+  QString zipMainnotes = privateDir + "KnotData/mainnotes.ini.zip";
+  m_Method->compressFile(zipMainnotes, iniDir + "mainnotes.ini",
+                         mw_one->m_Preferences->getZipPassword());
+
+  notes_sync_files.removeOne(zipMainnotes);
+  notes_sync_files.append(zipMainnotes);
+
+  QString zipMD = privateDir + "KnotData/memo/" +
+                  QFileInfo(currentMDFile).fileName() + ".zip";
+  m_Method->compressFile(zipMD, currentMDFile,
+                         mw_one->m_Preferences->getZipPassword());
+  notes_sync_files.append(zipMD);
 }
 
 void Notes::init_MainNotes() { loadNoteToQML(); }
@@ -693,7 +702,10 @@ QString Notes::insertImage(QString fileName, bool isToAndroidView) {
     qDebug() << "pic=" << strTar << nLeftMargin;
   }
 
-  notes_sync_files.append(tarImageFile);
+  QString zipImg =
+      privateDir + "KnotData/memo/images/" + QFileInfo(tarImageFile).fileName();
+  QFile::copy(tarImageFile, zipImg);
+  notes_sync_files.append(zipImg);
 
   return strImage;
 }
@@ -1912,7 +1924,11 @@ void Notes::javaNoteToQMLNote() {
   }
 #endif
 
-  notes_sync_files.append(currentMDFile);
+  QString zipMD = privateDir + "KnotData/memo/" +
+                  QFileInfo(currentMDFile).fileName() + ".zip";
+  m_Method->compressFile(zipMD, currentMDFile,
+                         mw_one->m_Preferences->getZipPassword());
+  notes_sync_files.append(zipMD);
 }
 
 QString Notes::formatMDText(QString text) {
@@ -2329,7 +2345,7 @@ void Notes::openNotes() {
                      << "修改时间:" << mtime.toString("yyyy-MM-dd hh:mm:ss");
             QString remote_f = path;
             remote_f = remote_f.replace("/dav/", "");  // 此处需注意
-            if (remote_f.contains("mainnotes.ini")) {
+            if (remote_f.contains("mainnotes.ini.zip")) {
               orgRemoteFiles.append(remote_f);
               orgRemoteDateTime.append(mtime);
 
@@ -2365,12 +2381,81 @@ void Notes::openNotes() {
                     downloader, &WebDavDownloader::downloadFinished,
                     [=](bool success, QString error) {
                       qDebug() << (success ? "下载成功" : "下载失败: " + error);
+
+                      for (int i = 0; i < remoteFiles.count(); i++) {
+                        QString file = remoteFiles.at(i);
+                        QString pDir, pFile, kFile, asFile, zFile;
+                        pFile = privateDir + file;
+                        zFile = pFile;
+                        asFile = file;
+
+                        if (file.contains("mainnotes.ini.zip")) {
+                          pDir = privateDir + "KnotData";
+                          pFile = pFile.replace(".zip", "");
+                          kFile = iniDir + asFile.replace("KnotData/", "");
+                          kFile = kFile.replace(".zip", "");
+                          qDebug() << "file=" << file;
+                          qDebug() << "pFile=" << pFile;
+                          qDebug() << "kFile" << kFile;
+                          bool unzipResult = m_Method->decompressWithPassword(
+                              zFile, pDir,
+                              mw_one->m_Preferences->getZipPassword());
+
+                          while (unzipResult == false &&
+                                 isPasswordError == false)
+                            QCoreApplication::processEvents(
+                                QEventLoop::AllEvents, 100);
+
+                          if (QFileInfo(pFile).lastModified() >
+                              QFileInfo(kFile).lastModified()) {
+                            QFile::remove(kFile);
+                            QFile::copy(pFile, kFile);
+                          }
+                        }
+
+                        if (file.contains(".md.zip")) {
+                          pDir = privateDir + "KnotData/memo";
+                          pFile = pFile.replace(".zip", "");
+                          kFile = iniDir + asFile.replace("KnotData/", "");
+                          kFile = kFile.replace(".zip", "");
+                          qDebug() << "file=" << file;
+                          qDebug() << "pFile=" << pFile;
+                          qDebug() << "kFile" << kFile;
+                          bool unzipResult = m_Method->decompressWithPassword(
+                              zFile, pDir,
+                              mw_one->m_Preferences->getZipPassword());
+
+                          while (unzipResult == false &&
+                                 isPasswordError == false)
+                            QCoreApplication::processEvents(
+                                QEventLoop::AllEvents, 100);
+
+                          if (QFileInfo(pFile).lastModified() >
+                              QFileInfo(kFile).lastModified()) {
+                            QFile::remove(kFile);
+                            QFile::copy(pFile, kFile);
+                          }
+                        }
+
+                        if (file.contains(".png")) {
+                          kFile = iniDir + asFile.replace("KnotData/", "");
+
+                          qDebug() << "file=" << file;
+                          qDebug() << "pFile=" << pFile;
+                          qDebug() << "kFile" << kFile;
+                          if (QFileInfo(pFile).lastModified() >
+                              QFileInfo(kFile).lastModified()) {
+                            QFile::remove(kFile);
+                            QFile::copy(pFile, kFile);
+                          }
+                        }
+                      }
+
                       mw_one->m_Notes->openNotesUI();
                     });
 
                 // 开始下载（1并发,根据文件的下载个数）
-                QString lf = iniDir;
-                lf = lf.replace("/KnotData/", "");
+                QString lf = privateDir;
                 qDebug() << "lf=" << lf;
                 downloader->downloadFiles(remoteFiles, lf, remoteFiles.count());
               }
@@ -2386,7 +2471,6 @@ void Notes::openNotes() {
                        qDebug() << "操作失败:" << error;
                        mw_one->m_Notes->openNotesUI();
                      });
-
   } else
 
     mw_one->m_Notes->openNotesUI();
