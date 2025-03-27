@@ -1805,8 +1805,12 @@ bool compressDirectory(const QString &zipPath, const QString &sourceDir,
 
     // 设置加密参数
     const bool useEncryption = !password.isEmpty();
-    const char *passData =
-        useEncryption ? password.toUtf8().constData() : nullptr;
+    // 确保密码使用 UTF-8 编码
+    QByteArray passwordBytes = password.toUtf8();
+    const char *passData = useEncryption ? passwordBytes.constData() : nullptr;
+
+    // const char *passData =
+    //     useEncryption ? password.toUtf8().constData() : nullptr;
 
     // 重要：与7zip的压缩参数完全一直，高度兼容，特别是加密的时候
     if (!zipFile.open(QIODevice::WriteOnly, newInfo, passData, 0, Z_DEFLATED,
@@ -1867,8 +1871,13 @@ bool Method::compressFile(const QString &zipPath, const QString &filePath,
 
   // 设置加密参数
   const bool useEncryption = !password.isEmpty();
-  const char *passData =
-      useEncryption ? password.toUtf8().constData() : nullptr;
+
+  // 确保密码使用 UTF-8 编码
+  QByteArray passwordBytes = password.toUtf8();
+  const char *passData = useEncryption ? passwordBytes.constData() : nullptr;
+
+  // const char *passData =
+  //     useEncryption ? password.toUtf8().constData() : nullptr;
 
   // 重要：与7zip的压缩参数完全一直，高度兼容，特别是加密的时候
   if (!zipFile.open(QIODevice::WriteOnly, newInfo, passData, 0, Z_DEFLATED,

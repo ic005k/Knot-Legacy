@@ -3143,7 +3143,7 @@ in skydrive folder</source>
     <message>
         <location filename="Preferences.ui" line="250"/>
         <source>Encrypt with Password</source>
-        <translation>用密码加密</translation>
+        <translation>采用密码加密</translation>
     </message>
     <message>
         <location filename="Preferences.ui" line="259"/>

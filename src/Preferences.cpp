@@ -30,8 +30,16 @@ Preferences::Preferences(QWidget* parent)
 
 #ifdef Q_OS_ANDROID
   ui->sliderFontSize->setMinimum(15);
+
+  font0.setBold(true);
+  font0.setPointSize(13);
+  ui->lblZipTip->setFont(font0);
 #else
   ui->sliderFontSize->setMinimum(9);
+
+  font0.setBold(true);
+  font0.setPointSize(9);
+  ui->lblZipTip->setFont(font0);
 #endif
 
   mw_one->set_ToolButtonStyle(this);
