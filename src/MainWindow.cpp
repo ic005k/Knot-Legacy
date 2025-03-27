@@ -2703,12 +2703,14 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 void MainWindow::on_actionExport_Data_triggered() {
   if (!isSaveEnd) return;
 
-#ifdef Q_OS_ANDROID
-  zipfile = "android";
-#else
-  QFileDialog fd;
-  zipfile = fd.getSaveFileName(this, tr("KnotBak"), "", tr("Zip File(*.zip)"));
-#endif
+  /*#ifdef Q_OS_ANDROID
+    zipfile = "android";
+  #else
+    QFileDialog fd;
+    zipfile = fd.getSaveFileName(this, tr("KnotBak"), "", tr("Zip
+  File(*.zip)")); #endif*/
+
+  zipfile = "export_data";
 
   isUpData = false;
   showProgress();
@@ -2756,23 +2758,25 @@ QString MainWindow::bakData(QString fileName, bool msgbox) {
     if (fileName != zipfile) {
       if (QFile::exists(fileName)) QFile::remove(fileName);
 
-#ifdef Q_OS_ANDROID
       QDir *folder = new QDir;
-      QString path = "/storage/emulated/0/KnotBak/";
+      QString path = iniDir;
+      path = path.replace("KnotData", "KnotBak");
+      // "/storage/emulated/0/KnotBak/";
       folder->mkdir(path);
+      QString pass = m_Preferences->getZipPassword();
+      if (pass.length() > 0) pass = "_encrypt";
+
       QString str = m_Notes->getDateTimeStr();
-      infoStr = path + str + "_Knot.zip";
+      infoStr = path + str + pass + "_Knot.zip";
+#ifdef Q_OS_ANDROID
       m_Notes->androidCopyFile(zipfile, infoStr);
       if (!QFile(infoStr).exists()) {
-        m_Method->m_widget = new QWidget(mw_one);
         ShowMessage *msg = new ShowMessage(this);
         msg->showMsg(
             "Knot", tr("Please turn on the storage permission of the app."), 1);
       }
-
 #else
-      QFile::copy(zipfile, fileName);
-      infoStr = fileName;
+      QFile::copy(zipfile, infoStr);
 #endif
     }
 

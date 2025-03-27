@@ -1677,6 +1677,7 @@ bool Method::decompressWithPassword(const QString &zipPath,
       qWarning() << "[ERROR] Failed to open file" << fileName
                  << "Error code:" << errorCode
                  << "Description:" << quazipErrorString(errorCode);
+      isPasswordError = true;
       success = false;
       break;
     }
@@ -1760,6 +1761,9 @@ QString Method::quazipErrorString(int code) {
 bool compressDirectory(const QString &zipPath, const QString &sourceDir,
                        const QString &password) {
   QuaZip zip(zipPath);
+  zip.setFileNameCodec("UTF-8");
+  zip.setZip64Enabled(false);  // 禁用 ZIP64（除非必要）
+
   if (!zip.open(QuaZip::mdCreate)) {
     qWarning() << "Failed to create zip:" << zip.getZipError();
     return false;
@@ -1803,7 +1807,12 @@ bool compressDirectory(const QString &zipPath, const QString &sourceDir,
     const char *passData =
         useEncryption ? password.toUtf8().constData() : nullptr;
 
-    if (!zipFile.open(QIODevice::WriteOnly, newInfo, passData, 0, 8)) {
+    // if (!zipFile.open(QIODevice::WriteOnly, newInfo, passData, 0, 8)) {
+    //   qWarning() << "Failed to add file:" << relativePath;
+    //   return false;
+    // }
+
+    if (!zipFile.open(QIODevice::WriteOnly, newInfo, passData, 0, Z_DEFLATED)) {
       qWarning() << "Failed to add file:" << relativePath;
       return false;
     }
