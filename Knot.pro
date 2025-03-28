@@ -38,6 +38,7 @@ android: {
 INCLUDEPATH += $$PWD/src/zlib
 DEFINES += QUAZIP_STATIC
 
+DEFINES += QUAZIP_USE_AES
 #DEFINES += QUAZIP_ENABLE_CRYPTO
 #LIBS += -lquazip -lz
 

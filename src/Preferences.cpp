@@ -367,7 +367,7 @@ void Preferences::autoBakData() {
   }
   int nextDel = iniPreferences->value("/AutoBak/NextDel").toInt();
   bakCount++;
-  QString fileName = mw_one->bakData("android", false);
+  QString fileName = mw_one->bakData("android");
   iniPreferences->setValue("/AutoBak/File" + QString::number(bakCount),
                            fileName);
   if (bakCount - nextDel > 15) {
@@ -547,6 +547,7 @@ QString Preferences::getZipPassword() {
         ui->editPassword->text().trimmed() ==
             ui->editValidate->text().trimmed()) {
       pass = ui->editPassword->text().trimmed();
+
       return pass;
     }
   }

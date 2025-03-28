@@ -1617,6 +1617,73 @@ bool Method::decompressWithPassword(const QString &zipPath,
     return false;
   }
 
+  ///////
+
+  // 预检查密码：找到第一个加密文件并验证密码有效性
+  isPasswordError = false;
+  bool hasEncrypted = false;
+  bool passwordValid = true;
+
+  for (bool f = zip.goToFirstFile(); f; f = zip.goToNextFile()) {
+    QuaZipFileInfo64 info;
+    if (!zip.getCurrentFileInfo(&info)) {
+      qWarning() << "[WARN] Failed to get file info during password check";
+      continue;
+    }
+
+    if (info.isEncrypted()) {
+      hasEncrypted = true;
+      QuaZipFile testFile(&zip);
+      QByteArray passBytes = password.toUtf8();
+
+      // 尝试打开加密文件
+      if (!testFile.open(QIODevice::ReadOnly, passBytes.constData())) {
+        passwordValid = false;
+        qWarning() << "[ERROR] Password open failed for"
+                   << zip.getCurrentFileName();
+
+        break;
+      }
+
+      // 尝试读取数据以验证密码
+      char buffer[1024];
+      qint64 bytesRead = testFile.read(buffer, sizeof(buffer));
+      testFile.close();  // 无论读取是否成功都需关闭文件
+
+      if (bytesRead == -1) {  // 读取失败表明密码错误
+        passwordValid = false;
+        qWarning() << "[ERROR] Password read failed for"
+                   << zip.getCurrentFileName();
+
+        break;
+      }
+
+      // 找到第一个加密文件并验证通过后即可退出检查
+      break;
+    }
+  }
+
+  // 处理加密文件逻辑
+  if (hasEncrypted) {
+    if (password.isEmpty()) {
+      qWarning() << "[ERROR] Password required but empty";
+      zip.close();
+      isPasswordError = true;
+      return false;
+    }
+    if (!passwordValid) {
+      qWarning() << "[ERROR] Incorrect password";
+      zip.close();
+      isPasswordError = true;
+      return false;
+    }
+  }
+
+  // 重置到第一个文件以开始解压
+  zip.goToFirstFile();
+
+  ///////
+
   QDir outputDir(extractDir);
   if (!outputDir.mkpath(".")) {
     qWarning() << "[ERROR] Cannot create output directory";
@@ -1662,12 +1729,16 @@ bool Method::decompressWithPassword(const QString &zipPath,
     if (fileInfo1.isEncrypted()) {
       if (password.isEmpty()) {
         qWarning() << "[ERROR] File is encrypted but password is empty";
-        isPasswordError = true;
+
         success = false;
         break;
       }
-      openSuccess =
-          file.open(QIODevice::ReadOnly, password.toUtf8().constData());
+
+      // 确保密码使用 UTF-8 编码
+      QByteArray passwordBytes = password.toUtf8();
+      const char *passData = passwordBytes.constData();
+
+      openSuccess = file.open(QIODevice::ReadOnly, passData);
     } else {
       openSuccess = file.open(QIODevice::ReadOnly);
     }
@@ -1677,7 +1748,7 @@ bool Method::decompressWithPassword(const QString &zipPath,
       qWarning() << "[ERROR] Failed to open file" << fileName
                  << "Error code:" << errorCode
                  << "Description:" << quazipErrorString(errorCode);
-      isPasswordError = true;
+
       success = false;
       break;
     }
@@ -1805,12 +1876,10 @@ bool compressDirectory(const QString &zipPath, const QString &sourceDir,
 
     // 设置加密参数
     const bool useEncryption = !password.isEmpty();
+
     // 确保密码使用 UTF-8 编码
     QByteArray passwordBytes = password.toUtf8();
     const char *passData = useEncryption ? passwordBytes.constData() : nullptr;
-
-    // const char *passData =
-    //     useEncryption ? password.toUtf8().constData() : nullptr;
 
     // 重要：与7zip的压缩参数完全一直，高度兼容，特别是加密的时候
     if (!zipFile.open(QIODevice::WriteOnly, newInfo, passData, 0, Z_DEFLATED,
@@ -1875,9 +1944,6 @@ bool Method::compressFile(const QString &zipPath, const QString &filePath,
   // 确保密码使用 UTF-8 编码
   QByteArray passwordBytes = password.toUtf8();
   const char *passData = useEncryption ? passwordBytes.constData() : nullptr;
-
-  // const char *passData =
-  //     useEncryption ? password.toUtf8().constData() : nullptr;
 
   // 重要：与7zip的压缩参数完全一直，高度兼容，特别是加密的时候
   if (!zipFile.open(QIODevice::WriteOnly, newInfo, passData, 0, Z_DEFLATED,

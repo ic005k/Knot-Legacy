@@ -90,9 +90,9 @@ static void JavaNotify_14();
 BakDataThread::BakDataThread(QObject *parent) : QThread{parent} {}
 void BakDataThread::run() {
   if (isUpData)
-    mw_one->bakData(zipfile, false);
+    mw_one->bakData(zipfile);
   else
-    mw_one->bakData(zipfile, true);
+    mw_one->bakData(zipfile);
 
   emit isDone();
 }
@@ -121,8 +121,7 @@ void MainWindow::bakDataDone() {
 
 ImportDataThread::ImportDataThread(QObject *parent) : QThread{parent} {}
 void ImportDataThread::run() {
-  if (isMenuImport || isDownData)
-    mw_one->importBakData(zipfile, true, false, false);
+  if (isMenuImport || isDownData) mw_one->importBakData(zipfile);
 
   emit isDone();
 }
@@ -2711,8 +2710,7 @@ void MainWindow::on_actionExport_Data_triggered() {
   myBakDataThread->start();
 }
 
-QString MainWindow::bakData(QString fileName, bool msgbox) {
-  Q_UNUSED(msgbox);
+QString MainWindow::bakData(QString fileName) {
   if (!fileName.isNull()) {
     isSelf = true;
 
@@ -2832,16 +2830,10 @@ void MainWindow::on_actionImport_Data_triggered() {
   myImportDataThread->start();
 }
 
-bool MainWindow::importBakData(QString fileName, bool msg, bool book,
-                               bool unre) {
+bool MainWindow::importBakData(QString fileName) {
   if (!fileName.isNull()) {
-    if (msg) {
-    }
-
-    if (unre) {
-    }
-
     QString zipPath = iniDir + "memo.zip";
+
     if (fileName != zipPath) {
       QFile::remove(zipPath);
 
@@ -2851,9 +2843,6 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
 
       QFile::copy(fileName, zipPath);
     }
-
-    deleteDirfile(iniDir + "memo");
-    QDir::setCurrent(iniDir);
 
     // mw_one->m_Notes->unzip(zipPath);
 
@@ -2901,9 +2890,6 @@ bool MainWindow::importBakData(QString fileName, bool msg, bool book,
 
       // Del ini bak files
       QFile::remove(strf);
-    }
-
-    if (book) {
     }
   }
 
