@@ -2400,13 +2400,17 @@ void Notes::openNotes() {
                             QCoreApplication::processEvents(
                                 QEventLoop::AllEvents, 100);
 
-                          if (QFileInfo(pFile).lastModified() >
-                              QFileInfo(kFile).lastModified()) {
-                            QFile::remove(kFile);
-                            if (QFile::copy(pFile, kFile)) {
-                              qDebug() << "kFile:" << kFile
-                                       << " Update successfully. ";
+                          if (isPasswordError == false) {
+                            if (QFileInfo(pFile).lastModified() >
+                                QFileInfo(kFile).lastModified()) {
+                              QFile::remove(kFile);
+                              if (QFile::copy(pFile, kFile)) {
+                                qDebug() << "kFile:" << kFile
+                                         << " Update successfully. ";
+                              }
                             }
+                          } else {
+                            QFile::remove(zFile);
                           }
                         }
 
@@ -2427,10 +2431,14 @@ void Notes::openNotes() {
                             QCoreApplication::processEvents(
                                 QEventLoop::AllEvents, 100);
 
-                          if (QFileInfo(pFile).lastModified() >
-                              QFileInfo(kFile).lastModified()) {
-                            QFile::remove(kFile);
-                            QFile::copy(pFile, kFile);
+                          if (isPasswordError == false) {
+                            if (QFileInfo(pFile).lastModified() >
+                                QFileInfo(kFile).lastModified()) {
+                              QFile::remove(kFile);
+                              QFile::copy(pFile, kFile);
+                            }
+                          } else {
+                            QFile::remove(zFile);
                           }
                         }
 

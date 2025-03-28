@@ -63,6 +63,10 @@ Todo::Todo(QWidget* parent) : QDialog(parent), ui(new Ui::Todo) {
   tmePlayProgress = new QTimer(this);
   connect(tmePlayProgress, SIGNAL(timeout()), this,
           SLOT(on_ShowPlayProgress()));
+
+  QScroller::grabGesture(mw_one->ui->editTodo,
+                         QScroller::LeftMouseButtonGesture);
+  m_Method->setSCrollPro(mw_one->ui->editTodo);
 }
 
 Todo::~Todo() { delete ui; }
@@ -1436,9 +1440,9 @@ void Todo::openTodo() {
                     downloader, &WebDavDownloader::downloadFinished,
                     [](bool success, QString error) {
                       qDebug() << (success ? "下载成功" : "下载失败: " + error);
+                      QString zFile = privateDir + "KnotData/todo.ini.zip";
                       bool unzipResult = m_Method->decompressWithPassword(
-                          privateDir + "KnotData/todo.ini.zip",
-                          privateDir + "KnotData",
+                          zFile, privateDir + "KnotData",
                           mw_one->m_Preferences->getZipPassword());
 
                       while (unzipResult == false && isPasswordError == false)
@@ -1446,10 +1450,15 @@ void Todo::openTodo() {
                                                         100);
                       QString zipToto = privateDir + "KnotData/todo.ini";
                       QString localTodo = iniDir + "todo.ini";
-                      if (QFileInfo(zipToto).lastModified() >
-                          QFileInfo(localTodo).lastModified()) {
-                        QFile::remove(localTodo);
-                        QFile::copy(zipToto, localTodo);
+
+                      if (isPasswordError == false) {
+                        if (QFileInfo(zipToto).lastModified() >
+                            QFileInfo(localTodo).lastModified()) {
+                          QFile::remove(localTodo);
+                          QFile::copy(zipToto, localTodo);
+                        }
+                      } else {
+                        QFile::remove(zFile);
                       }
 
                       mw_one->m_Todo->openTodoUI();
