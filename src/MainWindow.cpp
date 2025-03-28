@@ -127,8 +127,6 @@ void ImportDataThread::run() {
 }
 
 void MainWindow::importDataDone() {
-  mw_one->isSelf = true;
-
   if (isPasswordError) {
     closeProgress();
     ShowMessage *msg = new ShowMessage(this);
@@ -401,8 +399,6 @@ MainWindow::MainWindow(QWidget *parent)
 
   resetWinPos();
   initMain = false;
-
-  addFilesWatch();
 
   m_Todo->refreshTableListsFromIni();
   m_Todo->refreshAlarm();
@@ -851,26 +847,6 @@ void MainWindow::on_timerSyncData() {
 void MainWindow::startSyncData() {
   if (initMain) return;
   timerSyncData->start(10000);
-}
-
-void MainWindow::removeFilesWatch() {
-#ifdef Q_OS_ANDROID
-#else
-  FileSystemWatcher::removeWatchPath(iniDir + "todo.ini");
-  FileSystemWatcher::removeWatchPath(iniDir + "mainnotes.ini");
-  qDebug() << QTime::currentTime().toString() << "remove file watch......";
-#endif
-}
-
-void MainWindow::addFilesWatch() {
-#ifdef Q_OS_ANDROID
-#else
-  FileSystemWatcher::addWatchPath(iniDir + "todo.ini");
-  FileSystemWatcher::addWatchPath(iniDir + "mainnotes.ini");
-
-  qDebug() << QTime::currentTime().toString()
-           << "add file watch...... isSelf=" << isSelf;
-#endif
 }
 
 MainWindow::~MainWindow() {
@@ -2712,8 +2688,6 @@ void MainWindow::on_actionExport_Data_triggered() {
 
 QString MainWindow::bakData(QString fileName) {
   if (!fileName.isNull()) {
-    isSelf = true;
-
     m_NotesList->clearFiles();
 
     // Remove old ini files
@@ -2778,7 +2752,6 @@ QString MainWindow::bakData(QString fileName) {
       QFile::remove(iniFiles.at(i));
     }
 
-    isSelf = false;
     return infoStr;
   }
   return "";
@@ -3735,8 +3708,6 @@ void MainWindow::init_UIWidget() {
   ui->chkWebDAV->setStyleSheet(m_Preferences->chkStyle);
   ui->chkAutoSync->setStyleSheet(m_Preferences->chkStyle);
 
-  ui->editPassword1->setEchoMode(QLineEdit::EchoMode::Password);
-  ui->editPassword2->setEchoMode(QLineEdit::EchoMode::Password);
   ui->editWebDAVPassword->setEchoMode(QLineEdit::EchoMode::Password);
 
   this->installEventFilter(this);
@@ -3824,9 +3795,6 @@ void MainWindow::init_UIWidget() {
       "}");
   ui->progReader->setStyleSheet(ui->progBar->styleSheet());
   ui->progReader->setFixedHeight(4);
-
-  setLineEditQss(ui->editPassword1, 0, 1, "#4169E1", "#4169E1");
-  ui->editPassword2->setStyleSheet(ui->editPassword1->styleSheet());
 
   if (isIOS) {
   }
@@ -4793,57 +4761,9 @@ void MainWindow::on_btnBackNotes_clicked() {
 
   ui->frameNotes->hide();
   ui->frameNoteList->show();
-  isSelf = false;
-  addFilesWatch();
 }
 
-void MainWindow::on_btnSetKey_clicked() {
-  if (ui->f_SetKey->isHidden())
-    ui->f_SetKey->show();
-  else
-    ui->f_SetKey->hide();
-}
-
-void MainWindow::on_btnSetKeyOK_clicked() {
-  isSelf = true;
-
-  QSettings *iniNotes =
-      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, NULL);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  iniNotes->setIniCodec("utf-8");
-#endif
-
-  if (ui->editPassword1->text().trimmed() == "" &&
-      ui->editPassword2->text().trimmed() == "") {
-    iniNotes->remove("/MainNotes/UserKey");
-    ui->f_SetKey->hide();
-
-    m_Method->m_widget = new QWidget(mw_one);
-    ShowMessage *m_ShowMsg = new ShowMessage(this);
-    m_ShowMsg->showMsg("Knot", tr("The password is removed."), 1);
-
-    return;
-  }
-
-  if (ui->editPassword1->text().trimmed() ==
-      ui->editPassword2->text().trimmed()) {
-    QString strPw = ui->editPassword1->text().trimmed();
-    iniNotes->setValue("/MainNotes/UserKey", strPw);
-
-    m_Method->m_widget = new QWidget(mw_one);
-    ShowMessage *m_ShowMsg = new ShowMessage(this);
-    m_ShowMsg->showMsg("Knot", tr("The password is set successfully."), 1);
-
-    ui->f_SetKey->hide();
-    ui->editPassword1->clear();
-    ui->editPassword2->clear();
-
-  } else {
-    m_Method->m_widget = new QWidget(mw_one);
-    ShowMessage *m_ShowMsg = new ShowMessage(this);
-    m_ShowMsg->showMsg("Knot", tr("The entered password does not match."), 1);
-  }
-}
+void MainWindow::on_btnSetKey_clicked() {}
 
 void MainWindow::on_btnEdit_clicked() { m_Notes->openEditUI(); }
 
@@ -4964,14 +4884,6 @@ void MainWindow::on_btnNotesList_clicked() {
   m_NotesList->setNoteLabel();
 
   // m_NotesList->setNoteBookVPos();
-
-  return;
-
-  m_NotesList->show();
-  m_NotesList->setWinPos();
-  m_NotesList->tw->setFocus();
-  m_NotesList->isNeedSave = false;
-  m_NotesList->tw->scrollToItem(m_NotesList->tw->currentItem());
 }
 
 void MainWindow::on_btnBackImg_clicked() {
@@ -5036,10 +4948,7 @@ void MainWindow::on_KVChanged() {}
 
 void MainWindow::on_btnAddTodo_clicked() { m_Todo->on_btnAdd_clicked(); }
 
-void MainWindow::on_btnBackTodo_clicked() {
-  m_Todo->closeTodo();
-  addFilesWatch();
-}
+void MainWindow::on_btnBackTodo_clicked() { m_Todo->closeTodo(); }
 
 void MainWindow::on_btnHigh_clicked() {
   m_Method->closeKeyboard();
@@ -5529,7 +5438,6 @@ void MainWindow::on_btnBackNoteList_clicked() {
   ui->frameNoteList->hide();
   ui->frameMain->show();
   m_NotesList->saveNoteBookVPos();
-  m_NotesList->saveNotesList();
   m_Notes->updateMainnotesIni();
 
   isNeedSync = true;
@@ -5538,7 +5446,6 @@ void MainWindow::on_btnBackNoteList_clicked() {
 
 void MainWindow::on_btnBackNoteRecycle_clicked() {
   m_NotesList->saveRecycle();
-  m_Notes->updateMainnotesIni();
   ui->frameNoteRecycle->hide();
   ui->frameNoteList->show();
 

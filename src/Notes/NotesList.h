@@ -64,7 +64,7 @@ class NotesList : public QDialog {
   QStringList findResult;
   int findCount;
   QList<QTreeWidgetItem *> findResultList;
-  bool isNeedSave = false;
+
   QTreeWidget *twrb;
   QTreeWidget *tw;
 

@@ -159,7 +159,7 @@ class MainWindow : public QMainWindow {
   QDialog *dlgProg = nullptr;
 
   void setMini();
-  bool isSelf = false;
+
   int days = 45;
   int newHeight;
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
@@ -343,8 +343,6 @@ class MainWindow : public QMainWindow {
   void startInitReport();
 
   void startSyncData();
-  void removeFilesWatch();
-  void addFilesWatch();
 
   int getMaxDay(QString sy, QString sm);
   void showProgress();
@@ -487,8 +485,6 @@ class MainWindow : public QMainWindow {
   void on_btnBackNotes_clicked();
 
   void on_btnSetKey_clicked();
-
-  void on_btnSetKeyOK_clicked();
 
   void on_btnEdit_clicked();
 

@@ -270,10 +270,6 @@ void Notes::MD2Html(QString mdFile) {
 }
 
 void Notes::saveMainNotes() {
-  if (!isNeedSave) return;
-
-  mw_one->isSelf = true;
-
   mw_one->isNeedAutoBackup = true;
   mw_one->strLatestModify = tr("Modi Notes");
 
@@ -286,31 +282,16 @@ void Notes::saveMainNotes() {
     MD2Html(currentMDFile);
 
     qDebug() << "Save Note: " << currentMDFile;
+
+    QString zipMD = privateDir + "KnotData/memo/" +
+                    QFileInfo(currentMDFile).fileName() + ".zip";
+    m_Method->compressFile(zipMD, currentMDFile,
+                           mw_one->m_Preferences->getZipPassword());
+    notes_sync_files.append(zipMD);
   }
 
-  QString strTag = currentMDFile;
-  strTag.replace(iniDir, "");
-
-  QSettings *iniNotes =
-      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, NULL);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  iniNotes->setIniCodec("utf-8");
-#endif
-
-  iniNotes->setValue("/MainNotes/editVPos" + strTag,
-                     m_EditSource->verticalScrollBar()->sliderPosition());
-  iniNotes->setValue("/MainNotes/editCPos" + strTag,
-                     m_EditSource->textCursor().position());
-
-  isNeedSave = false;
   isTextChange = false;
   isNeedSync = true;
-
-  QString zipMD = privateDir + "KnotData/memo/" +
-                  QFileInfo(currentMDFile).fileName() + ".zip";
-  m_Method->compressFile(zipMD, currentMDFile,
-                         mw_one->m_Preferences->getZipPassword());
-  notes_sync_files.append(zipMD);
 }
 
 void Notes::init_MainNotes() { loadNoteToQML(); }
@@ -956,6 +937,14 @@ void Notes::saveQMLVPos() {
   Reg.setIniCodec("utf-8");
 #endif
 
+  QString strTag = currentMDFile;
+  strTag.replace(iniDir, "");
+
+  Reg.setValue("/MainNotes/editVPos" + strTag,
+               m_EditSource->verticalScrollBar()->sliderPosition());
+  Reg.setValue("/MainNotes/editCPos" + strTag,
+               m_EditSource->textCursor().position());
+
   if (QFile(currentMDFile).exists()) {
     sliderPos = getVPos();
     Reg.setValue("/MainNotes/SlidePos" + currentMDFile, sliderPos);
@@ -1118,8 +1107,6 @@ void Notes::on_btnS9_clicked() {
 void Notes::on_btnS10_clicked() { m_EditSource->insertPlainText("_"); }
 
 void Notes::highlightCurrentLine() {
-  isNeedSave = true;
-
   QList<QTextEdit::ExtraSelection> extraSelections;
 
   QTextEdit::ExtraSelection selection;
@@ -1340,29 +1327,26 @@ void Notes::closeEvent(QCloseEvent *event) {
 
   m_Method->Sleep(100);
 
-  if (isNeedSave) {
-    if (isDone) {
-      saveMainNotes();
-      loadNoteToQML();
-    } else {
-      if (isTextChange) {
-        m_Method->m_widget = new QWidget(this);
-        ShowMessage *msg = new ShowMessage(this);
-        if (msg->showMsg(tr("Notes"), tr("Do you want to save the notes?"),
-                         2)) {
-          saveMainNotes();
-          loadNoteToQML();
-        }
+  if (isDone) {
+    saveMainNotes();
+    loadNoteToQML();
+  } else {
+    if (isTextChange) {
+      m_Method->m_widget = new QWidget(this);
+      ShowMessage *msg = new ShowMessage(this);
+      if (msg->showMsg(tr("Notes"), tr("Do you want to save the notes?"), 2)) {
+        saveMainNotes();
+        loadNoteToQML();
       }
     }
+  }
 
-    if (isSetNewNoteTitle()) {
-      if (strNoteText.length() > 20)
-        new_title = strNoteText.mid(0, 20).trimmed() + "...";
-      else
-        new_title = strNoteText;
-      mw_one->ui->btnRename->click();
-    }
+  if (isSetNewNoteTitle()) {
+    if (strNoteText.length() > 20)
+      new_title = strNoteText.mid(0, 20).trimmed() + "...";
+    else
+      new_title = strNoteText;
+    mw_one->ui->btnRename->click();
   }
 }
 
@@ -1385,12 +1369,9 @@ bool Notes::isSetNewNoteTitle() {
   return false;
 }
 
-void Notes::on_editSource_textChanged() {
-  isNeedSave = true;
-  isTextChange = true;
-}
+void Notes::on_editSource_textChanged() { isTextChange = true; }
 
-void Notes::on_editSource_cursorPositionChanged() { isNeedSave = true; }
+void Notes::on_editSource_cursorPositionChanged() {}
 
 void Notes::on_btnReference_clicked() {
   QString str = m_EditSource->textCursor().selectedText();
@@ -1637,8 +1618,6 @@ void Notes::on_btnGetShare_clicked() {
 void Notes::on_btnSyncToWebDAV_clicked() { syncToWebDAV(); }
 
 void Notes::on_btnShowTools_clicked() {
-  bool old = isNeedSave;
-
   if (ui->f_ToolBar->isHidden()) {
     ui->f_ToolBar->show();
 
@@ -1651,10 +1630,8 @@ void Notes::on_btnShowTools_clicked() {
     on_btnRight_clicked();
   }
 
-  isNeedSave = old;
-
   QSettings *iniNotes =
-      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, NULL);
+      new QSettings(privateDir + "notes.ini", QSettings::IniFormat, NULL);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   iniNotes->setIniCodec("utf-8");
 #endif
@@ -2144,7 +2121,6 @@ void Notes::openNotesUI() {
   ui->btnRedo->setEnabled(false);
 
   mw_one->ui->frameMain->hide();
-  mw_one->ui->f_SetKey->hide();
   mw_one->ui->frameNotes->show();
   setVPos();
 
@@ -2225,8 +2201,6 @@ void Notes::openEditUI() {
     return;
   }
 
-  mw_one->isSelf = true;
-
   saveQMLVPos();
   QString mdString = loadText(currentMDFile);
 
@@ -2246,7 +2220,7 @@ void Notes::openEditUI() {
   a.replace(iniDir, "");
 
   QSettings *iniNotes =
-      new QSettings(iniDir + "mainnotes.ini", QSettings::IniFormat, NULL);
+      new QSettings(privateDir + "notes.ini", QSettings::IniFormat, NULL);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   iniNotes->setIniCodec("utf-8");
 #endif
@@ -2267,7 +2241,7 @@ void Notes::openEditUI() {
   }
 
   m_Method->Sleep(200);
-  isNeedSave = false;
+
   isDone = false;
   isTextChange = false;
 
@@ -2288,8 +2262,6 @@ void Notes::openNotes() {
   notes_sync_files.clear();
   mw_one->m_NotesList->needDelWebDAVFiles.clear();
   mainnotesLastModi = QFileInfo(iniDir + "mainnotes.ini").lastModified();
-  mw_one->removeFilesWatch();
-  mw_one->isSelf = true;
 
   if (mw_one->ui->chkAutoSync->isChecked() &&
       mw_one->ui->chkWebDAV->isChecked()) {
@@ -2482,7 +2454,9 @@ void Notes::openNotes() {
 }
 
 void Notes::updateMainnotesIni() {
-  if (QFileInfo(iniDir + "mainnotes.ini").lastModified() > mainnotesLastModi) {
+  QDateTime cDT = QFileInfo(iniDir + "mainnotes.ini").lastModified();
+  qDebug() << "cDT=" << cDT << "mainnotesLastModi=" << mainnotesLastModi;
+  if (cDT > mainnotesLastModi) {
     QString zipMainnotes = privateDir + "KnotData/mainnotes.ini.zip";
     m_Method->compressFile(zipMainnotes, iniDir + "mainnotes.ini",
                            mw_one->m_Preferences->getZipPassword());

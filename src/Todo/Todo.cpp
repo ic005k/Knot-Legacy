@@ -76,7 +76,6 @@ void Todo::keyReleaseEvent(QKeyEvent* event) { Q_UNUSED(event); }
 void Todo::saveTodo() {
   if (!isNeedSave) return;
 
-  mw_one->isSelf = true;
   isNeedSave = false;
 
   mw_one->isNeedAutoBackup = true;
@@ -116,7 +115,6 @@ void Todo::saveTodo() {
 }
 
 void Todo::init_Todo() {
-  mw_one->isSelf = true;
   clearAll();
 
   iniTodo = new QSettings(iniDir + "todo.ini", QSettings::IniFormat, this);
@@ -198,7 +196,6 @@ void Todo::closeTodo() {
   refreshTableLists();
   refreshAlarm();
   mw_one->ui->qwTodo->rootContext()->setContextProperty("isBtnVisible", false);
-  mw_one->isSelf = false;
 
   if (isNeedSync && mw_one->ui->chkAutoSync->isChecked() &&
       mw_one->ui->chkWebDAV->isChecked()) {
@@ -1390,8 +1387,6 @@ void Todo::openTodoUI() {
 }
 
 void Todo::openTodo() {
-  mw_one->removeFilesWatch();
-  mw_one->isSelf = true;
   m_TextSelector->close();
   m_TextSelector = new TextSelector(mw_one);
 

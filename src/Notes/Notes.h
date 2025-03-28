@@ -73,7 +73,7 @@ class Notes : public QDialog {
   int px, py, mx, my;
 
   bool isTextChange;
-  bool isNeedSave;
+
   bool isDone;
   QTimer *timerEditPanel;
   QString htmlBuffer;

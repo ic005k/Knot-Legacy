@@ -150,8 +150,6 @@ void NotesList::on_btnNewNoteBook_clicked() {
     topItem->addChild(item);
     tw->setCurrentItem(item);
   }
-
-  isNeedSave = true;
 }
 
 void NotesList::on_btnNewNote_clicked() {
@@ -181,8 +179,6 @@ void NotesList::on_btnNewNote_clicked() {
   for (int i = 0; i < count; i++) {
     pNoteItems.append(parentitem->child(i));
   }
-
-  isNeedSave = true;
 }
 
 void NotesList::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column) {
@@ -318,7 +314,7 @@ void NotesList::on_btnRename_clicked() {
   connect(btnOk, &QToolButton::clicked, [=]() mutable {
     renameCurrentItem(edit->toPlainText().trimmed());
 
-    isNeedSave = true;
+    saveNotesList();
     dlg->close();
   });
 
@@ -474,9 +470,9 @@ void NotesList::on_btnDel_clicked() {
   }
 
   tw->setFocus();
-  isNeedSave = true;
+
   saveNotesList();
-  isNeedSave = true;
+
   saveRecycle();
 
   resetQML_List();
@@ -565,7 +561,6 @@ bool NotesList::on_btnImport_clicked() {
     }
   }
 
-  isNeedSave = true;
   return true;
 }
 
@@ -593,26 +588,7 @@ void NotesList::on_btnExport_clicked() {
   TextEditToFile(edit, fileName);
 }
 
-void NotesList::closeEvent(QCloseEvent *event) {
-  Q_UNUSED(event);
-
-  if (!ui->frame1->isHidden()) {
-    on_btnBack_clicked();
-    event->ignore();
-    return;
-  }
-
-  bool save = isNeedSave;
-  saveNotesList();
-  isNeedSave = save;
-  saveRecycle();
-
-  mw_one->ui->btnBackNotes->show();
-  mw_one->ui->btnEdit->show();
-  mw_one->ui->btnNotesList->show();
-  mw_one->ui->btnSetKey->show();
-  mw_one->ui->btnPDF->show();
-}
+void NotesList::closeEvent(QCloseEvent *event) { Q_UNUSED(event); }
 
 void NotesList::resetQML_List() {
   if (tw->topLevelItemCount() == 0) {
@@ -756,14 +732,10 @@ void NotesList::setNoteBookVPos() {
 }
 
 void NotesList::saveNotesList() {
-  if (!isNeedSave) return;
-
   QSettings iniNotes(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   iniNotes.setIniCodec("utf-8");
 #endif
-
-  mw_one->isSelf = true;
 
   mw_one->isNeedAutoBackup = true;
   mw_one->strLatestModify = tr("Modi Notes List");
@@ -823,19 +795,13 @@ void NotesList::saveNotesList() {
 #endif
 
   Reg1.setValue("/MainNotes/NoteName", mw_one->ui->lblNoteName->text());
-
-  isNeedSave = false;
 }
 
 void NotesList::saveRecycle() {
-  if (!isNeedSave) return;
-
   QSettings iniNotes(iniDir + "mainnotes.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   iniNotes.setIniCodec("utf-8");
 #endif
-
-  mw_one->isSelf = true;
 
   mw_one->isNeedAutoBackup = true;
   mw_one->strLatestModify = tr("Modi Notes Recycle");
@@ -857,12 +823,9 @@ void NotesList::saveRecycle() {
         "/MainNotes/rbchildItem1" + QString::number(i) + QString::number(j),
         strChild1);
   }
-
-  isNeedSave = false;
 }
 
 void NotesList::initNotesList() {
-  mw_one->isSelf = true;
   tw->clear();
 
   QSettings *iniNotes =
@@ -961,7 +924,6 @@ void NotesList::initNotesList() {
 }
 
 void NotesList::initRecycle() {
-  mw_one->isSelf = true;
   twrb->clear();
 
   QSettings iniNotes(iniDir + "mainnotes.ini", QSettings::IniFormat);
@@ -1028,26 +990,7 @@ void NotesList::on_btnRestore_clicked() {
     return;
 
   saveRecycle();
-  isNeedSave = true;
-  saveNotesList();
 
-  return;
-
-  QTreeWidgetItem *item = new QTreeWidgetItem;
-  QString str0 = curItem->text(0);
-  QString str1 = curItem->text(1);
-
-  item->setText(0, str0);
-  item->setText(1, str1);
-  addItem(tw, item);
-
-  m_Method->addItemToQW(mw_one->ui->qwNoteList, str0, "", "", str1, 0);
-
-  curItem->parent()->removeChild(curItem);
-  isNeedSave = true;
-  saveRecycle();
-
-  isNeedSave = true;
   saveNotesList();
 }
 
@@ -1077,7 +1020,6 @@ void NotesList::on_btnDel_Recycle_clicked() {
     curItem->parent()->removeChild(curItem);
   }
 
-  isNeedSave = true;
   saveRecycle();
 
   resetQML_Recycle();
@@ -1578,7 +1520,6 @@ void NotesList::moveBy(int ud) {
         parentItem->insertChild(index - n, item);
         tw->setCurrentItem(item);
         tw->scrollToItem(item);
-        isNeedSave = true;
       }
     }
     if (ud == 1) {
@@ -1608,7 +1549,6 @@ void NotesList::moveBy(int ud) {
         parentItem->insertChild(index + n, item);
         tw->setCurrentItem(item);
         tw->scrollToItem(item);
-        isNeedSave = true;
       }
     }
   } else {
@@ -1621,7 +1561,6 @@ void NotesList::moveBy(int ud) {
         tw->setCurrentItem(item);
         tw->scrollToItem(item);
         tw->expandAll();
-        isNeedSave = true;
       }
     }
     if (ud == 1) {
@@ -1631,7 +1570,6 @@ void NotesList::moveBy(int ud) {
         tw->setCurrentItem(item);
         tw->scrollToItem(item);
         tw->expandAll();
-        isNeedSave = true;
       }
     }
   }
@@ -1705,6 +1643,8 @@ void NotesList::on_actionAdd_NoteBook_triggered() {
     setNoteBookCurrentIndex(index);
     clickNoteBook();
   }
+
+  saveNotesList();
 }
 
 void NotesList::on_actionDel_NoteBook_triggered() {
@@ -1727,9 +1667,8 @@ void NotesList::on_actionDel_NoteBook_triggered() {
 
   setNoteLabel();
 
-  bool save = isNeedSave;
   saveRecycle();
-  isNeedSave = save;
+
   saveNotesList();
 
   if (count == 0) {
@@ -1899,38 +1838,22 @@ void NotesList::on_actionAdd_Note_triggered() {
   int notebookIndex = getNoteBookCurrentIndex();
   if (notebookIndex < 0) return;
 
-  bool ok = false;
   QString text = "";
 
-  /*QInputDialog *idlg =
-      m_Method->inputDialog(tr("New Note"), tr("New Note Name"), "");
+  tw->setCurrentItem(pNoteBookItems.at(notebookIndex));
+  ui->editNote->setText(text);
 
-  if (QDialog::Accepted == idlg->exec()) {
-    ok = true;
-    text = idlg->textValue().trimmed();
-    idlg->close();
-  } else {
-    idlg->close();
-    return;
-  }*/
+  on_btnNewNote_clicked();
 
-  ok = true;
-  if (ok) {
-    tw->setCurrentItem(pNoteBookItems.at(notebookIndex));
-    ui->editNote->setText(text);
+  QTreeWidgetItem *childItem = tw->currentItem();
+  QString text3 = childItem->text(1);
+  m_Method->addItemToQW(mw_one->ui->qwNoteList, text, "", "", text3, 0);
 
-    on_btnNewNote_clicked();
+  int count = getNotesListCount();
+  setNotesListCurrentIndex(count - 1);
 
-    QTreeWidgetItem *childItem = tw->currentItem();
-    QString text3 = childItem->text(1);
-    m_Method->addItemToQW(mw_one->ui->qwNoteList, text, "", "", text3, 0);
-
-    int count = getNotesListCount();
-    setNotesListCurrentIndex(count - 1);
-
-    clickNoteList();
-    mw_one->on_btnEditNote_clicked();
-  }
+  clickNoteList();
+  mw_one->on_btnEditNote_clicked();
 
   setNoteLabel();
 }
@@ -1950,9 +1873,8 @@ void NotesList::on_actionDel_Note_triggered() {
 
   setNoteLabel();
 
-  bool save = isNeedSave;
   saveRecycle();
-  isNeedSave = save;
+
   saveNotesList();
 
   if (count == 0) {
@@ -2148,8 +2070,6 @@ bool NotesList::moveItem(QTreeWidget *twMain) {
     m_MoveTo->currentItem->addChild(new_item);
     tw->setCurrentItem(new_item);
   }
-
-  isNeedSave = true;
 
   return true;
 }
