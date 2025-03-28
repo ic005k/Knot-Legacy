@@ -6676,16 +6676,12 @@ QRadioButton::indicator:checked {
           </font>
          </property>
          <property name="styleSheet">
-          <string notr="true">QLabel
-{
-border: 0px solid gray;
-border-radius: 0px;
-/*padding: 0 8px;*/
-/*background: red;*/
- background-color:qlineargradient(spread:pad,x1:1,y1:0,x2:0,y2:0,stop:0 #FFAEB9,stop:1 #87CEFF);  
-color:black;
-selection-background-color: lightblue;
-}</string>
+          <string notr="true">QLabel {
+    /* 线性渐变背景，从浅灰色到稍深一点的浅灰色 */
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(230, 230, 230, 255), stop:1 rgba(210, 210, 210, 255));
+    /* 文字颜色设置为黑色 */
+    color: black;
+}    </string>
          </property>
          <property name="text">
           <string>Add</string>

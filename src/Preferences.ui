@@ -23,7 +23,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Font</string>
+      <string>Font:</string>
      </property>
     </widget>
    </item>
@@ -137,7 +137,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Additional Options</string>
+      <string>Additional Options:</string>
      </property>
     </widget>
    </item>
@@ -225,7 +225,7 @@ QCheckBox::indicator:checked{
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Data Encryption Protection</string>
+      <string>Data Encryption Protection:</string>
      </property>
     </widget>
    </item>

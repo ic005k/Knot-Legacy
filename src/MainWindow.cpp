@@ -420,6 +420,7 @@ MainWindow::MainWindow(QWidget *parent)
   m_Method->setAndroidFontSize(fontSize);
 
   init_CloudBacup();
+  setEncSyncStatusTip();
 }
 
 void MainWindow::initHardStepSensor() {
@@ -2006,7 +2007,7 @@ void MainWindow::on_twItemClicked() {
     max_day = getMaxDay(sy, sm);
 
     isShowDetails = false;
-    ui->lblStats->setStyleSheet(ui->lblTitleEditRecord->styleSheet());
+
     ui->lblStats->setText(strStats);
   }
 
@@ -3834,7 +3835,6 @@ void MainWindow::init_UIWidget() {
   ui->lblDetails->setStyleSheet(lblStyle);
   ui->lblTitle->setStyleSheet(lblStyle);
   ui->lblTitle_Report->setStyleSheet(lblStyle);
-  ui->lblStats->setStyleSheet(lblStyle);
 
   ui->tabMotion->setCornerWidget(ui->btnBackSteps, Qt::TopRightCorner);
   ui->tabMotion->setCurrentIndex(1);
@@ -4713,6 +4713,8 @@ void MainWindow::on_btnBack_One_clicked() {
   iniPreferences->setValue("/cloudbak/onedrive", ui->chkOneDrive->isChecked());
   iniPreferences->setValue("/cloudbak/webdav", ui->chkWebDAV->isChecked());
   iniPreferences->setValue("/cloudbak/autosync", ui->chkAutoSync->isChecked());
+
+  setEncSyncStatusTip();
 }
 
 void MainWindow::on_btnRefreshToken_clicked() {
@@ -6137,4 +6139,28 @@ void MainWindow::on_btnOpenEditFind_clicked() {
   isOpenSearchResult = true;
   mySearchText = ui->editFindNote->text().trimmed();
   on_btnEditNote_clicked();
+}
+
+void MainWindow::setEncSyncStatusTip() {
+  ui->lblStats->setStyleSheet(labelNormalStyleSheet);
+
+  if (m_Preferences->ui->chkZip->isChecked() && ui->chkAutoSync->isChecked() &&
+      ui->chkWebDAV->isChecked())
+    ui->lblStats->setStyleSheet(labelEnSyncStyleSheet);
+
+  if (m_Preferences->ui->chkZip->isChecked() && !ui->chkAutoSync->isChecked() &&
+      !ui->chkWebDAV->isChecked())
+    ui->lblStats->setStyleSheet(labelEncStyleSheet);
+
+  if (m_Preferences->ui->chkZip->isChecked() && !ui->chkAutoSync->isChecked() &&
+      ui->chkWebDAV->isChecked())
+    ui->lblStats->setStyleSheet(labelEncStyleSheet);
+
+  if (m_Preferences->ui->chkZip->isChecked() && ui->chkAutoSync->isChecked() &&
+      !ui->chkWebDAV->isChecked())
+    ui->lblStats->setStyleSheet(labelEncStyleSheet);
+
+  if (!m_Preferences->ui->chkZip->isChecked() && ui->chkAutoSync->isChecked() &&
+      ui->chkWebDAV->isChecked())
+    ui->lblStats->setStyleSheet(labelSyncStyleSheet);
 }

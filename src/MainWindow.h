@@ -146,6 +146,29 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
   Ui::MainWindow *ui;
 
+  QString labelNormalStyleSheet =
+      "QLabel { "
+      "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, "
+      "stop:0 rgba(230, 230, 230, 255), stop:1 rgba(210, 210, 210, 255)); "
+      "color: black; }";
+
+  QString labelEnSyncStyleSheet =
+      "background-color:qlineargradient(spread:pad,x1:1,y1:0,x2:0,y2:0,stop:0 "
+      "#FFAEB9,stop:1 #87CEFF); color:black;selection-background-color: "
+      "lightblue;";
+
+  QString labelSyncStyleSheet =
+      "QLabel { "
+      "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
+      "stop:0 rgba(255, 204, 204, 255), stop:1 rgba(220, 220, 220, 255)); "
+      "color: black; }";
+
+  QString labelEncStyleSheet =
+      "QLabel { "
+      "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
+      "stop:0 rgba(204, 229, 255, 255), stop:1 rgba(220, 220, 220, 255)); "
+      "color: black; }";
+
   QString mySearchText = "";
 
   bool isOpenSearchResult = false;
@@ -361,6 +384,8 @@ class MainWindow : public QMainWindow {
   void execDeskShortcut();
 
   void on_DelayCloseProgressBar();
+
+  void setEncSyncStatusTip();
 
  protected:
   void closeEvent(QCloseEvent *event) override;

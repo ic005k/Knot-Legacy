@@ -538,7 +538,10 @@ void Preferences::on_editValidate_textChanged(const QString& arg1) {
   on_editPassword_textChanged(arg1);
 }
 
-void Preferences::closeEvent(QCloseEvent* event) { Q_UNUSED(event); }
+void Preferences::closeEvent(QCloseEvent* event) {
+  Q_UNUSED(event);
+  mw_one->setEncSyncStatusTip();
+}
 
 QString Preferences::getZipPassword() {
   QString pass = "";
