@@ -255,18 +255,6 @@ void Notes::MD2Html(QString mdFile) {
   QString htmlString;
   htmlString = markdownToHtmlWithMath(strmd);
   StringToFile(htmlString, htmlFileName);
-
-  return;
-
-  QFile memofile1(htmlFileName);
-  if (memofile1.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-    QTextStream stream(&memofile1);
-    QTextEdit *edit = new QTextEdit();
-    edit->setPlainText(strmd);
-    edit->document()->setMarkdown(strmd, QTextDocument::MarkdownDialectGitHub);
-    stream << edit->toHtml().toUtf8();
-    memofile1.close();
-  }
 }
 
 void Notes::saveMainNotes() {
@@ -483,76 +471,6 @@ void Notes::on_KVChanged() {
       }
     }
   }
-}
-
-/*
-加密文件
-将文件读到字符串中，将每个字符都减1，然后将字符串写到文件中
-*/
-void Notes::encode(QString filename) {
-  QFile file(filename);
-  QTextStream in(&file);
-  QString str;
-  if (file.open(QIODevice::ReadWrite)) {
-    str = in.readAll();
-    qDebug() << str;
-
-    int len = str.length();
-    for (int i = 0; i < len; ++i) {
-      str[i] = QChar::fromLatin1(str[i].toLatin1() - 1);
-    }
-
-    qDebug() << str;
-  }
-  file.close();
-
-  QTextStream out(&file);
-  file.open(QIODevice::WriteOnly);
-  out << str;
-  file.close();
-}
-
-/*
-解密文件
-将文件读到字符串中，将每个字符加1，将字符写到文件中
-*/
-void Notes::decode(QString filename) {
-  QFile file(filename);
-  QTextStream fin(&file);
-  QString str;
-  if (file.open(QIODevice::ReadOnly)) {
-    str = fin.readAll();
-    qDebug() << str;
-
-    int len = str.length();
-    for (int i = 0; i < len; ++i) {
-      str[i] = QChar::fromLatin1(str[i].toLatin1() + 1);
-    }
-
-    qDebug() << str;
-  }
-  file.close();
-
-  QTextStream fout(&file);
-  file.open(QIODevice::WriteOnly);
-  fout << str;
-  file.close();
-}
-
-void Notes::encryption(const QString &fileName) {
-  QFile original(fileName);
-  if (!original.open(QIODevice::ReadOnly)) {
-    QMessageBox::warning(0, "Read11", "Read error!", QMessageBox::Yes);
-  }
-  QByteArray ba = original.readAll().toBase64();
-  original.close();
-
-  QFile dest(fileName);
-  if (!dest.open(QIODevice::WriteOnly)) {
-    QMessageBox::warning(0, "Write11", "Write error!", QMessageBox::Yes);
-  }
-  dest.write(ba);
-  dest.close();
 }
 
 QString Notes::Deciphering(const QString &fileName) {
@@ -1921,7 +1839,7 @@ void Notes::init_all_notes() {
     loadEmptyNote();
   }
 
-  mw_one->m_Notes->setVPos();
+  setVPos();
 }
 
 void Notes::loadEmptyNote() {
@@ -2127,6 +2045,8 @@ void Notes::openNotesUI() {
   mw_one->ui->btnNotesList->click();
 
   mw_one->closeProgress();
+
+  mainnotesLastModi = QFileInfo(iniDir + "mainnotes.ini").lastModified();
 }
 
 bool NoteIndexManager::loadIndex(const QString &indexPath) {
@@ -2261,7 +2181,6 @@ void Notes::openEditUI() {
 void Notes::openNotes() {
   notes_sync_files.clear();
   mw_one->m_NotesList->needDelWebDAVFiles.clear();
-  mainnotesLastModi = QFileInfo(iniDir + "mainnotes.ini").lastModified();
 
   if (mw_one->ui->chkAutoSync->isChecked() &&
       mw_one->ui->chkWebDAV->isChecked()) {
@@ -2319,8 +2238,8 @@ void Notes::openNotes() {
                 QString or_file = orgRemoteFiles.at(j);
                 QDateTime or_datetime = orgRemoteDateTime.at(j);
 
-                QString local_file = or_file;
-                local_file = iniDir + local_file.replace("KnotData/", "");
+                QString local_file = privateDir + or_file;
+
                 QDateTime local_datetime = QFileInfo(local_file).lastModified();
                 if (or_datetime > local_datetime ||
                     !QFile::exists(local_file)) {

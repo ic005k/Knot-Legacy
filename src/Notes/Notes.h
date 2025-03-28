@@ -92,10 +92,7 @@ class Notes : public QDialog {
   qlonglong curPos;
   qreal sliderPos;
   void loadNoteToQML();
-  void decode(QString filename);
-  void encode(QString filename);
 
-  void encryption(const QString &fileName);
   QString Deciphering(const QString &fileName);
 
   void init();

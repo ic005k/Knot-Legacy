@@ -3307,21 +3307,6 @@ void MainWindow::updateHardSensorSteps() {
 
 void MainWindow::on_btnNotes_clicked() { m_Notes->openNotes(); }
 
-QString MainWindow::decMemos(QString strDec, QString file) {
-  QString text;
-  QTextEdit *edit = new QTextEdit;
-  edit->setPlainText(strDec);
-  TextEditToFile(edit, file);
-  if (QFile(file).exists()) {
-    m_Notes->decode(file);
-    text = m_Notes->Deciphering(file);
-
-    QFile::remove(file);
-  }
-
-  return text;
-}
-
 void MainWindow::init_Sensors() {
   accel_pedometer = new SpecialAccelerometerPedometer(this);
 
@@ -5445,7 +5430,6 @@ void MainWindow::on_btnBackNoteList_clicked() {
 }
 
 void MainWindow::on_btnBackNoteRecycle_clicked() {
-  m_NotesList->saveRecycle();
   ui->frameNoteRecycle->hide();
   ui->frameNoteList->show();
 

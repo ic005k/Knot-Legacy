@@ -863,7 +863,6 @@ class MainWindow : public QMainWindow {
   void init_UIWidget();
   void init_Menu(QMenu *);
 
-  QString decMemos(QString strDec, QString file);
   void initHardStepSensor();
 
   void resetWinPos();
