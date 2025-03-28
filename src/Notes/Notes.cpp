@@ -271,15 +271,19 @@ void Notes::saveMainNotes() {
 
     qDebug() << "Save Note: " << currentMDFile;
 
-    QString zipMD = privateDir + "KnotData/memo/" +
-                    QFileInfo(currentMDFile).fileName() + ".zip";
-    m_Method->compressFile(zipMD, currentMDFile,
-                           mw_one->m_Preferences->getZipPassword());
-    notes_sync_files.append(zipMD);
+    updateMDFileToSyncLists(currentMDFile);
   }
 
   isTextChange = false;
   isNeedSync = true;
+}
+
+void Notes::updateMDFileToSyncLists(QString currentMDFile) {
+  QString zipMD = privateDir + "KnotData/memo/" +
+                  QFileInfo(currentMDFile).fileName() + ".zip";
+  m_Method->compressFile(zipMD, currentMDFile,
+                         mw_one->m_Preferences->getZipPassword());
+  notes_sync_files.append(zipMD);
 }
 
 void Notes::init_MainNotes() { loadNoteToQML(); }
@@ -2372,7 +2376,7 @@ void Notes::openNotes() {
     mw_one->m_Notes->openNotesUI();
 }
 
-void Notes::updateMainnotesIni() {
+void Notes::updateMainnotesIniToSyncLists() {
   QDateTime cDT = QFileInfo(iniDir + "mainnotes.ini").lastModified();
   qDebug() << "cDT=" << cDT << "mainnotesLastModi=" << mainnotesLastModi;
   if (cDT > mainnotesLastModi) {

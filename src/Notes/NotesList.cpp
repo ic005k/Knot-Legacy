@@ -1038,20 +1038,41 @@ void NotesList::setWinPos() {
 
 void NotesList::clearFiles() {
   QString tempDir = iniDir;
-  files.clear();
+  knot_all_files.clear();
   QStringList fmt = QString("zip;md;html;jpg;bmp;png;ini").split(';');
-  getAllFiles(tempDir, files, fmt);
+  getAllFiles(tempDir, knot_all_files, fmt);
 
   clearMD_Pic(tw);
   clearMD_Pic(twrb);
 
-  int count = files.count();
+  int count = knot_all_files.count();
   for (int i = 0; i < count; i++) {
-    QString filePath = files.at(i);
+    QString filePath = knot_all_files.at(i);
 
     QFile file(filePath);
     if (filePath.contains(".sync-conflict-") || filePath.contains(".png")) {
       file.remove();
+    }
+  }
+}
+
+void NotesList::clearInvalidMDFile() {
+  QStringList tempList = knot_all_files;
+  for (const QString &item : validMDFiles) {
+    tempList.removeAll(item);
+  }
+
+  QDir dir;
+  QString path = privateDir + "invalid_md/";
+  dir.mkpath(path);
+  for (int i = 0; i < tempList.count(); i++) {
+    QString m_file = tempList.at(i);
+    QFileInfo fi(m_file);
+    if (fi.suffix() == "md") {
+      QString new_file = path + fi.fileName();
+      QFile::remove(new_file);
+      QFile::copy(m_file, new_file);
+      QFile::remove(m_file);
     }
   }
 }
@@ -1079,12 +1100,12 @@ void NotesList::clearMD_Pic(QTreeWidget *tw) {
 void NotesList::removePicFromMD(QString mdfile) {
   QString txt = loadText(mdfile);
 
-  for (int i = 0; i < files.count(); i++) {
-    QString str0 = files.at(i);
+  for (int i = 0; i < knot_all_files.count(); i++) {
+    QString str0 = knot_all_files.at(i);
     str0.replace(iniDir + "memo/", "");
 
     if (txt.contains(str0)) {
-      files.removeAt(i);
+      knot_all_files.removeAt(i);
       i = 0;
     }
   }
@@ -1931,6 +1952,8 @@ void NotesList::on_actionImport_Note_triggered() {
     clickNoteBook();
     setNotesListCurrentIndex(getNotesListCount() - 1);
     clickNoteList();
+
+    mw_one->m_Notes->updateMDFileToSyncLists(currentMDFile);
   }
 }
 
@@ -2576,5 +2599,7 @@ QString NotesList::getSearchResultQmlFile() {
                             Q_RETURN_ARG(QVariant, item));
   return item.toString();
 }
+
+QStringList NotesList::getValidMDFiles() { return validMDFiles; }
 
 template class QFutureWatcher<ResultsMap>;

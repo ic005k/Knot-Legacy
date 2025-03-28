@@ -150,6 +150,8 @@ class NotesList : public QDialog {
 
   QString getSearchResultQmlFile();
 
+  QStringList getValidMDFiles();
+
  protected:
   bool eventFilter(QObject *watch, QEvent *evn) override;
 
@@ -207,12 +209,14 @@ class NotesList : public QDialog {
   void onSearchTextChanged(const QString &text);
 
  private:
+  QStringList validMDFiles;
+
   NotesSearchEngine *m_searchEngine;
   SearchResultModel *m_searchResultModel;
 
   QInputMethod *pAndroidKeyboard = QApplication::inputMethod();
 
-  QStringList files;
+  QStringList knot_all_files;
 
   void clearMD_Pic(QTreeWidget *tw);
   void removePicFromMD(QString mdfile);
@@ -245,6 +249,7 @@ class NotesList : public QDialog {
   void loadIndexTimestamp();
   bool m_isIndexing = false;  // 标记索引状态
   QString generatePreviewText(const SearchResult &result);
+  void clearInvalidMDFile();
 };
 
 class SearchMapper {

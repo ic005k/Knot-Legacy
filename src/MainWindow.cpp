@@ -5423,7 +5423,7 @@ void MainWindow::on_btnBackNoteList_clicked() {
   ui->frameNoteList->hide();
   ui->frameMain->show();
   m_NotesList->saveNoteBookVPos();
-  m_Notes->updateMainnotesIni();
+  m_Notes->updateMainnotesIniToSyncLists();
 
   isNeedSync = true;
   m_Notes->syncToWebDAV();

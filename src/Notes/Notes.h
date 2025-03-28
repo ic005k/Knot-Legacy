@@ -167,8 +167,10 @@ class Notes : public QDialog {
 
   void openNotes();
 
-  void updateMainnotesIni();
+  void updateMainnotesIniToSyncLists();
   QDateTime mainnotesLastModi;
+
+  void updateMDFileToSyncLists(QString currentMDFile);
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
