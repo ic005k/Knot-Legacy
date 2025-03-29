@@ -19,28 +19,38 @@
 /***************************************************************************/
 
 static mz_stream_vtbl mz_stream_zstd_vtbl = {
-    mz_stream_zstd_open,   mz_stream_zstd_is_open, mz_stream_zstd_read,           mz_stream_zstd_write,
-    mz_stream_zstd_tell,   mz_stream_zstd_seek,    mz_stream_zstd_close,          mz_stream_zstd_error,
-    mz_stream_zstd_create, mz_stream_zstd_delete,  mz_stream_zstd_get_prop_int64, mz_stream_zstd_set_prop_int64};
+    mz_stream_zstd_open,
+    mz_stream_zstd_is_open,
+    mz_stream_zstd_read,
+    mz_stream_zstd_write,
+    mz_stream_zstd_tell,
+    mz_stream_zstd_seek,
+    mz_stream_zstd_close,
+    mz_stream_zstd_error,
+    mz_stream_zstd_create,
+    mz_stream_zstd_delete,
+    mz_stream_zstd_get_prop_int64,
+    mz_stream_zstd_set_prop_int64
+};
 
 /***************************************************************************/
 
 typedef struct mz_stream_zstd_s {
-    mz_stream stream;
-    ZSTD_CStream *zcstream;
-    ZSTD_DStream *zdstream;
-    ZSTD_outBuffer out;
-    ZSTD_inBuffer in;
-    int32_t mode;
-    int32_t error;
-    uint8_t buffer[INT16_MAX];
-    int32_t buffer_len;
-    int64_t total_in;
-    int64_t total_out;
-    int64_t max_total_in;
-    int64_t max_total_out;
-    int8_t initialized;
-    int32_t preset;
+    mz_stream       stream;
+    ZSTD_CStream    *zcstream;
+    ZSTD_DStream    *zdstream;
+    ZSTD_outBuffer  out;
+    ZSTD_inBuffer   in;
+    int32_t         mode;
+    int32_t         error;
+    uint8_t         buffer[INT16_MAX];
+    int32_t         buffer_len;
+    int64_t         total_in;
+    int64_t         total_out;
+    int64_t         max_total_in;
+    int64_t         max_total_out;
+    int8_t          initialized;
+    uint32_t        preset;
 } mz_stream_zstd;
 
 /***************************************************************************/
@@ -58,7 +68,6 @@ int32_t mz_stream_zstd_open(void *stream, const char *path, int32_t mode) {
         zstd->out.dst = zstd->buffer;
         zstd->out.size = sizeof(zstd->buffer);
         zstd->out.pos = 0;
-        ZSTD_CCtx_setParameter(zstd->zcstream, ZSTD_c_compressionLevel, zstd->preset);
 #endif
     } else if (mode & MZ_OPEN_MODE_READ) {
 #ifdef MZ_ZIP_NO_DECOMPRESSION
@@ -97,6 +106,7 @@ int32_t mz_stream_zstd_read(void *stream, void *buf, int32_t size) {
     uint64_t total_in_after = 0;
     uint64_t total_out_before = 0;
     uint64_t total_out_after = 0;
+    int32_t total_in = 0;
     int32_t total_out = 0;
     int32_t in_bytes = 0;
     int32_t out_bytes = 0;
@@ -143,6 +153,7 @@ int32_t mz_stream_zstd_read(void *stream, void *buf, int32_t size) {
         in_bytes = (int32_t)(total_in_after - total_in_before);
         out_bytes = (int32_t)(total_out_after - total_out_before);
 
+        total_in += in_bytes;
         total_out += out_bytes;
 
         zstd->total_in += in_bytes;
@@ -300,8 +311,8 @@ int32_t mz_stream_zstd_set_prop_int64(void *stream, int32_t prop, int64_t value)
     mz_stream_zstd *zstd = (mz_stream_zstd *)stream;
     switch (prop) {
     case MZ_STREAM_PROP_COMPRESS_LEVEL:
-        if (value == MZ_COMPRESS_LEVEL_DEFAULT)
-            zstd->preset = ZSTD_CLEVEL_DEFAULT;
+        if (value < 0)
+            zstd->preset = 6;
         else
             zstd->preset = (int16_t)value;
         return MZ_OK;
@@ -312,13 +323,15 @@ int32_t mz_stream_zstd_set_prop_int64(void *stream, int32_t prop, int64_t value)
     return MZ_EXIST_ERROR;
 }
 
-void *mz_stream_zstd_create(void) {
-    mz_stream_zstd *zstd = (mz_stream_zstd *)calloc(1, sizeof(mz_stream_zstd));
+void *mz_stream_zstd_create(void **stream) {
+    mz_stream_zstd *zstd = NULL;
+    zstd = (mz_stream_zstd *)calloc(1, sizeof(mz_stream_zstd));
     if (zstd) {
         zstd->stream.vtbl = &mz_stream_zstd_vtbl;
         zstd->max_total_out = -1;
-        zstd->preset = ZSTD_CLEVEL_DEFAULT;
     }
+    if (stream)
+        *stream = zstd;
     return zstd;
 }
 

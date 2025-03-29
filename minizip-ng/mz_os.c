@@ -68,7 +68,7 @@ int32_t mz_path_remove_slash(char *path) {
 
 int32_t mz_path_has_slash(const char *path) {
     int32_t path_len = (int32_t)strlen(path);
-    if (path_len > 0 && path[path_len - 1] != '\\' && path[path_len - 1] != '/')
+    if (path[path_len - 1] != '\\' && path[path_len - 1] != '/')
         return MZ_EXIST_ERROR;
     return MZ_OK;
 }
@@ -136,12 +136,12 @@ int32_t mz_path_resolve(const char *path, char *output, int32_t max_output) {
 
     while (*source != 0 && max_output > 1) {
         check = source;
-        if (*check == '\\' || *check == '/')
+        if ((*check == '\\') || (*check == '/'))
             check += 1;
 
-        if (source == path || target == output || check != source) {
+        if ((source == path) || (target == output) || (check != source)) {
             /* Skip double paths */
-            if (*check == '\\' || *check == '/') {
+            if ((*check == '\\') || (*check == '/')) {
                 source += 1;
                 continue;
             }
@@ -149,7 +149,7 @@ int32_t mz_path_resolve(const char *path, char *output, int32_t max_output) {
                 check += 1;
 
                 /* Remove . if at end of string and not at the beginning */
-                if (*check == 0 && source != path && target != output) {
+                if ((*check == 0) && (source != path && target != output)) {
                     /* Copy last slash */
                     *target = *source;
                     target += 1;
@@ -158,7 +158,7 @@ int32_t mz_path_resolve(const char *path, char *output, int32_t max_output) {
                     continue;
                 }
                 /* Remove . if not at end of string */
-                else if (*check == '\\' || *check == '/') {
+                else if ((*check == '\\') || (*check == '/')) {
                     source += (check - source);
                     /* Skip slash if at beginning of string */
                     if (target == output && *source != 0)
@@ -168,14 +168,14 @@ int32_t mz_path_resolve(const char *path, char *output, int32_t max_output) {
                 /* Go to parent directory .. */
                 else if (*check == '.') {
                     check += 1;
-                    if (*check == 0 || (*check == '\\' || *check == '/')) {
+                    if ((*check == 0) || (*check == '\\' || *check == '/')) {
                         source += (check - source);
 
-                        /* Search backwards for previous slash or the start of the output string */
+                        /* Search backwards for previous slash */
                         if (target != output) {
                             target -= 1;
                             do {
-                                if (target == output || *target == '\\' || *target == '/')
+                                if ((*target == '\\') || (*target == '/'))
                                     break;
 
                                 target -= 1;
@@ -183,9 +183,9 @@ int32_t mz_path_resolve(const char *path, char *output, int32_t max_output) {
                             } while (target > output);
                         }
 
-                        if ((target == output) && *source != 0)
+                        if ((target == output) && (*source != 0))
                             source += 1;
-                        if ((*target == '\\' || *target == '/') && *source == 0)
+                        if ((*target == '\\' || *target == '/') && (*source == 0))
                             target += 1;
 
                         *target = 0;
@@ -283,9 +283,6 @@ int32_t mz_dir_make(const char *path) {
     char *match = NULL;
     char hold = 0;
 
-    if (!*path)
-        return MZ_OK;
-
     current_dir = strdup(path);
     if (!current_dir)
         return MZ_MEM_ERROR;
@@ -323,11 +320,10 @@ int32_t mz_file_get_crc(const char *path, uint32_t *result_crc) {
     int32_t err = MZ_OK;
     uint8_t buf[16384];
 
-    stream = mz_stream_os_create();
-    if (!stream)
-        return MZ_MEM_ERROR;
+    mz_stream_os_create(&stream);
 
     err = mz_stream_os_open(stream, path, MZ_OPEN_MODE_READ);
+
     if (err == MZ_OK) {
         do {
             read = mz_stream_os_read(stream, buf, sizeof(buf));

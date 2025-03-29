@@ -41,25 +41,27 @@
 
 /***************************************************************************/
 
-static mz_stream_vtbl mz_stream_os_vtbl = {mz_stream_os_open,
-                                           mz_stream_os_is_open,
-                                           mz_stream_os_read,
-                                           mz_stream_os_write,
-                                           mz_stream_os_tell,
-                                           mz_stream_os_seek,
-                                           mz_stream_os_close,
-                                           mz_stream_os_error,
-                                           mz_stream_os_create,
-                                           mz_stream_os_delete,
-                                           NULL,
-                                           NULL};
+static mz_stream_vtbl mz_stream_os_vtbl = {
+    mz_stream_os_open,
+    mz_stream_os_is_open,
+    mz_stream_os_read,
+    mz_stream_os_write,
+    mz_stream_os_tell,
+    mz_stream_os_seek,
+    mz_stream_os_close,
+    mz_stream_os_error,
+    mz_stream_os_create,
+    mz_stream_os_delete,
+    NULL,
+    NULL
+};
 
 /***************************************************************************/
 
 typedef struct mz_stream_posix_s {
-    mz_stream stream;
-    int32_t error;
-    FILE *handle;
+    mz_stream   stream;
+    int32_t     error;
+    FILE        *handle;
 } mz_stream_posix;
 
 /***************************************************************************/
@@ -174,10 +176,15 @@ int32_t mz_stream_os_error(void *stream) {
     return posix->error;
 }
 
-void *mz_stream_os_create(void) {
-    mz_stream_posix *posix = (mz_stream_posix *)calloc(1, sizeof(mz_stream_posix));
+void *mz_stream_os_create(void **stream) {
+    mz_stream_posix *posix = NULL;
+
+    posix = (mz_stream_posix *)calloc(1, sizeof(mz_stream_posix));
     if (posix)
         posix->stream.vtbl = &mz_stream_os_vtbl;
+    if (stream)
+        *stream = posix;
+
     return posix;
 }
 

@@ -406,7 +406,7 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 ######################### minizip-ng ##################################################
 INCLUDEPATH += $$PWD/minizip-ng
 
-# 在Qt的.pro文件中定义宏，关闭不需要的功能
+# 关闭不需要的功能
 DEFINES += MZ_ZLIB=ON \
            MZ_OPENSSL=ON \
            MZ_BZIP2=OFF \
@@ -445,11 +445,14 @@ SOURCES += \
 
     LIBS += -lShell32  # 确保路径创建支持宽字符
     DEFINES += MZ_USE_WIN32_API=ON
-    # Windows 示例路径（需替换为实际路径）
-    #INCLUDEPATH += "C:/OpenSSL-Win64/include"
     INCLUDEPATH += $$PWD/openssl
-    #LIBS += -L"C:/OpenSSL-Win64/lib/VC/x64/MD" -llibcrypto -llibssl
     LIBS += -L$$PWD/openssl/lib -llibcrypto -llibssl
+}
+
+android: {
+    INCLUDEPATH += $$PWD/android-openssl/include
+    LIBS += -L$$PWD/android-openssl/ \
+                -lssl -lcrypto
 }
 
 !win32 {
@@ -462,10 +465,9 @@ unix:!macx {
     DEFINES += MZ_USE_POSIX_API=ON
     LIBS += -lssl -lcrypto
 }
+
 macx {
     DEFINES += MZ_USE_POSIX_API=ON
-    #LIBS += -framework Security -framework CoreFoundation
-    #LIBS += -L/usr/local/opt/openssl/lib -lssl -lcrypto
 
     isEmpty(OPENSSL_PREFIX) {
         OPENSSL_PREFIX = $$system(brew --prefix openssl)
@@ -473,11 +475,6 @@ macx {
     INCLUDEPATH += $${OPENSSL_PREFIX}/include
     LIBS += -L$${OPENSSL_PREFIX}/lib -lssl -lcrypto
 
-    # Apple Silicon 额外配置
-    contains(QMAKE_HOST.arch, arm64) {
-        QMAKE_LFLAGS += -L/opt/homebrew/lib
-        QMAKE_CFLAGS += -I/opt/homebrew/include
-    }
 }
 
 ######################### OpenSSL #####################################################
@@ -485,9 +482,6 @@ macx {
 unix:!macx: {
     android: include(/home/zh/文档/android_openssl-master/openssl.pri)
 }
-
-# android: include($$PWD/android_openssl-master/openssl.pri)
-# ANDROID_EXTRA_LIBS = $$PWD/android_openssl-master/ssl_1.1/arm64-v8a/libcrypto_1_1.so $$PWD/android_openssl-master/ssl_1.1/arm64-v8a/libssl_1_1.so
 
 win32:{
     android: include(C:/Users/Administrator/Documents/android_openssl-master/openssl.pri)

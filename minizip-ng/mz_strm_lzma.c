@@ -23,28 +23,38 @@
 /***************************************************************************/
 
 static mz_stream_vtbl mz_stream_lzma_vtbl = {
-    mz_stream_lzma_open,   mz_stream_lzma_is_open, mz_stream_lzma_read,           mz_stream_lzma_write,
-    mz_stream_lzma_tell,   mz_stream_lzma_seek,    mz_stream_lzma_close,          mz_stream_lzma_error,
-    mz_stream_lzma_create, mz_stream_lzma_delete,  mz_stream_lzma_get_prop_int64, mz_stream_lzma_set_prop_int64};
+    mz_stream_lzma_open,
+    mz_stream_lzma_is_open,
+    mz_stream_lzma_read,
+    mz_stream_lzma_write,
+    mz_stream_lzma_tell,
+    mz_stream_lzma_seek,
+    mz_stream_lzma_close,
+    mz_stream_lzma_error,
+    mz_stream_lzma_create,
+    mz_stream_lzma_delete,
+    mz_stream_lzma_get_prop_int64,
+    mz_stream_lzma_set_prop_int64
+};
 
 /***************************************************************************/
 
 typedef struct mz_stream_lzma_s {
-    mz_stream stream;
+    mz_stream   stream;
     lzma_stream lstream;
-    int32_t mode;
-    int32_t error;
-    uint8_t buffer[INT16_MAX];
-    int32_t buffer_len;
-    int64_t total_in;
-    int64_t total_out;
-    int64_t max_total_in;
-    int64_t max_total_out;
-    int8_t initialized;
-    int8_t header;
-    int32_t header_size;
-    uint32_t preset;
-    int16_t method;
+    int32_t     mode;
+    int32_t     error;
+    uint8_t     buffer[INT16_MAX];
+    int32_t     buffer_len;
+    int64_t     total_in;
+    int64_t     total_out;
+    int64_t     max_total_in;
+    int64_t     max_total_out;
+    int8_t      initialized;
+    int8_t      header;
+    int32_t     header_size;
+    uint32_t    preset;
+    int16_t     method;
 } mz_stream_lzma;
 
 /***************************************************************************/
@@ -231,8 +241,6 @@ int32_t mz_stream_lzma_read(void *stream, void *buf, int32_t size) {
         }
     } while (lzma->lstream.avail_out > 0);
 
-    MZ_UNUSED(total_in);
-
     if (lzma->error != 0)
         return MZ_DATA_ERROR;
 
@@ -405,10 +413,10 @@ int32_t mz_stream_lzma_set_prop_int64(void *stream, int32_t prop, int64_t value)
     mz_stream_lzma *lzma = (mz_stream_lzma *)stream;
     switch (prop) {
     case MZ_STREAM_PROP_COMPRESS_LEVEL:
-        if (value == MZ_COMPRESS_LEVEL_DEFAULT)
-            lzma->preset = LZMA_PRESET_DEFAULT;
+        if (value >= 9)
+            lzma->preset = LZMA_PRESET_EXTREME;
         else
-            lzma->preset = (uint32_t)value;
+            lzma->preset = LZMA_PRESET_DEFAULT;
         break;
     case MZ_STREAM_PROP_COMPRESS_METHOD:
         lzma->method = (int16_t)value;
@@ -427,14 +435,19 @@ int32_t mz_stream_lzma_set_prop_int64(void *stream, int32_t prop, int64_t value)
     return MZ_OK;
 }
 
-void *mz_stream_lzma_create(void) {
-    mz_stream_lzma *lzma = (mz_stream_lzma *)calloc(1, sizeof(mz_stream_lzma));
+void *mz_stream_lzma_create(void **stream) {
+    mz_stream_lzma *lzma = NULL;
+
+    lzma = (mz_stream_lzma *)calloc(1, sizeof(mz_stream_lzma));
     if (lzma) {
         lzma->stream.vtbl = &mz_stream_lzma_vtbl;
         lzma->method = MZ_COMPRESS_METHOD_LZMA;
         lzma->preset = LZMA_PRESET_DEFAULT;
         lzma->max_total_out = -1;
     }
+    if (stream)
+        *stream = lzma;
+
     return lzma;
 }
 

@@ -1991,425 +1991,345 @@ bool Method::compressFile(const QString &zipPath, const QString &filePath,
   return true;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////
+
+// 压缩目录的主函数
+
 bool Method::compressDirectoryNG(const QString &zipPath,
                                  const QString &sourceDir,
                                  const QString &password) {
-  // 检查源目录是否存在
-  QDir sourceQDir(sourceDir);
-  if (!sourceQDir.exists()) {
-    qDebug() << "Source directory does not exist: " << sourceDir;
-    return false;
-  }
+  /* void *zip = mz_zip_create();
+   if (!zip) {
+     qDebug() << "Failed to create zip handle.";
+     return false;
+   }
 
-  void *writer = mz_zip_writer_create();
-  if (!writer) {
-    qDebug() << "Failed to create zip writer";
-    return false;
-  }
+   // 创建并打开文件流
+   void *stream = mz_stream_os_create();
+   if (!stream) {
+     mz_zip_delete(&zip);
+     qDebug() << "Failed to create stream.";
+     return false;
+   }
 
-  // 规范化 ZIP 文件路径
-  QString normalizedZipPath = QDir::cleanPath(zipPath);
+   int32_t err = mz_stream_os_open(stream, zipPath.toStdString().c_str(),
+                                   MZ_OPEN_MODE_CREATE);
+   if (err != MZ_OK) {
+     mz_stream_os_delete(&stream);
+     mz_zip_delete(&zip);
+     qDebug() << "Failed to open stream:" << zipPath;
+     return false;
+   }
 
-  // 检查并创建 ZIP 文件所在目录
-  QDir zipDir(QFileInfo(normalizedZipPath).absoluteDir());
-  if (!zipDir.exists()) {
-    if (!zipDir.mkpath(".")) {
-      qDebug() << "Failed to create directory: " << zipDir.absolutePath();
-      mz_zip_writer_delete(&writer);
-      return false;
-    }
-  }
+   // 打开 zip 文件
+   err = mz_zip_open(zip, stream, MZ_OPEN_MODE_CREATE);
+   if (err != MZ_OK) {
+     mz_stream_os_close(stream);
+     mz_stream_os_delete(&stream);
+     mz_zip_delete(&zip);
+     qDebug() << "Failed to open zip file:" << zipPath;
+     return false;
+   }
 
-  // 打开 ZIP 文件
-  if (!mz_zip_writer_open_file(writer, normalizedZipPath.toUtf8().constData(),
-                               0, 0)) {
-    qDebug() << "Failed to open zip file for writing: " << zipPath;
-    mz_zip_writer_delete(&writer);
-    return false;
-  }
+   QDir dir(sourceDir);
+   if (!dir.exists()) {
+     mz_zip_close(zip);
+     mz_zip_delete(&zip);
+     mz_stream_os_close(stream);
+     mz_stream_os_delete(&stream);
+     qDebug() << "Source directory does not exist:" << sourceDir;
+     return false;
+   }
 
-  // 设置密码和加密
-  if (!password.isEmpty()) {
-    mz_zip_writer_set_password(writer, password.toUtf8().constData());
-    mz_zip_writer_set_aes(writer, 1);  // 1 = AES-256
-  }
+   QFileInfoList fileList =
+       dir.entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot);
+   for (const QFileInfo &fileInfo : fileList) {
+     if (fileInfo.isDir()) {
+       // 递归处理子目录
+       QString subDirPath = fileInfo.absoluteFilePath();
+       QString relativePath = subDirPath.mid(sourceDir.length() + 1);
+       mz_zip_file file_info = {0};
+       file_info.filename = relativePath.toStdString().c_str();
+       file_info.compression_method = MZ_COMPRESS_METHOD_DEFLATE;
+       file_info.flag = MZ_ZIP_FLAG_UTF8;
+       file_info.version_madeby = 0;
+       file_info.version_needed = 0;
 
-  QString topLevelDir = sourceQDir.dirName();
+       if (!password.isEmpty()) {
+         file_info.flag |= MZ_ZIP_FLAG_ENCRYPTED;
+         file_info.aes_version = MZ_AES_VERSION;
+         file_info.aes_strength = MZ_AES_STRENGTH_256;
+       }
 
-  // 规范化源目录路径
-  QString normalizedSourceDir = QDir::cleanPath(sourceDir);
-  // 规范化顶层目录名
-  QString normalizedTopLevelDir = QDir::cleanPath(topLevelDir);
+       if (mz_zip_entry_is_open(zip) == MZ_OK) {
+         err = mz_zip_entry_close(zip);
+         if (err != MZ_OK) {
+           qDebug() << "Failed to close previous entry:" << relativePath;
+           continue;
+         }
+       }
 
-  // 递归添加目录
-  int32_t err = mz_zip_writer_add_path(
-      writer,                                    // 写入器句柄
-      normalizedSourceDir.toUtf8().constData(),  // 要压缩的目录路径
-      normalizedTopLevelDir.toUtf8()
-          .constData(),  // ZIP 内根目录名（保留顶层结构）
-      1,                 // include_path: 在 ZIP 路径中包含 root_path
-      1                  // recursive: 递归子目录
-  );
+       std::string passwordStr = password.toStdString();
+       err = mz_zip_entry_write_open(zip, &file_info, MZ_COMPRESS_LEVEL_DEFAULT,
+                                     0, passwordStr.c_str());
+       if (err != MZ_OK) {
+         qDebug() << "Failed to open directory entry:" << relativePath;
+         continue;
+       }
+       mz_zip_entry_close(zip);
 
-  // 检查错误
-  if (err != MZ_OK) {
-    qDebug() << "Failed to add directory to zip: " << sourceDir;
-    qDebug() << "Error code: " << err;
-    mz_zip_writer_close(writer);
-    mz_zip_writer_delete(&writer);
-    return false;
-  }
+       compressDirectoryNG(zipPath, subDirPath, password);
+     } else if (fileInfo.isFile()) {
+       // 处理文件
+       QString filePath = fileInfo.absoluteFilePath();
+       QString relativePath = filePath.mid(sourceDir.length() + 1);
+       mz_zip_file file_info = {0};
+       file_info.filename = relativePath.toStdString().c_str();
+       file_info.compression_method = MZ_COMPRESS_METHOD_DEFLATE;
+       file_info.flag = MZ_ZIP_FLAG_UTF8;
+       file_info.version_madeby = 0;
+       file_info.version_needed = 0;
 
-  mz_zip_writer_close(writer);
-  mz_zip_writer_delete(&writer);
+       if (!password.isEmpty()) {
+         file_info.flag |= MZ_ZIP_FLAG_ENCRYPTED;
+         file_info.aes_version = MZ_AES_VERSION;
+         file_info.aes_strength = MZ_AES_STRENGTH_256;
+       }
+
+       if (mz_zip_entry_is_open(zip) == MZ_OK) {
+         err = mz_zip_entry_close(zip);
+         if (err != MZ_OK) {
+           qDebug() << "Failed to close previous entry:" << relativePath;
+           continue;
+         }
+       }
+
+       std::string passwordStr = password.toStdString();
+       err = mz_zip_entry_write_open(zip, &file_info, MZ_COMPRESS_LEVEL_DEFAULT,
+                                     0, passwordStr.c_str());
+       if (err != MZ_OK) {
+         qDebug() << "Failed to open file entry:" << relativePath;
+         continue;
+       }
+
+       QFile file(filePath);
+       if (file.open(QIODevice::ReadOnly)) {
+         QByteArray data = file.readAll();
+         void *stream = NULL;
+         err = mz_zip_get_stream(zip, &stream);
+         if (err == MZ_OK) {
+           err = mz_stream_write(stream, data.constData(), data.size());
+           if (err != data.size()) {
+             qDebug() << "Failed to write file data:" << relativePath;
+           }
+         } else {
+           qDebug() << "Failed to get stream:" << err;
+         }
+
+       } else {
+         qDebug() << "Failed to open file:" << filePath;
+       }
+
+       mz_zip_entry_close(zip);
+     }
+   }
+
+   // 关闭并释放资源
+   mz_zip_close(zip);
+   mz_zip_delete(&zip);
+   mz_stream_os_close(stream);
+   mz_stream_os_delete(&stream);*/
+
   return true;
 }
+
 //////////////////////////////////////////////////////////////////////////////////
 
 bool Method::compressFileNG(const QString &zipPath, const QString &filePath,
                             const QString &password) {
-  void *writer = mz_zip_writer_create();
+  /* void *writer = mz_zip_writer_create();
 
-  if (!mz_zip_writer_open_file(writer, toNormalizedPath(zipPath).c_str(), 0,
-                               0)) {
-    mz_zip_writer_delete(&writer);
-    return false;
-  }
+   if (!mz_zip_writer_open_file(writer, toNormalizedPath(zipPath).c_str(), 0,
+                                0)) {
+     mz_zip_writer_delete(&writer);
+     return false;
+   }
 
-  if (!password.isEmpty()) {
-    mz_zip_writer_set_password(writer, password.toUtf8().constData());
-    mz_zip_writer_set_aes(writer, 1);
-  }
+   if (!password.isEmpty()) {
+     mz_zip_writer_set_password(writer, password.toUtf8().constData());
+     mz_zip_writer_set_aes(writer, 1);
+   }
 
-  QFileInfo fileInfo(filePath);
-  QString zipInternalPath = fileInfo.fileName();
+   QFileInfo fileInfo(filePath);
+   QString zipInternalPath = fileInfo.fileName();
 
-  // 使用正确的参数数量
-  int32_t err = mz_zip_writer_add_file(
-      writer,
-      toNormalizedPath(filePath).c_str(),        // 实际文件路径
-      toNormalizedPath(zipInternalPath).c_str()  // ZIP 内路径
-  );                                             // 无额外属性
+   // 使用正确的参数数量
+   int32_t err = mz_zip_writer_add_file(
+       writer,
+       toNormalizedPath(filePath).c_str(),        // 实际文件路径
+       toNormalizedPath(zipInternalPath).c_str()  // ZIP 内路径
+   );                                             // 无额外属性
 
-  mz_zip_writer_close(writer);
-  mz_zip_writer_delete(&writer);
-  return (err == MZ_OK);
+   mz_zip_writer_close(writer);
+   mz_zip_writer_delete(&writer);
+   return (err == MZ_OK);*/
+
+  return 0;
 }
 
-/*bool Method::decompressWithPasswordNG(const QString &zipPath,
-                                      const QString &extractDir,
-                                      const QString &password) {
-  void *reader = mz_zip_reader_create();
-  if (!reader) {
-    qDebug() << "Error: Failed to create ZIP reader handle";
-    return false;
-  }
-
-  // 检查文件是否存在
-  QFile file(zipPath);
-  if (!file.exists()) {
-    qDebug() << "Error: File does not exist:" << zipPath;
-    mz_zip_reader_delete(&reader);
-    return false;
-  }
-
-  // 检查文件权限
-  if (!file.permissions().testFlag(QFile::ReadUser)) {
-    qDebug() << "Error: No read permission for file:" << zipPath;
-    mz_zip_reader_delete(&reader);
-    return false;
-  }
-
-  // 打开 ZIP 文件
-  QString nativePath = QDir::toNativeSeparators(zipPath);
-  QByteArray m_path = nativePath.toUtf8();
-  const char *pathData = m_path.constData();
-
-  std::string quoted = "\"" + std::string(pathData) + "\"";
-  char *newStr = new char[quoted.size() + 1];
-  strcpy(newStr, quoted.c_str());
-
-  qDebug() << "Opening ZIP file:" << zipPath << m_path << pathData << newStr;
-
-  if (!mz_zip_reader_open_file(reader,
-                               "C:\Users\Administrator\.Knot\dict.zip")) {
-    int errorCode = 100;  // mz_zip_get_last_error(reader);
-    qDebug() << "Error: Failed to open ZIP file, error code:" << errorCode;
-    mz_zip_reader_delete(&reader);
-    return false;
-  }
-
-  // ==================== 3. 密码验证 ====================
-  bool hasEncryptedEntries = false;
-  bool passwordValid = true;
-
-  // 遍历所有条目检测加密状态
-  if (mz_zip_reader_goto_first_entry(reader) == MZ_OK) {
-    do {
-      mz_zip_entry *entry = nullptr;
-      if (mz_zip_reader_entry_get_info(reader, &entry) != MZ_OK) continue;
-
-      if (entry->flag & MZ_ZIP_FLAG_ENCRYPTED) {
-        hasEncryptedEntries = true;
-        if (password.isEmpty()) {
-          passwordValid = false;
-          break;
-        }
-
-        // 立即设置密码并验证
-        mz_zip_reader_set_password(reader, password.toUtf8().constData());
-        uint8_t buffer[1];
-        if (mz_zip_reader_entry_read(reader, buffer, 1) == MZ_PASSWORD_ERROR) {
-          passwordValid = false;
-          break;
-        }
-        mz_zip_reader_entry_close(reader);
-      }
-    } while (mz_zip_reader_goto_next_entry(reader) == MZ_OK);
-  }
-
-  if (!passwordValid || (hasEncryptedEntries && password.isEmpty())) {
-    mz_zip_reader_close(reader);
-    mz_zip_reader_delete(&reader);
-    return false;
-  }
-
-  // ==================== 4. 重新初始化读取器（关键修正） ====================
-  mz_zip_reader_close(reader);
-  mz_zip_reader_delete(&reader);
-
-  // 创建新的读取器实例
-  reader = mz_zip_reader_create();
-  if (!reader) return false;
-
-  // 重新打开文件（解压阶段）
-  if (!mz_zip_reader_open_file(reader,
-                               "C:\Users\Administrator\.Knot\dict.zip")) {
-    qDebug() << "[ERROR] Reopen failed:";
-    //<< mz_zip_get_error_string(mz_zip_get_last_error(reader));
-    mz_zip_reader_delete(&reader);
-    return false;
-  }
-
-  // 重新设置密码（重要！）
-  if (hasEncryptedEntries && !password.isEmpty()) {
-    mz_zip_reader_set_password(reader, password.toUtf8().constData());
-  }
-
-  // ==================== 5. 执行解压 ====================
-  bool success = false;
-  int32_t numEntries = 0;
-  // mz_zip_reader_get_num_entries(reader, 0);  // 获取条目总数
-  qDebug() << "Total entries in ZIP:" << numEntries;
-
-  if (mz_zip_reader_goto_first_entry(reader) == MZ_OK) {
-    success = true;
-    do {
-      mz_zip_entry *entry = nullptr;
-      if (mz_zip_reader_entry_get_info(reader, &entry) != MZ_OK) {
-        success = false;
-        break;
-      }
-
-      // 跳过目录条目（根据需求调整）
-      if (entry->uncompressed_size == 0 &&
-          entry->filename[strlen(entry->filename) - 1] == '/') {
-        qDebug() << "Skipping directory entry:" << entry->filename;
-        continue;
-      }
-
-      // 构建解压路径
-      QString fullPath =
-          QDir(extractDir).filePath(QString::fromUtf8(entry->filename));
-      qDebug() << "Extracting:" << entry->filename << "->" << fullPath;
-
-      // 创建父目录
-      QFileInfo fileInfo(fullPath);
-      if (!QDir().mkpath(fileInfo.path())) {
-        qDebug() << "[ERROR] mkpath failed:" << fileInfo.path();
-        success = false;
-        break;
-      }
-
-      // 解压文件
-      if (mz_zip_reader_entry_save_file(
-              reader, fullPath.toUtf8().constData()) != MZ_OK) {
-        qDebug() << "[ERROR] Extract failed:";
-        //<< mz_zip_get_error_string(mz_zip_get_last_error(reader));
-        success = false;
-        break;
-      }
-    } while (mz_zip_reader_goto_next_entry(reader) == MZ_OK);
-  } else {
-    qDebug() << "[WARN] No entries to extract";
-  }
-
-  // ==================== 6. 最终清理 ====================
-  mz_zip_reader_close(reader);
-  mz_zip_reader_delete(&reader);
-
-  // 验证至少解压了一个文件
-  if (success && numEntries > 0) {
-    QDir extractQDir(extractDir);
-    if (extractQDir.entryList(QDir::NoDotAndDotDot | QDir::AllEntries)
-            .isEmpty()) {
-      qDebug() << "[ERROR] No files extracted despite success flag";
-      return false;
-    }
-  }
-
-  return success;
-}*/
 /////////////////////////////////////////////////////////////////////////////////
 bool Method::decompressWithPasswordNG(const QString &zipPath,
                                       const QString &extractDir,
                                       const QString &password) {
   // 将 QString 转换为 const char*
-  const char *zipPathCStr = zipPath.toUtf8().constData();
-  const char *extractDirCStr = extractDir.toUtf8().constData();
-  const char *passwordCStr = password.toUtf8().constData();
+  /* const char *zipPathCStr = zipPath.toUtf8().constData();
+   const char *extractDirCStr = extractDir.toUtf8().constData();
+   const char *passwordCStr = password.toUtf8().constData();
 
-  // 创建并打开 ZIP 文件
-  void *zipHandle = mz_zip_create();
-  if (!zipHandle) {
-    qDebug() << "Failed to create zip handle";
-    return false;
-  }
+   // 创建并打开 ZIP 文件
+   void *zipHandle = mz_zip_create();
+   if (!zipHandle) {
+     qDebug() << "Failed to create zip handle";
+     return false;
+   }
 
-  void *stream = mz_stream_os_create();
-  if (!stream) {
-    qDebug() << "Failed to create stream";
-    mz_zip_delete(&zipHandle);
-    return false;
-  }
+   void *stream = mz_stream_os_create();
+   if (!stream) {
+     qDebug() << "Failed to create stream";
+     mz_zip_delete(&zipHandle);
+     return false;
+   }
 
-  if (mz_stream_open(stream, zipPathCStr, MZ_OPEN_MODE_READ) != MZ_OK) {
-    qDebug() << "Failed to open zip file: " << zipPath;
-    mz_stream_delete(&stream);
-    mz_zip_delete(&zipHandle);
-    return false;
-  }
+   if (mz_stream_open(stream, zipPathCStr, MZ_OPEN_MODE_READ) != MZ_OK) {
+     qDebug() << "Failed to open zip file: " << zipPath;
+     mz_stream_delete(&stream);
+     mz_zip_delete(&zipHandle);
+     return false;
+   }
 
-  if (mz_zip_open(zipHandle, stream, MZ_OPEN_MODE_READ) != MZ_OK) {
-    qDebug() << "Failed to open zip handle";
-    mz_stream_close(stream);
-    mz_stream_delete(&stream);
-    mz_zip_delete(&zipHandle);
-    return false;
-  }
+   if (mz_zip_open(zipHandle, stream, MZ_OPEN_MODE_READ) != MZ_OK) {
+     qDebug() << "Failed to open zip handle";
+     mz_stream_close(stream);
+     mz_stream_delete(&stream);
+     mz_zip_delete(&zipHandle);
+     return false;
+   }
 
-  int successfulExtractions = 0;
-  // 遍历 ZIP 文件中的每个条目
-  if (mz_zip_goto_first_entry(zipHandle) == MZ_OK) {
-    do {
-      mz_zip_file *fileInfo = nullptr;
-      if (mz_zip_entry_get_info(zipHandle, &fileInfo) != MZ_OK) {
-        qDebug() << "Failed to get entry info";
-        continue;
-      }
+   int successfulExtractions = 0;
+   // 遍历 ZIP 文件中的每个条目
+   if (mz_zip_goto_first_entry(zipHandle) == MZ_OK) {
+     do {
+       mz_zip_file *fileInfo = nullptr;
+       if (mz_zip_entry_get_info(zipHandle, &fileInfo) != MZ_OK) {
+         qDebug() << "Failed to get entry info";
+         continue;
+       }
 
-      // 打印更多文件信息
-      qDebug() << "File name: " << QString::fromUtf8(fileInfo->filename);
-      qDebug() << "Compressed size: " << fileInfo->compressed_size;
-      qDebug() << "Uncompressed size: " << fileInfo->uncompressed_size;
-      qDebug() << "CRC: " << fileInfo->crc;
-      qDebug() << "Compression flag: " << fileInfo->compression_method;
-      // 先计算按位与的值，再输出
-      int encryptionFlag = fileInfo->flag & MZ_ZIP_FLAG_ENCRYPTED;
-      qDebug() << "Encryption flag: " << encryptionFlag;
+       // 打印更多文件信息
+       qDebug() << "File name: " << QString::fromUtf8(fileInfo->filename);
+       qDebug() << "Compressed size: " << fileInfo->compressed_size;
+       qDebug() << "Uncompressed size: " << fileInfo->uncompressed_size;
+       qDebug() << "CRC: " << fileInfo->crc;
+       qDebug() << "Compression flag: " << fileInfo->compression_method;
+       // 先计算按位与的值，再输出
+       int encryptionFlag = fileInfo->flag & MZ_ZIP_FLAG_ENCRYPTED;
+       qDebug() << "Encryption flag: " << encryptionFlag;
 
-      // 构建提取路径
-      QString extractPathQStr = extractDir;
-      if (!extractPathQStr.endsWith('/') && !extractPathQStr.endsWith('\\')) {
-        extractPathQStr.append('/');
-      }
-      extractPathQStr.append(QString::fromUtf8(fileInfo->filename));
-      std::string extractPathStdStr = extractPathQStr.toStdString();
-      const char *extractPathCStr = extractPathStdStr.c_str();
+       // 构建提取路径
+       QString extractPathQStr = extractDir;
+       if (!extractPathQStr.endsWith('/') && !extractPathQStr.endsWith('\\')) {
+         extractPathQStr.append('/');
+       }
+       extractPathQStr.append(QString::fromUtf8(fileInfo->filename));
+       std::string extractPathStdStr = extractPathQStr.toStdString();
+       const char *extractPathCStr = extractPathStdStr.c_str();
 
-      // 打印调试信息
-      qDebug() << "Processing entry: " << QString::fromUtf8(fileInfo->filename);
-      qDebug() << "Extract path: " << extractPathQStr;
+       // 打印调试信息
+       qDebug() << "Processing entry: " <<
+   QString::fromUtf8(fileInfo->filename); qDebug() << "Extract path: " <<
+   extractPathQStr;
 
-      // 如果是目录，创建目录
-      if (mz_zip_entry_is_dir(zipHandle) == MZ_OK) {
-        if (mz_dir_make(extractPathCStr) != MZ_OK) {
-          qDebug() << "Failed to create directory: " << extractPathQStr;
-          // qDebug() << "Error code: " << mz_get_last_error(nullptr);
-        }
-        continue;
-      }
+       // 如果是目录，创建目录
+       if (mz_zip_entry_is_dir(zipHandle) == MZ_OK) {
+         if (mz_dir_make(extractPathCStr) != MZ_OK) {
+           qDebug() << "Failed to create directory: " << extractPathQStr;
+           // qDebug() << "Error code: " << mz_get_last_error(nullptr);
+         }
+         continue;
+       }
 
-      // 检查文件是否存在于压缩包中
-      if (fileInfo->uncompressed_size == 0) {
-        qDebug() << "File size is 0, skipping: "
-                 << QString::fromUtf8(fileInfo->filename);
-        continue;
-      }
+       // 检查文件是否存在于压缩包中
+       if (fileInfo->uncompressed_size == 0) {
+         qDebug() << "File size is 0, skipping: "
+                  << QString::fromUtf8(fileInfo->filename);
+         continue;
+       }
 
-      // 打开当前条目进行读取
-      qDebug() << "Trying to open entry: "
-               << QString::fromUtf8(fileInfo->filename);
-      int openResult =
-          mz_zip_entry_read_open(zipHandle, 0, nullptr);  // 不传递密码
-      if (openResult != MZ_OK) {
-        qDebug() << "Failed to open entry for reading: "
-                 << QString::fromUtf8(fileInfo->filename);
-        qDebug() << "mz_zip_entry_read_open return value: " << openResult;
-        // qDebug() << "Error code: " << mz_get_last_error(nullptr);
-        continue;
-      }
-      qDebug() << "Entry opened successfully: "
-               << QString::fromUtf8(fileInfo->filename);
+       // 打开当前条目进行读取
+       qDebug() << "Trying to open entry: "
+                << QString::fromUtf8(fileInfo->filename);
+       int openResult =
+           mz_zip_entry_read_open(zipHandle, 0, nullptr);  // 不传递密码
+       if (openResult != MZ_OK) {
+         qDebug() << "Failed to open entry for reading: "
+                  << QString::fromUtf8(fileInfo->filename);
+         qDebug() << "mz_zip_entry_read_open return value: " << openResult;
+         // qDebug() << "Error code: " << mz_get_last_error(nullptr);
+         continue;
+       }
+       qDebug() << "Entry opened successfully: "
+                << QString::fromUtf8(fileInfo->filename);
 
-      // 创建输出文件
-      void *outputStream = mz_stream_os_create();
-      if (!outputStream) {
-        qDebug() << "Failed to create output stream for: "
-                 << QString::fromUtf8(fileInfo->filename);
-        // qDebug() << "Error code: " << mz_get_last_error(nullptr);
-        mz_zip_entry_read_close(zipHandle, nullptr, nullptr, nullptr);
-        continue;
-      }
+       // 创建输出文件
+       void *outputStream = mz_stream_os_create();
+       if (!outputStream) {
+         qDebug() << "Failed to create output stream for: "
+                  << QString::fromUtf8(fileInfo->filename);
+         // qDebug() << "Error code: " << mz_get_last_error(nullptr);
+         mz_zip_entry_read_close(zipHandle, nullptr, nullptr, nullptr);
+         continue;
+       }
 
-      if (mz_stream_open(outputStream, extractPathCStr,
-                         MZ_OPEN_MODE_CREATE | MZ_OPEN_MODE_WRITE) != MZ_OK) {
-        qDebug() << "Failed to open output file: " << extractPathQStr;
-        // qDebug() << "Error code: " << mz_get_last_error(nullptr);
-        mz_stream_delete(&outputStream);
-        mz_zip_entry_read_close(zipHandle, nullptr, nullptr, nullptr);
-        continue;
-      }
+       if (mz_stream_open(outputStream, extractPathCStr,
+                          MZ_OPEN_MODE_CREATE | MZ_OPEN_MODE_WRITE) != MZ_OK) {
+         qDebug() << "Failed to open output file: " << extractPathQStr;
+         // qDebug() << "Error code: " << mz_get_last_error(nullptr);
+         mz_stream_delete(&outputStream);
+         mz_zip_entry_read_close(zipHandle, nullptr, nullptr, nullptr);
+         continue;
+       }
 
-      // 读取并写入数据
-      uint8_t buffer[4096];
-      int32_t bytesRead;
-      while ((bytesRead =
-                  mz_zip_entry_read(zipHandle, buffer, sizeof(buffer))) > 0) {
-        if (mz_stream_write(outputStream, buffer, bytesRead) != bytesRead) {
-          qDebug() << "Failed to write data to output file: "
-                   << extractPathQStr;
-          // qDebug() << "Error code: " << mz_get_last_error(nullptr);
-          break;
-        }
-      }
+       // 读取并写入数据
+       uint8_t buffer[4096];
+       int32_t bytesRead;
+       while ((bytesRead =
+                   mz_zip_entry_read(zipHandle, buffer, sizeof(buffer))) > 0) {
+         if (mz_stream_write(outputStream, buffer, bytesRead) != bytesRead) {
+           qDebug() << "Failed to write data to output file: "
+                    << extractPathQStr;
+           // qDebug() << "Error code: " << mz_get_last_error(nullptr);
+           break;
+         }
+       }
 
-      // 关闭流和条目
-      mz_stream_close(outputStream);
-      mz_stream_delete(&outputStream);
-      mz_zip_entry_read_close(zipHandle, nullptr, nullptr, nullptr);
-      successfulExtractions++;
+       // 关闭流和条目
+       mz_stream_close(outputStream);
+       mz_stream_delete(&outputStream);
+       mz_zip_entry_read_close(zipHandle, nullptr, nullptr, nullptr);
+       successfulExtractions++;
 
-    } while (mz_zip_goto_next_entry(zipHandle) == MZ_OK);
-  }
+     } while (mz_zip_goto_next_entry(zipHandle) == MZ_OK);
+   }
 
-  qDebug() << "Successfully extracted " << successfulExtractions << " files.";
+   qDebug() << "Successfully extracted " << successfulExtractions << " files.";
 
-  // 关闭并删除 ZIP 句柄和流
-  mz_zip_close(zipHandle);
-  mz_zip_delete(&zipHandle);
-  mz_stream_close(stream);
-  mz_stream_delete(&stream);
+   // 关闭并删除 ZIP 句柄和流
+   mz_zip_close(zipHandle);
+   mz_zip_delete(&zipHandle);
+   mz_stream_close(stream);
+   mz_stream_delete(&stream);
 
-  return true;
+   return true;*/
+
+  return 0;
 }

@@ -23,38 +23,36 @@
 /***************************************************************************/
 
 #ifndef INVALID_HANDLE_VALUE
-#  define INVALID_HANDLE_VALUE 0xFFFFFFFF
+#  define INVALID_HANDLE_VALUE (0xFFFFFFFF)
 #endif
 
 #ifndef INVALID_SET_FILE_POINTER
-#  define INVALID_SET_FILE_POINTER (DWORD)(-1)
-#endif
-
-#ifndef _WIN32_WINNT_WIN8
-#  define _WIN32_WINNT_WIN8 0x0602
+#  define INVALID_SET_FILE_POINTER ((DWORD)-1)
 #endif
 
 /***************************************************************************/
 
-static mz_stream_vtbl mz_stream_os_vtbl = {mz_stream_os_open,
-                                           mz_stream_os_is_open,
-                                           mz_stream_os_read,
-                                           mz_stream_os_write,
-                                           mz_stream_os_tell,
-                                           mz_stream_os_seek,
-                                           mz_stream_os_close,
-                                           mz_stream_os_error,
-                                           mz_stream_os_create,
-                                           mz_stream_os_delete,
-                                           NULL,
-                                           NULL};
+static mz_stream_vtbl mz_stream_os_vtbl = {
+    mz_stream_os_open,
+    mz_stream_os_is_open,
+    mz_stream_os_read,
+    mz_stream_os_write,
+    mz_stream_os_tell,
+    mz_stream_os_seek,
+    mz_stream_os_close,
+    mz_stream_os_error,
+    mz_stream_os_create,
+    mz_stream_os_delete,
+    NULL,
+    NULL
+};
 
 /***************************************************************************/
 
 typedef struct mz_stream_win32_s {
-    mz_stream stream;
-    HANDLE handle;
-    int32_t error;
+    mz_stream       stream;
+    HANDLE          handle;
+    int32_t         error;
 } mz_stream_win32;
 
 /***************************************************************************/
@@ -101,9 +99,11 @@ int32_t mz_stream_os_open(void *stream, const char *path, int32_t mode) {
         return MZ_PARAM_ERROR;
 
 #if _WIN32_WINNT >= _WIN32_WINNT_WIN8
-    win32->handle = CreateFile2(path_wide, desired_access, share_mode, creation_disposition, NULL);
+    win32->handle = CreateFile2(path_wide, desired_access, share_mode,
+        creation_disposition, NULL);
 #else
-    win32->handle = CreateFileW(path_wide, desired_access, share_mode, NULL, creation_disposition, flags_attribs, NULL);
+    win32->handle = CreateFileW(path_wide, desired_access, share_mode, NULL,
+        creation_disposition, flags_attribs, NULL);
 #endif
 
     mz_os_unicode_string_delete(&path_wide);
@@ -162,8 +162,8 @@ int32_t mz_stream_os_write(void *stream, const void *buf, int32_t size) {
     return written;
 }
 
-static int32_t mz_stream_os_seekinternal(HANDLE handle, LARGE_INTEGER large_pos, LARGE_INTEGER *new_pos,
-                                         uint32_t move_method) {
+static int32_t mz_stream_os_seekinternal(HANDLE handle, LARGE_INTEGER large_pos,
+    LARGE_INTEGER *new_pos, uint32_t move_method) {
 #if _WIN32_WINNT >= _WIN32_WINNT_WINXP
     BOOL success = FALSE;
     success = SetFilePointerEx(handle, large_pos, new_pos, move_method);
@@ -258,10 +258,15 @@ int32_t mz_stream_os_error(void *stream) {
     return win32->error;
 }
 
-void *mz_stream_os_create(void) {
-    mz_stream_win32 *win32 = (mz_stream_win32 *)calloc(1, sizeof(mz_stream_win32));
+void *mz_stream_os_create(void **stream) {
+    mz_stream_win32 *win32 = NULL;
+
+    win32 = (mz_stream_win32 *)calloc(1, sizeof(mz_stream_win32));
     if (win32)
         win32->stream.vtbl = &mz_stream_os_vtbl;
+    if (stream)
+        *stream = win32;
+
     return win32;
 }
 
