@@ -156,7 +156,7 @@ int main(int argc, char* argv[]) {
     QFile::remove(zipFile);
     QFile::copy(resFile, zipFile);
 
-    m_Method->decompressWithPassword(zipFile, privateDir, "");
+    m_Method->decompressWithPasswordNG(zipFile, privateDir, "");
   }
 
   // 初始化结巴分词

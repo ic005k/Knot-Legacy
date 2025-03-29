@@ -34,6 +34,8 @@ android: {
 
 }
 
+
+
 ####################### QuaZip ##############################################
 INCLUDEPATH += $$PWD/src/zlib
 DEFINES += QUAZIP_STATIC
@@ -400,6 +402,71 @@ DISTFILES += \
 
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+
+######################### minizip-ng ##################################################
+INCLUDEPATH += $$PWD/minizip-ng
+
+# 在Qt的.pro文件中定义宏，关闭不需要的功能
+DEFINES += MZ_ZLIB=ON \
+           MZ_OPENSSL=ON \
+           MZ_BZIP2=OFF \
+           MZ_LZMA=OFF \
+           MZ_ZSTD=OFF \
+           MZ_PKCRYPT=OFF
+
+# 包含路径
+INCLUDEPATH += $$PWD/minizip-ng
+
+# 定义宏，禁用 zlib-ng
+DEFINES += ZLIB_COMPAT=ON
+DEFINES += MZ_ZLIB=ON
+
+# 源文件（核心功能）
+SOURCES += \
+    $$PWD/minizip-ng/mz_crypt.c \
+    $$PWD/minizip-ng/mz_os.c \
+    $$PWD/minizip-ng/mz_strm.c \
+    $$PWD/minizip-ng/mz_zip.c \
+    $$PWD/minizip-ng/mz_strm_mem.c \
+    $$PWD/minizip-ng/mz_strm_zlib.c \
+    $$PWD/minizip-ng/mz_zip_rw.c \
+    $$PWD/minizip-ng/mz_crypt_openssl.c \
+    $$PWD/minizip-ng/mz_strm_buf.c \
+    $$PWD/minizip-ng/mz_strm_split.c
+
+# 启用 OpenSSL 加密支持
+DEFINES += MZ_USE_OPENSSL=ON
+
+# 链接 OpenSSL 库（根据平台配置）
+win32 {
+SOURCES += \
+    $$PWD/minizip-ng/mz_os_win32.c \
+    $$PWD/minizip-ng/mz_strm_os_win32.c
+
+    LIBS += -lShell32  # 确保路径创建支持宽字符
+    DEFINES += MZ_USE_WIN32_API=ON
+    # Windows 示例路径（需替换为实际路径）
+    #INCLUDEPATH += "C:/OpenSSL-Win64/include"
+    INCLUDEPATH += $$PWD/openssl
+    #LIBS += -L"C:/OpenSSL-Win64/lib/VC/x64/MD" -llibcrypto -llibssl
+    LIBS += -L$$PWD/openssl/lib -llibcrypto -llibssl
+}
+
+!win32 {
+SOURCES += \
+    $$PWD/minizip-ng/mz_os_posix.c \
+    $$PWD/minizip-ng/mz_strm_os_posix.c
+}
+
+unix:!macx {
+    DEFINES += MZ_USE_POSIX_API=ON
+    LIBS += -lssl -lcrypto
+}
+macx {
+    DEFINES += MZ_USE_POSIX_API=ON
+    LIBS += -framework Security -framework CoreFoundation
+    LIBS += -L/usr/local/opt/openssl/lib -lssl -lcrypto
+}
 
 ######################### OpenSSL #####################################################
 #Linux

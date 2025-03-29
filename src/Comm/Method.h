@@ -22,6 +22,15 @@
 #include <QTimer>
 #include <QWidget>
 
+// 在包含 minizip 头文件前定义以下宏
+#define MZ_ZIP_USE_CRYPTO  // 启用 AES 加密支持
+#define MZ_ZIP_USE_UTF8    // 强制使用 UTF-8 编码
+#include "mz.h"
+#include "mz_strm.h"
+#include "mz_strm_os.h"
+#include "mz_zip.h"
+#include "mz_zip_rw.h"
+
 namespace Ui {
 class Method;
 }
@@ -280,8 +289,18 @@ class Method : public QDialog {
   bool decompressWithPassword(const QString &zipPath, const QString &extractDir,
                               const QString &password);
 
-  bool compressFile(const QString &zipPath, const QString &filePath, const QString &password);
-  protected:
+  bool compressFile(const QString &zipPath, const QString &filePath,
+                    const QString &password);
+
+  bool compressDirectoryNG(const QString &zipPath, const QString &sourceDir,
+                           const QString &password);
+  bool compressFileNG(const QString &zipPath, const QString &filePath,
+                      const QString &password);
+  bool decompressWithPasswordNG(const QString &zipPath,
+                                const QString &extractDir,
+                                const QString &password);
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

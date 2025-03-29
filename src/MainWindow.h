@@ -166,7 +166,7 @@ class MainWindow : public QMainWindow {
   QString labelEncStyleSheet =
       "QLabel { "
       "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
-      "stop:0 rgba(204, 229, 255, 255), stop:1 rgba(220, 220, 220, 255)); "
+      "stop:0 #87CEFF, stop:1 rgba(220, 220, 220, 255)); "
       "color: black; }";
 
   QString mySearchText = "";
