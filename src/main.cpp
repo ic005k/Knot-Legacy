@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QDir>
 #include <QObject>
 #include <QQuickWindow>
 #include <QTranslator>
@@ -144,6 +145,9 @@ int main(int argc, char* argv[]) {
 
 #endif
 
+  QDir p_dir;
+  p_dir.mkpath(privateDir);
+
   strJBDict1 = privateDir + "dict/jieba.dict.utf8";
   strJBDict2 = privateDir + "dict/hmm_model.utf8";
   strJBDict3 = privateDir + "dict/user.dict.utf8";
@@ -156,7 +160,7 @@ int main(int argc, char* argv[]) {
     QFile::remove(zipFile);
     QFile::copy(resFile, zipFile);
 
-    m_Method->decompressWithPasswordNG(zipFile, privateDir, "");
+    m_Method->decompressWithPassword(zipFile, privateDir, "");
   }
 
   // 初始化结巴分词

@@ -326,6 +326,7 @@ class Method : public QDialog {
 
   void setMainTabCurrentIndex();
   QString quazipErrorString(int code);
+  bool addFilesToZip(void *zip_handle, const QString &currentDir, const QString &baseDir);
 };
 
 class IOSCircularProgress : public QWidget {
