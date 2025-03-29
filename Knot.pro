@@ -464,8 +464,20 @@ unix:!macx {
 }
 macx {
     DEFINES += MZ_USE_POSIX_API=ON
-    LIBS += -framework Security -framework CoreFoundation
-    LIBS += -L/usr/local/opt/openssl/lib -lssl -lcrypto
+    #LIBS += -framework Security -framework CoreFoundation
+    #LIBS += -L/usr/local/opt/openssl/lib -lssl -lcrypto
+
+    isEmpty(OPENSSL_PREFIX) {
+        OPENSSL_PREFIX = $$system(brew --prefix openssl)
+    }
+    INCLUDEPATH += $${OPENSSL_PREFIX}/include
+    LIBS += -L$${OPENSSL_PREFIX}/lib -lssl -lcrypto
+
+    # Apple Silicon 额外配置
+    contains(QMAKE_HOST.arch, arm64) {
+        QMAKE_LFLAGS += -L/opt/homebrew/lib
+        QMAKE_CFLAGS += -I/opt/homebrew/include
+    }
 }
 
 ######################### OpenSSL #####################################################

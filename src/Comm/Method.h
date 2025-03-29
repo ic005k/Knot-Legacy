@@ -26,6 +26,7 @@
 #define MZ_ZIP_USE_CRYPTO  // 启用 AES 加密支持
 #define MZ_ZIP_USE_UTF8    // 强制使用 UTF-8 编码
 #include "mz.h"
+#include "mz_os.h"
 #include "mz_strm.h"
 #include "mz_strm_os.h"
 #include "mz_zip.h"

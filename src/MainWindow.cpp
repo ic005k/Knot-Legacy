@@ -2716,8 +2716,8 @@ QString MainWindow::bakData(QString fileName) {
     //  mw_one->m_Notes->zipMemo();
 
     bool isZipResult = false;
-    isZipResult = compressDirectory(zipfile, iniDir + "memo",
-                                    m_Preferences->getZipPassword());
+    isZipResult = m_Method->compressDirectoryNG(
+        zipfile, iniDir + "memo", m_Preferences->getZipPassword());
     while (isZipResult == false)
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
