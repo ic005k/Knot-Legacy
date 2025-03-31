@@ -37,11 +37,18 @@ jobs:
           cached: 'false'
           modules: qtcharts qtwebengine
 
-      - name: Install OpenSSL via Homebrew
+      - name: Install Homebrew (x86_64)
         run: |
-          brew update  # 更新 Homebrew
-          brew install openssl  # 安装 OpenSSL
-          brew link openssl --force  # 强制链接（可选，防止路径问题）
+         # 卸载已存在的 arm64 Homebrew（如有）
+         if [ -d "/opt/homebrew" ]; then
+          sudo rm -rf /opt/homebrew
+         fi
+       
+      - name: Install OpenSSL via Homebrew (x86_64)
+        run: |
+         brew update
+         brew install openssl
+         brew link openssl --force
                     
       - uses: actions/checkout@v2
         with:
