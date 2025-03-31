@@ -19,9 +19,9 @@ std::string toNormalizedPath(const QString &qtPath) {
 
 extern MainWindow *mw_one;
 extern QTabWidget *tabData;
-extern QString iniDir, searchStr, currentMDFile, privateDir;
+extern QString iniDir, searchStr, currentMDFile, privateDir, encPassword;
 extern CategoryList *m_CategoryList;
-extern bool isEpub, isText, isPDF, loading, isDark, isAndroid;
+extern bool isEpub, isText, isPDF, loading, isDark, isAndroid, isEncrypt;
 extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
     s_y2, s_m2, s_d2, fontSize;
 extern QStringList readTextList, htmlFiles, listCategory;
@@ -1626,6 +1626,7 @@ bool Method::decompressWithPassword(const QString &zipPath,
   QuaZip zip(zipPath);
   if (!zip.open(QuaZip::mdUnzip)) {
     qWarning() << "[ERROR] Failed to open zip:" << zip.getZipError();
+    isPasswordError = true;
     return false;
   }
 
@@ -2130,6 +2131,37 @@ bool Method::decryptFile(const QString &inputPath, const QString &outputPath,
 
   EVP_CIPHER_CTX_free(ctx);
   return true;
+}
+
+QString Method::useDec(QString enc_file) {
+  if (isEncrypt) {
+    QString dec_file = enc_file + ".dec";
+    if (decryptFile(enc_file, dec_file, encPassword)) {
+      QFile::remove(enc_file);
+      QFile::rename(dec_file, enc_file);
+      return enc_file;
+    } else {
+      QFile::remove(dec_file);
+      return "";
+    }
+  }
+  return "";
+}
+
+QString Method::useEnc(QString m_file) {
+  if (isEncrypt) {
+    QString enc_file = m_file + ".enc";
+    if (encryptFile(m_file, enc_file, encPassword)) {
+      QFile::remove(m_file);
+      QFile::rename(enc_file, m_file);
+      return m_file;
+    } else {
+      QFile::remove(enc_file);
+      return "";
+    }
+  }
+
+  return "";
 }
 
 /////////////////////////////////////////////////////////////////////////////////////

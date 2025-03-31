@@ -11,8 +11,9 @@ QString orgLblStyle;
 extern MainWindow* mw_one;
 extern TextSelector* m_TextSelector;
 extern Method* m_Method;
-extern QString iniFile, iniDir, privateDir;
-extern bool loading, isBreak, zh_cn, isDark, isAndroid, isPasswordError;
+extern QString iniFile, iniDir, privateDir, encPassword;
+extern bool loading, isBreak, zh_cn, isDark, isAndroid, isPasswordError,
+    isEncrypt;
 extern int fontSize;
 
 extern WebDavHelper* listWebDavFiles(const QString& url,
@@ -203,6 +204,9 @@ void Todo::closeTodo() {
     QString todoZipFile = privateDir + "KnotData/todo.ini.zip";
     m_Method->compressFile(todoZipFile, todoFile,
                            mw_one->m_Preferences->getZipPassword());
+
+    QString enc_file = m_Method->useEnc(todoZipFile);
+    if (enc_file != "") todoZipFile = enc_file;
 
     QStringList files;
     files.append(todoZipFile);
@@ -1436,6 +1440,10 @@ void Todo::openTodo() {
                     [](bool success, QString error) {
                       qDebug() << (success ? "下载成功" : "下载失败: " + error);
                       QString zFile = privateDir + "KnotData/todo.ini.zip";
+
+                      QString dec_file = m_Method->useDec(zFile);
+                      if (dec_file != "") zFile = dec_file;
+
                       bool unzipResult = m_Method->decompressWithPassword(
                           zFile, privateDir + "KnotData",
                           mw_one->m_Preferences->getZipPassword());

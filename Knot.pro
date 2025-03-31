@@ -476,6 +476,7 @@ macx {
     }
     INCLUDEPATH += $${OPENSSL_PREFIX}/include
     LIBS += -L$${OPENSSL_PREFIX}/lib -lssl -lcrypto
+
 }
 
 #######################################################################################

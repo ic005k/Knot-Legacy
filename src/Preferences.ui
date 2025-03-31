@@ -225,7 +225,7 @@ QCheckBox::indicator:checked{
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Data Encryption Protection:</string>
+      <string>Data Encryption Protection(AES256):</string>
      </property>
     </widget>
    </item>

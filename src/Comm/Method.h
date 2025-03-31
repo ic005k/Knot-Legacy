@@ -309,6 +309,8 @@ class Method : public QDialog {
 
   bool encryptFile(const QString &inputPath, const QString &outputPath, const QString &password);
   bool decryptFile(const QString &inputPath, const QString &outputPath, const QString &password);
+  QString useDec(QString enc_file);
+  QString useEnc(QString m_file);
   protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 

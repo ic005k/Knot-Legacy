@@ -49,6 +49,7 @@ Preferences::Preferences(QWidget* parent)
 
   ui->chkAutoTime->hide();
   ui->chkAniEffects->hide();
+  ui->lblZipTip->hide();
 
   ui->lblFontSize->setText(tr("Font Size") + " : " + QString::number(fontSize));
   isFontChange = false;

@@ -138,10 +138,13 @@ void ImportDataThread::run() {
       zipfile = dec_file;
     } else {
       QFile::remove(dec_file);
+      isPasswordError = true;
     }
   }
-
-  if (isMenuImport || isDownData) mw_one->importBakData(zipfile);
+  qDebug() << "isPassError" << isPasswordError;
+  if (!isPasswordError) {
+    if (isMenuImport || isDownData) mw_one->importBakData(zipfile);
+  }
 
   emit isDone();
 }
@@ -150,8 +153,7 @@ void MainWindow::importDataDone() {
   if (isPasswordError) {
     closeProgress();
     ShowMessage *msg = new ShowMessage(this);
-    msg->showMsg("Knot", tr("The password of the compressed file is wrong!"),
-                 1);
+    msg->showMsg("Knot", tr("The password of the encrypted file is wrong!"), 1);
     return;
   }
 

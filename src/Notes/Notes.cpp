@@ -283,6 +283,10 @@ void Notes::updateMDFileToSyncLists(QString currentMDFile) {
                   QFileInfo(currentMDFile).fileName() + ".zip";
   m_Method->compressFile(zipMD, currentMDFile,
                          mw_one->m_Preferences->getZipPassword());
+
+  QString enc_file = m_Method->useEnc(zipMD);
+  if (enc_file != "") zipMD = enc_file;
+
   notes_sync_files.append(zipMD);
 }
 
@@ -1820,6 +1824,10 @@ void Notes::javaNoteToQMLNote() {
                   QFileInfo(currentMDFile).fileName() + ".zip";
   m_Method->compressFile(zipMD, currentMDFile,
                          mw_one->m_Preferences->getZipPassword());
+
+  QString enc_file = m_Method->useEnc(zipMD);
+  if (enc_file != "") zipMD = enc_file;
+
   notes_sync_files.append(zipMD);
 }
 
@@ -2286,6 +2294,10 @@ void Notes::openNotes() {
                           qDebug() << "file=" << file;
                           qDebug() << "pFile=" << pFile;
                           qDebug() << "kFile" << kFile;
+
+                          QString dec_file = m_Method->useDec(zFile);
+                          if (dec_file != "") zFile = dec_file;
+
                           bool unzipResult = m_Method->decompressWithPassword(
                               zFile, pDir,
                               mw_one->m_Preferences->getZipPassword());
@@ -2317,6 +2329,10 @@ void Notes::openNotes() {
                           qDebug() << "file=" << file;
                           qDebug() << "pFile=" << pFile;
                           qDebug() << "kFile" << kFile;
+
+                          QString dec_file = m_Method->useDec(zFile);
+                          if (dec_file != "") zFile = dec_file;
+
                           bool unzipResult = m_Method->decompressWithPassword(
                               zFile, pDir,
                               mw_one->m_Preferences->getZipPassword());
@@ -2383,6 +2399,9 @@ void Notes::updateMainnotesIniToSyncLists() {
     QString zipMainnotes = privateDir + "KnotData/mainnotes.ini.zip";
     m_Method->compressFile(zipMainnotes, iniDir + "mainnotes.ini",
                            mw_one->m_Preferences->getZipPassword());
+
+    QString enc_file = m_Method->useEnc(zipMainnotes);
+    if (enc_file != "") zipMainnotes = enc_file;
 
     mw_one->m_Notes->notes_sync_files.removeOne(zipMainnotes);
     mw_one->m_Notes->notes_sync_files.append(zipMainnotes);
