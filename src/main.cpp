@@ -156,11 +156,8 @@ int main(int argc, char* argv[]) {
       !QFile::exists(strJBDict3)) {
     QString resFile = ":/res/jbdict/dict.zip";
     deleteDirfile(privateDir + "dict");
-    QString zipFile = privateDir + "dict.zip";
-    QFile::remove(zipFile);
-    QFile::copy(resFile, zipFile);
 
-    m_Method->decompressWithPassword(zipFile, privateDir, "");
+    m_Method->decompressWithPasswordNG(resFile, privateDir, "");
   }
 
   // 初始化结巴分词

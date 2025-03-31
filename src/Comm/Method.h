@@ -29,6 +29,7 @@
 #include "mz_os.h"
 #include "mz_strm.h"
 #include "mz_strm_os.h"
+#include "mz_strm_zlib.h"
 #include "mz_zip.h"
 #include "mz_zip_rw.h"
 
@@ -326,7 +327,8 @@ class Method : public QDialog {
 
   void setMainTabCurrentIndex();
   QString quazipErrorString(int code);
-  bool addFilesToZip(void *zip_handle, const QString &currentDir, const QString &baseDir);
+  bool addFilesToZip(void *zip_handle, const QString &currentDir,
+                     const QString &baseDir);
 };
 
 class IOSCircularProgress : public QWidget {

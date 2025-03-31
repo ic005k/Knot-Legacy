@@ -35,9 +35,8 @@ android: {
 }
 
 
-
 ####################### QuaZip ##############################################
-INCLUDEPATH += $$PWD/src/zlib
+INCLUDEPATH += $$PWD/lib/zlib
 DEFINES += QUAZIP_STATIC
 
 DEFINES += QUAZIP_USE_AES
@@ -72,25 +71,6 @@ INCLUDEPATH += $$PWD/cppjieba/limonp/include
 ############################ cmark-gfm ########################################
 INCLUDEPATH += $$PWD/lib/cmark-gfm/include
 
-# 强制单线程链接
-#QMAKE_CXXFLAGS += -pthread
-#QMAKE_LFLAGS += -Wl,--no-as-needed -pthread
-
-win32:{
-# 静态库路径（Windows 示例）
-# Windows MSVC
-    #QMAKE_CXXFLAGS_RELEASE += /MT
-    #LIBS += $$PWD/lib/cmark-gfm/cmark-gfm_static.lib
-    #LIBS += $$PWD/lib/cmark-gfm/cmark-gfm-extensions_static.lib
-    # 必须链接 Windows 系统库
-    #LIBS += -ladvapi32 -luserenv
-}
-# Linux额外依赖
-unix:!macx: {
-    #LIBS += $$PWD/lib/cmark-gfm/linux/libcmark-gfm.a
-    #LIBS += -lpthread
-}
-
 #################################################################################
 
 
@@ -102,6 +82,21 @@ unix:!macx: {
 #           QT_ANGLE_PLATFORM
 
 SOURCES += \
+    lib/zlib/adler32.c \
+    lib/zlib/compress.c \
+    lib/zlib/crc32.c \
+    lib/zlib/deflate.c \
+    lib/zlib/gzclose.c \
+    lib/zlib/gzlib.c \
+    lib/zlib/gzread.c \
+    lib/zlib/gzwrite.c \
+    lib/zlib/infback.c \
+    lib/zlib/inffast.c \
+    lib/zlib/inflate.c \
+    lib/zlib/inftrees.c \
+    lib/zlib/trees.c \
+    lib/zlib/uncompr.c \
+    lib/zlib/zutil.c \
     src/AboutThis.cpp \
     src/AutoUpdate.cpp \
     src/CategoryList.cpp \
@@ -198,24 +193,20 @@ SOURCES += \
     src/quazip/quazipnewinfo.cpp \
     src/quazip/unzip.c \
     src/quazip/zip.c \
-    src/zlib/adler32.c \
-    src/zlib/compress.c \
-    src/zlib/crc32.c \
-    src/zlib/deflate.c \
-    src/zlib/gzclose.c \
-    src/zlib/gzlib.c \
-    src/zlib/gzread.c \
-    src/zlib/gzwrite.c \
-    src/zlib/infback.c \
-    src/zlib/inffast.c \
-    src/zlib/inflate.c \
-    src/zlib/inftrees.c \
-    src/zlib/trees.c \
-    src/zlib/uncompr.c \
-    src/zlib/zutil.c
 
 
 HEADERS += \
+    lib/zlib/crc32.h \
+    lib/zlib/deflate.h \
+    lib/zlib/gzguts.h \
+    lib/zlib/inffast.h \
+    lib/zlib/inffixed.h \
+    lib/zlib/inflate.h \
+    lib/zlib/inftrees.h \
+    lib/zlib/trees.h \
+    lib/zlib/zconf.h \
+    lib/zlib/zlib.h \
+    lib/zlib/zutil.h \
     src/AboutThis.h \
     src/AutoUpdate.h \
     src/CategoryList.h \
@@ -281,17 +272,6 @@ HEADERS += \
     src/quazip/quazipnewinfo.h \
     src/quazip/unzip.h \
     src/quazip/zip.h \
-    src/zlib/crc32.h \
-    src/zlib/deflate.h \
-    src/zlib/gzguts.h \
-    src/zlib/inffast.h \
-    src/zlib/inffixed.h \
-    src/zlib/inflate.h \
-    src/zlib/inftrees.h \
-    src/zlib/trees.h \
-    src/zlib/zconf.h \
-    src/zlib/zlib.h \
-    src/zlib/zutil.h \
     win.rc
 
 FORMS += \
@@ -349,7 +329,6 @@ DISTFILES += \
     android/res/values/libs.xml \
     android/res/values/libs.xml \
     android/res/xml/qtprovider_paths.xml \
-    src/3rdparty/zlib.pri \
     src/cmark-gfm/src/case_fold_switch.inc \
     src/cmark-gfm/src/entities.inc \
     src/cn.qm \
@@ -395,7 +374,6 @@ DISTFILES += \
     src/qmlsrc/type.qml \
     src/qmlsrc/viewcate.qml \
     src/quazip/quazip.pc.cmakein \
-    src/qzip/zlib.pri \
     src/reader.qml \
     src/steps.qml
 
@@ -404,38 +382,33 @@ DISTFILES += \
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 ######################### minizip-ng ##################################################
+#INCLUDEPATH += $$PWD/lib/zlib-ng
 INCLUDEPATH += $$PWD/minizip-ng
 
 # 关闭不需要的功能
-DEFINES += MZ_ZLIB=ON \
-           MZ_OPENSSL=ON \
-           MZ_BZIP2=OFF \
-           MZ_LZMA=OFF \
-           MZ_ZSTD=OFF \
-           MZ_PKCRYPT=OFF
+DEFINES += MZ_ZLIB=1 \
+           ZLIB_COMPAT=1 \
+           MZ_OPENSSL=1 \
+           MZ_BZIP2=0 \
+           MZ_LZMA=0 \
+           MZ_ZSTD=0 \
+           MZ_PKCRYPT=0
 
 # 包含路径
 INCLUDEPATH += $$PWD/minizip-ng
 
-# 定义宏，禁用 zlib-ng
-DEFINES += ZLIB_COMPAT=ON
-DEFINES += MZ_ZLIB=ON
-
 # 源文件（核心功能）
 SOURCES += \
     $$PWD/minizip-ng/mz_crypt.c \
-    $$PWD/minizip-ng/mz_os.c \
-    $$PWD/minizip-ng/mz_strm.c \
-    $$PWD/minizip-ng/mz_zip.c \
-    $$PWD/minizip-ng/mz_strm_mem.c \
-    $$PWD/minizip-ng/mz_strm_zlib.c \
-    $$PWD/minizip-ng/mz_zip_rw.c \
     $$PWD/minizip-ng/mz_crypt_openssl.c \
+    $$PWD/minizip-ng/mz_os.c \
+    $$PWD/minizip-ng/mz_zip.c \
+    $$PWD/minizip-ng/mz_strm.c \
+    $$PWD/minizip-ng/mz_strm_mem.c \
     $$PWD/minizip-ng/mz_strm_buf.c \
-    $$PWD/minizip-ng/mz_strm_split.c
-
-# 启用 OpenSSL 加密支持
-DEFINES += MZ_USE_OPENSSL=ON
+    $$PWD/minizip-ng/mz_strm_split.c \
+    $$PWD/minizip-ng/mz_strm_zlib.c \
+    $$PWD/minizip-ng/mz_zip_rw.c
 
 # 链接 OpenSSL 库（根据平台配置）
 win32 {
@@ -445,6 +418,9 @@ SOURCES += \
 
     LIBS += -lShell32  # 确保路径创建支持宽字符
     DEFINES += MZ_USE_WIN32_API=ON
+    DEFINES += UNICODE _UNICODE  # 强制启用 Unicode API
+    LIBS += -lkernel32 -luser32 -lole32  # 基础 Windows API 库
+
     INCLUDEPATH += $$PWD/openssl
     LIBS += -L$$PWD/openssl/lib -llibcrypto -llibssl
 }

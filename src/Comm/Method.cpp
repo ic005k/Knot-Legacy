@@ -2011,80 +2011,89 @@ bool Method::compressFileNG(const QString &zipPath, const QString &filePath,
 bool Method::decompressWithPasswordNG(const QString &zipPath,
                                       const QString &extractDir,
                                       const QString &password) {
-  void *reader = nullptr;
-  int32_t err = MZ_OK;
-  int32_t err_close = MZ_OK;
+  // void *handle = mz_zip_reader_create();
+  // void *stream = mz_stream_os_create();
 
-  // 创建zip读取器
-  mz_zip_reader_create(&reader);
-  mz_zip_reader_set_password(reader, password.toUtf8().constData());
+  // qDebug() << "Zlib 版本:" << zlibVersion();
 
-  // 转换路径为本地格式
-  QString nativeZipPath = QDir::toNativeSeparators(zipPath);
-  QString nativeExtractDir = QDir::toNativeSeparators(extractDir);
+  // 创建操作系统文件流
+  void *file_stream = nullptr;
+  mz_stream_os_create(&file_stream);
+  if (!file_stream) {
+    qDebug() << "创建文件流失败";
+    return false;
+  }
 
-  // 打开zip文件
-  err = mz_zip_reader_open_file(reader, nativeZipPath.toUtf8().constData());
+  // 打开文件流
+  QByteArray pathBytes = QDir::toNativeSeparators(zipPath).toUtf8();
+  int32_t err =
+      mz_stream_os_open(file_stream, pathBytes.constData(), MZ_OPEN_MODE_READ);
   if (err != MZ_OK) {
-    if (err == MZ_PARAM_ERROR && !password.isEmpty()) {
-      std::cerr << "Password is incorrect when opening the archive."
-                << std::endl;
-    } else {
-      std::cerr << "Error opening archive: " << err << std::endl;
-    }
-    mz_zip_reader_delete(&reader);
+    qDebug() << "打开文件流失败，错误码:" << err;
+    mz_stream_os_delete(&file_stream);
     return false;
   }
 
-  // 创建提取目录
-  QDir dir(nativeExtractDir);
-  if (!dir.exists()) {
-    if (!dir.mkpath(".")) {
-      std::cerr << "Failed to create extraction directory." << std::endl;
-      mz_zip_reader_close(reader);
-      mz_zip_reader_delete(&reader);
-      return false;
-    }
-  }
-
-  // 尝试读取第一个条目信息，检查密码是否正确
-  err = mz_zip_reader_goto_first_entry(reader);
-  if (err != MZ_OK && err != MZ_END_OF_LIST) {
-    if (err == MZ_PARAM_ERROR && !password.isEmpty()) {
-      std::cerr << "Password is incorrect when accessing the first entry."
-                << std::endl;
-    } else {
-      std::cerr << "Error going to the first entry: " << err << std::endl;
-    }
-    mz_zip_reader_close(reader);
-    mz_zip_reader_delete(&reader);
+  // 创建 ZIP 阅读器
+  void *handle = nullptr;
+  mz_zip_reader_create(&handle);
+  if (!handle) {
+    qDebug() << "创建 ZIP 阅读器失败，错误码:" << err;
+    mz_stream_os_delete(&file_stream);
     return false;
   }
 
-  // 保存所有条目到提取目录
-  err = mz_zip_reader_save_all(reader, nativeExtractDir.toUtf8().constData());
-  if (err == MZ_END_OF_LIST) {
-    std::cout << "No files in archive." << std::endl;
-  } else if (err != MZ_OK) {
-    if (err == MZ_PARAM_ERROR && !password.isEmpty()) {
-      std::cerr << "Password is incorrect during extraction." << std::endl;
-    } else {
-      std::cerr << "Error saving entries to disk: " << err << std::endl;
+  // 绑定文件流到 ZIP 阅读器
+  err = mz_zip_reader_open(handle, file_stream);
+  if (err != MZ_OK) {
+    qDebug() << "打开 ZIP 文件失败，错误码:" << err;
+    mz_zip_reader_delete(&handle);
+    mz_stream_os_delete(&file_stream);
+    return false;
+  }
+
+  // 3. 解压每个文件
+  err = mz_zip_reader_goto_first_entry(handle);
+  while (err == MZ_OK) {
+    mz_zip_file *file_info = nullptr;
+    if (mz_zip_reader_entry_get_info(handle, &file_info) == MZ_OK &&
+        file_info) {
+      QString filePath =
+          QDir(extractDir).filePath(QString::fromUtf8(file_info->filename));
+      QFileInfo fileInfo(filePath);
+      QDir().mkpath(fileInfo.absolutePath());
+
+      qDebug() << "当前条目:" << filePath << "文件名:" << file_info->filename
+               << "压缩方法:" << file_info->compression_method
+               << "加密标志:" << (file_info->flag & MZ_ZIP_FLAG_ENCRYPTED)
+               << "原始大小:" << file_info->uncompressed_size;
+
+      QFile file(filePath);
+      if (file.open(QIODevice::WriteOnly)) {
+        int32_t open_err = mz_zip_reader_entry_open(handle);
+        if (open_err == MZ_OK) {
+          char buffer[4096];
+          int32_t bytes_read = 0;
+          while ((bytes_read = mz_zip_reader_entry_read(handle, buffer,
+                                                        sizeof(buffer))) > 0) {
+            file.write(buffer, bytes_read);
+          }
+          qDebug() << "bytes_read=" << bytes_read;
+          mz_zip_reader_entry_close(handle);
+        } else {
+          qDebug() << "mz_zip_reader_entry_open 获取条目出错 " << open_err;
+        }
+        file.close();
+      }
     }
-    mz_zip_reader_close(reader);
-    mz_zip_reader_delete(&reader);
-    return false;
+    err = mz_zip_reader_goto_next_entry(handle);
   }
 
-  // 关闭读取器
-  err_close = mz_zip_reader_close(reader);
-  if (err_close != MZ_OK) {
-    std::cerr << "Error closing archive for reading: " << err_close
-              << std::endl;
-    mz_zip_reader_delete(&reader);
-    return false;
-  }
+  // 4. 清理资源
+  mz_zip_reader_close(handle);
+  mz_zip_reader_delete(&handle);
+  mz_stream_os_close(file_stream);
+  mz_stream_os_delete(&file_stream);
 
-  mz_zip_reader_delete(&reader);
   return true;
 }
