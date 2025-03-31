@@ -340,7 +340,6 @@ void MainWindow::SaveFile(QString SaveType) {
       if (QFile(ini_file).exists()) QFile(ini_file).remove();
 
       saveData(tw, i);
-      saveRemarks(i);
     }
 
     saveTab();
@@ -351,7 +350,6 @@ void MainWindow::SaveFile(QString SaveType) {
   }
 
   if (SaveType == "notes") {
-    saveRemarks(tabData->currentIndex());
   }
 }
 
@@ -729,11 +727,6 @@ void MainWindow::init_TotalData() {
   RegTab.setIniCodec("utf-8");
 #endif
 
-  ini_file1 = iniDir + "notes.ini";
-  QSettings RegNotes(ini_file1, QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  RegNotes.setIniCodec("utf-8");
-#endif
   int TabCount = RegTab.value("TabCount", 0).toInt();
 
   clearAll();
@@ -753,9 +746,6 @@ void MainWindow::init_TotalData() {
     addItem(tabText, "", "", "", 0);
 
     RegTab.setValue("twName" + QString::number(i), name);
-
-    QString strNotes = RegNotes.value("/" + name + "/Note").toString();
-    ui->tabWidget->setTabToolTip(i, strNotes);
   }
 
   if (TabCount == 0) {
@@ -2248,17 +2238,6 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
   m_Method->clickMainDateData();
 }
 
-void MainWindow::saveRemarks(int tabIndex) {
-  if (loading) return;
-  QSettings Reg(iniDir + "notes.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-  QTreeWidget *tw = (QTreeWidget *)tabData->widget(tabIndex);
-  QString name = tw->objectName();
-  Reg.setValue("/" + name + "/Note", tabData->tabToolTip(tabIndex));
-}
-
 void MainWindow::on_btnModifyRecord_clicked() {
   m_TextSelector->close();
   m_TextSelector = new TextSelector(mw_one);
@@ -2833,6 +2812,7 @@ bool MainWindow::importBakData(QString fileName) {
 
     QFile file(iniDir + "memo/tab.ini");
     if (!file.exists()) {
+      deleteDirfile(iniDir + "memo");
       QString oldPath = iniDir + "memo_bak";
       QDir dirOld(oldPath);
       dirOld.rename(oldPath, iniDir + "memo");
@@ -2844,14 +2824,27 @@ bool MainWindow::importBakData(QString fileName) {
     isZipOK = true;
     deleteDirfile(iniDir + "memo_bak");
 
-    // Remove old ini files
+    QString bakFileFrom;
+    QSettings Reg(iniDir + "memo/osflag.ini", QSettings::IniFormat);
+    bakFileFrom = Reg.value("/os/", "mobile").toString();
+
+    if (bakFileFrom == "desktop") {
+      deleteDirfile(privateDir + "gps");
+      m_Reader->copyDirectoryFiles(iniDir + "memo/gps", privateDir + "gps",
+                                   true);
+    }
+
     QStringList iniFiles;
     QStringList fmt;
     fmt.append("ini");
-    m_NotesList->getAllFiles(iniDir, iniFiles, fmt);
-    for (int i = 0; i < iniFiles.count(); i++) {
-      QString file = iniFiles.at(i);
-      if (!file.contains("/memo/")) QFile::remove(file);
+
+    // Remove old ini files
+    if (bakFileFrom == "mobile") {
+      m_NotesList->getAllFiles(iniDir, iniFiles, fmt);
+      for (int i = 0; i < iniFiles.count(); i++) {
+        QString file = iniFiles.at(i);
+        if (!file.contains("/memo/")) QFile::remove(file);
+      }
     }
 
     // Copy new ini files
@@ -2860,10 +2853,29 @@ bool MainWindow::importBakData(QString fileName) {
     for (int i = 0; i < iniFiles.count(); i++) {
       QString strf = iniFiles.at(i);
       QFileInfo fi(strf);
-      QFile::copy(strf, iniDir + fi.fileName());
+
+      if (bakFileFrom == "mobile") QFile::copy(strf, iniDir + fi.fileName());
+
+      if (bakFileFrom == "desktop") {
+        if (strf.contains("todo.ini")) {
+          QFile::remove(iniDir + "todo.ini");
+          QFile::copy(strf, iniDir + fi.fileName());
+        }
+
+        if (strf.contains("mainnotes.ini")) {
+          QFile::remove(iniDir + "mainnotes.ini");
+          QFile::copy(strf, iniDir + fi.fileName());
+        }
+      }
 
       // Del ini bak files
       QFile::remove(strf);
+    }
+
+    if (bakFileFrom == "desktop") {
+      deleteDirfile(iniDir + "memo/gps");
+      m_Reader->copyDirectoryFiles(privateDir + "gps", iniDir + "memo/gps",
+                                   true);
     }
   }
 
@@ -3621,6 +3633,12 @@ void MainWindow::init_Instance() {
 
   if (m_Preferences->getDefaultFont() == "None")
     m_Preferences->setDefaultFont(this->font().family());
+
+  QSettings Reg(iniDir + "osflag.ini", QSettings::IniFormat);
+  if (isAndroid)
+    Reg.setValue("/os/", "mobile");
+  else
+    Reg.setValue("/os/", "desktop");
 }
 
 void MainWindow::init_UIWidget() {

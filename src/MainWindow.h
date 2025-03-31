@@ -292,7 +292,6 @@ class MainWindow : public QMainWindow {
 
   void initChartMonth();
   void initChartDay();
-  static void saveRemarks(int);
 
   static void saveTab();
   bool isSlide = false;

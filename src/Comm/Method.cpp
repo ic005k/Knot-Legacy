@@ -2014,7 +2014,7 @@ bool Method::decompressWithPasswordNG(const QString &zipPath,
   // void *handle = mz_zip_reader_create();
   // void *stream = mz_stream_os_create();
 
-  // qDebug() << "Zlib 版本:" << zlibVersion();
+  qDebug() << "Zlib 版本:" << zlibVersion();
 
   // 创建操作系统文件流
   void *file_stream = nullptr;

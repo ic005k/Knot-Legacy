@@ -147,6 +147,7 @@ int main(int argc, char* argv[]) {
 
   QDir p_dir;
   p_dir.mkpath(privateDir);
+  p_dir.mkpath(iniDir);
 
   strJBDict1 = privateDir + "dict/jieba.dict.utf8";
   strJBDict2 = privateDir + "dict/hmm_model.utf8";
@@ -157,7 +158,7 @@ int main(int argc, char* argv[]) {
     QString resFile = ":/res/jbdict/dict.zip";
     deleteDirfile(privateDir + "dict");
 
-    m_Method->decompressWithPasswordNG(resFile, privateDir, "");
+    m_Method->decompressWithPassword(resFile, privateDir, "");
   }
 
   // 初始化结巴分词
