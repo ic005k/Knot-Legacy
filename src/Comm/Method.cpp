@@ -1991,6 +1991,147 @@ bool Method::compressFile(const QString &zipPath, const QString &filePath,
   return true;
 }
 
+QByteArray Method::generateRandomBytes(int length) {
+  QByteArray bytes(length, 0);
+  if (RAND_bytes(reinterpret_cast<unsigned char *>(bytes.data()), length) !=
+      1) {
+    return QByteArray();  // 返回空表示生成失败
+  }
+  return bytes;
+}
+
+QByteArray Method::deriveKey(const QString &password, const QByteArray &salt,
+                             int keyLength) {
+  QByteArray key(keyLength, 0);
+  const int iterations = 10000;  // 迭代次数
+  const EVP_MD *digest = EVP_sha256();
+
+  if (PKCS5_PBKDF2_HMAC(
+          password.toUtf8().constData(),  // 密码明文
+          password.length(),              // 密码长度
+          reinterpret_cast<const unsigned char *>(salt.constData()),  // 盐值
+          salt.size(),                                                // 盐长度
+          iterations,                                    // 迭代次数
+          digest,                                        // 哈希算法
+          keyLength,                                     // 输出密钥长度
+          reinterpret_cast<unsigned char *>(key.data())  // 输出缓冲区
+          ) != 1) {
+    return QByteArray();  // 返回空表示失败
+  }
+  return key;
+}
+
+bool Method::encryptFile(const QString &inputPath, const QString &outputPath,
+                         const QString &password) {
+  // 生成随机盐和IV
+  QByteArray salt = generateRandomBytes(16);
+  QByteArray iv = generateRandomBytes(16);
+  if (salt.isEmpty() || iv.isEmpty()) return false;
+
+  // 打开文件
+  QFile inFile(inputPath);
+  QFile outFile(outputPath);
+  if (!inFile.open(QIODevice::ReadOnly) ||
+      !outFile.open(QIODevice::WriteOnly)) {
+    return false;
+  }
+
+  // 写入盐和IV到文件头部
+  outFile.write(salt);
+  outFile.write(iv);
+
+  // 密钥派生
+  QByteArray key = deriveKey(password, salt, 32);
+  if (key.isEmpty()) return false;
+
+  // 初始化加密上下文
+  EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+  if (!ctx ||
+      EVP_EncryptInit_ex(
+          ctx, EVP_aes_256_cbc(), nullptr,
+          reinterpret_cast<const unsigned char *>(key.constData()),
+          reinterpret_cast<const unsigned char *>(iv.constData())) != 1) {
+    EVP_CIPHER_CTX_free(ctx);
+    return false;
+  }
+
+  // 分块加密（每次处理4KB）
+  const int bufferSize = 4096;
+  unsigned char inBuf[bufferSize], outBuf[bufferSize + EVP_MAX_BLOCK_LENGTH];
+  int bytesRead = 0, outLen = 0;
+
+  while ((bytesRead = inFile.read((char *)inBuf, bufferSize)) > 0) {
+    if (EVP_EncryptUpdate(ctx, outBuf, &outLen, inBuf, bytesRead) != 1) {
+      EVP_CIPHER_CTX_free(ctx);
+      return false;
+    }
+    outFile.write((char *)outBuf, outLen);
+  }
+
+  // 处理最后的数据块
+  if (EVP_EncryptFinal_ex(ctx, outBuf, &outLen) != 1) {
+    EVP_CIPHER_CTX_free(ctx);
+    return false;
+  }
+  outFile.write((char *)outBuf, outLen);
+
+  EVP_CIPHER_CTX_free(ctx);
+  return true;
+}
+
+bool Method::decryptFile(const QString &inputPath, const QString &outputPath,
+                         const QString &password) {
+  QFile inFile(inputPath);
+  QFile outFile(outputPath);
+  if (!inFile.open(QIODevice::ReadOnly) ||
+      !outFile.open(QIODevice::WriteOnly)) {
+    return false;
+  }
+
+  // 从文件头部读取盐和IV
+  QByteArray salt = inFile.read(16);
+  QByteArray iv = inFile.read(16);
+  if (salt.size() != 16 || iv.size() != 16) return false;
+
+  // 密钥派生
+  QByteArray key = deriveKey(password, salt, 32);
+  if (key.isEmpty()) return false;
+
+  // 初始化解密上下文
+  EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+  if (!ctx ||
+      EVP_DecryptInit_ex(
+          ctx, EVP_aes_256_cbc(), nullptr,
+          reinterpret_cast<const unsigned char *>(key.constData()),
+          reinterpret_cast<const unsigned char *>(iv.constData())) != 1) {
+    EVP_CIPHER_CTX_free(ctx);
+    return false;
+  }
+
+  // 分块解密（每次处理4KB + 填充空间）
+  const int bufferSize = 4096 + EVP_MAX_BLOCK_LENGTH;
+  unsigned char inBuf[bufferSize], outBuf[bufferSize];
+  int bytesRead = 0, outLen = 0;
+
+  while ((bytesRead = inFile.read((char *)inBuf, bufferSize)) > 0) {
+    if (EVP_DecryptUpdate(ctx, outBuf, &outLen, inBuf, bytesRead) != 1) {
+      EVP_CIPHER_CTX_free(ctx);
+      return false;
+    }
+    outFile.write((char *)outBuf, outLen);
+  }
+
+  // 处理最后的数据块
+  if (EVP_DecryptFinal_ex(ctx, outBuf, &outLen) != 1) {
+    EVP_CIPHER_CTX_free(ctx);
+    return false;
+  }
+  outFile.write((char *)outBuf, outLen);
+
+  EVP_CIPHER_CTX_free(ctx);
+  return true;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////
 
 bool Method::compressDirectoryNG(const QString &zipPath,

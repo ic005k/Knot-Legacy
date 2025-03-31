@@ -6,10 +6,10 @@
 #include "ui_MainWindow.h"
 #include "ui_Preferences.h"
 extern QString iniFile, iniDir, privateDir, defaultFontFamily, customFontFamily,
-    infoStr;
+    infoStr, encPassword;
 extern MainWindow* mw_one;
 extern Method* m_Method;
-extern bool isBreak, isDark;
+extern bool isBreak, isDark, isEncrypt;
 extern int fontSize;
 extern QSettings* iniPreferences;
 extern ReaderSet* m_ReaderSet;
@@ -114,6 +114,9 @@ void Preferences::saveOptions() {
   QString password = ui->editPassword->text().trimmed();
   QString aesStr = m_CloudBackup->aesEncrypt(password, aes_key, aes_iv);
   iniPreferences->setValue("/zip/password", aesStr);
+
+  encPassword = password;
+  isEncrypt = ui->chkZip->isChecked();
 }
 
 void Preferences::on_sliderFontSize_sliderMoved(int position) {
@@ -280,9 +283,11 @@ void Preferences::initOptions() {
   QString password = m_CloudBackup->aesDecrypt(aesStr, aes_key, aes_iv);
   ui->editPassword->setText(password);
   ui->editValidate->setText(password);
+  encPassword = password;
 
   bool isZip = iniPreferences->value("/Options/Zip", false).toBool();
   ui->chkZip->setChecked(isZip);
+  isEncrypt = isZip;
 
   devMode = iniPreferences->value("/Options/DevMode", false).toBool();
 #ifdef Q_OS_ANDROID

@@ -1,11 +1,14 @@
 #ifndef METHOD_H
 #define METHOD_H
 
+#include <openssl/evp.h>
+#include <openssl/rand.h>
 #include <src/quazip/quazip.h>
 #include <src/quazip/quazipfile.h>
 #include <src/quazip/quazipnewinfo.h>
 #include <src/quazip/unzip.h>
 
+#include <QByteArray>
 #include <QConicalGradient>
 #include <QCryptographicHash>
 #include <QDialog>
@@ -18,6 +21,7 @@
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QQuickWidget>
+#include <QString>
 #include <QTableWidget>
 #include <QTimer>
 #include <QWidget>
@@ -303,7 +307,9 @@ class Method : public QDialog {
                                 const QString &extractDir,
                                 const QString &password);
 
- protected:
+  bool encryptFile(const QString &inputPath, const QString &outputPath, const QString &password);
+  bool decryptFile(const QString &inputPath, const QString &outputPath, const QString &password);
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:
@@ -330,6 +336,8 @@ class Method : public QDialog {
   QString quazipErrorString(int code);
   bool addFilesToZip(void *zip_handle, const QString &currentDir,
                      const QString &baseDir);
+  QByteArray generateRandomBytes(int length);
+  QByteArray deriveKey(const QString &password, const QByteArray &salt, int keyLength);
 };
 
 class IOSCircularProgress : public QWidget {

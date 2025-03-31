@@ -12,13 +12,13 @@ QList<double> doubleList;
 QGridLayout *gl1;
 QTreeWidgetItem *parentItem;
 bool isrbFreq = true;
-bool isEBook, isReport, isUpData, isZipOK, isMenuImport, isDownData;
+bool isEBook, isReport, isUpData, isZipOK, isMenuImport, isDownData, isEncrypt;
 bool isAdd = false;
 
 QString iniFile, iniDir, privateDir, strDate, readDate, noteText, strStats,
     SaveType, strY, strM, btnYText, btnMText, btnDText, CurrentYearMonth,
     zipfile, txt, infoStr, searchStr, currentMDFile, copyText, imgFileName,
-    defaultFontFamily, customFontFamily;
+    defaultFontFamily, customFontFamily, encPassword;
 QStringList listM;
 
 int curPos, today, fontSize, red, currentTabIndex;
@@ -94,6 +94,16 @@ void BakDataThread::run() {
   else
     mw_one->bakData(zipfile);
 
+  if (isEncrypt) {
+    QString enc_file = infoStr + ".enc";
+    qDebug() << "enc_file=" << enc_file;
+    if (m_Method->encryptFile(infoStr, enc_file, encPassword)) {
+      QFile::remove(infoStr);
+      infoStr = enc_file;
+    } else
+      QFile::remove(enc_file);
+  }
+
   emit isDone();
 }
 
@@ -121,6 +131,16 @@ void MainWindow::bakDataDone() {
 
 ImportDataThread::ImportDataThread(QObject *parent) : QThread{parent} {}
 void ImportDataThread::run() {
+  if (isEncrypt) {
+    QString dec_file = zipfile;
+    dec_file = dec_file.replace(".enc", "");
+    if (m_Method->decryptFile(zipfile, dec_file, encPassword)) {
+      zipfile = dec_file;
+    } else {
+      QFile::remove(dec_file);
+    }
+  }
+
   if (isMenuImport || isDownData) mw_one->importBakData(zipfile);
 
   emit isDone();
@@ -156,6 +176,8 @@ void MainWindow::importDataDone() {
                          QDate::currentDate().month());
     m_Steps->allGpsTotal();
   }
+
+  QFile::remove(zipfile);
 
   closeProgress();
 
