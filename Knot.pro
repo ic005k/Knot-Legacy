@@ -383,75 +383,75 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 ######################### minizip-ng ##################################################
 #INCLUDEPATH += $$PWD/lib/zlib-ng
-INCLUDEPATH += $$PWD/minizip-ng
+#INCLUDEPATH += $$PWD/minizip-ng
 
 # 关闭不需要的功能
-DEFINES += MZ_ZLIB=1 \
-           ZLIB_COMPAT=1 \
-           MZ_OPENSSL=1 \
-           MZ_BZIP2=0 \
-           MZ_LZMA=0 \
-           MZ_ZSTD=0 \
-           MZ_PKCRYPT=0
+#DEFINES += MZ_ZLIB=1 \
+#           ZLIB_COMPAT=1 \
+#           MZ_OPENSSL=1 \
+#           MZ_BZIP2=0 \
+#           MZ_LZMA=0 \
+#           MZ_ZSTD=0 \
+#           MZ_PKCRYPT=0
 
 # 包含路径
-INCLUDEPATH += $$PWD/minizip-ng
+#INCLUDEPATH += $$PWD/minizip-ng
 
 # 源文件（核心功能）
-SOURCES += \
-    $$PWD/minizip-ng/mz_crypt.c \
-    $$PWD/minizip-ng/mz_crypt_openssl.c \
-    $$PWD/minizip-ng/mz_os.c \
-    $$PWD/minizip-ng/mz_zip.c \
-    $$PWD/minizip-ng/mz_strm.c \
-    $$PWD/minizip-ng/mz_strm_mem.c \
-    $$PWD/minizip-ng/mz_strm_buf.c \
-    $$PWD/minizip-ng/mz_strm_split.c \
-    $$PWD/minizip-ng/mz_strm_zlib.c \
-    $$PWD/minizip-ng/mz_zip_rw.c
+#SOURCES += \
+#    $$PWD/minizip-ng/mz_crypt.c \
+#    $$PWD/minizip-ng/mz_crypt_openssl.c \
+#    $$PWD/minizip-ng/mz_os.c \
+#    $$PWD/minizip-ng/mz_zip.c \
+#    $$PWD/minizip-ng/mz_strm.c \
+#    $$PWD/minizip-ng/mz_strm_mem.c \
+#    $$PWD/minizip-ng/mz_strm_buf.c \
+#    $$PWD/minizip-ng/mz_strm_split.c \
+#    $$PWD/minizip-ng/mz_strm_zlib.c \
+#    $$PWD/minizip-ng/mz_zip_rw.c
 
 # 链接 OpenSSL 库（根据平台配置）
-win32 {
-SOURCES += \
-    $$PWD/minizip-ng/mz_os_win32.c \
-    $$PWD/minizip-ng/mz_strm_os_win32.c
+#win32 {
+#SOURCES += \
+#    $$PWD/minizip-ng/mz_os_win32.c \
+#    $$PWD/minizip-ng/mz_strm_os_win32.c
 
-    LIBS += -lShell32  # 确保路径创建支持宽字符
-    DEFINES += MZ_USE_WIN32_API=ON
-    DEFINES += UNICODE _UNICODE  # 强制启用 Unicode API
-    LIBS += -lkernel32 -luser32 -lole32  # 基础 Windows API 库
+#    LIBS += -lShell32  # 确保路径创建支持宽字符
+#    DEFINES += MZ_USE_WIN32_API=ON
+#    DEFINES += UNICODE _UNICODE  # 强制启用 Unicode API
+#    LIBS += -lkernel32 -luser32 -lole32  # 基础 Windows API 库
 
-    INCLUDEPATH += $$PWD/openssl
-    LIBS += -L$$PWD/openssl/lib -llibcrypto -llibssl
-}
+#    INCLUDEPATH += $$PWD/openssl
+#    LIBS += -L$$PWD/openssl/lib -llibcrypto -llibssl
+#}
 
-android: {
-    INCLUDEPATH += $$PWD/android-openssl/include
-    LIBS += -L$$PWD/android-openssl/ \
-                -lssl -lcrypto
-}
+#android: {
+#    INCLUDEPATH += $$PWD/android-openssl/include
+#    LIBS += -L$$PWD/android-openssl/ \
+#                -lssl -lcrypto
+#}
 
-!win32 {
-SOURCES += \
-    $$PWD/minizip-ng/mz_os_posix.c \
-    $$PWD/minizip-ng/mz_strm_os_posix.c
-}
+#!win32 {
+#SOURCES += \
+#    $$PWD/minizip-ng/mz_os_posix.c \
+#    $$PWD/minizip-ng/mz_strm_os_posix.c
+#}
 
-unix:!macx {
-    DEFINES += MZ_USE_POSIX_API=ON
-    LIBS += -lssl -lcrypto
-}
+#unix:!macx {
+#    DEFINES += MZ_USE_POSIX_API=ON
+#    LIBS += -lssl -lcrypto
+#}
 
-macx {
-    DEFINES += MZ_USE_POSIX_API=ON
+#macx {
+#    DEFINES += MZ_USE_POSIX_API=ON
 
-    isEmpty(OPENSSL_PREFIX) {
-        OPENSSL_PREFIX = $$system(brew --prefix openssl)
-    }
-    INCLUDEPATH += $${OPENSSL_PREFIX}/include
-    LIBS += -L$${OPENSSL_PREFIX}/lib -lssl -lcrypto
+#    isEmpty(OPENSSL_PREFIX) {
+#        OPENSSL_PREFIX = $$system(brew --prefix openssl)
+#    }
+#    INCLUDEPATH += $${OPENSSL_PREFIX}/include
+#    LIBS += -L$${OPENSSL_PREFIX}/lib -lssl -lcrypto
 
-}
+#}
 
 ######################### OpenSSL #####################################################
 #Linux

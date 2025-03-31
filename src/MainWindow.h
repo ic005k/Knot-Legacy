@@ -154,16 +154,16 @@ class MainWindow : public QMainWindow {
 
   QString labelEnSyncStyleSheet =
       "background-color:qlineargradient(spread:pad,x1:1,y1:0,x2:0,y2:0,stop:0 "
-      "#FFAEB9,stop:1 #87CEFF); color:black;selection-background-color: "
+      "#87CEFF,stop:1 #FFAEB9); color:black;selection-background-color: "
       "lightblue;";
 
-  QString labelSyncStyleSheet =
+  QString labelEncStyleSheet =
       "QLabel { "
       "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
       "stop:0 rgba(255, 204, 204, 255), stop:1 rgba(220, 220, 220, 255)); "
       "color: black; }";
 
-  QString labelEncStyleSheet =
+  QString labelSyncStyleSheet =
       "QLabel { "
       "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, "
       "stop:0 #87CEFF, stop:1 rgba(220, 220, 220, 255)); "

@@ -22,7 +22,7 @@
 #include <QTimer>
 #include <QWidget>
 
-// 在包含 minizip 头文件前定义以下宏
+/*
 #define MZ_ZIP_USE_CRYPTO  // 启用 AES 加密支持
 #define MZ_ZIP_USE_UTF8    // 强制使用 UTF-8 编码
 #include "mz.h"
@@ -32,6 +32,7 @@
 #include "mz_strm_zlib.h"
 #include "mz_zip.h"
 #include "mz_zip_rw.h"
+*/
 
 namespace Ui {
 class Method;

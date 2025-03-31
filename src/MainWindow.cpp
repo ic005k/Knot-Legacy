@@ -6181,4 +6181,8 @@ void MainWindow::setEncSyncStatusTip() {
   if (!m_Preferences->ui->chkZip->isChecked() && ui->chkAutoSync->isChecked() &&
       ui->chkWebDAV->isChecked())
     ui->lblStats->setStyleSheet(labelSyncStyleSheet);
+
+  if (isAndroid) ui->lblVer->hide();
+  ui->lblVer->setText("Knot   V:" + ver);
+  ui->lblVer->setStyleSheet(ui->lblStats->styleSheet());
 }

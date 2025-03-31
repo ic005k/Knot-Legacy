@@ -7921,6 +7921,19 @@ QSlider::handle:horizontal:disabled {
       </item>
      </layout>
     </item>
+    <item>
+     <widget class="QLabel" name="lblVer">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Knot</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
