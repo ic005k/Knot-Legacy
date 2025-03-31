@@ -454,6 +454,31 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 #}
 
 ######################### OpenSSL #####################################################
+# 链接 OpenSSL 库（根据平台配置）
+win32 {
+    INCLUDEPATH += $$PWD/openssl
+    LIBS += -L$$PWD/openssl/lib -llibcrypto -llibssl
+}
+
+android: {
+    INCLUDEPATH += $$PWD/android-openssl/include
+    LIBS += -L$$PWD/android-openssl/ \
+                -lssl -lcrypto
+}
+
+unix:!macx {
+    LIBS += -lssl -lcrypto
+}
+
+macx {
+    isEmpty(OPENSSL_PREFIX) {
+        OPENSSL_PREFIX = $$system(brew --prefix openssl)
+    }
+    INCLUDEPATH += $${OPENSSL_PREFIX}/include
+    LIBS += -L$${OPENSSL_PREFIX}/lib -lssl -lcrypto
+}
+
+#######################################################################################
 #Linux
 unix:!macx: {
     android: include(/home/zh/文档/android_openssl-master/openssl.pri)
