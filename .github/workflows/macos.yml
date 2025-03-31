@@ -36,6 +36,12 @@ jobs:
           version: ${{ matrix.qt_ver }}
           cached: 'false'
           modules: qtcharts qtwebengine
+
+      - name: Install OpenSSL via Homebrew
+        run: |
+          brew update  # 更新 Homebrew
+          brew install openssl  # 安装 OpenSSL
+          brew link openssl --force  # 强制链接（可选，防止路径问题）
                     
       - uses: actions/checkout@v2
         with:
