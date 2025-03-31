@@ -43,6 +43,11 @@ jobs:
          if [ -d "/opt/homebrew" ]; then
           sudo rm -rf /opt/homebrew
          fi
+
+         # 安装 x86_64 版 Homebrew
+         arch -x86_64 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+         echo 'export PATH="/usr/local/bin:$PATH"' >> ~/.bash_profile
+         source ~/.bash_profile
        
       - name: Install OpenSSL via Homebrew (x86_64)
         run: |
