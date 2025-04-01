@@ -2077,6 +2077,11 @@ bool Method::encryptFile(const QString &inputPath, const QString &outputPath,
   outFile.write((char *)outBuf, outLen);
 
   EVP_CIPHER_CTX_free(ctx);
+
+  inFile.close();
+  outFile.flush();
+  outFile.close();
+
   return true;
 }
 
@@ -2084,53 +2089,115 @@ bool Method::decryptFile(const QString &inputPath, const QString &outputPath,
                          const QString &password) {
   QFile inFile(inputPath);
   QFile outFile(outputPath);
-  if (!inFile.open(QIODevice::ReadOnly) ||
-      !outFile.open(QIODevice::WriteOnly)) {
+
+  // 1. 检查文件打开状态（添加详细错误日志）
+  if (!inFile.open(QIODevice::ReadOnly)) {
+    qDebug() << "无法打开输入文件：" << inFile.errorString();
+    return false;
+  }
+  if (!outFile.open(QIODevice::WriteOnly)) {
+    qDebug() << "无法打开输出文件：" << outFile.errorString();
+    inFile.close();
     return false;
   }
 
-  // 从文件头部读取盐和IV
+  // 2. 读取盐和 IV（检查实际读取长度）
   QByteArray salt = inFile.read(16);
   QByteArray iv = inFile.read(16);
-  if (salt.size() != 16 || iv.size() != 16) return false;
+  if (salt.size() != 16 || iv.size() != 16) {
+    qDebug() << "盐或 IV 长度错误（salt:" << salt.size() << "iv:" << iv.size()
+             << ")";
+    inFile.close();
+    outFile.close();
+    return false;
+  }
 
-  // 密钥派生
+  // 3. 密钥派生（添加错误检查）
   QByteArray key = deriveKey(password, salt, 32);
-  if (key.isEmpty()) return false;
+  if (key.isEmpty()) {
+    qDebug() << "密钥派生失败";
+    inFile.close();
+    outFile.close();
+    return false;
+  }
 
-  // 初始化解密上下文
+  // 4. 初始化 OpenSSL 上下文（启用填充）
   EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
-  if (!ctx ||
-      EVP_DecryptInit_ex(
+  if (!ctx) {
+    qDebug() << "无法创建 EVP 上下文";
+    inFile.close();
+    outFile.close();
+    return false;
+  }
+  if (EVP_DecryptInit_ex(
           ctx, EVP_aes_256_cbc(), nullptr,
           reinterpret_cast<const unsigned char *>(key.constData()),
           reinterpret_cast<const unsigned char *>(iv.constData())) != 1) {
+    qDebug() << "解密初始化失败："
+             << ERR_error_string(ERR_get_error(), nullptr);
     EVP_CIPHER_CTX_free(ctx);
+    inFile.close();
+    outFile.close();
     return false;
   }
+  EVP_CIPHER_CTX_set_padding(ctx, 1);  // 显式启用 PKCS#7 填充
 
-  // 分块解密（每次处理4KB + 填充空间）
+  // 5. 动态分配缓冲区（避免栈溢出）
   const int bufferSize = 4096 + EVP_MAX_BLOCK_LENGTH;
-  unsigned char inBuf[bufferSize], outBuf[bufferSize];
+  unsigned char *inBuf = new unsigned char[bufferSize];
+  unsigned char *outBuf = new unsigned char[bufferSize];
   int bytesRead = 0, outLen = 0;
+  bool success = true;
 
+  // 6. 分块解密（修复读取循环）
   while ((bytesRead = inFile.read((char *)inBuf, bufferSize)) > 0) {
     if (EVP_DecryptUpdate(ctx, outBuf, &outLen, inBuf, bytesRead) != 1) {
-      EVP_CIPHER_CTX_free(ctx);
-      return false;
+      qDebug() << "解密分块失败："
+               << ERR_error_string(ERR_get_error(), nullptr);
+      success = false;
+      break;
     }
-    outFile.write((char *)outBuf, outLen);
+    if (outFile.write((char *)outBuf, outLen) != outLen) {
+      qDebug() << "写入输出文件失败：" << outFile.errorString();
+      success = false;
+      break;
+    }
   }
 
-  // 处理最后的数据块
-  if (EVP_DecryptFinal_ex(ctx, outBuf, &outLen) != 1) {
-    EVP_CIPHER_CTX_free(ctx);
-    return false;
+  // 7. 处理最终块（检查是否还有数据）
+  if (success) {
+    if (EVP_DecryptFinal_ex(ctx, outBuf, &outLen) != 1) {
+      qDebug() << "最终块处理失败："
+               << ERR_error_string(ERR_get_error(), nullptr);
+      success = false;
+    } else {
+      if (outFile.write((char *)outBuf, outLen) != outLen) {
+        qDebug() << "写入最终块失败：" << outFile.errorString();
+        success = false;
+      }
+    }
   }
-  outFile.write((char *)outBuf, outLen);
 
+  // 8. 清理资源
+  delete[] inBuf;
+  delete[] outBuf;
   EVP_CIPHER_CTX_free(ctx);
-  return true;
+  inFile.close();
+  outFile.flush();
+  outFile.close();
+
+  // 9. 验证输出文件完整性
+  if (success) {
+    qint64 expectedSize = inFile.size() - 32;  // 加密文件去头（salt + iv）
+    qint64 actualSize = outFile.size();
+    if (actualSize != expectedSize) {
+      qDebug() << "文件大小不匹配，预期：" << expectedSize << "实际："
+               << actualSize;
+      // success = false;
+    }
+  }
+
+  return success;
 }
 
 QString Method::useDec(QString enc_file) {

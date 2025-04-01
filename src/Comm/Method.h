@@ -1,6 +1,7 @@
 #ifndef METHOD_H
 #define METHOD_H
 
+#include <openssl/err.h>
 #include <openssl/evp.h>
 #include <openssl/rand.h>
 #include <src/quazip/quazip.h>
@@ -11,6 +12,7 @@
 #include <QByteArray>
 #include <QConicalGradient>
 #include <QCryptographicHash>
+#include <QDebug>
 #include <QDialog>
 #include <QDir>
 #include <QDirIterator>
@@ -307,11 +309,14 @@ class Method : public QDialog {
                                 const QString &extractDir,
                                 const QString &password);
 
-  bool encryptFile(const QString &inputPath, const QString &outputPath, const QString &password);
-  bool decryptFile(const QString &inputPath, const QString &outputPath, const QString &password);
+  bool encryptFile(const QString &inputPath, const QString &outputPath,
+                   const QString &password);
+  bool decryptFile(const QString &inputPath, const QString &outputPath,
+                   const QString &password);
   QString useDec(QString enc_file);
   QString useEnc(QString m_file);
-  protected:
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:
@@ -339,7 +344,8 @@ class Method : public QDialog {
   bool addFilesToZip(void *zip_handle, const QString &currentDir,
                      const QString &baseDir);
   QByteArray generateRandomBytes(int length);
-  QByteArray deriveKey(const QString &password, const QByteArray &salt, int keyLength);
+  QByteArray deriveKey(const QString &password, const QByteArray &salt,
+                       int keyLength);
 };
 
 class IOSCircularProgress : public QWidget {

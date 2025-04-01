@@ -273,7 +273,7 @@ void CloudBackup::on_pushButton_getFolders_clicked() {
 
 void CloudBackup::on_pushButton_downloadFile_clicked() {
   QString filePath;
-  filePath = bakfileDir + "KnotData.zip";
+  filePath = bakfileDir + "memo.zip";
   if (QFile(filePath).exists()) QFile(filePath).remove();
   if (filePath.isEmpty()) return;
 

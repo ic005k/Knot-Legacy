@@ -89,14 +89,12 @@ static void JavaNotify_14();
 
 BakDataThread::BakDataThread(QObject *parent) : QThread{parent} {}
 void BakDataThread::run() {
-  // mw_one->bakData();
+  mw_one->bakData();
 
   emit isDone();
 }
 
 void MainWindow::bakDataDone() {
-  mw_one->bakData();
-
   closeProgress();
 
   if (isUpData) {
@@ -120,14 +118,12 @@ void MainWindow::bakDataDone() {
 
 ImportDataThread::ImportDataThread(QObject *parent) : QThread{parent} {}
 void ImportDataThread::run() {
-  // if (isMenuImport || isDownData) mw_one->importBakData(zipfile);
+  if (isMenuImport || isDownData) mw_one->importBakData(zipfile);
 
   emit isDone();
 }
 
 void MainWindow::importDataDone() {
-  importBakData(zipfile);
-
   if (isPasswordError) {
     closeProgress();
     ShowMessage *msg = new ShowMessage(this);
@@ -2666,7 +2662,7 @@ void MainWindow::on_actionExport_Data_triggered() {
 
 QString MainWindow::bakData() {
   m_NotesList->clearFiles();
-  QFile::remove(bakfileDir + "KnotData.zip");
+  QFile::remove(bakfileDir + "memo.zip");
 
   QSettings Reg(iniDir + "osflag.ini", QSettings::IniFormat);
   if (isAndroid)
@@ -2681,7 +2677,7 @@ QString MainWindow::bakData() {
   zipfile = bakfileDir + str + pass + "_Knot.zip";
 
   if (isUpData) {
-    zipfile = bakfileDir + "KnotData.zip";
+    zipfile = bakfileDir + "memo.zip";
     QFile::remove(zipfile);
   }
 
@@ -2754,16 +2750,24 @@ bool MainWindow::importBakData(QString fileName) {
   deleteDirfile(privateDir + "gps");
   m_Reader->copyDirectoryFiles(iniDir + "memo/gps", privateDir + "gps", true);
 
-  QString zipPath = bakfileDir + "restore.zip";
+  QString zipPath = bakfileDir + "memo.zip";
   if (fileName != zipPath) {
     QFile::remove(zipPath);
     QFile::copy(fileName, zipPath);
   }
 
   // dec data
-  QString dec_file = m_Method->useDec(zipPath);
-  if (dec_file != "") {
-    zipPath = dec_file;
+  // QString dec_file = m_Method->useDec(zipPath);
+  // if (dec_file != "") zipPath = dec_file;
+
+  QString dec_file;
+  if (isEncrypt) {
+    dec_file = zipPath + ".dec";
+    bool result = false;
+    result = m_Method->decryptFile(zipPath, dec_file, encPassword);
+
+    while (result == false)
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
   }
 
   // mw_one->m_Notes->unzip(zipPath);
@@ -2771,7 +2775,7 @@ bool MainWindow::importBakData(QString fileName) {
   deleteDirfile(bakfileDir + "KnotData");
   bool unzipResult = false;
   unzipResult =
-      m_Method->decompressWithPassword(zipPath, bakfileDir, encPassword);
+      m_Method->decompressWithPassword(dec_file, bakfileDir, encPassword);
 
   while (unzipResult == false && isPasswordError == false)
     QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
@@ -3616,6 +3620,7 @@ void MainWindow::init_UIWidget() {
   ui->frameMain->setContentsMargins(1, 0, 1, 0);
   ui->frameMain->layout()->setSpacing(1);
 
+  ui->qwOneDriver->hide();
   ui->frameOne->hide();
   ui->f_FunWeb->hide();
   ui->btnStorageInfo->hide();
@@ -6015,8 +6020,8 @@ void MainWindow::on_btnWebDAVBackup_clicked() {
 
 void MainWindow::on_btnWebDAVRestore_clicked() {
   QString filePath;
-  filePath = bakfileDir + "KnotData.zip";
-  ;
+  filePath = bakfileDir + "memo.zip";
+
   if (QFile(filePath).exists()) QFile(filePath).remove();
   if (filePath.isEmpty()) return;
 
