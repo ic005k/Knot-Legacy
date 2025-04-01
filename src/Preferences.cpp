@@ -6,7 +6,7 @@
 #include "ui_MainWindow.h"
 #include "ui_Preferences.h"
 extern QString iniFile, iniDir, privateDir, defaultFontFamily, customFontFamily,
-    infoStr, encPassword;
+    encPassword;
 extern MainWindow* mw_one;
 extern Method* m_Method;
 extern bool isBreak, isDark, isEncrypt;
@@ -116,8 +116,11 @@ void Preferences::saveOptions() {
   QString aesStr = m_CloudBackup->aesEncrypt(password, aes_key, aes_iv);
   iniPreferences->setValue("/zip/password", aesStr);
 
-  encPassword = password;
   isEncrypt = ui->chkZip->isChecked();
+  if (isEncrypt)
+    encPassword = password;
+  else
+    encPassword = "";
 }
 
 void Preferences::on_sliderFontSize_sliderMoved(int position) {
@@ -284,11 +287,14 @@ void Preferences::initOptions() {
   QString password = m_CloudBackup->aesDecrypt(aesStr, aes_key, aes_iv);
   ui->editPassword->setText(password);
   ui->editValidate->setText(password);
-  encPassword = password;
 
   bool isZip = iniPreferences->value("/Options/Zip", false).toBool();
   ui->chkZip->setChecked(isZip);
   isEncrypt = isZip;
+  if (isEncrypt)
+    encPassword = password;
+  else
+    encPassword = "";
 
   devMode = iniPreferences->value("/Options/DevMode", false).toBool();
 #ifdef Q_OS_ANDROID
@@ -362,39 +368,6 @@ void Preferences::on_btnReStart_clicked() {
   mw_one->close();
 }
 
-void Preferences::autoBakData() {
-  if (!mw_one->isNeedAutoBackup) return;
-
-  int bakCount = iniPreferences->value("/AutoBak/BakCount").toInt();
-  if (bakCount > 100000) {
-    bakCount = 0;
-    iniPreferences->setValue("/AutoBak/BakCount", 0);
-    iniPreferences->setValue("/AutoBak/NextDel", 0);
-  }
-  int nextDel = iniPreferences->value("/AutoBak/NextDel").toInt();
-  bakCount++;
-  QString fileName = mw_one->bakData("android");
-  iniPreferences->setValue("/AutoBak/File" + QString::number(bakCount),
-                           fileName);
-  if (bakCount - nextDel > 15) {
-    nextDel++;
-    QString oldBakFile =
-        iniPreferences->value("/AutoBak/File" + QString::number(nextDel))
-            .toString();
-    QFile file(oldBakFile);
-    file.remove(oldBakFile);
-    iniPreferences->remove("/AutoBak/File" + QString::number(nextDel));
-    iniPreferences->setValue("/AutoBak/NextDel", nextDel);
-  }
-  iniPreferences->setValue("/AutoBak/BakCount", bakCount);
-
-  appendBakFile(QDateTime::currentDateTime().toString("yyyy-M-d HH:mm:ss") +
-                    "\n" + tr("Auto Backup") + "\n" + mw_one->strLatestModify,
-                infoStr);
-
-  mw_one->isNeedAutoBackup = false;
-}
-
 void Preferences::setBakStatus(bool status) {
   QSettings Reg(privateDir + iniBakFiles, QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -422,15 +395,6 @@ void Preferences::setLatestAction(QString action) {
   Reg.setValue("/BakFiles/BakAction", action);
 
   setBakStatus(false);
-}
-
-QString Preferences::getLatestAction() {
-  QSettings Reg(privateDir + iniBakFiles, QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  Reg.setIniCodec("utf-8");
-#endif
-
-  return Reg.value("/BakFiles/BakAction").toString();
 }
 
 void Preferences::appendBakFile(QString action, QString bakfile) {
@@ -547,22 +511,6 @@ void Preferences::on_editValidate_textChanged(const QString& arg1) {
 void Preferences::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
   mw_one->setEncSyncStatusTip();
-}
-
-QString Preferences::getZipPassword() {
-  QString pass = "";
-  if (ui->chkZip->isChecked()) {
-    if (ui->editPassword->text().trimmed() != "" &&
-        ui->editPassword->text().trimmed() ==
-            ui->editValidate->text().trimmed()) {
-      pass = ui->editPassword->text().trimmed();
-
-      return pass;
-    }
-  }
-
-  qDebug() << "zip password=" << pass;
-  return "";
 }
 
 void Preferences::on_btnShowPassword_pressed() {

@@ -23,12 +23,10 @@ class Preferences : public QDialog {
   void saveOptions();
 
   void initOptions();
-  void autoBakData();
 
   void setBakStatus(bool status);
   bool getBakStatus();
   void setLatestAction(QString action);
-  QString getLatestAction();
 
   void appendBakFile(QString action, QString bakfile);
 
@@ -42,8 +40,6 @@ class Preferences : public QDialog {
   QString getDefaultFont();
 
   QString setFontDemo(QString customFontPath, QToolButton *btn, int fontSize);
-
-  QString getZipPassword();
 
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;

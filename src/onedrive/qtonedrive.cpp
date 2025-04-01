@@ -425,7 +425,6 @@ void QtOneDrive::downloadFile(const QUrl& url) {
 
         if (QFile(zipfile).exists()) {
           if (!zipfile.isNull()) {
-            m_Method->m_widget = new QWidget(mw_one);
             ShowMessage* m_ShowMsg = new ShowMessage(mw_one);
             if (!m_ShowMsg->showMsg(
                     "Kont",

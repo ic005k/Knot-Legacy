@@ -12,7 +12,8 @@
 
 extern MainWindow *mw_one;
 extern Method *m_Method;
-extern QString iniFile, iniDir, privateDir, currentMDFile, imgFileName, appName;
+extern QString iniFile, iniDir, privateDir, currentMDFile, imgFileName, appName,
+    encPassword;
 extern bool isAndroid, isIOS, isDark, isNeedSync, isPasswordError;
 extern int fontSize;
 extern QRegularExpression regxNumber;
@@ -281,8 +282,7 @@ void Notes::saveMainNotes() {
 void Notes::updateMDFileToSyncLists(QString currentMDFile) {
   QString zipMD = privateDir + "KnotData/memo/" +
                   QFileInfo(currentMDFile).fileName() + ".zip";
-  m_Method->compressFile(zipMD, currentMDFile,
-                         mw_one->m_Preferences->getZipPassword());
+  m_Method->compressFile(zipMD, currentMDFile, encPassword);
 
   QString enc_file = m_Method->useEnc(zipMD);
   if (enc_file != "") zipMD = enc_file;
@@ -1822,8 +1822,7 @@ void Notes::javaNoteToQMLNote() {
 
   QString zipMD = privateDir + "KnotData/memo/" +
                   QFileInfo(currentMDFile).fileName() + ".zip";
-  m_Method->compressFile(zipMD, currentMDFile,
-                         mw_one->m_Preferences->getZipPassword());
+  m_Method->compressFile(zipMD, currentMDFile, encPassword);
 
   QString enc_file = m_Method->useEnc(zipMD);
   if (enc_file != "") zipMD = enc_file;
@@ -2299,8 +2298,7 @@ void Notes::openNotes() {
                           if (dec_file != "") zFile = dec_file;
 
                           bool unzipResult = m_Method->decompressWithPassword(
-                              zFile, pDir,
-                              mw_one->m_Preferences->getZipPassword());
+                              zFile, pDir, encPassword);
 
                           while (unzipResult == false &&
                                  isPasswordError == false)
@@ -2334,8 +2332,7 @@ void Notes::openNotes() {
                           if (dec_file != "") zFile = dec_file;
 
                           bool unzipResult = m_Method->decompressWithPassword(
-                              zFile, pDir,
-                              mw_one->m_Preferences->getZipPassword());
+                              zFile, pDir, encPassword);
 
                           while (unzipResult == false &&
                                  isPasswordError == false)
@@ -2397,8 +2394,7 @@ void Notes::updateMainnotesIniToSyncLists() {
   qDebug() << "cDT=" << cDT << "mainnotesLastModi=" << mainnotesLastModi;
   if (cDT > mainnotesLastModi) {
     QString zipMainnotes = privateDir + "KnotData/mainnotes.ini.zip";
-    m_Method->compressFile(zipMainnotes, iniDir + "mainnotes.ini",
-                           mw_one->m_Preferences->getZipPassword());
+    m_Method->compressFile(zipMainnotes, iniDir + "mainnotes.ini", encPassword);
 
     QString enc_file = m_Method->useEnc(zipMainnotes);
     if (enc_file != "") zipMainnotes = enc_file;

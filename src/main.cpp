@@ -13,8 +13,8 @@
 
 std::unique_ptr<cppjieba::Jieba> jieba;
 
-extern QString iniFile, txtFile, appName, iniDir, privateDir, customFontFamily,
-    defaultFontFamily;
+extern QString iniFile, txtFile, appName, iniDir, privateDir, bakfileDir,
+    customFontFamily, defaultFontFamily;
 extern int fontSize;
 extern void RegJni(const char* myClassName);
 extern bool isDark;
@@ -148,6 +148,10 @@ int main(int argc, char* argv[]) {
   QDir p_dir;
   p_dir.mkpath(privateDir);
   p_dir.mkpath(iniDir);
+  QString bak_dir = iniDir;
+  bak_dir = bak_dir.replace("KnotData", "KnotBak");
+  p_dir.mkpath(bak_dir);
+  bakfileDir = bak_dir;
 
   strJBDict1 = privateDir + "dict/jieba.dict.utf8";
   strJBDict2 = privateDir + "dict/hmm_model.utf8";

@@ -202,8 +202,7 @@ void Todo::closeTodo() {
       mw_one->ui->chkWebDAV->isChecked()) {
     QString todoFile = iniDir + "todo.ini";
     QString todoZipFile = privateDir + "KnotData/todo.ini.zip";
-    m_Method->compressFile(todoZipFile, todoFile,
-                           mw_one->m_Preferences->getZipPassword());
+    m_Method->compressFile(todoZipFile, todoFile, encPassword);
 
     QString enc_file = m_Method->useEnc(todoZipFile);
     if (enc_file != "") todoZipFile = enc_file;
@@ -1445,8 +1444,7 @@ void Todo::openTodo() {
                       if (dec_file != "") zFile = dec_file;
 
                       bool unzipResult = m_Method->decompressWithPassword(
-                          zFile, privateDir + "KnotData",
-                          mw_one->m_Preferences->getZipPassword());
+                          zFile, privateDir + "KnotData", encPassword);
 
                       while (unzipResult == false && isPasswordError == false)
                         QCoreApplication::processEvents(QEventLoop::AllEvents,
