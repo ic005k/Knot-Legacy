@@ -3103,6 +3103,9 @@ void MainWindow::on_actionPreferences_triggered() {
     x = geometry().x() + (width() - m_Preferences->width()) / 2;
     y = geometry().y() + (height() - m_Preferences->height()) / 2;
   }
+
+  if (y < 0) y = 50;
+
   m_Preferences->setGeometry(x, y, m_Preferences->width(), height());
   m_Preferences->setModal(true);
   m_Preferences->ui->sliderFontSize->setStyleSheet(ui->hsM->styleSheet());

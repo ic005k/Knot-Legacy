@@ -60,6 +60,10 @@ Preferences::Preferences(QWidget* parent)
   ui->chkUIFont->setStyleSheet(chkStyle);
   ui->lblFontSize->setFixedHeight(40);
 
+  QString lbl_style = ui->lbl1->styleSheet();
+  ui->lbl2->setStyleSheet(lbl_style);
+  ui->lbl3->setStyleSheet(lbl_style);
+
   ui->btnCustomFont->adjustSize();
   ui->btnCustomFont->setStyleSheet(
       "background-color: rgb(255, 255, 255);color:black;");

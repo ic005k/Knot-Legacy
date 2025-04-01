@@ -410,7 +410,6 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 #    $$PWD/minizip-ng/mz_strm_zlib.c \
 #    $$PWD/minizip-ng/mz_zip_rw.c
 
-# 链接 OpenSSL 库（根据平台配置）
 #win32 {
 #SOURCES += \
 #    $$PWD/minizip-ng/mz_os_win32.c \
@@ -420,15 +419,6 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 #    DEFINES += MZ_USE_WIN32_API=ON
 #    DEFINES += UNICODE _UNICODE  # 强制启用 Unicode API
 #    LIBS += -lkernel32 -luser32 -lole32  # 基础 Windows API 库
-
-#    INCLUDEPATH += $$PWD/openssl
-#    LIBS += -L$$PWD/openssl/lib -llibcrypto -llibssl
-#}
-
-#android: {
-#    INCLUDEPATH += $$PWD/android-openssl/include
-#    LIBS += -L$$PWD/android-openssl/ \
-#                -lssl -lcrypto
 #}
 
 #!win32 {
@@ -439,18 +429,10 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 #unix:!macx {
 #    DEFINES += MZ_USE_POSIX_API=ON
-#    LIBS += -lssl -lcrypto
 #}
 
 #macx {
 #    DEFINES += MZ_USE_POSIX_API=ON
-
-#    isEmpty(OPENSSL_PREFIX) {
-#        OPENSSL_PREFIX = $$system(brew --prefix openssl)
-#    }
-#    INCLUDEPATH += $${OPENSSL_PREFIX}/include
-#    LIBS += -L$${OPENSSL_PREFIX}/lib -lssl -lcrypto
-
 #}
 
 ######################### OpenSSL #####################################################
