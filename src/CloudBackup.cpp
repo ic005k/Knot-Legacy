@@ -24,8 +24,7 @@ extern MainWindow *mw_one;
 extern Method *m_Method;
 extern QString iniFile, iniDir, zipfile, privateDir, bakfileDir;
 extern QtOneDriveAuthorizationDialog *dialog_;
-extern bool isUpData;
-extern bool isZipOK, isMenuImport, isDownData;
+extern bool isZipOK, isMenuImport, isDownData, isAndroid, isUpData;
 
 WebDavHelper *listWebDavFiles(const QString &url, const QString &username,
                               const QString &password);
@@ -376,7 +375,11 @@ int CloudBackup::getProg() {
 }
 
 void CloudBackup::startBakData() {
-  zipfile = bakfileDir + "KontData.zip";
+  QSettings Reg(iniDir + "osflag.ini", QSettings::IniFormat);
+  if (isAndroid)
+    Reg.setValue("os", "mobile");
+  else
+    Reg.setValue("os", "desktop");
 
   isUpData = true;
   mw_one->showProgress();

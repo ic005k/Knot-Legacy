@@ -2170,6 +2170,7 @@ bool Method::decryptFile(const QString &inputPath, const QString &outputPath,
       qDebug() << "最终块处理失败："
                << ERR_error_string(ERR_get_error(), nullptr);
       success = false;
+      isPasswordError = true;
     } else {
       if (outFile.write((char *)outBuf, outLen) != outLen) {
         qDebug() << "写入最终块失败：" << outFile.errorString();

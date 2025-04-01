@@ -2654,6 +2654,12 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 void MainWindow::on_actionExport_Data_triggered() {
   if (!isSaveEnd) return;
 
+  QSettings Reg(iniDir + "osflag.ini", QSettings::IniFormat);
+  if (isAndroid)
+    Reg.setValue("os", "mobile");
+  else
+    Reg.setValue("os", "desktop");
+
   isUpData = false;
   showProgress();
 
@@ -2663,12 +2669,6 @@ void MainWindow::on_actionExport_Data_triggered() {
 QString MainWindow::bakData() {
   m_NotesList->clearFiles();
   QFile::remove(bakfileDir + "memo.zip");
-
-  QSettings Reg(iniDir + "osflag.ini", QSettings::IniFormat);
-  if (isAndroid)
-    Reg.setValue("os", "mobile");
-  else
-    Reg.setValue("os", "desktop");
 
   // set zip filename
   QString pass = encPassword;
@@ -2766,7 +2766,7 @@ bool MainWindow::importBakData(QString fileName) {
     bool result = false;
     result = m_Method->decryptFile(zipPath, dec_file, encPassword);
 
-    while (result == false)
+    while (result == false && isPasswordError == false)
       QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
   }
 
@@ -3099,7 +3099,7 @@ void MainWindow::on_actionPreferences_triggered() {
     y = geometry().y();
   } else {
     m_Preferences->setMaximumWidth(320);
-    m_Preferences->setMaximumHeight(600);
+
     x = geometry().x() + (width() - m_Preferences->width()) / 2;
     y = geometry().y() + (height() - m_Preferences->height()) / 2;
   }

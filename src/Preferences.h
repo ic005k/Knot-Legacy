@@ -79,6 +79,8 @@ class Preferences : public QDialog {
 
   void on_btnShowValidate_released();
 
+  void on_chkDark_clicked();
+
  private:
   QString iniBakFiles = "BakFiles.ini";
   void getCheckStatusChange();

@@ -528,3 +528,5 @@ void Preferences::on_btnShowValidate_pressed() {
 void Preferences::on_btnShowValidate_released() {
   ui->editValidate->setEchoMode(QLineEdit::EchoMode::Password);
 }
+
+void Preferences::on_chkDark_clicked() {}
