@@ -1037,6 +1037,7 @@ void NotesList::setWinPos() {
 }
 
 void NotesList::clearFiles() {
+  QFile::remove(iniDir + "memo.zip");
   QString tempDir = iniDir;
   knot_all_files.clear();
   QStringList fmt = QString("zip;md;html;jpg;bmp;png;ini").split(';');

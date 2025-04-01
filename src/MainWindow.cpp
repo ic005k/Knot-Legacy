@@ -89,12 +89,14 @@ static void JavaNotify_14();
 
 BakDataThread::BakDataThread(QObject *parent) : QThread{parent} {}
 void BakDataThread::run() {
-  mw_one->bakData();
+  // mw_one->bakData();
 
   emit isDone();
 }
 
 void MainWindow::bakDataDone() {
+  mw_one->bakData();
+
   closeProgress();
 
   if (isUpData) {
@@ -118,12 +120,14 @@ void MainWindow::bakDataDone() {
 
 ImportDataThread::ImportDataThread(QObject *parent) : QThread{parent} {}
 void ImportDataThread::run() {
-  if (isMenuImport || isDownData) mw_one->importBakData(zipfile);
+  // if (isMenuImport || isDownData) mw_one->importBakData(zipfile);
 
   emit isDone();
 }
 
 void MainWindow::importDataDone() {
+  importBakData(zipfile);
+
   if (isPasswordError) {
     closeProgress();
     ShowMessage *msg = new ShowMessage(this);
@@ -152,8 +156,6 @@ void MainWindow::importDataDone() {
                          QDate::currentDate().month());
     m_Steps->allGpsTotal();
   }
-
-  QFile::remove(zipfile);
 
   closeProgress();
 
@@ -2803,9 +2805,7 @@ bool MainWindow::importBakData(QString fileName) {
 
   if (bakFileFrom == "mobile") {
     deleteDirfile(iniDir);
-    QString tarDir = iniDir;
-    tarDir = tarDir.replace("KnotData", "");
-    m_Reader->copyDirectoryFiles(bakfileDir + "KnotData", tarDir, true);
+    m_Reader->copyDirectoryFiles(bakfileDir + "KnotData", iniDir, true);
   }
 
   return true;
