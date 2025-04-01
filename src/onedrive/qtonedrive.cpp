@@ -418,7 +418,6 @@ void QtOneDrive::downloadFile(const QUrl& url) {
       if (!checkReplyJson(reply).isEmpty()) {
         state_ = Empty;
 
-        zipfile = iniDir + "memo.zip";
         emit successDownloadFile(
             tmp_fileId_ + "\n" + zipfile + "\n\n" +
             "SIZE: " + mw_one->getFileSize(QFile(zipfile).size(), 2));

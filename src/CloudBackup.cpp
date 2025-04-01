@@ -22,7 +22,7 @@
 
 extern MainWindow *mw_one;
 extern Method *m_Method;
-extern QString iniFile, iniDir, zipfile, privateDir;
+extern QString iniFile, iniDir, zipfile, privateDir, bakfileDir;
 extern QtOneDriveAuthorizationDialog *dialog_;
 extern bool isUpData;
 extern bool isZipOK, isMenuImport, isDownData;
@@ -273,7 +273,7 @@ void CloudBackup::on_pushButton_getFolders_clicked() {
 
 void CloudBackup::on_pushButton_downloadFile_clicked() {
   QString filePath;
-  filePath = iniDir + "memo.zip";
+  filePath = bakfileDir + "KnotData.zip";
   if (QFile(filePath).exists()) QFile(filePath).remove();
   if (filePath.isEmpty()) return;
 
@@ -320,9 +320,8 @@ void CloudBackup::uploadData() {
 
   if (mw_one->ui->chkWebDAV->isChecked()) {
     QString url = getWebDAVArgument();
-    QString file = iniDir + "memo.zip";
     createDirectory(url, "Knot/");
-    uploadFileToWebDAV(url, file, "Knot/memo.zip");
+    uploadFileToWebDAV(url, zipfile, "Knot/memo.zip");
   }
 }
 
@@ -377,7 +376,7 @@ int CloudBackup::getProg() {
 }
 
 void CloudBackup::startBakData() {
-  zipfile = iniDir + "memo.zip";
+  zipfile = bakfileDir + "KontData.zip";
 
   isUpData = true;
   mw_one->showProgress();
@@ -437,6 +436,7 @@ void CloudBackup::uploadFileToWebDAV(QString webdavUrl, QString localFilePath,
                   "\n\n" + QDateTime::currentDateTime().toString())
               .arg(localFilePath, webdavUrl + remoteFileName),
           1);
+
       mw_one->ui->progBar->hide();
 
     } else {

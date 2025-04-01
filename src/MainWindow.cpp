@@ -2664,6 +2664,7 @@ void MainWindow::on_actionExport_Data_triggered() {
 
 QString MainWindow::bakData() {
   m_NotesList->clearFiles();
+  QFile::remove(bakfileDir + "KnotData.zip");
 
   QSettings Reg(iniDir + "osflag.ini", QSettings::IniFormat);
   if (isAndroid)
@@ -2671,37 +2672,22 @@ QString MainWindow::bakData() {
   else
     Reg.setValue("os", "desktop");
 
-  // Remove old ini files
-  QStringList iniFiles;
-  QStringList fmt;
-  fmt.append("ini");
-  m_NotesList->getAllFiles(iniDir + "memo/", iniFiles, fmt);
-  for (int i = 0; i < iniFiles.count(); i++) {
-    QFile::remove(iniFiles.at(i));
-  }
-
-  // Copy new ini files
-  iniFiles.clear();
-  m_NotesList->getAllFiles(iniDir, iniFiles, fmt);
-  for (int i = 0; i < iniFiles.count(); i++) {
-    QString strf = iniFiles.at(i);
-    QFileInfo fi(strf);
-    QFile::copy(strf, iniDir + "memo/" + fi.fileName());
-  }
-
   // set zip filename
   QString pass = encPassword;
   if (pass.length() > 0) pass = "_encrypt";
   QString str = m_Notes->getDateTimeStr();
   zipfile = bakfileDir + str + pass + "_Knot.zip";
 
-  if (isUpData) zipfile = iniDir + "memo.zip";
+  if (isUpData) {
+    zipfile = bakfileDir + "KnotData.zip";
+    QFile::remove(zipfile);
+  }
 
   // old method
   //  mw_one->m_Notes->zipMemo();
 
   bool isZipResult = false;
-  isZipResult = compressDirectory(zipfile, iniDir + "memo", encPassword);
+  isZipResult = compressDirectory(zipfile, iniDir, encPassword);
   while (isZipResult == false)
     QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 
@@ -2709,15 +2695,6 @@ QString MainWindow::bakData() {
   QString enc_file = m_Method->useEnc(zipfile);
   if (enc_file != "") {
     zipfile = enc_file;
-  } else {
-    QFile::remove(enc_file);
-  }
-
-  // Remove old ini files
-  iniFiles.clear();
-  m_NotesList->getAllFiles(iniDir + "memo/", iniFiles, fmt);
-  for (int i = 0; i < iniFiles.count(); i++) {
-    QFile::remove(iniFiles.at(i));
   }
 
   return zipfile;
@@ -2772,35 +2749,27 @@ void MainWindow::on_actionImport_Data_triggered() {
 bool MainWindow::importBakData(QString fileName) {
   if (fileName.isNull()) return false;
 
-  QString zipPath = iniDir + "memo.zip";
+  deleteDirfile(privateDir + "gps");
+  m_Reader->copyDirectoryFiles(iniDir + "memo/gps", privateDir + "gps", true);
 
+  QString zipPath = bakfileDir + "restore.zip";
   if (fileName != zipPath) {
     QFile::remove(zipPath);
-
-    QString oldPath = iniDir + "memo";
-    QDir dirOld(oldPath);
-    dirOld.rename(oldPath, iniDir + "memo_bak");
-
     QFile::copy(fileName, zipPath);
   }
 
   // dec data
-  QString dec_file = "enc";
-  dec_file = m_Method->useDec(zipPath);
-
-  while (dec_file == "enc")
-    QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-
+  QString dec_file = m_Method->useDec(zipPath);
   if (dec_file != "") {
     zipPath = dec_file;
-  } else {
-    QFile::remove(dec_file);
   }
 
   // mw_one->m_Notes->unzip(zipPath);
 
+  deleteDirfile(bakfileDir + "KnotData");
   bool unzipResult = false;
-  unzipResult = m_Method->decompressWithPassword(zipPath, iniDir, encPassword);
+  unzipResult =
+      m_Method->decompressWithPassword(zipPath, bakfileDir, encPassword);
 
   while (unzipResult == false && isPasswordError == false)
     QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
@@ -2809,71 +2778,34 @@ bool MainWindow::importBakData(QString fileName) {
     return false;
   }
 
-  QFile file(iniDir + "memo/tab.ini");
-  if (!file.exists()) {
-    deleteDirfile(iniDir + "memo");
-    QString oldPath = iniDir + "memo_bak";
-    QDir dirOld(oldPath);
-    dirOld.rename(oldPath, iniDir + "memo");
-
-    isZipOK = false;
-    return false;
-  }
-
   isZipOK = true;
-  deleteDirfile(iniDir + "memo_bak");
 
   QString bakFileFrom;
-  QSettings Reg(iniDir + "memo/osflag.ini", QSettings::IniFormat);
+  QSettings Reg(bakfileDir + "KnotData/osflag.ini", QSettings::IniFormat);
   bakFileFrom = Reg.value("os", "mobile").toString();
   qDebug() << "bakFileFrom=" << bakFileFrom;
 
   if (bakFileFrom == "desktop") {
-    deleteDirfile(privateDir + "gps");
-    m_Reader->copyDirectoryFiles(iniDir + "memo/gps", privateDir + "gps", true);
-  }
+    deleteDirfile(iniDir + "memo");
+    QFile::remove(bakfileDir + "KnotData/todo.ini");
+    QFile::remove(bakfileDir + "KnotData/mainnotes.ini");
 
-  QStringList iniFiles;
-  QStringList fmt;
-  fmt.append("ini");
+    m_Reader->copyDirectoryFiles(bakfileDir + "KnotData/memo", iniDir + "memo",
+                                 true);
+    QFile::copy(bakfileDir + "KnotData/todo.ini", iniDir + "todo.ini");
+    QFile::copy(bakfileDir + "KnotData/mainnotes.ini",
+                iniDir + "mainnotes.ini");
 
-  // Remove old ini files
-  if (bakFileFrom == "mobile") {
-    m_NotesList->getAllFiles(iniDir, iniFiles, fmt);
-    for (int i = 0; i < iniFiles.count(); i++) {
-      QString file = iniFiles.at(i);
-      if (!file.contains("/memo/")) QFile::remove(file);
-    }
-  }
-
-  // Copy new ini files
-  iniFiles.clear();
-  m_NotesList->getAllFiles(iniDir + "memo/", iniFiles, fmt);
-  for (int i = 0; i < iniFiles.count(); i++) {
-    QString strf = iniFiles.at(i);
-    QFileInfo fi(strf);
-
-    if (bakFileFrom == "mobile") QFile::copy(strf, iniDir + fi.fileName());
-
-    if (bakFileFrom == "desktop") {
-      if (strf.contains("todo.ini")) {
-        QFile::remove(iniDir + "todo.ini");
-        QFile::copy(strf, iniDir + fi.fileName());
-      }
-
-      if (strf.contains("mainnotes.ini")) {
-        QFile::remove(iniDir + "mainnotes.ini");
-        QFile::copy(strf, iniDir + fi.fileName());
-      }
-    }
-
-    // Del ini bak files
-    QFile::remove(strf);
-  }
-
-  if (bakFileFrom == "desktop") {
     deleteDirfile(iniDir + "memo/gps");
-    m_Reader->copyDirectoryFiles(privateDir + "gps", iniDir + "memo/gps", true);
+    m_Reader->copyDirectoryFiles(bakfileDir + "KnotData/memo/gps",
+                                 iniDir + "memo/gps", true);
+  }
+
+  if (bakFileFrom == "mobile") {
+    deleteDirfile(iniDir);
+    QString tarDir = iniDir;
+    tarDir = tarDir.replace("KnotData", "");
+    m_Reader->copyDirectoryFiles(bakfileDir + "KnotData", tarDir, true);
   }
 
   return true;
@@ -6083,7 +6015,8 @@ void MainWindow::on_btnWebDAVBackup_clicked() {
 
 void MainWindow::on_btnWebDAVRestore_clicked() {
   QString filePath;
-  filePath = iniDir + "memo.zip";
+  filePath = bakfileDir + "KnotData.zip";
+  ;
   if (QFile(filePath).exists()) QFile(filePath).remove();
   if (filePath.isEmpty()) return;
 
