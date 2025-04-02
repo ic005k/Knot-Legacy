@@ -862,6 +862,8 @@ class MainWindow : public QMainWindow {
 
   void on_btnOpenEditFind_clicked();
 
+  void on_btnTools_clicked();
+
  private:
   bool isMoveEntry;
   QTimer *tmeFlash;

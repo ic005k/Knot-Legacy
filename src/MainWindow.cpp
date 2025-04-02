@@ -3674,6 +3674,7 @@ void MainWindow::init_UIWidget() {
   ui->lblNoteTitle->adjustSize();
   ui->lblNoteTitle->setWordWrap(true);
   ui->lblNoteTitle->hide();
+  ui->f_Tools->hide();
 
   timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(timerUpdate()));
@@ -6123,4 +6124,11 @@ void MainWindow::setEncSyncStatusTip() {
   if (isAndroid) ui->lblVer->hide();
   ui->lblVer->setText("Knot   V:" + ver);
   ui->lblVer->setStyleSheet(ui->lblStats->styleSheet());
+}
+
+void MainWindow::on_btnTools_clicked() {
+  if (ui->f_Tools->isHidden())
+    ui->f_Tools->show();
+  else
+    ui->f_Tools->hide();
 }

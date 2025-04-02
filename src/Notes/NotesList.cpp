@@ -38,6 +38,7 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   mw_one->ui->f_FindNotes->setStyleSheet(
       "QFrame{background-color: #455364;color: #FFFFFF;border-radius:10px; "
       "border:0px solid gray;}");
+  mw_one->ui->f_Tools->setStyleSheet(mw_one->ui->f_FindNotes->styleSheet());
 
   setModal(true);
   this->layout()->setSpacing(5);
