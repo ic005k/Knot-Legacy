@@ -594,11 +594,6 @@ QString Notes::insertImage(QString fileName, bool isToAndroidView) {
     pix.save(strTar);
     tarImageFile = strTar;
 
-    // strTar = strTar.replace(iniDir, imgDir);
-    // strImage = "\n\n![image](file://" + strTar + ")\n\n";
-
-    // strTar = strTar.replace(imgDir + "memo/", "");
-
     strTar = strTar.replace(iniDir + "memo/", "");
     strImage = "\n\n![image](" + strTar + ")\n\n";
 
@@ -614,6 +609,7 @@ QString Notes::insertImage(QString fileName, bool isToAndroidView) {
   QString zipImg =
       privateDir + "KnotData/memo/images/" + QFileInfo(tarImageFile).fileName();
   QFile::copy(tarImageFile, zipImg);
+  zipImg = m_Method->useEnc(zipImg);
   notes_sync_files.append(zipImg);
 
   return strImage;
@@ -2379,11 +2375,13 @@ void Notes::openNotes() {
                         }
 
                         if (file.contains(".png")) {
+                          pFile = m_Method->useDec(pFile);
                           kFile = iniDir + asFile.replace("KnotData/", "");
 
                           qDebug() << "file=" << file;
                           qDebug() << "pFile=" << pFile;
                           qDebug() << "kFile" << kFile;
+
                           if (QFileInfo(pFile).lastModified() >
                               QFileInfo(kFile).lastModified()) {
                             QFile::remove(kFile);
