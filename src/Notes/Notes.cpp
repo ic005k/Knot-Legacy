@@ -2121,8 +2121,6 @@ void NoteIndexManager::setNoteTitle(const QString &filePath,
   } else {
     m_index[cleanPath] = title;
   }
-  // 延迟自动保存（例如定时器触发）
-  QTimer::singleShot(2000, this, [this]() { saveIndex(m_currentIndexPath); });
 }
 
 void Notes::openEditUI() {

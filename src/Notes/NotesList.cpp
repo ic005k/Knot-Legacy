@@ -1008,7 +1008,7 @@ void NotesList::on_btnDel_Recycle_clicked() {
     }
 
     QString md = iniDir + curItem->text(1);
-    needDelWebDAVFiles.append(md);
+    needDelWebDAVFiles.append(md + ".zip");
     QStringList imagesInMD = extractLocalImagesFromMarkdown(md);
     for (int i = 0; i < imagesInMD.count(); i++) {
       QString image_file = imagesInMD.at(i);
@@ -1597,6 +1597,7 @@ void NotesList::moveBy(int ud) {
   }
 
   resetQML_List();
+  saveNotesList();
 }
 
 void NotesList::on_btnUp_clicked() { moveBy(-1); }
@@ -2050,6 +2051,7 @@ void NotesList::on_btnMoveTo_clicked() {
 
   if (moveItem(tw)) {
     resetQML_List();
+    saveNotesList();
   }
 }
 
