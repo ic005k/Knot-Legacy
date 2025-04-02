@@ -13,7 +13,7 @@
 extern MainWindow *mw_one;
 extern Method *m_Method;
 extern QString iniFile, iniDir, privateDir, currentMDFile, imgFileName, appName,
-    encPassword;
+    encPassword, errorInfo;
 extern bool isAndroid, isIOS, isDark, isNeedSync, isPasswordError;
 extern int fontSize;
 extern QRegularExpression regxNumber;
@@ -282,7 +282,16 @@ void Notes::saveMainNotes() {
 void Notes::updateMDFileToSyncLists(QString currentMDFile) {
   QString zipMD = privateDir + "KnotData/memo/" +
                   QFileInfo(currentMDFile).fileName() + ".zip";
-  m_Method->compressFile(zipMD, currentMDFile, encPassword);
+
+  // m_Method->compressFile(zipMD, currentMDFile, encPassword);
+
+  if (!m_Method->compressFileWithZlib(currentMDFile, zipMD,
+                                      Z_DEFAULT_COMPRESSION)) {
+    errorInfo = tr("An error occurred while compressing the file.");
+    ShowMessage *msg = new ShowMessage(this);
+    msg->showMsg("Knot", errorInfo, 1);
+    return;
+  }
 
   QString enc_file = m_Method->useEnc(zipMD);
   if (enc_file != "") zipMD = enc_file;
@@ -1822,7 +1831,16 @@ void Notes::javaNoteToQMLNote() {
 
   QString zipMD = privateDir + "KnotData/memo/" +
                   QFileInfo(currentMDFile).fileName() + ".zip";
-  m_Method->compressFile(zipMD, currentMDFile, encPassword);
+
+  // m_Method->compressFile(zipMD, currentMDFile, encPassword);
+
+  if (!m_Method->compressFileWithZlib(currentMDFile, zipMD,
+                                      Z_DEFAULT_COMPRESSION)) {
+    errorInfo = tr("An error occurred while compressing the file.");
+    ShowMessage *msg = new ShowMessage(this);
+    msg->showMsg("Knot", errorInfo, 1);
+    return;
+  }
 
   QString enc_file = m_Method->useEnc(zipMD);
   if (enc_file != "") zipMD = enc_file;
@@ -2297,13 +2315,18 @@ void Notes::openNotes() {
                           QString dec_file = m_Method->useDec(zFile);
                           if (dec_file != "") zFile = dec_file;
 
-                          bool unzipResult = m_Method->decompressWithPassword(
-                              zFile, pDir, encPassword);
+                          if (!m_Method->decompressFileWithZlib(zFile, kFile)) {
+                            mw_one->closeProgress();
+                            errorInfo = tr(
+                                "An error occurred while unzipping the file.");
 
-                          while (unzipResult == false &&
-                                 isPasswordError == false)
-                            QCoreApplication::processEvents(
-                                QEventLoop::AllEvents, 100);
+                            ShowMessage *msg = new ShowMessage();
+                            msg->showMsg("Knot", errorInfo, 1);
+                            return;
+                          }
+
+                          // m_Method->decompressWithPassword(
+                          //     zFile, pDir, encPassword);
 
                           if (isPasswordError == false) {
                             if (QFileInfo(pFile).lastModified() >
@@ -2331,13 +2354,18 @@ void Notes::openNotes() {
                           QString dec_file = m_Method->useDec(zFile);
                           if (dec_file != "") zFile = dec_file;
 
-                          bool unzipResult = m_Method->decompressWithPassword(
-                              zFile, pDir, encPassword);
+                          if (!m_Method->decompressFileWithZlib(zFile, kFile)) {
+                            mw_one->closeProgress();
+                            errorInfo = tr(
+                                "An error occurred while unzipping the file.");
 
-                          while (unzipResult == false &&
-                                 isPasswordError == false)
-                            QCoreApplication::processEvents(
-                                QEventLoop::AllEvents, 100);
+                            ShowMessage *msg = new ShowMessage();
+                            msg->showMsg("Knot", errorInfo, 1);
+                            return;
+                          }
+
+                          // m_Method->decompressWithPassword(
+                          //     zFile, pDir, encPassword);
 
                           if (isPasswordError == false) {
                             if (QFileInfo(pFile).lastModified() >
@@ -2394,7 +2422,17 @@ void Notes::updateMainnotesIniToSyncLists() {
   qDebug() << "cDT=" << cDT << "mainnotesLastModi=" << mainnotesLastModi;
   if (cDT > mainnotesLastModi) {
     QString zipMainnotes = privateDir + "KnotData/mainnotes.ini.zip";
-    m_Method->compressFile(zipMainnotes, iniDir + "mainnotes.ini", encPassword);
+
+    // m_Method->compressFile(zipMainnotes, iniDir + "mainnotes.ini",
+    // encPassword);
+
+    if (!m_Method->compressFileWithZlib(iniDir + "mainnotes.ini", zipMainnotes,
+                                        Z_DEFAULT_COMPRESSION)) {
+      errorInfo = tr("An error occurred while compressing the file.");
+      ShowMessage *msg = new ShowMessage(this);
+      msg->showMsg("Knot", errorInfo, 1);
+      return;
+    }
 
     QString enc_file = m_Method->useEnc(zipMainnotes);
     if (enc_file != "") zipMainnotes = enc_file;

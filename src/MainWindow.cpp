@@ -16,7 +16,7 @@ bool isEBook, isReport, isUpData, isZipOK, isMenuImport, isDownData, isEncrypt;
 bool isAdd = false;
 
 QString iniFile, iniDir, privateDir, bakfileDir, strDate, readDate, noteText,
-    strStats, SaveType, strY, strM, btnYText, btnMText, btnDText,
+    strStats, SaveType, strY, strM, btnYText, btnMText, btnDText, errorInfo,
     CurrentYearMonth, zipfile, txt, searchStr, currentMDFile, copyText,
     imgFileName, defaultFontFamily, customFontFamily, encPassword;
 QStringList listM;
@@ -96,6 +96,12 @@ void BakDataThread::run() {
 
 void MainWindow::bakDataDone() {
   closeProgress();
+
+  if (errorInfo != "") {
+    ShowMessage *msg = new ShowMessage(this);
+    msg->showMsg("Knot", errorInfo, 1);
+    return;
+  }
 
   if (isUpData) {
     m_CloudBackup->uploadData();
@@ -2666,9 +2672,9 @@ void MainWindow::on_actionExport_Data_triggered() {
   myBakDataThread->start();
 }
 
-QString MainWindow::bakData() {
+bool MainWindow::bakData() {
+  errorInfo = "";
   m_NotesList->clearFiles();
-  QFile::remove(bakfileDir + "memo.zip");
 
   // set zip filename
   QString pass = encPassword;
@@ -2686,16 +2692,16 @@ QString MainWindow::bakData() {
 
   bool isZipResult = false;
   isZipResult = compressDirectory(zipfile, iniDir, encPassword);
-  while (isZipResult == false)
-    QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+  if (isZipResult == false) {
+    errorInfo = tr("An error occurred while compressing the file.");
+    return false;
+  }
 
   // enc data
   QString enc_file = m_Method->useEnc(zipfile);
-  if (enc_file != "") {
-    zipfile = enc_file;
-  }
+  if (enc_file != "") zipfile = enc_file;
 
-  return zipfile;
+  return true;
 }
 
 void MainWindow::on_actionShareFile() {
@@ -2793,8 +2799,8 @@ bool MainWindow::importBakData(QString fileName) {
 
   if (bakFileFrom == "desktop") {
     deleteDirfile(iniDir + "memo");
-    QFile::remove(bakfileDir + "KnotData/todo.ini");
-    QFile::remove(bakfileDir + "KnotData/mainnotes.ini");
+    QFile::remove(iniDir + "todo.ini");
+    QFile::remove(iniDir + "mainnotes.ini");
 
     m_Reader->copyDirectoryFiles(bakfileDir + "KnotData/memo", iniDir + "memo",
                                  true);

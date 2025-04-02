@@ -7,7 +7,7 @@
 
 extern MainWindow *mw_one;
 extern Method *m_Method;
-extern QString iniDir, privateDir, currentMDFile, appName;
+extern QString iniDir, privateDir, currentMDFile, appName, errorInfo;
 extern bool isAndroid, isDark;
 extern int fontSize;
 

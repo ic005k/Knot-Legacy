@@ -11,7 +11,7 @@ QString orgLblStyle;
 extern MainWindow* mw_one;
 extern TextSelector* m_TextSelector;
 extern Method* m_Method;
-extern QString iniFile, iniDir, privateDir, encPassword;
+extern QString iniFile, iniDir, privateDir, encPassword, errorInfo;
 extern bool loading, isBreak, zh_cn, isDark, isAndroid, isPasswordError,
     isEncrypt;
 extern int fontSize;
@@ -202,7 +202,16 @@ void Todo::closeTodo() {
       mw_one->ui->chkWebDAV->isChecked()) {
     QString todoFile = iniDir + "todo.ini";
     QString todoZipFile = privateDir + "KnotData/todo.ini.zip";
-    m_Method->compressFile(todoZipFile, todoFile, encPassword);
+
+    // if (!m_Method->compressFile(todoZipFile, todoFile, encPassword)) {
+
+    if (!m_Method->compressFileWithZlib(todoFile, todoZipFile,
+                                        Z_DEFAULT_COMPRESSION)) {
+      errorInfo = tr("An error occurred while compressing the file.");
+      ShowMessage* msg = new ShowMessage(this);
+      msg->showMsg("Knot", errorInfo, 1);
+      return;
+    }
 
     QString enc_file = m_Method->useEnc(todoZipFile);
     if (enc_file != "") todoZipFile = enc_file;
@@ -1443,12 +1452,21 @@ void Todo::openTodo() {
                       QString dec_file = m_Method->useDec(zFile);
                       if (dec_file != "") zFile = dec_file;
 
-                      bool unzipResult = m_Method->decompressWithPassword(
-                          zFile, privateDir + "KnotData", encPassword);
+                      errorInfo = "";
+                      if (!m_Method->decompressFileWithZlib(
+                              zFile, privateDir + "KnotData/todo.ini")) {
+                        mw_one->closeProgress();
+                        errorInfo =
+                            tr("An error occurred while unzipping the file.");
 
-                      while (unzipResult == false && isPasswordError == false)
-                        QCoreApplication::processEvents(QEventLoop::AllEvents,
-                                                        100);
+                        ShowMessage* msg = new ShowMessage();
+                        msg->showMsg("Knot", errorInfo, 1);
+                        return;
+                      }
+
+                      //  m_Method->decompressWithPassword(
+                      //     zFile, privateDir + "KnotData", encPassword);
+
                       QString zipToto = privateDir + "KnotData/todo.ini";
                       QString localTodo = iniDir + "todo.ini";
 

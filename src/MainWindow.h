@@ -328,7 +328,7 @@ class MainWindow : public QMainWindow {
   void initTodayInitSteps();
 
   QString getYMD(QString date);
-  QString bakData();
+  bool bakData();
   bool importBakData(QString fileName);
 
   QString getTabText();

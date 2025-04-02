@@ -19,7 +19,8 @@ std::string toNormalizedPath(const QString &qtPath) {
 
 extern MainWindow *mw_one;
 extern QTabWidget *tabData;
-extern QString iniDir, searchStr, currentMDFile, privateDir, encPassword;
+extern QString iniDir, searchStr, currentMDFile, privateDir, encPassword,
+    errorInfo;
 extern CategoryList *m_CategoryList;
 extern bool isEpub, isText, isPDF, loading, isDark, isAndroid, isEncrypt;
 extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
@@ -2024,6 +2025,148 @@ QByteArray Method::deriveKey(const QString &password, const QByteArray &salt,
 
 bool Method::encryptFile(const QString &inputPath, const QString &outputPath,
                          const QString &password) {
+  // 生成随机盐和IV（带错误日志）
+  QByteArray salt = generateRandomBytes(16);
+  QByteArray iv = generateRandomBytes(16);
+  if (salt.isEmpty() || iv.isEmpty()) {
+    qDebug() << "Salt/IV生成失败: "
+             << ERR_error_string(ERR_get_error(), nullptr);
+    return false;
+  }
+
+  // 打开文件（处理Android权限）
+  QFile inFile(inputPath);
+  QFile outFile(outputPath);
+  if (!inFile.open(QIODevice::ReadOnly | QIODevice::Unbuffered)) {
+    qDebug() << "输入文件打开失败: " << inFile.errorString();
+    return false;
+  }
+
+  qint64 dataSize = inFile.size();
+
+  if (!outFile.open(QIODevice::WriteOnly | QIODevice::Unbuffered)) {
+    qDebug() << "输出文件打开失败: " << outFile.errorString();
+    inFile.close();
+    return false;
+  }
+
+  // 写入盐和IV
+  if (outFile.write(salt) != 16 || outFile.write(iv) != 16) {
+    qDebug() << "盐/IV写入失败";
+    inFile.close();
+    outFile.close();
+    return false;
+  }
+
+  // 密钥派生（高迭代次数）
+  QByteArray key = deriveKey(password, salt, 32);
+  if (key.isEmpty()) {
+    qDebug() << "密钥派生失败";
+    inFile.close();
+    outFile.close();
+    return false;
+  }
+
+  // 初始化加密上下文（显式设置填充）
+  EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+  if (!ctx) {
+    qDebug() << "EVP上下文创建失败";
+    inFile.close();
+    outFile.close();
+    return false;
+  }
+  if (EVP_EncryptInit_ex(
+          ctx, EVP_aes_256_cbc(), nullptr,
+          reinterpret_cast<const unsigned char *>(key.constData()),
+          reinterpret_cast<const unsigned char *>(iv.constData())) != 1) {
+    qDebug() << "加密初始化失败: "
+             << ERR_error_string(ERR_get_error(), nullptr);
+    EVP_CIPHER_CTX_free(ctx);
+    inFile.close();
+    outFile.close();
+    return false;
+  }
+  EVP_CIPHER_CTX_set_padding(ctx, 1);  // 显式启用PKCS#7填充
+
+  // 动态分配缓冲区（避免栈溢出）
+  const int bufferSize = 4096;
+  unsigned char *inBuf = new unsigned char[bufferSize];
+  unsigned char *outBuf = new unsigned char[bufferSize + EVP_MAX_BLOCK_LENGTH];
+  bool success = true;
+  int outLen = 0;
+
+  // 分块加密
+  while (true) {
+    qint64 bytesRead = inFile.read(reinterpret_cast<char *>(inBuf), bufferSize);
+    if (bytesRead < 0) {
+      qDebug() << "文件读取错误: " << inFile.errorString();
+      success = false;
+      break;
+    } else if (bytesRead == 0) {
+      break;  // 文件结束
+    }
+
+    if (EVP_EncryptUpdate(ctx, outBuf, &outLen, inBuf, bytesRead) != 1) {
+      qDebug() << "加密分块失败: "
+               << ERR_error_string(ERR_get_error(), nullptr);
+      success = false;
+      break;
+    }
+
+    qint64 written = outFile.write(reinterpret_cast<char *>(outBuf), outLen);
+    if (written != outLen) {
+      qDebug() << "加密数据写入不完整: " << outFile.errorString();
+      success = false;
+      break;
+    }
+  }
+
+  // 处理最终块
+  if (success) {
+    if (EVP_EncryptFinal_ex(ctx, outBuf, &outLen) != 1) {
+      qDebug() << "最终块加密失败: "
+               << ERR_error_string(ERR_get_error(), nullptr);
+      success = false;
+    } else {
+      qint64 written = outFile.write(reinterpret_cast<char *>(outBuf), outLen);
+      if (written != outLen) success = false;
+    }
+  }
+
+  // 清理资源
+  delete[] inBuf;
+  delete[] outBuf;
+  EVP_CIPHER_CTX_free(ctx);
+  inFile.close();
+  outFile.flush();
+  outFile.close();
+
+  // 验证文件大小（可选）
+  // 在验证阶段计算预期大小
+  if (success) {
+    const int blockSize = 16;
+    qint64 encryptedDataSize = dataSize + (blockSize - (dataSize % blockSize));
+    if (dataSize % blockSize == 0) {
+      encryptedDataSize += blockSize;
+    }
+    qint64 expectedSize = 32 + encryptedDataSize;
+
+    if (outFile.size() != expectedSize) {
+      qDebug() << "文件大小验证失败，预期：" << expectedSize << "实际："
+               << outFile.size();
+      // success = false;
+    } else {
+      qDebug() << "文件大小验证成功，预期：" << expectedSize << "实际："
+               << outFile.size();
+    }
+  }
+
+  return success;
+}
+
+bool Method::encryptFile_Old(const QString &inputPath,
+                             const QString &outputPath,
+                             const QString &password) {
   // 生成随机盐和IV
   QByteArray salt = generateRandomBytes(16);
   QByteArray iv = generateRandomBytes(16);
@@ -2095,6 +2238,7 @@ bool Method::decryptFile(const QString &inputPath, const QString &outputPath,
     qDebug() << "无法打开输入文件：" << inFile.errorString();
     return false;
   }
+
   if (!outFile.open(QIODevice::WriteOnly)) {
     qDebug() << "无法打开输出文件：" << outFile.errorString();
     inFile.close();
@@ -2253,4 +2397,167 @@ bool Method::decompressWithPasswordNG(const QString &zipPath,
                                       const QString &extractDir,
                                       const QString &password) {
   return 0;
+}
+
+bool Method::compressFileWithZlib(const QString &sourcePath,
+                                  const QString &destPath, int level) {
+  // compressFile(..., Z_BEST_SPEED);    // 最快速度
+  // compressFile(..., Z_DEFAULT_COMPRESSION); // 平衡模式
+  // compressFile(..., Z_BEST_COMPRESSION);    // 最高压缩率
+
+  QFile srcFile(sourcePath);
+  if (!srcFile.open(QIODevice::ReadOnly)) {
+    qWarning() << "无法打开源文件:" << sourcePath;
+    return false;
+  }
+
+  QFile destFile(destPath);
+  if (!destFile.open(QIODevice::WriteOnly)) {
+    qWarning() << "无法创建目标文件:" << destPath;
+    srcFile.close();
+    return false;
+  }
+
+  z_stream zs;
+  memset(&zs, 0, sizeof(zs));
+
+  // 初始化压缩流
+  if (deflateInit(&zs, level) != Z_OK) {
+    qWarning() << "zlib压缩初始化失败";
+    srcFile.close();
+    destFile.close();
+    return false;
+  }
+
+  constexpr int CHUNK_SIZE = 128 * 1024;  // 128KB分块
+  char inBuffer[CHUNK_SIZE];
+  char outBuffer[CHUNK_SIZE];
+
+  bool success = true;
+  qint64 totalRead = 0;
+
+  do {
+    // 读取源文件块
+    qint64 bytesRead = srcFile.read(inBuffer, CHUNK_SIZE);
+    if (bytesRead < 0) {
+      qWarning() << "文件读取错误";
+      success = false;
+      break;
+    }
+
+    zs.avail_in = bytesRead;
+    zs.next_in = reinterpret_cast<Bytef *>(inBuffer);
+
+    // 压缩并写入目标文件
+    do {
+      zs.avail_out = CHUNK_SIZE;
+      zs.next_out = reinterpret_cast<Bytef *>(outBuffer);
+
+      int ret = deflate(&zs, (srcFile.atEnd() ? Z_FINISH : Z_NO_FLUSH));
+      if (ret == Z_STREAM_ERROR) {
+        qWarning() << "压缩过程中发生错误";
+        success = false;
+        break;
+      }
+
+      qint64 compressedSize = CHUNK_SIZE - zs.avail_out;
+      if (destFile.write(outBuffer, compressedSize) != compressedSize) {
+        qWarning() << "文件写入错误";
+        success = false;
+        break;
+      }
+
+    } while (zs.avail_out == 0);
+
+    totalRead += bytesRead;
+  } while (!srcFile.atEnd() && success);
+
+  deflateEnd(&zs);
+  srcFile.close();
+  destFile.close();
+
+  if (success) {
+    qDebug() << "压缩完成，原始大小:" << totalRead
+             << "压缩后大小:" << QFileInfo(destPath).size();
+  }
+  return success;
+}
+
+bool Method::decompressFileWithZlib(const QString &sourcePath,
+                                    const QString &destPath) {
+  QFile srcFile(sourcePath);
+  if (!srcFile.open(QIODevice::ReadOnly)) {
+    qWarning() << "无法打开压缩文件:" << sourcePath;
+    return false;
+  }
+
+  QFile destFile(destPath);
+  if (!destFile.open(QIODevice::WriteOnly)) {
+    qWarning() << "无法创建解压文件:" << destPath;
+    srcFile.close();
+    return false;
+  }
+
+  z_stream zs;
+  memset(&zs, 0, sizeof(zs));
+
+  if (inflateInit(&zs) != Z_OK) {
+    qWarning() << "zlib解压初始化失败";
+    srcFile.close();
+    destFile.close();
+    return false;
+  }
+
+  constexpr int CHUNK_SIZE = 128 * 1024;
+  char inBuffer[CHUNK_SIZE];
+  char outBuffer[CHUNK_SIZE];
+
+  bool success = true;
+  qint64 totalWritten = 0;
+  qint64 bytesRead = 0;
+
+  do {
+    // 读取压缩数据块
+    bytesRead = srcFile.read(inBuffer, CHUNK_SIZE);
+    if (bytesRead < 0) {
+      qWarning() << "文件读取错误";
+      success = false;
+      break;
+    }
+
+    zs.avail_in = bytesRead;
+    zs.next_in = reinterpret_cast<Bytef *>(inBuffer);
+
+    // 解压并写入目标文件
+    do {
+      zs.avail_out = CHUNK_SIZE;
+      zs.next_out = reinterpret_cast<Bytef *>(outBuffer);
+
+      int ret = inflate(&zs, Z_NO_FLUSH);
+      if (ret == Z_NEED_DICT || ret == Z_DATA_ERROR || ret == Z_MEM_ERROR) {
+        qWarning() << "解压过程中发生错误:" << ret;
+        success = false;
+        break;
+      }
+
+      qint64 decompressedSize = CHUNK_SIZE - zs.avail_out;
+      if (destFile.write(outBuffer, decompressedSize) != decompressedSize) {
+        qWarning() << "文件写入错误";
+        success = false;
+        break;
+      }
+
+      totalWritten += decompressedSize;
+    } while (zs.avail_out == 0 && success);
+
+  } while (bytesRead > 0 && success);
+
+  inflateEnd(&zs);
+  srcFile.close();
+  destFile.close();
+
+  if (success) {
+    qDebug() << "解压完成，解压后大小:" << totalWritten;
+  }
+  return success;
 }

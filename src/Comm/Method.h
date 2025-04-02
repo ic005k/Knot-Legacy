@@ -8,6 +8,7 @@
 #include <src/quazip/quazipfile.h>
 #include <src/quazip/quazipnewinfo.h>
 #include <src/quazip/unzip.h>
+#include <zlib.h>
 
 #include <QByteArray>
 #include <QConicalGradient>
@@ -16,6 +17,7 @@
 #include <QDialog>
 #include <QDir>
 #include <QDirIterator>
+#include <QFile>
 #include <QFileInfo>
 #include <QFileInfoList>
 #include <QInputDialog>
@@ -23,6 +25,7 @@
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QQuickWidget>
+#include <QStandardPaths>
 #include <QString>
 #include <QTableWidget>
 #include <QTimer>
@@ -315,6 +318,14 @@ class Method : public QDialog {
                    const QString &password);
   QString useDec(QString enc_file);
   QString useEnc(QString m_file);
+
+  bool encryptFile_Old(const QString &inputPath, const QString &outputPath,
+                       const QString &password);
+
+  bool decompressFileWithZlib(const QString &sourcePath,
+                              const QString &destPath);
+  bool compressFileWithZlib(const QString &sourcePath, const QString &destPath,
+                            int level);
 
  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
