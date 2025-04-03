@@ -17,7 +17,9 @@ ListView {
     delegate: ItemDelegate {
         width: listView.width
 
-        height: 100
+        // 动态高度：根据内容自动计算
+        implicitHeight: layout.implicitHeight + 20 // 增加上下边距
+
         leftPadding: 16
         rightPadding: 16
 
@@ -25,6 +27,7 @@ ListView {
         property bool isCurrent: ListView.isCurrentItem
 
         contentItem: ColumnLayout {
+            id:layout
             spacing: 4
 
             Text {
@@ -85,5 +88,20 @@ ListView {
 
             mw_one.on_btnOpenSearchResult_clicked()
         }
+    }
+
+    // 空状态提示
+    Label {
+        anchors.centerIn: parent
+        visible: listView.count === 0
+        text: qsTr("No results were found")
+        color: "#bdc3c7"
+        font.pixelSize: 18
+    }
+
+    // 滚动条
+    ScrollBar.vertical: ScrollBar {
+        policy: ScrollBar.AsNeeded
+        width: 8
     }
 }
