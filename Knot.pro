@@ -329,8 +329,6 @@ DISTFILES += \
     android/res/values/libs.xml \
     android/res/values/libs.xml \
     android/res/xml/qtprovider_paths.xml \
-    src/cmark-gfm/src/case_fold_switch.inc \
-    src/cmark-gfm/src/entities.inc \
     src/cn.qm \
     src/cn.ts \
     src/imgview.qml \
@@ -338,6 +336,7 @@ DISTFILES += \
     src/onedrive/log.qml \
     src/onedrive/web.qml \
     src/qmlsrc/MainModel.qml \
+    src/qmlsrc/SearchResults.qml \
     src/qmlsrc/TodoModel.qml \
     src/qmlsrc/TreeItem.js \
     src/qmlsrc/TreeWidget.qml \

@@ -71,8 +71,9 @@ ListView {
                                         const end = pos.charEnd
                                         if (start >= 0
                                             && end <= result.length) {
-                                            result = result.slice(0, start)
-                                            + `<span style="background: #fff3b1;">${result.slice(
+                                            result = result.slice(
+                                                0,
+                                                start) + `<span style="background: #fff3b1;color:#333">${result.slice(
                                                 start,
                                                 end)}</span>` + result.slice(
                                                 end)

@@ -96,7 +96,6 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
   connect(mw_one->ui->editNotesSearch, &QLineEdit::textChanged, this,
           &NotesList::onSearchTextChanged);
 
-  // m_lastIndexTime = QDateTime::fromMSecsSinceEpoch(0); // 初始化为无效时间
   loadIndexTimestamp();
   m_searchEngine->loadIndex(privateDir + "MyNotesIndex");
 }
@@ -2483,8 +2482,8 @@ void NotesList::onSearchTextChanged(const QString &text) {
     SearchResult item;
     QString file = result.filePath;
     item.filePath = file;
-    item.previewText = generatePreviewText(result);  // 确保此函数已实现
-    item.highlightPos = result.highlightPos;         // 直接使用已处理的位置
+    item.previewText = generatePreviewText(result);
+    item.highlightPos = result.highlightPos;  // 直接使用已处理的位置
 
     QString title = mw_one->m_Notes->m_NoteIndexManager->getNoteTitle(file);
     if (title.length() > 0)
@@ -2574,24 +2573,27 @@ QString NotesList::generatePreviewText(const SearchResult &result) {
   }
 
   // 3. 生成带高亮的预览文本
-  QString preview = content.left(200);  // 截取前200字符
-  QList<KeywordPosition> sortedPositions = result.highlightPos;
+  QString preview;
+  preview = content.left(200);  // 截取前200字符
+
+  // QList<KeywordPosition> sortedPositions = result.highlightPos;
 
   // 按起始位置反向排序（避免插入标签导致偏移错乱）
-  std::sort(sortedPositions.begin(), sortedPositions.end(),
-            [](const KeywordPosition &a, const KeywordPosition &b) {
-              return a.charStart > b.charStart;
-            });
+  // std::sort(sortedPositions.begin(), sortedPositions.end(),
+  //          [](const KeywordPosition &a, const KeywordPosition &b) {
+  //           return a.charStart > b.charStart;
+  //         });
 
   // 插入高亮标签
-  for (const KeywordPosition &pos : sortedPositions) {
-    int start = pos.charStart;
-    int end = pos.charEnd;
-    if (start < preview.length() && end <= preview.length()) {
-      preview.insert(end, "</span>");
-      preview.insert(start, "<span style='color: #e74c3c; font-weight: 500;'>");
-    }
-  }
+  // for (const KeywordPosition &pos : sortedPositions) {
+  // int start = pos.charStart;
+  // int end = pos.charEnd;
+  // if (start < preview.length() && end <= preview.length()) {
+  //     preview.insert(end, "</span>");
+  //    preview.insert(start, "<span style='color: #e74c3c; font-weight:
+  //    500;'>");
+  // }
+  //}
 
   return preview;
 }
