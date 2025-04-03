@@ -1,88 +1,89 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
-
-/*ListView {
-    id: listView
-    width: parent.width
-    height: parent.height
-    spacing: 8
-
-    property var results: []
-
-    function updateResults() {
-        model = results
-    }
-
-    delegate: Rectangle {
-        width: listView.width
-        height: column.height + 16
-        color: "#FFFFFF"
-        radius: 6
-
-        Column {
-            id: column
-            anchors.fill: parent
-            anchors.margins: 8
-            spacing: 4
-
-            Text {
-                text: modelData.path.split("/").pop()
-                font.bold: true
-                font.pixelSize: 14
-                color: "#212121"
-            }
-
-            Text {
-                text: modelData.snippet
-                textFormat: Text.RichText
-                wrapMode: Text.Wrap
-                font.pixelSize: 12
-                color: "#757575"
-            }
-        }
-    }
-
-    Connections {
-        target: dbManager
-        onSearchResultsReady: {
-            resultModel.clear()
-            results.forEach(item => resultModel.append(item))
-        }
-    }
-}*/
+import QtQuick.Layouts 1.15
 
 ListView {
-    property var results: []
-    function updateResults() {
-        model = results
+    id: listView
+    clip: true
+    spacing: 12
+    model: searchModel
+
+    property string mdFile: ""
+
+    function getQmlCurrentMDFile() {
+        return mdFile
     }
 
-    model: ListModel { id: resultModel }
-    delegate: Item {
-        width: parent.width
-        height: 80
+    delegate: ItemDelegate {
+        width: listView.width
 
-        Column {
+        height: 100
+        leftPadding: 16
+        rightPadding: 16
+
+        // 新增选中状态标识属性
+        property bool isCurrent: ListView.isCurrentItem
+
+        contentItem: ColumnLayout {
             spacing: 4
+
             Text {
-                text: model.path.split("/").pop()
+                id: text1
+                text: model.title
                 font.bold: true
-                color: "#333"
+                font.pointSize: fontSize
+                elide: Text.ElideRight
+                Layout.fillWidth: true
+                color: isCurrent ? "white" : "#212121" // 选中时文字变白
             }
+
             Text {
-                text: model.snippet
+                id: text2
+                text: model.preview
                 textFormat: Text.RichText
                 wrapMode: Text.Wrap
-                width: parent.width
+                maximumLineCount: 2
+                font.pointSize: fontSize - 1
+                color: isCurrent ? "#eeeeee" : "#495057" // 选中时浅灰色文字
+                Layout.fillWidth: true
+            }
+
+            Text {
+                id: text3
+                text: model.path
+                font.italic: true
+                font.pointSize: fontSize - 2
+                color: isCurrent ? "#bdbdbd" : "#868e96" // 选中时浅灰色路径
+                elide: Text.ElideMiddle
+                Layout.fillWidth: true
             }
         }
-    }
 
-    Connections {
-        target: dbManager
-        onSearchResultsReady: {
-            resultModel.clear();
-            results.forEach(item => resultModel.append(item));
+        background: Rectangle {
+            anchors.fill: parent
+            color: isCurrent ? "#757575" : "transparent" // 中灰色背景
+            radius: 6
+
+            // 添加边框效果
+            border.color: isCurrent ? "#616161" : "transparent"
+            border.width: 1
+        }
+
+        // 点击选中处理
+        onClicked: {
+
+            mdFile = text3.text
+            console.log("Open file:", text3.text)
+            listView.currentIndex = index
+        }
+
+        onDoubleClicked: {
+
+            mdFile = text3.text
+            console.log("Open file:", text3.text)
+            listView.currentIndex = index
+
+            mw_one.on_btnOpenSearchResult_clicked()
         }
     }
 }

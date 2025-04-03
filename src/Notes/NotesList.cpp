@@ -98,6 +98,12 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
 
   loadIndexTimestamp();
   m_searchEngine->loadIndex(privateDir + "MyNotesIndex");
+
+  m_dbManager.initDatabase(privateDir + "md_database_v3.db");
+  mw_one->ui->qwNotesSearchResult->setSource(
+      QUrl(QStringLiteral("qrc:/src/qmlsrc/SearchResults.qml")));
+  mw_one->ui->qwNotesSearchResult->rootContext()->setContextProperty(
+      "searchModel", &m_searchModel);
 }
 
 NotesList::~NotesList() { delete ui; }
@@ -2462,6 +2468,16 @@ void NotesList::onSearchIndexReady() {
 }
 
 void NotesList::onSearchTextChanged(const QString &text) {
+  QTimer::singleShot(300, [this, text]() {  // 防抖处理
+    auto results =
+        m_dbManager.searchDocuments(text, mw_one->m_Notes->m_NoteIndexManager);
+    m_searchModel.setResults(results);
+  });
+
+  ////////
+  return;
+  ///////
+
   QList<SearchResult> results = m_searchEngine->search(text);
 
   // 打印调试信息
@@ -2506,6 +2522,10 @@ void NotesList::onSearchTextChanged(const QString &text) {
 }
 
 void NotesList::openSearch() {
+  m_dbManager.updateFileIndex(iniDir + "memo");
+
+  return;
+
   if (m_isIndexing) return;
   m_isIndexing = true;
 

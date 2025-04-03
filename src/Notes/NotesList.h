@@ -21,6 +21,8 @@
 
 #include "NotesSearchEngine.h"
 #include "SearchResultModel.h"
+#include "database_manager.h"
+#include "search_model.h"
 #include "src/Notes/MoveTo.h"
 #include "src/Notes/NewNoteBook.h"
 #include "ui_MoveTo.h"
@@ -250,6 +252,9 @@ class NotesList : public QDialog {
   bool m_isIndexing = false;  // 标记索引状态
   QString generatePreviewText(const SearchResult &result);
   void clearInvalidMDFile();
+
+  DatabaseManager m_dbManager;
+  SearchModel m_searchModel;
 };
 
 class SearchMapper {

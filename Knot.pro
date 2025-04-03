@@ -1,5 +1,5 @@
 QT += core gui network printsupport core-private
-QT += charts sensors
+QT += charts sensors sql
 QT += qml quick quickwidgets webview positioning location
 QT += xml svg
 
@@ -124,6 +124,8 @@ SOURCES += \
     src/Notes/QTextEditHighlighter.cpp \
     src/Notes/SearchResultModel.cpp \
     src/Notes/TextSelector.cpp \
+    src/Notes/database_manager.cpp \
+    src/Notes/search_model.cpp \
     src/Preferences.cpp \
     src/Reader/DocumentHandler.cpp \
     src/Reader/File.cpp \
@@ -234,6 +236,8 @@ HEADERS += \
     src/Notes/QTextEditHighlighter.h \
     src/Notes/SearchResultModel.h \
     src/Notes/TextSelector.h \
+    src/Notes/database_manager.h \
+    src/Notes/search_model.h \
     src/Preferences.h \
     src/Reader/DocumentHandler.h \
     src/Reader/File.h \
