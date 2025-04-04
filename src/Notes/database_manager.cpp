@@ -70,7 +70,9 @@ void DatabaseManager::updateFilesIndex(const QString &directory) {
 }
 
 void DatabaseManager::processFile(const QString &filePath) {
-  QFile file(filePath);
+  QString m_filePath = QFileInfo(filePath).canonicalFilePath();
+
+  QFile file(m_filePath);
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
 
   QTextStream in(&file);
@@ -85,7 +87,7 @@ void DatabaseManager::processFile(const QString &filePath) {
   q.prepare(
       "INSERT INTO documents (path, modified, content, terms) "
       "VALUES (?, ?, ?, ?)");
-  q.addBindValue(filePath);
+  q.addBindValue(m_filePath);
   q.addBindValue(modified);
   q.addBindValue(content);
   q.addBindValue(terms.join(' '));
@@ -93,7 +95,7 @@ void DatabaseManager::processFile(const QString &filePath) {
 
   q.prepare(
       "INSERT INTO fts_documents (path, content, terms) VALUES (?, ?, ?)");
-  q.addBindValue(filePath);
+  q.addBindValue(m_filePath);
   q.addBindValue(content);
   q.addBindValue(terms.join(' '));
   q.exec();
@@ -234,7 +236,14 @@ void DatabaseManager::executeTransaction(
 void DatabaseManager::updateFileIndex(const QString &filePath) {
   deleteFileIndex(filePath);
 
-  executeTransaction([this, filePath]() { processFile(filePath); });
+  // executeTransaction([this, filePath]() { processFile(filePath); });
+
+  executeTransactionWithRetry(
+      [this, filePath]() -> bool {
+        processFile(filePath);
+        return true;
+      },
+      1);
 }
 
 void DatabaseManager::deleteFileIndex(const QString &filePath) {
