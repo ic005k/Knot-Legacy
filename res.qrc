@@ -164,5 +164,6 @@
         <file>res/marker.png</file>
         <file>res/find2_l.svg</file>
         <file>res/jbdict/dict.zip</file>
+        <file>res/view_l.svg</file>
     </qresource>
 </RCC>

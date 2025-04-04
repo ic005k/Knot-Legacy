@@ -6303,7 +6303,7 @@ QRadioButton::indicator:checked {
            </property>
            <property name="icon">
             <iconset resource="../res.qrc">
-             <normaloff>:/res/open_l.png</normaloff>:/res/open_l.png</iconset>
+             <normaloff>:/res/view_l.svg</normaloff>:/res/view_l.svg</iconset>
            </property>
            <property name="iconSize">
             <size>
