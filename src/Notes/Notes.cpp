@@ -273,6 +273,8 @@ void Notes::saveMainNotes() {
     qDebug() << "Save Note: " << currentMDFile;
 
     updateMDFileToSyncLists(currentMDFile);
+
+    mw_one->m_NotesList->m_dbManager.updateFileIndex(currentMDFile);
   }
 
   isTextChange = false;
@@ -1842,6 +1844,8 @@ void Notes::javaNoteToQMLNote() {
   if (enc_file != "") zipMD = enc_file;
 
   notes_sync_files.append(zipMD);
+
+  mw_one->m_NotesList->m_dbManager.updateFileIndex(currentMDFile);
 }
 
 QString Notes::formatMDText(QString text) {

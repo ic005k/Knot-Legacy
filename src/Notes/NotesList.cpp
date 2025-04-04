@@ -104,6 +104,7 @@ NotesList::NotesList(QWidget *parent) : QDialog(parent), ui(new Ui::NotesList) {
       QUrl(QStringLiteral("qrc:/src/qmlsrc/SearchResults.qml")));
   mw_one->ui->qwNotesSearchResult->rootContext()->setContextProperty(
       "searchModel", &m_searchModel);
+  m_dbManager.updateFilesIndex(iniDir + "memo");
 }
 
 NotesList::~NotesList() { delete ui; }
@@ -1021,6 +1022,9 @@ void NotesList::on_btnDel_Recycle_clicked() {
       image_file = "KnotData/memo/" + image_file;
       needDelWebDAVFiles.append(image_file);
     }
+
+    m_dbManager.deleteFileIndex(md);
+
     delFile(md);
 
     curItem->parent()->removeChild(curItem);
@@ -2522,8 +2526,6 @@ void NotesList::onSearchTextChanged(const QString &text) {
 }
 
 void NotesList::openSearch() {
-  m_dbManager.updateFileIndex(iniDir + "memo");
-
   return;
 
   if (m_isIndexing) return;

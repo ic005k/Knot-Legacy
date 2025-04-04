@@ -52,6 +52,8 @@ class NotesList : public QDialog {
   ~NotesList();
   Ui::NotesList *ui;
 
+  DatabaseManager m_dbManager;
+
   QStringList needDelWebDAVFiles;
 
   QStringList searchResultList;
@@ -253,7 +255,6 @@ class NotesList : public QDialog {
   QString generatePreviewText(const SearchResult &result);
   void clearInvalidMDFile();
 
-  DatabaseManager m_dbManager;
   SearchModel m_searchModel;
 };
 
