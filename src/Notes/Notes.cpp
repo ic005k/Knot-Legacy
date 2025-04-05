@@ -2208,6 +2208,7 @@ void Notes::openEditUI() {
 void Notes::openNotes() {
   notes_sync_files.clear();
   mw_one->m_NotesList->needDelWebDAVFiles.clear();
+  isPasswordError = false;
 
   if (mw_one->ui->chkAutoSync->isChecked() &&
       mw_one->ui->chkWebDAV->isChecked()) {
@@ -2320,6 +2321,7 @@ void Notes::openNotes() {
 
                             ShowMessage *msg = new ShowMessage();
                             msg->showMsg("Knot", errorInfo, 1);
+                            isPasswordError = true;
                             return;
                           }
 
@@ -2359,6 +2361,7 @@ void Notes::openNotes() {
 
                             ShowMessage *msg = new ShowMessage();
                             msg->showMsg("Knot", errorInfo, 1);
+                            isPasswordError = true;
                             return;
                           }
 
@@ -2370,6 +2373,8 @@ void Notes::openNotes() {
                                 QFileInfo(kFile).lastModified()) {
                               QFile::remove(kFile);
                               QFile::copy(pFile, kFile);
+                              mw_one->m_NotesList->m_dbManager.updateFileIndex(
+                                  kFile);
                             }
                           } else {
                             QFile::remove(zFile);

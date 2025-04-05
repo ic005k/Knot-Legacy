@@ -1401,6 +1401,7 @@ void Todo::openTodoUI() {
 void Todo::openTodo() {
   m_TextSelector->close();
   m_TextSelector = new TextSelector(mw_one);
+  isPasswordError = false;
 
   if (mw_one->ui->chkAutoSync->isChecked() &&
       mw_one->ui->chkWebDAV->isChecked()) {
@@ -1461,6 +1462,7 @@ void Todo::openTodo() {
 
                         ShowMessage* msg = new ShowMessage();
                         msg->showMsg("Knot", errorInfo, 1);
+                        isPasswordError = true;
                         return;
                       }
 
