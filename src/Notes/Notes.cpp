@@ -2314,14 +2314,17 @@ void Notes::openNotes() {
                           QString dec_file = m_Method->useDec(zFile);
                           if (dec_file != "") zFile = dec_file;
 
-                          if (!m_Method->decompressFileWithZlib(zFile, kFile)) {
+                          if (!m_Method->decompressFileWithZlib(zFile, pFile)) {
                             mw_one->closeProgress();
-                            errorInfo = tr(
-                                "An error occurred while unzipping the file.");
+                            errorInfo =
+                                tr("Decompression failed. Please check in "
+                                   "Preferences that the passwords are "
+                                   "consistent across all platforms.");
 
                             ShowMessage *msg = new ShowMessage();
                             msg->showMsg("Knot", errorInfo, 1);
                             isPasswordError = true;
+                            QFile::remove(zFile);
                             return;
                           }
 
@@ -2354,14 +2357,17 @@ void Notes::openNotes() {
                           QString dec_file = m_Method->useDec(zFile);
                           if (dec_file != "") zFile = dec_file;
 
-                          if (!m_Method->decompressFileWithZlib(zFile, kFile)) {
+                          if (!m_Method->decompressFileWithZlib(zFile, pFile)) {
                             mw_one->closeProgress();
-                            errorInfo = tr(
-                                "An error occurred while unzipping the file.");
+                            errorInfo =
+                                tr("Decompression failed. Please check in "
+                                   "Preferences that the passwords are "
+                                   "consistent across all platforms.");
 
                             ShowMessage *msg = new ShowMessage();
                             msg->showMsg("Knot", errorInfo, 1);
                             isPasswordError = true;
+                            QFile::remove(zFile);
                             return;
                           }
 

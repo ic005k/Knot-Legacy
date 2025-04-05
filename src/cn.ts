@@ -2519,7 +2519,7 @@ in skydrive folder</source>
     <message>
         <location filename="Notes/Notes.cpp" line="292"/>
         <location filename="Notes/Notes.cpp" line="1837"/>
-        <location filename="Notes/Notes.cpp" line="2429"/>
+        <location filename="Notes/Notes.cpp" line="2442"/>
         <source>An error occurred while compressing the file.</source>
         <translation>压缩文件时发生错误。</translation>
     </message>
@@ -2571,15 +2571,19 @@ in skydrive folder</source>
         <translation>分享到</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="2133"/>
+        <location filename="Notes/Notes.cpp" line="2135"/>
         <source>The current note does not exist. Please select another note or create a new note.</source>
         <translation>当前笔记不存在。请选择其它笔记或新建笔记。</translation>
     </message>
     <message>
-        <location filename="Notes/Notes.cpp" line="2316"/>
-        <location filename="Notes/Notes.cpp" line="2355"/>
+        <location filename="Notes/Notes.cpp" line="2320"/>
+        <location filename="Notes/Notes.cpp" line="2363"/>
+        <source>Decompression failed. Please check in Preferences that the passwords are consistent across all platforms.</source>
+        <translation>解压文件不成功，请在偏好设置里面检查各平台的密码是否一致。</translation>
+    </message>
+    <message>
         <source>An error occurred while unzipping the file.</source>
-        <translation>解压文件时发生错误。</translation>
+        <translation type="vanished">解压文件时发生错误。</translation>
     </message>
     <message>
         <location filename="Notes/Notes.ui" line="909"/>
@@ -3835,17 +3839,17 @@ in skydrive folder</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="Comm/ShowMessage.ui" line="125"/>
+        <location filename="Comm/ShowMessage.ui" line="128"/>
         <source>Copy</source>
         <translation>拷贝</translation>
     </message>
     <message>
-        <location filename="Comm/ShowMessage.ui" line="144"/>
+        <location filename="Comm/ShowMessage.ui" line="150"/>
         <source>Del</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="Comm/ShowMessage.ui" line="163"/>
+        <location filename="Comm/ShowMessage.ui" line="172"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
@@ -4259,9 +4263,13 @@ in skydrive folder</source>
         <translation>音频记录进行中...</translation>
     </message>
     <message>
-        <location filename="Todo/Todo.cpp" line="1460"/>
+        <location filename="Todo/Todo.cpp" line="1461"/>
+        <source>Decompression failed. Please check in Preferences that the passwords are consistent across all platforms.</source>
+        <translation>解压文件不成功，请在偏好设置里面检查各平台的密码是否一致。</translation>
+    </message>
+    <message>
         <source>An error occurred while unzipping the file.</source>
-        <translation type="unfinished">解压文件时发生错误。</translation>
+        <translation type="obsolete">解压文件时发生错误。</translation>
     </message>
 </context>
 <context>

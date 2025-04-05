@@ -1458,11 +1458,14 @@ void Todo::openTodo() {
                               zFile, privateDir + "KnotData/todo.ini")) {
                         mw_one->closeProgress();
                         errorInfo =
-                            tr("An error occurred while unzipping the file.");
+                            tr("Decompression failed. Please check in "
+                               "Preferences that the passwords are consistent "
+                               "across all platforms.");
 
                         ShowMessage* msg = new ShowMessage();
                         msg->showMsg("Knot", errorInfo, 1);
                         isPasswordError = true;
+                        QFile::remove(zFile);
                         return;
                       }
 
