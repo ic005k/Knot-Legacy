@@ -55,6 +55,8 @@ class Method : public QDialog {
   ~Method();
   Ui::Method *ui;
 
+  static QString getFileSize(const qint64 &size, int precision);
+
   bool isClickLink = false;
   QWidget *m_widget;
   QString qssSlider;

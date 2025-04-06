@@ -243,7 +243,7 @@ void Reader::startOpenFile(QString openfile) {
 
     ebookFile = openfile;
     strTitle =
-        bookName + "    " + mw_one->getFileSize(QFile(ebookFile).size(), 2);
+        bookName + "    " + m_Method->getFileSize(QFile(ebookFile).size(), 2);
 
     mw_one->m_ReadTWThread->quit();
     mw_one->m_ReadTWThread->wait();
@@ -1024,8 +1024,9 @@ void Reader::setQMLHtml(QString htmlFile, QString htmlBuffer, QString skipID) {
   //                          skipID));
 
   QFileInfo fi(htmlFile);
-  mw_one->ui->lblInfo->setText(tr("Info") + " : " + fi.baseName() + "  " +
-                               mw_one->getFileSize(QFile(htmlFile).size(), 2));
+  mw_one->ui->lblInfo->setText(
+      tr("Info") + " : " + fi.baseName() + "  " +
+      m_Method->getFileSize(QFile(htmlFile).size(), 2));
 
   qDebug() << "setQMLHtml:Html File=" << htmlFile;
 
@@ -1394,7 +1395,7 @@ void Reader::SplitFile(QString qfile) {
       tempHtmlList.append(filen);
     }
 
-    strShowMsg = "SplitFile: " + mw_one->getFileSize(bb, 2) + "  " +
+    strShowMsg = "SplitFile: " + m_Method->getFileSize(bb, 2) + "  " +
                  QString::number(x) + "->" + QString::number(n) + "  " +
                  fi.baseName();
   }

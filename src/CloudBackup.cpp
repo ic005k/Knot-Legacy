@@ -201,7 +201,7 @@ QString CloudBackup::initUserInfo(QString info) {
         QStringList list = str.split(":");
         QString s_size = list.at(1);
         qint64 size = s_size.toLongLong();
-        str = list.at(0) + ": " + mw_one->getFileSize(size, 2);
+        str = list.at(0) + ": " + m_Method->getFileSize(size, 2);
       }
 
       str1 = str1 + "\n" + str;
@@ -308,7 +308,7 @@ void CloudBackup::uploadData() {
           tr("Uploading data?") + "\n\n" +
               tr("This action updates the data in the cloud.") + "\n\n" +
               mw_one->m_Reader->getUriRealPath(zipfile) +
-              "\n\nSIZE: " + mw_one->getFileSize(QFile(zipfile).size(), 2),
+              "\n\nSIZE: " + m_Method->getFileSize(QFile(zipfile).size(), 2),
           2))
     return;
 
@@ -560,7 +560,7 @@ void CloudBackup::downloadFile(QString remoteFileName, QString localSavePath) {
                 "WebDAV",
                 tr("Successfully downloaded file,File saved to") + " : " +
                     localSavePath + "\n\nSize: " +
-                    mw_one->getFileSize(QFile(localSavePath).size(), 2),
+                    m_Method->getFileSize(QFile(localSavePath).size(), 2),
                 1);
 
             if (QFile(localSavePath).exists()) {

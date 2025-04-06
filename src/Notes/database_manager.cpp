@@ -211,32 +211,8 @@ QString DatabaseManager::extractPreview(const QString &content,
          (end < simplified.length() ? "..." : "");
 }
 
-void DatabaseManager::executeTransaction(
-    const std::function<void()> &operations) {
-  QSqlDatabase db = QSqlDatabase::database();
-  if (!db.transaction()) {
-    emit errorOccurred("无法开始事务: " + db.lastError().text());
-
-    return;
-  }
-
-  try {
-    operations();  // 执行实际操作
-
-    if (!db.commit()) {
-      throw std::runtime_error("事务提交失败: " +
-                               db.lastError().text().toStdString());
-    }
-  } catch (const std::exception &e) {
-    db.rollback();
-    emit errorOccurred(QString("操作失败: %1").arg(e.what()));
-  }
-}
-
 void DatabaseManager::updateFileIndex(const QString &filePath) {
   deleteFileIndex(filePath);
-
-  // executeTransaction([this, filePath]() { processFile(filePath); });
 
   executeTransactionWithRetry(
       [this, filePath]() -> bool {

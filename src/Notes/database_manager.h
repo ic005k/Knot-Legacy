@@ -47,10 +47,9 @@ class DatabaseManager : public QObject {
   void processFile(const QString &filePath);
   QString extractPreview(const QString &content, const QStringList &keywords);
   void setupDatabaseSchema();
-  void executeTransaction(
-      const std::function<void()> &operations);  // 事务处理模板
 
   QString m_defaultDir;
   QStringList scanMarkdownFiles(const QString &directory) const;
+
   bool executeTransactionWithRetry(std::function<bool()> ops, int retries);
 };

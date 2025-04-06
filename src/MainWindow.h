@@ -302,7 +302,6 @@ class MainWindow : public QMainWindow {
   static QTreeWidget *get_tw(int tabIndex);
 
   void sort_childItem(QTreeWidgetItem *);
-  static QString getFileSize(const qint64 &size, int precision);
 
   static QStringList get_MonthList(QString strY, QString strM);
   static void drawMonthChart();

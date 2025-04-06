@@ -2561,3 +2561,27 @@ bool Method::decompressFileWithZlib(const QString &sourcePath,
   }
   return success;
 }
+
+QString Method::getFileSize(const qint64 &size, int precision) {
+  double sizeAsDouble = size;
+  static QStringList measures;
+  if (measures.isEmpty())
+    measures << QCoreApplication::translate("QInstaller", "bytes")
+             << QCoreApplication::translate("QInstaller", "KiB")
+             << QCoreApplication::translate("QInstaller", "MiB")
+             << QCoreApplication::translate("QInstaller", "GiB")
+             << QCoreApplication::translate("QInstaller", "TiB")
+             << QCoreApplication::translate("QInstaller", "PiB")
+             << QCoreApplication::translate("QInstaller", "EiB")
+             << QCoreApplication::translate("QInstaller", "ZiB")
+             << QCoreApplication::translate("QInstaller", "YiB");
+  QStringListIterator it(measures);
+  QString measure(it.next());
+  while (sizeAsDouble >= 1024.0 && it.hasNext()) {
+    measure = it.next();
+    sizeAsDouble /= 1024.0;
+  }
+  return QString::fromLatin1("%1 %2")
+      .arg(sizeAsDouble, 0, 'f', precision)
+      .arg(measure);
+}

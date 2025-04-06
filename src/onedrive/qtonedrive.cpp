@@ -240,7 +240,7 @@ void QtOneDrive::uploadFile(const QString& localFilePath,
           emit successUploadFile(
               mw_one->m_Reader->getUriRealPath(localFilePath) + "\n\n" +
                   "SIZE: " +
-                  mw_one->getFileSize(QFile(localFilePath).size(), 2),
+                  m_Method->getFileSize(QFile(localFilePath).size(), 2),
               id);
         } else
           emitError("Json Error 2");
@@ -420,7 +420,7 @@ void QtOneDrive::downloadFile(const QUrl& url) {
 
         emit successDownloadFile(
             tmp_fileId_ + "\n" + zipfile + "\n\n" +
-            "SIZE: " + mw_one->getFileSize(QFile(zipfile).size(), 2));
+            "SIZE: " + m_Method->getFileSize(QFile(zipfile).size(), 2));
 
         if (QFile(zipfile).exists()) {
           if (!zipfile.isNull()) {

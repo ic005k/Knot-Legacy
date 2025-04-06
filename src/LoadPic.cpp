@@ -28,7 +28,7 @@ LoadPic::~LoadPic() {}
 void LoadPic::initMain(QString imgFile) {
   imgFileName = imgFile;
   mw_one->ui->lblImgInfo->setText(
-      imgFile + "  " + mw_one->getFileSize(QFile(imgFile).size(), 2));
+      imgFile + "  " + m_Method->getFileSize(QFile(imgFile).size(), 2));
 
   if (mw_one->ui->frameReader->isVisible()) mw_one->ui->frameReader->hide();
   if (mw_one->ui->frameNotes->isVisible()) mw_one->ui->frameNotes->hide();

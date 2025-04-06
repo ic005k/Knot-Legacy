@@ -3,7 +3,7 @@
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
 #include "ui_MainWindow.h"
 
-QString ver = "1.2.24";
+QString ver = "1.2.25";
 QString appName = "Knot";
 
 QList<QPointF> PointList;
@@ -113,9 +113,11 @@ void MainWindow::bakDataDone() {
           zipfile);
 
       ShowMessage *m_ShowMsg = new ShowMessage(this);
-      m_ShowMsg->showMsg(
-          "Knot", tr("The data was exported successfully.") + +"\n\n" + zipfile,
-          1);
+      m_ShowMsg->showMsg("Knot",
+                         tr("The data was exported successfully.") + +"\n\n" +
+                             zipfile + "\n\n" +
+                             m_Method->getFileSize(QFile(zipfile).size(), 2),
+                         1);
     }
   }
 
@@ -1214,30 +1216,6 @@ void MainWindow::saveTab() {
     QTreeWidget *tw = (QTreeWidget *)tabData->widget(i);
     Reg.setValue("twName" + QString::number(i), tw->objectName());
   }
-}
-
-QString MainWindow::getFileSize(const qint64 &size, int precision) {
-  double sizeAsDouble = size;
-  static QStringList measures;
-  if (measures.isEmpty())
-    measures << QCoreApplication::translate("QInstaller", "bytes")
-             << QCoreApplication::translate("QInstaller", "KiB")
-             << QCoreApplication::translate("QInstaller", "MiB")
-             << QCoreApplication::translate("QInstaller", "GiB")
-             << QCoreApplication::translate("QInstaller", "TiB")
-             << QCoreApplication::translate("QInstaller", "PiB")
-             << QCoreApplication::translate("QInstaller", "EiB")
-             << QCoreApplication::translate("QInstaller", "ZiB")
-             << QCoreApplication::translate("QInstaller", "YiB");
-  QStringListIterator it(measures);
-  QString measure(it.next());
-  while (sizeAsDouble >= 1024.0 && it.hasNext()) {
-    measure = it.next();
-    sizeAsDouble /= 1024.0;
-  }
-  return QString::fromLatin1("%1 %2")
-      .arg(sizeAsDouble, 0, 'f', precision)
-      .arg(measure);
 }
 
 void MainWindow::saveData(QTreeWidget *tw, int tabIndex) {
@@ -4203,7 +4181,8 @@ void MainWindow::on_actionBakFileList() {
     action = str.split("-===-").at(0);
     bakfile = str.split("-===-").at(1);
 
-    QString item = action + "\n" + getFileSize(QFile(bakfile).size(), 2);
+    QString item =
+        action + "\n" + m_Method->getFileSize(QFile(bakfile).size(), 2);
 
     m_Method->addItemToQW(ui->qwBakList, item, "", "", bakfile, 0);
   }
