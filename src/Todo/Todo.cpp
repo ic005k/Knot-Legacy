@@ -1421,6 +1421,12 @@ void Todo::openTodo() {
         [](const QList<QPair<QString, QDateTime>>& files) {
           qDebug() << "获取到文件列表:";
           qDebug() << "共找到" << files.size() << "个文件:";
+
+          if (files.size() == 0) {
+            mw_one->m_Todo->openTodoUI();
+            return;
+          }
+
           for (const auto& [path, mtime] : files) {
             qDebug() << "路径:" << path
                      << "修改时间:" << mtime.toString("yyyy-MM-dd hh:mm:ss");

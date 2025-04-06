@@ -2253,6 +2253,12 @@ void Notes::openNotes() {
         [=](const QList<QPair<QString, QDateTime>> &files) {
           qDebug() << "获取到文件列表:";
           qDebug() << "共找到" << files.size() << "个文件:";
+
+          if (files.size() == 0) {
+            openNotesUI();
+            return;
+          }
+
           for (const auto &[path, mtime] : files) {
             qDebug() << "路径:" << path
                      << "修改时间:" << mtime.toString("yyyy-MM-dd hh:mm:ss");
@@ -2368,6 +2374,8 @@ void Notes::openNotes() {
                             msg->showMsg("Knot", errorInfo, 1);
                             isPasswordError = true;
                             QFile::remove(zFile);
+                            QFile::remove(privateDir +
+                                          "KnotData/mainnotes.ini.zip");
                             return;
                           }
 
