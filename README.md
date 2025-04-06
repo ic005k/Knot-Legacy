@@ -63,7 +63,8 @@
 **Latest Version Acquisition:**
 - Scan QR code (Recommended for Android)  
   ![Download QR Code](https://github.com/ic005k/Knot/blob/main/res/apk.png)  
-- [GitHub Releases](https://api.github.com/repos/ic005k/Knot/releases/latest)
+- [GitHub Releases](https://github.com/ic005k/Knot/releases)
+- [API](https://api.github.com/repos/ic005k/Knot/releases/latest)
 
 ## 🔒 Data Security Architecture
 ```mermaid
