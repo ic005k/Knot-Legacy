@@ -29,7 +29,7 @@ ShowMessage::ShowMessage(QWidget* parent)
         "border:0px solid gray;}");
   else
     ui->frame->setStyleSheet(
-        "QFrame{background-color: rgb(255, 255, 255);border-radius:10px; "
+        "QFrame{background-color: #F5F5F5;border-radius:10px; "
         "border:0px solid gray;}");
 
   setModal(true);
@@ -52,7 +52,12 @@ ShowMessage::ShowMessage(QWidget* parent)
   else
     ui->hframe->setStyleSheet("QFrame{background:red;min-height:2px}");
 
-  mw_one->set_ToolButtonStyle(this);
+  // mw_one->set_ToolButtonStyle(this);
+
+  QString strBtnStyle = ui->btnOk->styleSheet();
+  ui->btnCancel->setStyleSheet(strBtnStyle);
+  ui->btnCopy->setStyleSheet(strBtnStyle);
+  ui->btnDel->setStyleSheet(strBtnStyle);
 }
 
 ShowMessage::~ShowMessage() { delete ui; }

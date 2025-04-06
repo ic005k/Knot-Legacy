@@ -16,7 +16,13 @@
 * Data export and import
 * Backup data to OneDrive
 * **Clients(Win,Mac,Linux) can use [Syncthing](https://github.com/syncthing/syncthing) to seamlessly synchronize data.(KnotData folder)**
-
+
+
+### How to Use WebDAV for Automatic Todo & Notes Sync Across Clients?
+
+* Open the **Cloud Sync** interface via the **main menu**, configure correct WebDAV parameters, and check the "Auto-Sync" option.
+
+* Enable **data encryption** in **Preferences** to ensure your data is stored **securely** on the WebDAV server.
 
 
 ### Android's instructions on applying for permission:
@@ -58,7 +64,7 @@
 * [iconfinder](https://www.iconfinder.com/)
 * [md4c](https://github.com/mity/md4c)
 * [QDarkStyleSheet](https://github.com/ColinDuquesnoy/QDarkStyleSheet)
-* [zlib](https://zlib.net/)
+* [zlib](https://zlib.net/)
 * [quazip](https://github.com/stachenov/quazip)
 * [ColorPicker](https://github.com/QuadFlask/colorpicker)
 * [ini4j](https://ini4j.sourceforge.net/)

@@ -166,7 +166,27 @@
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true"/>
+              <string notr="true">/* 基础样式 */
+QToolButton {
+    background-color: #AAFFAA;    /* 深灰背景 */
+    border: 1px solid #404040;    /* 深色边框 */
+    border-radius: 4px;           /* 圆角 */
+    padding: 6px 12px;            /* 内边距 */
+    color: #000000;               /* 白色文字 */
+    
+}
+
+/* 按下效果 */
+QToolButton:pressed {
+    background-color: #FFAAAA;   
+    border-color: #303030;
+}
+
+/* 禁用状态 */
+QToolButton:disabled {
+    background-color: #202020;
+    color: #808080;
+}</string>
              </property>
              <property name="text">
               <string>Ok</string>
