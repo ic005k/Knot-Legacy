@@ -1427,12 +1427,14 @@ void Todo::openTodo() {
             return;
           }
 
+          bool isTodoFile = false;
           for (const auto& [path, mtime] : files) {
             qDebug() << "路径:" << path
                      << "修改时间:" << mtime.toString("yyyy-MM-dd hh:mm:ss");
             QString remoteFile = path;
             remoteFile = remoteFile.replace("/dav/", "");  // 此处需注意
             if (remoteFile.contains("todo.ini.zip")) {
+              isTodoFile = true;
               QString localFile = privateDir + "KnotData/todo.ini.zip";
               QDateTime localModi = QFileInfo(localFile).lastModified();
               if (mtime > localModi || !QFile::exists(localFile)) {
@@ -1507,6 +1509,8 @@ void Todo::openTodo() {
               break;
             }
           }
+
+          if (isTodoFile == false) mw_one->m_Todo->openTodoUI();
         });
 
     QObject::connect(helper, &WebDavHelper::errorOccurred,

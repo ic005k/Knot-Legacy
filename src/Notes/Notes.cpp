@@ -2264,165 +2264,163 @@ void Notes::openNotes() {
                      << "修改时间:" << mtime.toString("yyyy-MM-dd hh:mm:ss");
             QString remote_f = path;
             remote_f = remote_f.replace("/dav/", "");  // 此处需注意
-            if (remote_f.contains("mainnotes.ini.zip")) {
-              orgRemoteFiles.append(remote_f);
-              orgRemoteDateTime.append(mtime);
 
-              for (int j = 0; j < orgRemoteFiles.count(); j++) {
-                QString or_file = orgRemoteFiles.at(j);
-                QDateTime or_datetime = orgRemoteDateTime.at(j);
+            orgRemoteFiles.append(remote_f);
+            orgRemoteDateTime.append(mtime);
 
-                QString local_file = privateDir + or_file;
+            for (int j = 0; j < orgRemoteFiles.count(); j++) {
+              QString or_file = orgRemoteFiles.at(j);
+              QDateTime or_datetime = orgRemoteDateTime.at(j);
 
-                QDateTime local_datetime = QFileInfo(local_file).lastModified();
-                if (or_datetime > local_datetime ||
-                    !QFile::exists(local_file)) {
-                  remoteFiles.append(or_file);
-                }
+              QString local_file = privateDir + or_file;
+
+              QDateTime local_datetime = QFileInfo(local_file).lastModified();
+              if (or_datetime > local_datetime || !QFile::exists(local_file)) {
+                remoteFiles.append(or_file);
               }
+            }
 
-              if (remoteFiles.count() > 0) {
-                // 初始化下载器
-                WebDavDownloader *downloader = new WebDavDownloader(
-                    m_CloudBackup->USERNAME, m_CloudBackup->APP_PASSWORD);
+            if (remoteFiles.count() > 0) {
+              // 初始化下载器
+              WebDavDownloader *downloader = new WebDavDownloader(
+                  m_CloudBackup->USERNAME, m_CloudBackup->APP_PASSWORD);
 
-                // 连接信号
-                QObject::connect(downloader, &WebDavDownloader::progressChanged,
-                                 [](int current, int total, QString file) {
-                                   qDebug()
-                                       << QString("进度: %1/%2  当前文件: %3")
-                                              .arg(current)
-                                              .arg(total)
-                                              .arg(file);
-                                 });
+              // 连接信号
+              QObject::connect(downloader, &WebDavDownloader::progressChanged,
+                               [](int current, int total, QString file) {
+                                 qDebug()
+                                     << QString("进度: %1/%2  当前文件: %3")
+                                            .arg(current)
+                                            .arg(total)
+                                            .arg(file);
+                               });
 
-                QObject::connect(
-                    downloader, &WebDavDownloader::downloadFinished,
-                    [=](bool success, QString error) {
-                      qDebug() << (success ? "下载成功" : "下载失败: " + error);
+              QObject::connect(
+                  downloader, &WebDavDownloader::downloadFinished,
+                  [=](bool success, QString error) {
+                    qDebug() << (success ? "下载成功" : "下载失败: " + error);
 
-                      for (int i = 0; i < remoteFiles.count(); i++) {
-                        QString file = remoteFiles.at(i);
-                        QString pDir, pFile, kFile, asFile, zFile;
-                        pFile = privateDir + file;
-                        zFile = pFile;
-                        asFile = file;
+                    for (int i = 0; i < remoteFiles.count(); i++) {
+                      QString file = remoteFiles.at(i);
+                      QString pDir, pFile, kFile, asFile, zFile;
+                      pFile = privateDir + file;
+                      zFile = pFile;
+                      asFile = file;
 
-                        if (file.contains("mainnotes.ini.zip")) {
-                          pDir = privateDir + "KnotData";
-                          pFile = pFile.replace(".zip", "");
-                          kFile = iniDir + asFile.replace("KnotData/", "");
-                          kFile = kFile.replace(".zip", "");
-                          qDebug() << "file=" << file;
-                          qDebug() << "pFile=" << pFile;
-                          qDebug() << "kFile" << kFile;
+                      if (file.contains("mainnotes.ini.zip")) {
+                        pDir = privateDir + "KnotData";
+                        pFile = pFile.replace(".zip", "");
+                        kFile = iniDir + asFile.replace("KnotData/", "");
+                        kFile = kFile.replace(".zip", "");
+                        qDebug() << "file=" << file;
+                        qDebug() << "pFile=" << pFile;
+                        qDebug() << "kFile" << kFile;
 
-                          QString dec_file = m_Method->useDec(zFile);
-                          if (dec_file != "") zFile = dec_file;
+                        QString dec_file = m_Method->useDec(zFile);
+                        if (dec_file != "") zFile = dec_file;
 
-                          if (!m_Method->decompressFileWithZlib(zFile, pFile)) {
-                            mw_one->closeProgress();
-                            errorInfo =
-                                tr("Decompression failed. Please check in "
-                                   "Preferences that the passwords are "
-                                   "consistent across all platforms.");
+                        if (!m_Method->decompressFileWithZlib(zFile, pFile)) {
+                          mw_one->closeProgress();
+                          errorInfo =
+                              tr("Decompression failed. Please check in "
+                                 "Preferences that the passwords are "
+                                 "consistent across all platforms.");
 
-                            ShowMessage *msg = new ShowMessage();
-                            msg->showMsg("Knot", errorInfo, 1);
-                            isPasswordError = true;
-                            QFile::remove(zFile);
-                            return;
-                          }
-
-                          // m_Method->decompressWithPassword(
-                          //     zFile, pDir, encPassword);
-
-                          if (isPasswordError == false) {
-                            if (QFileInfo(pFile).lastModified() >
-                                QFileInfo(kFile).lastModified()) {
-                              QFile::remove(kFile);
-                              if (QFile::copy(pFile, kFile)) {
-                                qDebug() << "kFile:" << kFile
-                                         << " Update successfully. ";
-                              }
-                            }
-                          } else {
-                            QFile::remove(zFile);
-                          }
+                          ShowMessage *msg = new ShowMessage();
+                          msg->showMsg("Knot", errorInfo, 1);
+                          isPasswordError = true;
+                          QFile::remove(zFile);
+                          return;
                         }
 
-                        if (file.contains(".md.zip")) {
-                          pDir = privateDir + "KnotData/memo";
-                          pFile = pFile.replace(".zip", "");
-                          kFile = iniDir + asFile.replace("KnotData/", "");
-                          kFile = kFile.replace(".zip", "");
-                          qDebug() << "file=" << file;
-                          qDebug() << "pFile=" << pFile;
-                          qDebug() << "kFile" << kFile;
+                        // m_Method->decompressWithPassword(
+                        //     zFile, pDir, encPassword);
 
-                          QString dec_file = m_Method->useDec(zFile);
-                          if (dec_file != "") zFile = dec_file;
-
-                          if (!m_Method->decompressFileWithZlib(zFile, pFile)) {
-                            mw_one->closeProgress();
-                            errorInfo =
-                                tr("Decompression failed. Please check in "
-                                   "Preferences that the passwords are "
-                                   "consistent across all platforms.");
-
-                            ShowMessage *msg = new ShowMessage();
-                            msg->showMsg("Knot", errorInfo, 1);
-                            isPasswordError = true;
-                            QFile::remove(zFile);
-                            QFile::remove(privateDir +
-                                          "KnotData/mainnotes.ini.zip");
-                            return;
-                          }
-
-                          // m_Method->decompressWithPassword(
-                          //     zFile, pDir, encPassword);
-
-                          if (isPasswordError == false) {
-                            if (QFileInfo(pFile).lastModified() >
-                                QFileInfo(kFile).lastModified()) {
-                              QFile::remove(kFile);
-                              QFile::copy(pFile, kFile);
-                              mw_one->m_NotesList->m_dbManager.updateFileIndex(
-                                  kFile);
+                        if (isPasswordError == false) {
+                          if (QFileInfo(pFile).lastModified() >
+                              QFileInfo(kFile).lastModified()) {
+                            QFile::remove(kFile);
+                            if (QFile::copy(pFile, kFile)) {
+                              qDebug() << "kFile:" << kFile
+                                       << " Update successfully. ";
                             }
-                          } else {
-                            QFile::remove(zFile);
                           }
+                        } else {
+                          QFile::remove(zFile);
+                        }
+                      }
+
+                      if (file.contains(".md.zip")) {
+                        pDir = privateDir + "KnotData/memo";
+                        pFile = pFile.replace(".zip", "");
+                        kFile = iniDir + asFile.replace("KnotData/", "");
+                        kFile = kFile.replace(".zip", "");
+                        qDebug() << "file=" << file;
+                        qDebug() << "pFile=" << pFile;
+                        qDebug() << "kFile" << kFile;
+
+                        QString dec_file = m_Method->useDec(zFile);
+                        if (dec_file != "") zFile = dec_file;
+
+                        if (!m_Method->decompressFileWithZlib(zFile, pFile)) {
+                          mw_one->closeProgress();
+                          errorInfo =
+                              tr("Decompression failed. Please check in "
+                                 "Preferences that the passwords are "
+                                 "consistent across all platforms.");
+
+                          ShowMessage *msg = new ShowMessage();
+                          msg->showMsg("Knot", errorInfo, 1);
+                          isPasswordError = true;
+                          QFile::remove(zFile);
+                          QFile::remove(privateDir +
+                                        "KnotData/mainnotes.ini.zip");
+                          return;
                         }
 
-                        if (file.contains(".png")) {
-                          pFile = m_Method->useDec(pFile);
-                          kFile = iniDir + asFile.replace("KnotData/", "");
+                        // m_Method->decompressWithPassword(
+                        //     zFile, pDir, encPassword);
 
-                          qDebug() << "file=" << file;
-                          qDebug() << "pFile=" << pFile;
-                          qDebug() << "kFile" << kFile;
-
+                        if (isPasswordError == false) {
                           if (QFileInfo(pFile).lastModified() >
                               QFileInfo(kFile).lastModified()) {
                             QFile::remove(kFile);
                             QFile::copy(pFile, kFile);
+                            mw_one->m_NotesList->m_dbManager.updateFileIndex(
+                                kFile);
                           }
+                        } else {
+                          QFile::remove(zFile);
                         }
                       }
 
-                      mw_one->m_Notes->openNotesUI();
-                    });
+                      if (file.contains(".png")) {
+                        pFile = m_Method->useDec(pFile);
+                        kFile = iniDir + asFile.replace("KnotData/", "");
 
-                // 开始下载（1并发,根据文件的下载个数）
-                QString lf = privateDir;
-                qDebug() << "lf=" << lf;
-                downloader->downloadFiles(remoteFiles, lf, remoteFiles.count());
-              }
+                        qDebug() << "file=" << file;
+                        qDebug() << "pFile=" << pFile;
+                        qDebug() << "kFile" << kFile;
 
-              if (remoteFiles.count() == 0) mw_one->m_Notes->openNotesUI();
-              break;
+                        if (QFileInfo(pFile).lastModified() >
+                            QFileInfo(kFile).lastModified()) {
+                          QFile::remove(kFile);
+                          QFile::copy(pFile, kFile);
+                        }
+                      }
+                    }
+
+                    mw_one->m_Notes->openNotesUI();
+                  });
+
+              // 开始下载（1并发,根据文件的下载个数）
+              QString lf = privateDir;
+              qDebug() << "lf=" << lf;
+              downloader->downloadFiles(remoteFiles, lf, remoteFiles.count());
             }
+
+            if (remoteFiles.count() == 0) mw_one->m_Notes->openNotesUI();
+            break;
           }
         });
 
