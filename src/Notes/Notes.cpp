@@ -268,7 +268,6 @@ void Notes::saveMainNotes() {
     QString text = m_EditSource->toPlainText();
     text = formatMDText(text);
     StringToFile(text, currentMDFile);
-    MD2Html(currentMDFile);
 
     qDebug() << "Save Note: " << currentMDFile;
 
@@ -300,8 +299,6 @@ void Notes::updateMDFileToSyncLists(QString currentMDFile) {
 
   notes_sync_files.append(zipMD);
 }
-
-void Notes::init_MainNotes() { loadNoteToQML(); }
 
 void Notes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
   QMouseEvent *event = static_cast<QMouseEvent *>(evn);
@@ -1262,14 +1259,13 @@ void Notes::closeEvent(QCloseEvent *event) {
 
   if (isDone) {
     saveMainNotes();
-    loadNoteToQML();
+
   } else {
     if (isTextChange) {
       m_Method->m_widget = new QWidget(this);
       ShowMessage *msg = new ShowMessage(this);
       if (msg->showMsg(tr("Notes"), tr("Do you want to save the notes?"), 2)) {
         saveMainNotes();
-        loadNoteToQML();
       }
     }
   }
@@ -1498,6 +1494,7 @@ bool Notes::selectPDFFormat(QPrinter *printer) {
 }
 
 void Notes::on_btnPDF_clicked() {
+  MD2Html(currentMDFile);
   QString html = loadText(privateDir + "memo.html");
   auto doc = new QTextDocument(this);
   doc->setHtml(html);
@@ -1764,8 +1761,7 @@ void Notes::delImage() {
 
   buffers = formatMDText(buffers);
   StringToFile(buffers, currentMDFile);
-  MD2Html(currentMDFile);
-  loadNoteToQML();
+
   mw_one->on_btnBackImg_clicked();
 }
 
@@ -1803,14 +1799,9 @@ void Notes::delLink(QString link) {
 
   mdBuffers = formatMDText(mdBuffers);
   StringToFile(mdBuffers, currentMDFile);
-  MD2Html(currentMDFile);
-  loadNoteToQML();
 }
 
 void Notes::javaNoteToQMLNote() {
-  MD2Html(currentMDFile);
-  loadNoteToQML();
-
   if (isSetNewNoteTitle()) {
     QString mdString = loadText(currentMDFile).trimmed();
     if (mdString.length() > 20)
@@ -1862,8 +1853,6 @@ void Notes::init_all_notes() {
   currentMDFile = mw_one->m_NotesList->getCurrentMDFile();
   qDebug() << "currentMDFile=" << currentMDFile;
   if (QFile::exists(currentMDFile)) {
-    MD2Html(currentMDFile);
-    loadNoteToQML();
   } else {
     loadEmptyNote();
   }
@@ -1874,7 +1863,7 @@ void Notes::init_all_notes() {
 void Notes::loadEmptyNote() {
   currentMDFile = "";
   MD2Html(currentMDFile);
-  loadNoteToQML();
+
   mw_one->ui->lblNoteName->setText("");
 }
 
@@ -1949,6 +1938,23 @@ QString markdownToHtmlWithMath(const QString &md) {
   // 渲染 HTML（保留原始内容）
   char *html_cstr = cmark_render_html(doc, CMARK_OPT_UNSAFE, nullptr);
   QString html = QString::fromUtf8(html_cstr);
+
+  // --- 新增：处理 Mermaid 代码块 ---
+  QRegularExpression mermaidCodeBlock(
+      R"(<pre><code class="language-mermaid">(.*?)</code></pre>)",
+      QRegularExpression::DotMatchesEverythingOption);
+  html.replace(mermaidCodeBlock, R"(<div class="mermaid">\1</div>)");
+
+  // --- 新增：定义 Mermaid 脚本 ---
+  QString mermaid_js = R"(
+      <script src="https://cdn.jsdelivr.net/npm/mermaid@9/dist/mermaid.min.js"></script>
+      <script>
+          document.addEventListener('DOMContentLoaded', function() {
+              mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+              mermaid.init();
+          });
+      </script>
+  )";
 
   // 处理转义字符
   // html.replace("\\~", "~");
@@ -2048,8 +2054,8 @@ QString markdownToHtmlWithMath(const QString &md) {
   html =
       "<!DOCTYPE html><html><head>"
       "<meta charset='utf-8'>" +
-      mathjax_config + highlight_js + custom_css + "</head><body>" + html +
-      "</body></html>";
+      mathjax_config + mermaid_js + highlight_js + custom_css +
+      "</head><body>" + html + "</body></html>";
 
   // 清理资源
   free(html_cstr);

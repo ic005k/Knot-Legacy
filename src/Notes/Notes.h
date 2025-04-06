@@ -88,7 +88,7 @@ class Notes : public QDialog {
   QString textMemo;
   void saveMainNotes();
   QString fileName;
-  void init_MainNotes();
+
   qlonglong curPos;
   qreal sliderPos;
   void loadNoteToQML();

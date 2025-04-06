@@ -212,8 +212,6 @@ void NotesList::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column) {
     Reg.setValue("/MainNotes/currentItem", curmd);
 
     currentMDFile = iniDir + curmd;
-    mw_one->m_Notes->MD2Html(currentMDFile);
-    mw_one->m_Notes->loadNoteToQML();
 
     setNoteName(item->text(0));
   }
@@ -2296,8 +2294,7 @@ void NotesList::clickNoteList() {
   }
 
   QString noteName = m_Method->getText0(mw_one->ui->qwNoteList, index);
-  mw_one->m_Notes->MD2Html(currentMDFile);
-  mw_one->m_Notes->loadNoteToQML();
+
   mw_one->ui->lblNoteName->setText(noteName);
 
   tw->setCurrentItem(pNoteItems.at(index));
@@ -2342,8 +2339,6 @@ void NotesList::genRecentOpenMenu() {
       connect(act, &QAction::triggered, this, [=]() {
         currentMDFile = file;
 
-        mw_one->m_Notes->MD2Html(file);
-        mw_one->m_Notes->loadNoteToQML();
         mw_one->ui->lblNoteName->setText(name);
 
         mw_one->on_btnOpenNote_clicked();
