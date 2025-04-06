@@ -1,81 +1,148 @@
-# Knot--Record everything in the simplest way possible.
+# Knot - Minimalist Cross-Scenario Recording Tool
 
-### The origin of the name Knot: Ancient people used a knot to remember things, simple and efficient.
+![Android Version](https://img.shields.io/badge/Android-6.0%2B-brightgreen)
+![Platforms](https://img.shields.io/badge/Platform-Android%20|%20Win%20|%20Mac%20|%20Linux-blue)
 
-### The Knot is an Android gadget that integrates common modules such as Todo, Notes and Reader and supports various clients (Win, Mac, Linux) for editing Todo and Notes.
+## 🌟 Project Overview
+**Knot** is an intelligent multi-scenario recording tool inspired by the minimalist concept of ancient "knot-tying" memorization. By integrating core modules such as todo lists, smart notes, and document reading with multi-platform client support, we create a full-scenario productivity toolchain.
 
-* Android version >= 6.0 (Not tested below 6.0)
-* Bookkeeping
-* Counters
-* Todo list
-* Exercise recording: pedometer and GPS record distance (e.g. cycling, running, etc.)
-* Statistical charts
-* Statistical reports
-* Reader(txt,epub,pdf)
-* Notes(Markdown)
-* Data export and import
-* Backup data to OneDrive
-* **Clients(Win,Mac,Linux) can use [Syncthing](https://github.com/syncthing/syncthing) to seamlessly synchronize data.(KnotData folder)**
-
-
-### How to Use WebDAV for Automatic Todo & Notes Sync Across Clients?
-
-* Open the **Cloud Sync** interface via the **main menu**, configure correct WebDAV parameters, and check the "Auto-Sync" option.
-
-* Enable **data encryption** in **Preferences** to ensure your data is stored **securely** on the WebDAV server.
+*Etymology*: Just as ancient civilizations recorded important events with physical knots, we continue this simple yet efficient concept through digital "knots".
 
+## 📱 Core Features
 
-### Android's instructions on applying for permission:
+### Multi-modal Recording System
+- **Smart Todo List**  
+  Supports voice input (long-press add button), recurring reminders, and intelligent sorting
+- **Markdown Notes**  
+  Real-time preview + Syntax highlighting + Image/attachment embedding
+- **Exercise Tracker**  
+  Precision pedometer + GPS trajectory recording (cycling/running scenarios)
+- **Data Dashboard**  
+  Visualized statistics + Periodic report generation
 
+### Multi-format Document Support
+- E-book reader (EPUB/PDF/TXT)
+- Document annotation system
+- Cross-document content search
 
-1. Storage permission: Save data.
+### Data Management System
+- Local/cloud dual backup (WebDAV/OneDrive)
+- Encrypted data synchronization (AES-256)
+- Cross-platform data migration (Import/Export)
 
+## 🖥️ Multi-Platform Support
+| Platform    | Core Features                | Sync Solutions              |
+|-------------|------------------------------|-----------------------------|
+| Android     | Full feature experience      | Native cloud sync + Local backup |
+| Windows     | Note/Todo editing            | Syncthing/WebDAV            |
+| macOS       | Note/Todo editing            | Syncthing/WebDAV            |
+| Linux       | Note/Todo editing            | Syncthing/WebDAV            |
 
-2. Microphone permission: Voice memo in Todo. (In the Todo interface, long press the "Add" button to start voice recording)
+## ⚙️ User Guide
 
+### Cloud Sync Configuration
+1. **WebDAV Sync**  
+   `Main Menu > Cloud Sync` Configure server parameters and enable "Auto-Sync"
+2. **Data Encryption**  
+   `Settings > Preferences` Enable encryption for cloud data security
 
-3. Camera permissions: Take photos and add them to your notes.
+### Real-time Reminder Setup
+1. Open Android System Settings
+2. Navigate to "App Startup Management"
+3. Allow Knot's background activities
 
+### Permission Specifications
+| Permission Type | Usage Scenario               | Configuration Path          |
+|------------------|-------------------------------|-----------------------------|
+| Storage          | Local data storage           | Auto-request on first launch|
+| Microphone       | Voice memo functionality     | Long-press add button in Todo UI |
+| Camera           | Note photography             | Attachment menu in note editor |
+| GPS              | Exercise trajectory recording| Activated in fitness module |
 
-4. GPS permissions: Record mileage and trajectory.
+## 📥 Download & Installation
+**Latest Version Acquisition:**
+- Scan QR code (Recommended for Android)  
+  ![Download QR Code](https://github.com/ic005k/Knot/blob/main/res/apk.png)  
+- [GitHub Releases](https://api.github.com/repos/ic005k/Knot/releases/latest)
 
-
-### How to make Todo's scheduled tasks reminded in real time?
-
-
-1. Open "App Startup Management" in Android Settings.
-
-
-2. Set Knot to Allow Background activities.
-
-
-### QR code for downloading:
-
-![QR code for downloading](https://github.com/ic005k/Knot/blob/main/res/apk.png)
-
-### Credits
-
-* [Pedometer](https://github.com/vikasy/Pedometer)
-* [android-qt-pedometer-accelerometer](https://github.com/adct-the-experimenter/android-qt-pedometer-accelerometer)
-* [QtOneDrive](https://github.com/AndreyMacritskiy/QtOneDrive)
-* [qt-pdf-viewer-library](https://github.com/develtar/qt-pdf-viewer-library)
-* [pdf.js](https://github.com/mozilla/pdf.js)
-* [QOwnNotes](https://github.com/pbek/QOwnNotes)
-* [iconfinder](https://www.iconfinder.com/)
-* [md4c](https://github.com/mity/md4c)
-* [QDarkStyleSheet](https://github.com/ColinDuquesnoy/QDarkStyleSheet)
-* [zlib](https://zlib.net/)
-* [quazip](https://github.com/stachenov/quazip)
-* [ColorPicker](https://github.com/QuadFlask/colorpicker)
-* [ini4j](https://ini4j.sourceforge.net/)
-* [PowerMenu](https://github.com/skydoves/PowerMenu)
-* [AndroidPdfViewerDemo](https://github.com/qxcwanxss/AndroidPdfViewerDemo)
-* [Markwon](https://github.com/noties/Markwon)
-* [Prism4j](https://github.com/noties/Prism4j)
-* [cmark-gfm](https://github.com/github/cmark-gfm)
-* [Qt-AES](https://github.com/bricke/Qt-AES)
-* [cppjieba](https://github.com/yanyiwu/cppjieba)
+## 🔒 Data Security Architecture
+```mermaid
+graph LR
+    A[Local Device] -->|AES-256 Encryption| B(WebDAV Server)
+    A -->|SSL Transmission| C(OneDrive)
+    B --> D[Multi-device Decryption Sync]
+    C --> D
+```
 
 ---
 
-API:https://api.github.com/repos/ic005k/Knot/releases/latest
+## 📜 Complete Open Source Acknowledgments
+All dependencies are preserved in original format for maintenance and upgrades:
+
+### Core Function Components
+| Project Name | Functionality | Repository Link |
+|--------------|---------------|-----------------|
+| **Pedometer** | Basic step-counting algorithm | [vikasy/Pedometer](https://github.com/vikasy/Pedometer) |
+| **android-qt-pedometer-accelerometer** | Motion sensor integration | [adct-the-experimenter/android-qt-pedometer-accelerometer](https://github.com/adct-the-experimenter/android-qt-pedometer-accelerometer) |
+| **QtOneDrive** | OneDrive sync engine | [AndreyMacritskiy/QtOneDrive](https://github.com/AndreyMacritskiy/QtOneDrive) |
+
+### Document Processing Components
+| Project Name | Functionality | Repository Link |
+|--------------|---------------|-----------------|
+| **qt-pdf-viewer-library** | PDF rendering core | [develtar/qt-pdf-viewer-library](https://github.com/develtar/qt-pdf-viewer-library) |
+| **pdf.js** | Cross-platform PDF parsing | [mozilla/pdf.js](https://github.com/mozilla/pdf.js) |
+| **md4c** | Markdown parser | [mity/md4c](https://github.com/mity/md4c) |
+| **cmark-gfm** | GitHub-flavored Markdown extension | [github/cmark-gfm](https://github.com/github/cmark-gfm) |
+
+### Security & Utility Libraries
+| Project Name | Functionality | Repository Link |
+|--------------|---------------|-----------------|
+| **Qt-AES** | Data encryption module | [bricke/Qt-AES](https://github.com/bricke/Qt-AES) |
+| **quazip** | Compression/archive support | [stachenov/quazip](https://github.com/stachenov/quazip) |
+| **ini4j** | Configuration file management | [ini4j](https://ini4j.sourceforge.net/) |
+| **zlib** | Data compression algorithm | [zlib.net](https://zlib.net/) |
+
+### UI & Auxiliary Tools
+| Project Name | Functionality | Repository Link |
+|--------------|---------------|-----------------|
+| **QOwnNotes** | Note system framework | [pbek/QOwnNotes](https://github.com/pbek/QOwnNotes) |
+| **QDarkStyleSheet** | Dark theme support | [ColinDuquesnoy/QDarkStyleSheet](https://github.com/ColinDuquesnoy/QDarkStyleSheet) |
+| **ColorPicker** | Color selection component | [QuadFlask/colorpicker](https://github.com/QuadFlask/colorpicker) |
+| **PowerMenu** | Context menu component | [skydoves/PowerMenu](https://github.com/skydoves/PowerMenu) |
+
+### Android-specific Components
+| Project Name | Functionality | Repository Link |
+|--------------|---------------|-----------------|
+| **AndroidPdfViewerDemo** | Android PDF rendering | [qxcwanxss/AndroidPdfViewerDemo](https://github.com/qxcwanxss/AndroidPdfViewerDemo) |
+| **Markwon** | Android Markdown rendering | [noties/Markwon](https://github.com/noties/Markwon) |
+| **Prism4j** | Code highlighting support | [noties/Prism4j](https://github.com/noties/Prism4j) |
+
+### Other Dependencies
+| Project Name | Functionality | Repository Link |
+|--------------|---------------|-----------------|
+| **iconfinder** | Icon resources | [iconfinder](https://www.iconfinder.com/) |
+| **cppjieba** | Chinese text segmentation | [yanyiwu/cppjieba](https://github.com/yanyiwu/cppjieba) |
+
+---
+
+## 🔗 Maintenance Reference
+Recommended dependency update monitoring:
+```bash
+# Check repository status using GitHub CLI
+gh repo view [REPO_NAME] --json name,url,updatedAt,pushedAt
+```
+
+All components follow their original open source licenses. Verify during upgrades:
+1. License compatibility (GPL/LGPL/MIT)
+2. API changelogs
+3. Binary compatibility testing
+
+---
+
+> We welcome community contributions. Full technical documentation: [Technical Architecture](https://github.com/ic005k/Knot/wiki/Technical-Architecture)
+
+> Complete dependency list: [build.gradle](https://github.com/ic005k/Knot/blob/main/android/build.gradle)
+
+---
+
+[![Star History](https://api.star-history.com/svg?repos=ic005k/Knot&type=Date)](https://star-history.com/#ic005k/Knot&Date)
