@@ -162,31 +162,33 @@
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>32</height>
+               <height>0</height>
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">/* 基础样式 */
-QToolButton {
-    background-color: #AAFFAA;    /* 深灰背景 */
-    border: 1px solid #404040;    /* 深色边框 */
-    border-radius: 4px;           /* 圆角 */
-    padding: 6px 12px;            /* 内边距 */
-    color: #000000;               /* 白色文字 */
-    
-}
+              <string notr="true">
+    QToolButton {
+        background-color: #2196F3;  /* 默认背景色 */
+        border: none;               /* 无边框 */
+        border-radius: 4px;         /* 圆角半径 */
+        color: white;               /* 文字颜色 */
+        padding: 8px 16px;          /* 内边距 */
+       
+    }
 
-/* 按下效果 */
-QToolButton:pressed {
-    background-color: #FFAAAA;   
-    border-color: #303030;
-}
+    QToolButton:hover {
+        background-color: #1E88E5;  /* 悬停颜色 */
+    }
 
-/* 禁用状态 */
-QToolButton:disabled {
-    background-color: #202020;
-    color: #808080;
-}</string>
+    QToolButton:pressed {
+        background-color: #1976D2;  /* 按下颜色 */
+    }
+
+    QToolButton:disabled {
+        background-color: #BDBDBD;  /* 禁用背景色 */
+        color: #616161;             /* 禁用文字颜色 */
+    }
+</string>
              </property>
              <property name="text">
               <string>Ok</string>
