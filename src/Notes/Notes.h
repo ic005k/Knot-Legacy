@@ -78,7 +78,6 @@ class Notes : public QDialog {
 
   bool isTextChange;
 
-  bool isDone;
   QTimer *timerEditPanel;
   QString htmlBuffer;
   QTextEdit *byTextEdit;
@@ -202,19 +201,9 @@ class Notes : public QDialog {
 
   void on_KVChanged();
 
-  void on_btnUndo_clicked();
-
-  void on_btnRedo_clicked();
-
   void on_btnPic_clicked();
 
   void on_btnInsertTable_clicked();
-
-  void on_editSource_redoAvailable(bool b);
-
-  void on_editSource_undoAvailable(bool b);
-
-  void on_btnVLine_clicked();
 
   void on_btnS1_clicked();
 
@@ -228,21 +217,7 @@ class Notes : public QDialog {
 
   void on_btnS5_clicked();
 
-  void on_btnLink_clicked();
-
-  void on_btnS7_clicked();
-
-  void on_btnS8_clicked();
-
-  void on_btnS9_clicked();
-
   void on_btnPaste_clicked();
-
-  void on_btnLeft_clicked();
-
-  void on_btnRight_clicked();
-
-  void on_btnS10_clicked();
 
   void editNote();
   void showNoteList();
@@ -259,8 +234,6 @@ class Notes : public QDialog {
 
   void on_editSource_cursorPositionChanged();
 
-  void on_btnReference_clicked();
-
   void on_btnFind_clicked();
 
   void on_btnPrev_clicked();
@@ -268,10 +241,6 @@ class Notes : public QDialog {
   void on_editFind_returnPressed();
 
   void on_editFind_textChanged(const QString &arg1);
-
-  void on_btnDate_clicked();
-
-  void on_btnTime_clicked();
 
  private:
   QStringList orgRemoteFiles;

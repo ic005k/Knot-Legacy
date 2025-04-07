@@ -39,6 +39,21 @@ android: {
 
 }
 
+####################### Qsci ##############################################
+
+DEFINES += LEXILLA_STATIC
+
+linux {
+    LIBS += /usr/local/lib/liblexilla.a
+}
+
+macx {
+    LIBS += -L/usr/local/lib -llexilla -lscintilla
+    INCLUDEPATH += /usr/local/include
+    QMAKE_LFLAGS += -Wl,-rpath,/usr/local/lib
+    DEFINES += LEXILLA
+}
+
 INCLUDEPATH += $$PWD/lib/scintilla/include
 INCLUDEPATH += $$PWD/lib/scintilla/src
 INCLUDEPATH += $$PWD/lib/scintilla/lexlib

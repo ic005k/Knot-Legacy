@@ -82,14 +82,13 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
     btn->setFont(font1);
   }
 
-  ui->lblInfo->hide();
   ui->btnFind->hide();
   ui->lblCount->hide();
   ui->f_ToolBar->hide();
 
 #ifdef Q_OS_ANDROID
 #else
-  ui->btnSyncToWebDAV->hide();
+
   mw_one->set_ToolButtonStyle(this);
 #endif
 
@@ -125,7 +124,7 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
 
   QFont f = this->font();
   f.setPointSize(fontSize - 1);
-  ui->lblInfo->setFont(f);
+
   ui->f_ToolBar->setFont(f);
 
   connect(m_EditSource->verticalScrollBar(), SIGNAL(valueChanged(int)), this,
@@ -163,16 +162,6 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   timerCur = new QTimer(this);
   connect(this, SIGNAL(sendUpdate()), this, SLOT(update()));
   connect(timerCur, SIGNAL(timeout()), this, SLOT(timerSlot()));
-
-  int a = 500;
-  int b = 50;
-  ui->btnLeft->setAutoRepeat(true);
-  ui->btnLeft->setAutoRepeatDelay(a);
-  ui->btnLeft->setAutoRepeatInterval(b);
-
-  ui->btnRight->setAutoRepeat(true);
-  ui->btnRight->setAutoRepeatDelay(a);
-  ui->btnRight->setAutoRepeatInterval(b);
 
   m_EditSource->setFocus();
 }
@@ -230,8 +219,12 @@ void Notes::resizeEvent(QResizeEvent *event) {
 }
 
 void Notes::on_btnDone_clicked() {
-  isDone = true;
-  close();
+  saveMainNotes();
+
+  if (!mw_one->ui->frameNotes->isHidden()) {
+    MD2Html(currentMDFile);
+    loadNoteToQML();
+  }
 }
 
 void Notes::MD2Html(QString mdFile) {
@@ -501,10 +494,6 @@ QString Notes::Deciphering(const QString &fileName) {
 
   file.close();
 }
-
-void Notes::on_btnUndo_clicked() { m_EditSource->undo(); }
-
-void Notes::on_btnRedo_clicked() { m_EditSource->redo(); }
 
 QString Notes::getDateTimeStr() {
   int y, m, d, hh, mm, s;
@@ -943,22 +932,6 @@ void Notes::on_btnInsertTable_clicked() {
   }
 }
 
-void Notes::on_editSource_redoAvailable(bool b) {
-  if (b)
-    ui->btnRedo->setEnabled(true);
-  else
-    ui->btnRedo->setEnabled(false);
-}
-
-void Notes::on_editSource_undoAvailable(bool b) {
-  if (b)
-    ui->btnUndo->setEnabled(true);
-  else
-    ui->btnUndo->setEnabled(false);
-}
-
-void Notes::on_btnVLine_clicked() { m_EditSource->insert("|"); }
-
 void Notes::on_btnS1_clicked() {
   QString str = m_EditSource->selectedText();
   if (str == "") str = tr("Bold Italic");
@@ -1000,32 +973,11 @@ QColor Notes::StringToColor(QString mRgbStr) {
 void Notes::on_btnS5_clicked() {
   QString str = m_EditSource->selectedText();
   if (str == "") str = tr("Bold");
-  m_EditSource->insert("**" + str + "**");
+  if (!m_EditSource->hasSelectedText())
+    m_EditSource->insert("**" + str + "**");
+  else
+    m_EditSource->replaceSelectedText("**" + str + "**");
 }
-
-void Notes::on_btnLink_clicked() {
-  m_EditSource->insert("[]()");
-  on_btnLeft_clicked();
-  on_btnLeft_clicked();
-  on_btnLeft_clicked();
-}
-
-void Notes::on_btnS7_clicked() {
-  m_EditSource->insert("[]");
-  ui->btnLeft->click();
-}
-
-void Notes::on_btnS8_clicked() {
-  m_EditSource->insert("()");
-  ui->btnLeft->click();
-}
-
-void Notes::on_btnS9_clicked() {
-  m_EditSource->insert("{}");
-  ui->btnLeft->click();
-}
-
-void Notes::on_btnS10_clicked() { m_EditSource->insert("_"); }
 
 void Notes::on_btnPaste_clicked() {
   const QClipboard *clipboard = QApplication::clipboard();
@@ -1148,10 +1100,6 @@ void Notes::timerSlot() {
   emit sendUpdate();
 }
 
-void Notes::on_btnLeft_clicked() {}
-
-void Notes::on_btnRight_clicked() {}
-
 bool Notes::androidCopyFile(QString src, QString des) {
   bool result = false;
 
@@ -1188,16 +1136,11 @@ void Notes::closeEvent(QCloseEvent *event) {
 
   m_Method->Sleep(100);
 
-  if (isDone) {
-    saveMainNotes();
-
-  } else {
-    if (isTextChange) {
-      m_Method->m_widget = new QWidget(this);
-      ShowMessage *msg = new ShowMessage(this);
-      if (msg->showMsg(tr("Notes"), tr("Do you want to save the notes?"), 2)) {
-        saveMainNotes();
-      }
+  if (isTextChange) {
+    m_Method->m_widget = new QWidget(this);
+    ShowMessage *msg = new ShowMessage(this);
+    if (msg->showMsg(tr("Notes"), tr("Do you want to save the notes?"), 2)) {
+      saveMainNotes();
     }
   }
 
@@ -1232,11 +1175,6 @@ bool Notes::isSetNewNoteTitle() {
 void Notes::on_editSource_textChanged() { isTextChange = true; }
 
 void Notes::on_editSource_cursorPositionChanged() {}
-
-void Notes::on_btnReference_clicked() {
-  QString str = m_EditSource->selectedText();
-  m_EditSource->insert("> " + str);
-}
 
 void Notes::show_findText() {
   QString findtext = ui->editFind->text().trimmed().toLower();
@@ -1481,14 +1419,6 @@ void Notes::showNoteList() { mw_one->on_btnNotesList_clicked(); }
 void Notes::on_editNote() {
   timerEditNote->stop();
   mw_one->on_btnEdit_clicked();
-}
-
-void Notes::on_btnDate_clicked() {
-  m_EditSource->insert(QDate::currentDate().toString());
-}
-
-void Notes::on_btnTime_clicked() {
-  m_EditSource->insert(QTime::currentTime().toString());
 }
 
 void Notes::setEditorVPos() {
@@ -1974,9 +1904,6 @@ void Notes::openNotesUI() {
   mw_one->isMemoVisible = true;
   mw_one->isReaderVisible = false;
 
-  ui->btnUndo->setEnabled(false);
-  ui->btnRedo->setEnabled(false);
-
   mw_one->ui->frameMain->hide();
   mw_one->ui->frameNotes->show();
   setVPos();
@@ -2101,7 +2028,6 @@ void Notes::openEditUI() {
 
   m_Method->Sleep(200);
 
-  isDone = false;
   isTextChange = false;
 
   if (mw_one->isOpenSearchResult) {
