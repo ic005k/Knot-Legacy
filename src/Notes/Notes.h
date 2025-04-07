@@ -212,13 +212,7 @@ class Notes : public QDialog {
 
   void on_editSource_undoAvailable(bool b);
 
-  void on_btnSeparator_clicked();
-
-  void on_btnWells_clicked();
-
   void on_btnVLine_clicked();
-
-  void on_btnAsterisk_clicked();
 
   void on_btnS1_clicked();
 
@@ -233,8 +227,6 @@ class Notes : public QDialog {
   void on_btnS5_clicked();
 
   void on_btnLink_clicked();
-
-  void on_btnS6_clicked();
 
   void on_btnS7_clicked();
 
@@ -277,13 +269,9 @@ class Notes : public QDialog {
 
   void on_editFind_textChanged(const QString &arg1);
 
-  void on_btnGetShare_clicked();
-
   void on_btnDate_clicked();
 
   void on_btnTime_clicked();
-
-  void on_btnS11_clicked();
 
  private:
   QStringList orgRemoteFiles;

@@ -83,7 +83,6 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->btnFind->hide();
   ui->lblCount->hide();
   ui->f_ToolBar->hide();
-  ui->btnGetShare->hide();
 
 #ifdef Q_OS_ANDROID
 #else
@@ -178,8 +177,9 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
 }
 
 void Notes::init() {
-  this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                    mw_one->width(), mw_one->height());
+  int w = this->width();
+  if (mw_one->width() > w) w = mw_one->width();
+  this->setGeometry(this->x(), mw_one->geometry().y(), w, mw_one->height());
 }
 
 void Notes::wheelEvent(QWheelEvent *e) { Q_UNUSED(e); }
@@ -957,13 +957,7 @@ void Notes::on_editSource_undoAvailable(bool b) {
     ui->btnUndo->setEnabled(false);
 }
 
-void Notes::on_btnSeparator_clicked() { m_EditSource->insertPlainText("-"); }
-
-void Notes::on_btnWells_clicked() { m_EditSource->insertPlainText("#"); }
-
 void Notes::on_btnVLine_clicked() { m_EditSource->insertPlainText("|"); }
-
-void Notes::on_btnAsterisk_clicked() { m_EditSource->insertPlainText("*"); }
 
 void Notes::on_btnS1_clicked() {
   QString str = m_EditSource->textCursor().selectedText();
@@ -1016,8 +1010,6 @@ void Notes::on_btnLink_clicked() {
   on_btnLeft_clicked();
   on_btnLeft_clicked();
 }
-
-void Notes::on_btnS6_clicked() { m_EditSource->insertPlainText("~"); }
 
 void Notes::on_btnS7_clicked() {
   m_EditSource->insertPlainText("[]");
@@ -1525,26 +1517,6 @@ void Notes::on_btnPDF_clicked() {
   delete printer;
 }
 
-void Notes::on_btnGetShare_clicked() {
-#ifdef Q_OS_ANDROID
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  QAndroidJniObject javaUriPath = QAndroidJniObject::fromString("uripath");
-  QAndroidJniObject m_activity = QtAndroid::androidActivity();
-  QAndroidJniObject s = m_activity.callObjectMethod(
-      "getShare", "(Ljava/lang/String;)Ljava/lang/String;",
-      javaUriPath.object<jstring>());
-
-#else
-  QJniObject javaUriPath = QJniObject::fromString("uripath");
-  QJniObject m_activity = QtAndroidPrivate::activity();
-  QJniObject s = m_activity.callObjectMethod(
-      "getShare", "(Ljava/lang/String;)Ljava/lang/String;",
-      javaUriPath.object<jstring>());
-#endif
-  on_btnPaste_clicked();
-#endif
-}
-
 void Notes::on_btnSyncToWebDAV_clicked() { syncToWebDAV(); }
 
 void Notes::on_btnShowTools_clicked() {
@@ -1584,8 +1556,6 @@ void Notes::on_btnDate_clicked() {
 void Notes::on_btnTime_clicked() {
   m_EditSource->insertPlainText(QTime::currentTime().toString());
 }
-
-void Notes::on_btnS11_clicked() { m_EditSource->insertPlainText("!"); }
 
 void Notes::setEditorVPos() {
   QSettings Reg(privateDir + "notes.ini", QSettings::IniFormat);
