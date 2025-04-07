@@ -723,7 +723,7 @@ void MainWindow::init_TotalData() {
   for (int i = 0; i < count; i++) {
     ui->tabWidget->removeTab(0);
   }
-  QString ini_file, ini_file1;
+  QString ini_file;
 
   ini_file = iniDir + "tab.ini";
   QSettings RegTab(ini_file, QSettings::IniFormat);
@@ -4202,7 +4202,7 @@ void MainWindow::on_btnMenu_clicked() {
 #ifdef Q_OS_ANDROID
   x = mw_one->geometry().x() + 2;
 #else
-  x = mw_one->geometry().x() + (ui->btnMenu->width() - 28) / 2 + 2;
+  x = mw_one->geometry().x() + ui->btnMenu->x();
 #endif
   int y = geometry().y() + ui->f_Menu->height() + 2;
   QPoint pos(x, y);
