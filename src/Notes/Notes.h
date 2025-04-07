@@ -40,6 +40,8 @@
 #include <QTextDocument>
 #include <QTextDocumentFragment>
 
+#include "MarkdownSyntax.h"
+#include "qsciscintilla.h"
 #include "src/Comm/ShowMessage.h"
 #include "src/Notes/ColorDialog.h"
 #include "src/Notes/LineNumberArea.h"
@@ -68,7 +70,9 @@ class Notes : public QDialog {
 
   QString new_title;
 
-  QTextEditHighlighter *m_EditSource;
+  QsciScintilla *m_EditSource;
+  QTextEditHighlighter *m_EditSource1;
+
   QTimer *timerEditNote;
   int px, py, mx, my;
 
@@ -194,8 +198,6 @@ class Notes : public QDialog {
 
   void on_showEditPanel();
 
-  void highlightCurrentLine();
-
   void on_btnDone_clicked();
 
   void on_KVChanged();
@@ -233,8 +235,6 @@ class Notes : public QDialog {
   void on_btnS8_clicked();
 
   void on_btnS9_clicked();
-
-  void onTextChange();
 
   void on_btnPaste_clicked();
 
@@ -300,6 +300,7 @@ class Notes : public QDialog {
   QColor StringToColor(QString mRgbStr);
 
   void setOpenSearchResultForAndroid(bool isValue, QString strSearchText);
+  void initMarkdownEditor(QsciScintilla *editor);
 };
 
 class LimitedTextEdit : public QTextEdit {

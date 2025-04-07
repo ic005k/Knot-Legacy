@@ -22,7 +22,12 @@ QT += concurrent
 CONFIG += c++17
 CONFIG+=sdk_no_version_check
 
-TRANSLATIONS += src/cn.ts
+TRANSLATIONS += src/cn.ts \
+    lib/qsci/qscintilla_cs.ts \
+    lib/qsci/qscintilla_de.ts \
+    lib/qsci/qscintilla_es.ts \
+    lib/qsci/qscintilla_fr.ts \
+    lib/qsci/qscintilla_pt_br.ts
 
 ICON = res/icon.icns
 RC_FILE +=win.rc
@@ -34,6 +39,12 @@ android: {
 
 }
 
+INCLUDEPATH += $$PWD/lib/scintilla/include
+INCLUDEPATH += $$PWD/lib/scintilla/src
+INCLUDEPATH += $$PWD/lib/scintilla/lexlib
+
+INCLUDEPATH += $$PWD/lib/qsci
+INCLUDEPATH += $$PWD/lib/qsci/QSci
 
 ####################### QuaZip ##############################################
 INCLUDEPATH += $$PWD/lib/zlib
@@ -82,6 +93,221 @@ INCLUDEPATH += $$PWD/lib/cmark-gfm/include
 #           QT_ANGLE_PLATFORM
 
 SOURCES += \
+    lib/qsci/InputMethod.cpp \
+    lib/qsci/ListBoxQt.cpp \
+    lib/qsci/MacPasteboardMime.cpp \
+    lib/qsci/PlatQt.cpp \
+    lib/qsci/SciAccessibility.cpp \
+    lib/qsci/SciClasses.cpp \
+    lib/qsci/ScintillaQt.cpp \
+    lib/qsci/qsciabstractapis.cpp \
+    lib/qsci/qsciapis.cpp \
+    lib/qsci/qscicommand.cpp \
+    lib/qsci/qscicommandset.cpp \
+    lib/qsci/qscidocument.cpp \
+    lib/qsci/qscilexer.cpp \
+    lib/qsci/qscilexerasm.cpp \
+    lib/qsci/qscilexeravs.cpp \
+    lib/qsci/qscilexerbash.cpp \
+    lib/qsci/qscilexerbatch.cpp \
+    lib/qsci/qscilexercmake.cpp \
+    lib/qsci/qscilexercoffeescript.cpp \
+    lib/qsci/qscilexercpp.cpp \
+    lib/qsci/qscilexercsharp.cpp \
+    lib/qsci/qscilexercss.cpp \
+    lib/qsci/qscilexercustom.cpp \
+    lib/qsci/qscilexerd.cpp \
+    lib/qsci/qscilexerdiff.cpp \
+    lib/qsci/qscilexeredifact.cpp \
+    lib/qsci/qscilexerfortran.cpp \
+    lib/qsci/qscilexerfortran77.cpp \
+    lib/qsci/qscilexerhex.cpp \
+    lib/qsci/qscilexerhtml.cpp \
+    lib/qsci/qscilexeridl.cpp \
+    lib/qsci/qscilexerintelhex.cpp \
+    lib/qsci/qscilexerjava.cpp \
+    lib/qsci/qscilexerjavascript.cpp \
+    lib/qsci/qscilexerjson.cpp \
+    lib/qsci/qscilexerlua.cpp \
+    lib/qsci/qscilexermakefile.cpp \
+    lib/qsci/qscilexermarkdown.cpp \
+    lib/qsci/qscilexermasm.cpp \
+    lib/qsci/qscilexermatlab.cpp \
+    lib/qsci/qscilexernasm.cpp \
+    lib/qsci/qscilexeroctave.cpp \
+    lib/qsci/qscilexerpascal.cpp \
+    lib/qsci/qscilexerperl.cpp \
+    lib/qsci/qscilexerpo.cpp \
+    lib/qsci/qscilexerpostscript.cpp \
+    lib/qsci/qscilexerpov.cpp \
+    lib/qsci/qscilexerproperties.cpp \
+    lib/qsci/qscilexerpython.cpp \
+    lib/qsci/qscilexerruby.cpp \
+    lib/qsci/qscilexerspice.cpp \
+    lib/qsci/qscilexersql.cpp \
+    lib/qsci/qscilexersrec.cpp \
+    lib/qsci/qscilexertcl.cpp \
+    lib/qsci/qscilexertekhex.cpp \
+    lib/qsci/qscilexertex.cpp \
+    lib/qsci/qscilexerverilog.cpp \
+    lib/qsci/qscilexervhdl.cpp \
+    lib/qsci/qscilexerxml.cpp \
+    lib/qsci/qscilexeryaml.cpp \
+    lib/qsci/qscimacro.cpp \
+    lib/qsci/qsciprinter.cpp \
+    lib/qsci/qsciscintilla.cpp \
+    lib/qsci/qsciscintillabase.cpp \
+    lib/qsci/qscistyle.cpp \
+    lib/qsci/qscistyledtext.cpp \
+    lib/scintilla/lexers/LexA68k.cpp \
+    lib/scintilla/lexers/LexAPDL.cpp \
+    lib/scintilla/lexers/LexASY.cpp \
+    lib/scintilla/lexers/LexAU3.cpp \
+    lib/scintilla/lexers/LexAVE.cpp \
+    lib/scintilla/lexers/LexAVS.cpp \
+    lib/scintilla/lexers/LexAbaqus.cpp \
+    lib/scintilla/lexers/LexAda.cpp \
+    lib/scintilla/lexers/LexAsm.cpp \
+    lib/scintilla/lexers/LexAsn1.cpp \
+    lib/scintilla/lexers/LexBaan.cpp \
+    lib/scintilla/lexers/LexBash.cpp \
+    lib/scintilla/lexers/LexBasic.cpp \
+    lib/scintilla/lexers/LexBatch.cpp \
+    lib/scintilla/lexers/LexBibTeX.cpp \
+    lib/scintilla/lexers/LexBullant.cpp \
+    lib/scintilla/lexers/LexCLW.cpp \
+    lib/scintilla/lexers/LexCOBOL.cpp \
+    lib/scintilla/lexers/LexCPP.cpp \
+    lib/scintilla/lexers/LexCSS.cpp \
+    lib/scintilla/lexers/LexCaml.cpp \
+    lib/scintilla/lexers/LexCmake.cpp \
+    lib/scintilla/lexers/LexCoffeeScript.cpp \
+    lib/scintilla/lexers/LexConf.cpp \
+    lib/scintilla/lexers/LexCrontab.cpp \
+    lib/scintilla/lexers/LexCsound.cpp \
+    lib/scintilla/lexers/LexD.cpp \
+    lib/scintilla/lexers/LexDMAP.cpp \
+    lib/scintilla/lexers/LexDMIS.cpp \
+    lib/scintilla/lexers/LexDiff.cpp \
+    lib/scintilla/lexers/LexECL.cpp \
+    lib/scintilla/lexers/LexEDIFACT.cpp \
+    lib/scintilla/lexers/LexEScript.cpp \
+    lib/scintilla/lexers/LexEiffel.cpp \
+    lib/scintilla/lexers/LexErlang.cpp \
+    lib/scintilla/lexers/LexErrorList.cpp \
+    lib/scintilla/lexers/LexFlagship.cpp \
+    lib/scintilla/lexers/LexForth.cpp \
+    lib/scintilla/lexers/LexFortran.cpp \
+    lib/scintilla/lexers/LexGAP.cpp \
+    lib/scintilla/lexers/LexGui4Cli.cpp \
+    lib/scintilla/lexers/LexHTML.cpp \
+    lib/scintilla/lexers/LexHaskell.cpp \
+    lib/scintilla/lexers/LexHex.cpp \
+    lib/scintilla/lexers/LexIndent.cpp \
+    lib/scintilla/lexers/LexInno.cpp \
+    lib/scintilla/lexers/LexJSON.cpp \
+    lib/scintilla/lexers/LexKVIrc.cpp \
+    lib/scintilla/lexers/LexKix.cpp \
+    lib/scintilla/lexers/LexLPeg.cpp \
+    lib/scintilla/lexers/LexLaTeX.cpp \
+    lib/scintilla/lexers/LexLisp.cpp \
+    lib/scintilla/lexers/LexLout.cpp \
+    lib/scintilla/lexers/LexLua.cpp \
+    lib/scintilla/lexers/LexMMIXAL.cpp \
+    lib/scintilla/lexers/LexMPT.cpp \
+    lib/scintilla/lexers/LexMSSQL.cpp \
+    lib/scintilla/lexers/LexMagik.cpp \
+    lib/scintilla/lexers/LexMake.cpp \
+    lib/scintilla/lexers/LexMarkdown.cpp \
+    lib/scintilla/lexers/LexMatlab.cpp \
+    lib/scintilla/lexers/LexMaxima.cpp \
+    lib/scintilla/lexers/LexMetapost.cpp \
+    lib/scintilla/lexers/LexModula.cpp \
+    lib/scintilla/lexers/LexMySQL.cpp \
+    lib/scintilla/lexers/LexNimrod.cpp \
+    lib/scintilla/lexers/LexNsis.cpp \
+    lib/scintilla/lexers/LexNull.cpp \
+    lib/scintilla/lexers/LexOScript.cpp \
+    lib/scintilla/lexers/LexOpal.cpp \
+    lib/scintilla/lexers/LexPB.cpp \
+    lib/scintilla/lexers/LexPLM.cpp \
+    lib/scintilla/lexers/LexPO.cpp \
+    lib/scintilla/lexers/LexPOV.cpp \
+    lib/scintilla/lexers/LexPS.cpp \
+    lib/scintilla/lexers/LexPascal.cpp \
+    lib/scintilla/lexers/LexPerl.cpp \
+    lib/scintilla/lexers/LexPowerPro.cpp \
+    lib/scintilla/lexers/LexPowerShell.cpp \
+    lib/scintilla/lexers/LexProgress.cpp \
+    lib/scintilla/lexers/LexProps.cpp \
+    lib/scintilla/lexers/LexPython.cpp \
+    lib/scintilla/lexers/LexR.cpp \
+    lib/scintilla/lexers/LexRebol.cpp \
+    lib/scintilla/lexers/LexRegistry.cpp \
+    lib/scintilla/lexers/LexRuby.cpp \
+    lib/scintilla/lexers/LexRust.cpp \
+    lib/scintilla/lexers/LexSAS.cpp \
+    lib/scintilla/lexers/LexSML.cpp \
+    lib/scintilla/lexers/LexSQL.cpp \
+    lib/scintilla/lexers/LexSTTXT.cpp \
+    lib/scintilla/lexers/LexScriptol.cpp \
+    lib/scintilla/lexers/LexSmalltalk.cpp \
+    lib/scintilla/lexers/LexSorcus.cpp \
+    lib/scintilla/lexers/LexSpecman.cpp \
+    lib/scintilla/lexers/LexSpice.cpp \
+    lib/scintilla/lexers/LexStata.cpp \
+    lib/scintilla/lexers/LexTACL.cpp \
+    lib/scintilla/lexers/LexTADS3.cpp \
+    lib/scintilla/lexers/LexTAL.cpp \
+    lib/scintilla/lexers/LexTCL.cpp \
+    lib/scintilla/lexers/LexTCMD.cpp \
+    lib/scintilla/lexers/LexTeX.cpp \
+    lib/scintilla/lexers/LexTxt2tags.cpp \
+    lib/scintilla/lexers/LexVB.cpp \
+    lib/scintilla/lexers/LexVHDL.cpp \
+    lib/scintilla/lexers/LexVerilog.cpp \
+    lib/scintilla/lexers/LexVisualProlog.cpp \
+    lib/scintilla/lexers/LexYAML.cpp \
+    lib/scintilla/lexlib/Accessor.cpp \
+    lib/scintilla/lexlib/CharacterCategory.cpp \
+    lib/scintilla/lexlib/CharacterSet.cpp \
+    lib/scintilla/lexlib/DefaultLexer.cpp \
+    lib/scintilla/lexlib/LexerBase.cpp \
+    lib/scintilla/lexlib/LexerModule.cpp \
+    lib/scintilla/lexlib/LexerNoExceptions.cpp \
+    lib/scintilla/lexlib/LexerSimple.cpp \
+    lib/scintilla/lexlib/PropSetSimple.cpp \
+    lib/scintilla/lexlib/StyleContext.cpp \
+    lib/scintilla/lexlib/WordList.cpp \
+    lib/scintilla/src/AutoComplete.cpp \
+    lib/scintilla/src/CallTip.cpp \
+    lib/scintilla/src/CaseConvert.cpp \
+    lib/scintilla/src/CaseFolder.cpp \
+    lib/scintilla/src/Catalogue.cpp \
+    lib/scintilla/src/CellBuffer.cpp \
+    lib/scintilla/src/CharClassify.cpp \
+    lib/scintilla/src/ContractionState.cpp \
+    lib/scintilla/src/DBCS.cpp \
+    lib/scintilla/src/Decoration.cpp \
+    lib/scintilla/src/Document.cpp \
+    lib/scintilla/src/EditModel.cpp \
+    lib/scintilla/src/EditView.cpp \
+    lib/scintilla/src/Editor.cpp \
+    lib/scintilla/src/ExternalLexer.cpp \
+    lib/scintilla/src/Indicator.cpp \
+    lib/scintilla/src/KeyMap.cpp \
+    lib/scintilla/src/LineMarker.cpp \
+    lib/scintilla/src/MarginView.cpp \
+    lib/scintilla/src/PerLine.cpp \
+    lib/scintilla/src/PositionCache.cpp \
+    lib/scintilla/src/RESearch.cpp \
+    lib/scintilla/src/RunStyles.cpp \
+    lib/scintilla/src/ScintillaBase.cpp \
+    lib/scintilla/src/Selection.cpp \
+    lib/scintilla/src/Style.cpp \
+    lib/scintilla/src/UniConversion.cpp \
+    lib/scintilla/src/ViewStyle.cpp \
+    lib/scintilla/src/XPM.cpp \
     lib/zlib/adler32.c \
     lib/zlib/compress.c \
     lib/zlib/crc32.c \
@@ -114,6 +340,7 @@ SOURCES += \
     src/Notes/ColorDialog.cpp \
     src/Notes/LineNumberArea.cpp \
     src/Notes/MarkdownHighlighter.cpp \
+    src/Notes/MarkdownSyntax.cpp \
     src/Notes/MoveTo.cpp \
     src/Notes/NewNoteBook.cpp \
     src/Notes/Notes.cpp \
@@ -198,6 +425,130 @@ SOURCES += \
 
 
 HEADERS += \
+    lib/qsci/ListBoxQt.h \
+    lib/qsci/Qsci/qsciabstractapis.h \
+    lib/qsci/Qsci/qsciapis.h \
+    lib/qsci/Qsci/qscicommand.h \
+    lib/qsci/Qsci/qscicommandset.h \
+    lib/qsci/Qsci/qscidocument.h \
+    lib/qsci/Qsci/qsciglobal.h \
+    lib/qsci/Qsci/qscilexer.h \
+    lib/qsci/Qsci/qscilexerasm.h \
+    lib/qsci/Qsci/qscilexeravs.h \
+    lib/qsci/Qsci/qscilexerbash.h \
+    lib/qsci/Qsci/qscilexerbatch.h \
+    lib/qsci/Qsci/qscilexercmake.h \
+    lib/qsci/Qsci/qscilexercoffeescript.h \
+    lib/qsci/Qsci/qscilexercpp.h \
+    lib/qsci/Qsci/qscilexercsharp.h \
+    lib/qsci/Qsci/qscilexercss.h \
+    lib/qsci/Qsci/qscilexercustom.h \
+    lib/qsci/Qsci/qscilexerd.h \
+    lib/qsci/Qsci/qscilexerdiff.h \
+    lib/qsci/Qsci/qscilexeredifact.h \
+    lib/qsci/Qsci/qscilexerfortran.h \
+    lib/qsci/Qsci/qscilexerfortran77.h \
+    lib/qsci/Qsci/qscilexerhex.h \
+    lib/qsci/Qsci/qscilexerhtml.h \
+    lib/qsci/Qsci/qscilexeridl.h \
+    lib/qsci/Qsci/qscilexerintelhex.h \
+    lib/qsci/Qsci/qscilexerjava.h \
+    lib/qsci/Qsci/qscilexerjavascript.h \
+    lib/qsci/Qsci/qscilexerjson.h \
+    lib/qsci/Qsci/qscilexerlua.h \
+    lib/qsci/Qsci/qscilexermakefile.h \
+    lib/qsci/Qsci/qscilexermarkdown.h \
+    lib/qsci/Qsci/qscilexermasm.h \
+    lib/qsci/Qsci/qscilexermatlab.h \
+    lib/qsci/Qsci/qscilexernasm.h \
+    lib/qsci/Qsci/qscilexeroctave.h \
+    lib/qsci/Qsci/qscilexerpascal.h \
+    lib/qsci/Qsci/qscilexerperl.h \
+    lib/qsci/Qsci/qscilexerpo.h \
+    lib/qsci/Qsci/qscilexerpostscript.h \
+    lib/qsci/Qsci/qscilexerpov.h \
+    lib/qsci/Qsci/qscilexerproperties.h \
+    lib/qsci/Qsci/qscilexerpython.h \
+    lib/qsci/Qsci/qscilexerruby.h \
+    lib/qsci/Qsci/qscilexerspice.h \
+    lib/qsci/Qsci/qscilexersql.h \
+    lib/qsci/Qsci/qscilexersrec.h \
+    lib/qsci/Qsci/qscilexertcl.h \
+    lib/qsci/Qsci/qscilexertekhex.h \
+    lib/qsci/Qsci/qscilexertex.h \
+    lib/qsci/Qsci/qscilexerverilog.h \
+    lib/qsci/Qsci/qscilexervhdl.h \
+    lib/qsci/Qsci/qscilexerxml.h \
+    lib/qsci/Qsci/qscilexeryaml.h \
+    lib/qsci/Qsci/qscimacro.h \
+    lib/qsci/Qsci/qsciprinter.h \
+    lib/qsci/Qsci/qsciscintilla.h \
+    lib/qsci/Qsci/qsciscintillabase.h \
+    lib/qsci/Qsci/qscistyle.h \
+    lib/qsci/Qsci/qscistyledtext.h \
+    lib/qsci/SciAccessibility.h \
+    lib/qsci/SciClasses.h \
+    lib/qsci/ScintillaQt.h \
+    lib/scintilla/include/ILexer.h \
+    lib/scintilla/include/ILoader.h \
+    lib/scintilla/include/Platform.h \
+    lib/scintilla/include/SciLexer.h \
+    lib/scintilla/include/Sci_Position.h \
+    lib/scintilla/include/Scintilla.h \
+    lib/scintilla/include/ScintillaWidget.h \
+    lib/scintilla/lexlib/Accessor.h \
+    lib/scintilla/lexlib/CharacterCategory.h \
+    lib/scintilla/lexlib/CharacterSet.h \
+    lib/scintilla/lexlib/DefaultLexer.h \
+    lib/scintilla/lexlib/LexAccessor.h \
+    lib/scintilla/lexlib/LexerBase.h \
+    lib/scintilla/lexlib/LexerModule.h \
+    lib/scintilla/lexlib/LexerNoExceptions.h \
+    lib/scintilla/lexlib/LexerSimple.h \
+    lib/scintilla/lexlib/OptionSet.h \
+    lib/scintilla/lexlib/PropSetSimple.h \
+    lib/scintilla/lexlib/SparseState.h \
+    lib/scintilla/lexlib/StringCopy.h \
+    lib/scintilla/lexlib/StyleContext.h \
+    lib/scintilla/lexlib/SubStyles.h \
+    lib/scintilla/lexlib/WordList.h \
+    lib/scintilla/src/AutoComplete.h \
+    lib/scintilla/src/CallTip.h \
+    lib/scintilla/src/CaseConvert.h \
+    lib/scintilla/src/CaseFolder.h \
+    lib/scintilla/src/Catalogue.h \
+    lib/scintilla/src/CellBuffer.h \
+    lib/scintilla/src/CharClassify.h \
+    lib/scintilla/src/ContractionState.h \
+    lib/scintilla/src/DBCS.h \
+    lib/scintilla/src/Decoration.h \
+    lib/scintilla/src/Document.h \
+    lib/scintilla/src/EditModel.h \
+    lib/scintilla/src/EditView.h \
+    lib/scintilla/src/Editor.h \
+    lib/scintilla/src/ElapsedPeriod.h \
+    lib/scintilla/src/ExternalLexer.h \
+    lib/scintilla/src/FontQuality.h \
+    lib/scintilla/src/Indicator.h \
+    lib/scintilla/src/IntegerRectangle.h \
+    lib/scintilla/src/KeyMap.h \
+    lib/scintilla/src/LineMarker.h \
+    lib/scintilla/src/MarginView.h \
+    lib/scintilla/src/Partitioning.h \
+    lib/scintilla/src/PerLine.h \
+    lib/scintilla/src/Position.h \
+    lib/scintilla/src/PositionCache.h \
+    lib/scintilla/src/RESearch.h \
+    lib/scintilla/src/RunStyles.h \
+    lib/scintilla/src/ScintillaBase.h \
+    lib/scintilla/src/Selection.h \
+    lib/scintilla/src/SparseVector.h \
+    lib/scintilla/src/SplitVector.h \
+    lib/scintilla/src/Style.h \
+    lib/scintilla/src/UniConversion.h \
+    lib/scintilla/src/UniqueString.h \
+    lib/scintilla/src/ViewStyle.h \
+    lib/scintilla/src/XPM.h \
     lib/zlib/crc32.h \
     lib/zlib/deflate.h \
     lib/zlib/gzguts.h \
@@ -226,6 +577,7 @@ HEADERS += \
     src/Notes/ColorDialog.h \
     src/Notes/LineNumberArea.h \
     src/Notes/MarkdownHighlighter.h \
+    src/Notes/MarkdownSyntax.h \
     src/Notes/MoveTo.h \
     src/Notes/NewNoteBook.h \
     src/Notes/Notes.h \
@@ -333,6 +685,19 @@ DISTFILES += \
     android/res/values/libs.xml \
     android/res/values/libs.xml \
     android/res/xml/qtprovider_paths.xml \
+    lib/qsci/features/qscintilla2.prf \
+    lib/qsci/features_staticlib/qscintilla2.prf \
+    lib/qsci/qscintilla_cs.qm \
+    lib/qsci/qscintilla_de.qm \
+    lib/qsci/qscintilla_es.qm \
+    lib/qsci/qscintilla_fr.qm \
+    lib/qsci/qscintilla_pt_br.qm \
+    lib/scintilla/include/License.txt \
+    lib/scintilla/include/Scintilla.iface \
+    lib/scintilla/lexers/License.txt \
+    lib/scintilla/lexlib/License.txt \
+    lib/scintilla/src/License.txt \
+    lib/scintilla/src/SciTE.properties \
     src/cn.qm \
     src/cn.ts \
     src/imgview.qml \
@@ -475,5 +840,8 @@ win32:{
 }
 
 ANDROID_EXTRA_LIBS = $$PWD/android-openssl/libcrypto_1_1.so $$PWD/android-openssl/libssl_1_1.so
+
+SUBDIRS += \
+    lib/qsci/qscintilla.pro
 
 

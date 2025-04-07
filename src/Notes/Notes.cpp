@@ -40,7 +40,10 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
 
   m_NoteIndexManager = new NoteIndexManager();
 
-  m_EditSource = new QTextEditHighlighter();
+  m_EditSource = new QsciScintilla(this);
+  initMarkdownEditor(m_EditSource);
+
+  m_EditSource1 = new QTextEditHighlighter();
   ui->frameEdit->layout()->addWidget(m_EditSource);
 
   ui->editSource->hide();
@@ -118,7 +121,7 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->frameEdit->layout()->setContentsMargins(0, 0, 0, 0);
   m_EditSource->setContentsMargins(1, 1, 1, 1);
   m_EditSource->setStyleSheet("border:none");
-  m_EditSource->setCursorWidth(2);
+  // m_EditSource->setCursorWidth(2);
 
   QFont f = this->font();
   f.setPointSize(fontSize - 1);
@@ -135,22 +138,20 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->editCol->setValidator(validator);
   ui->editCol->setPlaceholderText(tr("Column"));
 
-  connect(m_EditSource, &QTextEdit::undoAvailable, this,
-          &Notes::on_editSource_undoAvailable);
-  connect(m_EditSource, &QTextEdit::redoAvailable, this,
-          &Notes::on_editSource_redoAvailable);
-  connect(m_EditSource, &QTextEdit::textChanged, this,
+  // connect(m_EditSource, &QsciScintilla::undoAvailable, this,
+  //         &Notes::on_editSource_undoAvailable);
+  // connect(m_EditSource, &QsciScintilla::redoAvailable, this,
+  //         &Notes::on_editSource_redoAvailable);
+  connect(m_EditSource, &QsciScintilla::textChanged, this,
           &Notes::on_editSource_textChanged);
-  connect(m_EditSource, &QTextEdit::cursorPositionChanged, this,
-          &Notes::highlightCurrentLine);
-  highlightCurrentLine();
+
+  // connect(m_EditSource, &QsciScintilla::cursorPositionChanged, this,
+  //        &Notes::highlightCurrentLine);
 
   QFont font = this->font();
   font.setLetterSpacing(QFont::AbsoluteSpacing, 2);  // 字间距
   m_EditSource->setFont(font);
-  m_EditSource->setAcceptRichText(false);
-
-  connect(m_EditSource, &QTextEdit::textChanged, this, &Notes::onTextChange);
+  // m_EditSource->setAcceptRichText(false);
 
   timerEditPanel = new QTimer(this);
   connect(timerEditPanel, SIGNAL(timeout()), this, SLOT(on_showEditPanel()));
@@ -265,7 +266,7 @@ void Notes::saveMainNotes() {
   saveQMLVPos();
 
   if (isTextChange) {
-    QString text = m_EditSource->toPlainText();
+    QString text = m_EditSource->text();
     text = formatMDText(text);
     StringToFile(text, currentMDFile);
 
@@ -420,7 +421,7 @@ void Notes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
 
 bool Notes::eventFilter(QObject *obj, QEvent *evn) {
   if (obj == m_EditSource->viewport()) {
-    getEditPanel(m_EditSource, evn);
+    // getEditPanel(m_EditSource, evn);
   }
 
   QKeyEvent *keyEvent = static_cast<QKeyEvent *>(evn);
@@ -597,7 +598,7 @@ QString Notes::insertImage(QString fileName, bool isToAndroidView) {
     strImage = "\n\n![image](" + strTar + ")\n\n";
 
     if (!isAndroid) {
-      m_EditSource->insertPlainText(strImage);
+      m_EditSource->insert(strImage);
     } else {
       if (isToAndroidView) insertNote(strImage);
     }
@@ -872,8 +873,7 @@ void Notes::saveQMLVPos() {
 
   Reg.setValue("/MainNotes/editVPos" + strTag,
                m_EditSource->verticalScrollBar()->sliderPosition());
-  Reg.setValue("/MainNotes/editCPos" + strTag,
-               m_EditSource->textCursor().position());
+  Reg.setValue("/MainNotes/editCPos" + strTag, m_EditSource->cursor().pos());
 
   if (QFile(currentMDFile).exists()) {
     sliderPos = getVPos();
@@ -936,9 +936,9 @@ void Notes::on_btnInsertTable_clicked() {
   }
 
   if (!m_EditSource->isHidden()) {
-    m_EditSource->insertPlainText(strCol + "\n" + strHead + "\n");
+    m_EditSource->insert(strCol + "\n" + strHead + "\n");
     for (int j = 0; j < row; j++) {
-      m_EditSource->insertPlainText(strRow + "\n");
+      m_EditSource->insert(strRow + "\n");
     }
   }
 }
@@ -957,40 +957,39 @@ void Notes::on_editSource_undoAvailable(bool b) {
     ui->btnUndo->setEnabled(false);
 }
 
-void Notes::on_btnVLine_clicked() { m_EditSource->insertPlainText("|"); }
+void Notes::on_btnVLine_clicked() { m_EditSource->insert("|"); }
 
 void Notes::on_btnS1_clicked() {
-  QString str = m_EditSource->textCursor().selectedText();
+  QString str = m_EditSource->selectedText();
   if (str == "") str = tr("Bold Italic");
-  m_EditSource->insertPlainText("_**" + str + "**_");
+  m_EditSource->insert("_**" + str + "**_");
 }
 
 void Notes::on_btnS2_clicked() {
-  QString str = m_EditSource->textCursor().selectedText();
+  QString str = m_EditSource->selectedText();
   if (str == "") str = tr("Italic");
-  m_EditSource->insertPlainText("_" + str + "_");
+  m_EditSource->insert("_" + str + "_");
 }
 
 void Notes::on_btnS3_clicked() {
-  QString str = m_EditSource->textCursor().selectedText();
+  QString str = m_EditSource->selectedText();
   if (str == "") str = tr("Underline");
-  m_EditSource->insertPlainText("<u>" + str + "</u>");
+  m_EditSource->insert("<u>" + str + "</u>");
 }
 
 void Notes::on_btnS4_clicked() {
-  QString str = m_EditSource->textCursor().selectedText();
+  QString str = m_EditSource->selectedText();
   if (str == "") str = tr("Strickout");
-  m_EditSource->insertPlainText("~~" + str + "~~");
+  m_EditSource->insert("~~" + str + "~~");
 }
 
 void Notes::on_btnColor_clicked() {
   QString strColor = m_Method->getCustomColor();
   if (strColor.isEmpty()) return;
 
-  QString str = m_EditSource->textCursor().selectedText();
+  QString str = m_EditSource->selectedText();
   if (str == "") str = tr("Color");
-  m_EditSource->insertPlainText("<font color=" + strColor + ">" + str +
-                                "</font>");
+  m_EditSource->insert("<font color=" + strColor + ">" + str + "</font>");
 }
 
 QColor Notes::StringToColor(QString mRgbStr) {
@@ -999,77 +998,34 @@ QColor Notes::StringToColor(QString mRgbStr) {
 }
 
 void Notes::on_btnS5_clicked() {
-  QString str = m_EditSource->textCursor().selectedText();
+  QString str = m_EditSource->selectedText();
   if (str == "") str = tr("Bold");
-  m_EditSource->insertPlainText("**" + str + "**");
+  m_EditSource->insert("**" + str + "**");
 }
 
 void Notes::on_btnLink_clicked() {
-  m_EditSource->insertPlainText("[]()");
+  m_EditSource->insert("[]()");
   on_btnLeft_clicked();
   on_btnLeft_clicked();
   on_btnLeft_clicked();
 }
 
 void Notes::on_btnS7_clicked() {
-  m_EditSource->insertPlainText("[]");
+  m_EditSource->insert("[]");
   ui->btnLeft->click();
 }
 
 void Notes::on_btnS8_clicked() {
-  m_EditSource->insertPlainText("()");
+  m_EditSource->insert("()");
   ui->btnLeft->click();
 }
 
 void Notes::on_btnS9_clicked() {
-  m_EditSource->insertPlainText("{}");
+  m_EditSource->insert("{}");
   ui->btnLeft->click();
 }
 
-void Notes::on_btnS10_clicked() { m_EditSource->insertPlainText("_"); }
-
-void Notes::highlightCurrentLine() {
-  QList<QTextEdit::ExtraSelection> extraSelections;
-
-  QTextEdit::ExtraSelection selection;
-
-  QColor lineColor;
-
-  if (isDark)
-    lineColor = QColor(QColor(25, 125, 25, 25));
-  else
-    lineColor = QColor(Qt::yellow).lighter(160);
-
-  selection.format.setBackground(lineColor);
-  selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-  selection.cursor = m_EditSource->textCursor();
-  selection.cursor.clearSelection();
-  extraSelections.append(selection);
-
-  m_EditSource->setExtraSelections(extraSelections);
-
-  QString str1, str2, str3, str4;
-
-  // 当前光标
-  QTextCursor tc = m_EditSource->textCursor();
-  // QTextLayout* lay = tc.block().layout();
-  // 当前光标在本BLOCK内的相对位置
-  int iCurPos = tc.position() - tc.block().position();
-  // 光标所在行号
-  //  int iCurrentLine = lay->lineForTextPosition(iCurPos).lineNumber() +
-  //                    tc.block().firstLineNumber();
-  int iLineCount = m_EditSource->document()->lineCount();
-  // 或者  获取光标所在行的行号
-  int iRowNum = tc.blockNumber() + 1;
-
-  str1 = QString::number(iLineCount);
-  str2 = QString::number(m_EditSource->textCursor().position());
-  str3 = QString::number(iCurPos);
-  str4 = QString::number(iRowNum);
-  ui->lblInfo->setText(" " + str4 + " , " + str3);
-}
-
-void Notes::onTextChange() {}
+void Notes::on_btnS10_clicked() { m_EditSource->insert("_"); }
 
 void Notes::on_btnPaste_clicked() {
   const QClipboard *clipboard = QApplication::clipboard();
@@ -1180,18 +1136,6 @@ void Notes::selectText(int start, int end) {
 void Notes::paintEvent(QPaintEvent *event) {
   Q_UNUSED(event);
   return;
-
-  if (m_EditSource->hasFocus()) {
-    if (bCursorVisible) {
-      const QRect qRect = m_EditSource->cursorRect(m_EditSource->textCursor());
-      QPainter qPainter(m_EditSource->viewport());
-      qPainter.fillRect(qRect, QColor(255, 0, 0, 255));
-    } else {
-      const QRect qRect = m_EditSource->cursorRect(m_EditSource->textCursor());
-      QPainter qPainter(m_EditSource->viewport());
-      qPainter.fillRect(qRect, QColor(0, 255, 0, 255));
-    }
-  }
 }
 
 void Notes::timerSlot() {
@@ -1204,14 +1148,9 @@ void Notes::timerSlot() {
   emit sendUpdate();
 }
 
-void Notes::on_btnLeft_clicked() {
-  m_EditSource->moveCursor(QTextCursor::PreviousCharacter,
-                           QTextCursor::MoveAnchor);
-}
+void Notes::on_btnLeft_clicked() {}
 
-void Notes::on_btnRight_clicked() {
-  m_EditSource->moveCursor(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
-}
+void Notes::on_btnRight_clicked() {}
 
 bool Notes::androidCopyFile(QString src, QString des) {
   bool result = false;
@@ -1241,7 +1180,7 @@ bool Notes::androidCopyFile(QString src, QString des) {
 
 void Notes::closeEvent(QCloseEvent *event) {
   Q_UNUSED(event);
-  strNoteText = m_EditSource->toPlainText().trimmed();
+  strNoteText = m_EditSource->text().trimmed();
 
   if (!m_TextSelector->isHidden()) {
     m_TextSelector->close();
@@ -1295,22 +1234,22 @@ void Notes::on_editSource_textChanged() { isTextChange = true; }
 void Notes::on_editSource_cursorPositionChanged() {}
 
 void Notes::on_btnReference_clicked() {
-  QString str = m_EditSource->textCursor().selectedText();
-  m_EditSource->insertPlainText("> " + str);
+  QString str = m_EditSource->selectedText();
+  m_EditSource->insert("> " + str);
 }
 
 void Notes::show_findText() {
   QString findtext = ui->editFind->text().trimmed().toLower();
   if (findtext == "") return;
   // 获得对话框的内容
-  if (m_EditSource->find(findtext, QTextDocument::FindCaseSensitively))
+  if (m_EditSource1->find(findtext, QTextDocument::FindCaseSensitively))
   // 查找后一个
   {
     // 查找到后高亮显示
     QPalette palette = m_EditSource->palette();
     palette.setColor(QPalette::Highlight,
                      palette.color(QPalette::Active, QPalette::Highlight));
-    m_EditSource->setPalette(palette);
+    m_EditSource1->setPalette(palette);
   } else {
     m_Method->m_widget = new QWidget(this);
     ShowMessage *m_ShowMsg = new ShowMessage(this);
@@ -1323,14 +1262,14 @@ void Notes::show_findTextBack() {
   QString findtext = ui->editFind->text().trimmed().toLower();
   if (findtext == "") return;
   // 获得对话框的内容
-  if (m_EditSource->find(findtext, QTextDocument::FindBackward))
+  if (m_EditSource1->find(findtext, QTextDocument::FindBackward))
   // 查找后一个
   {
     // 查找到后高亮显示
-    QPalette palette = m_EditSource->palette();
+    QPalette palette = m_EditSource1->palette();
     palette.setColor(QPalette::Highlight,
                      palette.color(QPalette::Active, QPalette::Highlight));
-    m_EditSource->setPalette(palette);
+    m_EditSource1->setPalette(palette);
   } else {
     m_Method->m_widget = new QWidget(this);
     ShowMessage *m_ShowMsg = new ShowMessage(this);
@@ -1344,7 +1283,7 @@ void Notes::findText() {
   if (search_text.trimmed().isEmpty()) {
     return;
   } else {
-    QTextDocument *document = m_EditSource->document();
+    QTextDocument *document = m_EditSource1->document();
     bool found = false;
     QTextCursor highlight_cursor(document);
     QTextCursor cursor(document);
@@ -1527,11 +1466,6 @@ void Notes::on_btnShowTools_clicked() {
     ui->f_ToolBar->hide();
   }
 
-  if (m_EditSource->textCursor().position() > 0) {
-    on_btnLeft_clicked();
-    on_btnRight_clicked();
-  }
-
   QSettings *iniNotes =
       new QSettings(privateDir + "notes.ini", QSettings::IniFormat, NULL);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
@@ -1550,11 +1484,11 @@ void Notes::on_editNote() {
 }
 
 void Notes::on_btnDate_clicked() {
-  m_EditSource->insertPlainText(QDate::currentDate().toString());
+  m_EditSource->insert(QDate::currentDate().toString());
 }
 
 void Notes::on_btnTime_clicked() {
-  m_EditSource->insertPlainText(QTime::currentTime().toString());
+  m_EditSource->insert(QTime::currentTime().toString());
 }
 
 void Notes::setEditorVPos() {
@@ -2134,8 +2068,8 @@ void Notes::openEditUI() {
   mw_one->mainHeight = mw_one->height();
 
   init();
-  m_EditSource->setPlainText(mdString);
-  new MarkdownHighlighter(m_EditSource->document());
+  m_EditSource->setText(mdString);
+  // new MarkdownHighlighter(m_EditSource->document());
 
   show();
 
@@ -2153,9 +2087,11 @@ void Notes::openEditUI() {
   bool isToolBarVisible =
       iniNotes->value("/MainNotes/toolBarVisible", false).toBool();
   m_EditSource->verticalScrollBar()->setSliderPosition(vpos);
-  QTextCursor tmpCursor = m_EditSource->textCursor();
-  tmpCursor.setPosition(cpos);
-  m_EditSource->setTextCursor(tmpCursor);
+
+  // QTextCursor tmpCursor = m_EditSource->textCursor();
+  // tmpCursor.setPosition(cpos);
+  // m_EditSource->setTextCursor(tmpCursor);
+
   m_EditSource->setFocus();
   if (isToolBarVisible) {
     if (ui->f_ToolBar->isHidden()) on_btnShowTools_clicked();
@@ -2172,7 +2108,9 @@ void Notes::openEditUI() {
     QString findText = mw_one->mySearchText;
     if (findText.length() > 0) {
       if (ui->f_ToolBar->isHidden()) on_btnShowTools_clicked();
-      m_EditSource->moveCursor(QTextCursor::Start);
+
+      // m_EditSource->moveCursor(QTextCursor::Start);
+
       ui->editFind->setText(findText);
       on_btnNext_clicked();
     }
@@ -2433,4 +2371,57 @@ void Notes::updateMainnotesIniToSyncLists() {
     mw_one->m_Notes->notes_sync_files.removeOne(zipMainnotes);
     mw_one->m_Notes->notes_sync_files.append(zipMainnotes);
   }
+}
+
+void Notes::initMarkdownEditor(QsciScintilla *editor) {
+  // 创建词法分析器
+  MarkdownLexer *lexer = new MarkdownLexer(editor);
+
+  // 应用主题
+  lexer->applyVividTheme(isDark);
+
+  // 配置编辑器
+  editor->setLexer(lexer);
+  editor->setFolding(QsciScintilla::BoxedTreeFoldStyle);
+  editor->setAutoIndent(true);
+
+  // 配置边距
+  // 配置行号边距（Margin 0）
+  editor->setMarginType(0, QsciScintilla::NumberMargin);  // 必须首先生效
+  editor->setMarginWidth(0, 50);                          // 固定宽度或动态计算
+  editor->SendScintilla(QsciScintilla::SCI_STYLESETFORE,
+                        QsciScintilla::STYLE_LINENUMBER,
+                        QColor("#000000").rgba());
+
+  // 配置符号边距（Margin 1）
+  editor->setMarginType(1, QsciScintilla::SymbolMargin);
+  editor->setMarginWidth(1, 20);
+
+  // 边距2：断点符号边距
+  editor->setMarginType(2, QsciScintilla::SymbolMargin);
+  editor->setMarginWidth(2, 20);
+  editor->setMarginBackgroundColor(2, QColor("#FFE4E1"));
+
+  // 高亮当前行
+  editor->setCaretLineVisible(true);
+  editor->setCaretLineBackgroundColor(QColor("#FFF8DC"));
+
+  // 显示代码折叠
+  editor->SendScintilla(QsciScintilla::SCI_SETPROPERTY, "fold", "1");
+  editor->SendScintilla(QsciScintilla::SCI_SETFOLDFLAGS,
+                        16);  // 带边框的折叠图标
+
+  // 自动换行配置
+  editor->setWrapMode(QsciScintilla::WrapWord);               // 按单词换行
+  editor->setWrapVisualFlags(QsciScintilla::WrapFlagByText);  // 无视觉标记
+  editor->setWrapIndentMode(QsciScintilla::WrapIndentSame);   // 缩进对齐
+
+  // 滚动条控制
+  editor->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);  // 隐藏水平条
+  editor->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);  // 按需显示垂直条
+
+  // 边缘参考线（90字符列）
+  editor->setEdgeMode(QsciScintilla::EdgeLine);
+  editor->setEdgeColumn(90);
+  editor->setEdgeColor(QColor("#FFA07A"));
 }
