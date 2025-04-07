@@ -54,6 +54,8 @@ macx {
     DEFINES += LEXILLA
 }
 
+INCLUDEPATH += $$PWD/lib/lexilla/include
+
 INCLUDEPATH += $$PWD/lib/scintilla/include
 INCLUDEPATH += $$PWD/lib/scintilla/src
 INCLUDEPATH += $$PWD/lib/scintilla/lexlib
