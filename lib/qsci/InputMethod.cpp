@@ -254,15 +254,7 @@ QVariant QsciScintillaBase::inputMethodQuery(Qt::InputMethodQuery query) const
             int paraEnd = sci->pdoc->ParaDown(pos);
             QVarLengthArray<char,1024> buffer(paraEnd - paraStart + 1);
 
-            Sci_CharacterRange charRange;
-            charRange.cpMin = paraStart;
-            charRange.cpMax = paraEnd;
-
-            Sci_TextRange textRange;
-            textRange.chrg = charRange;
-            textRange.lpstrText = buffer.data();
-
-            SendScintilla(SCI_GETTEXTRANGE, 0, (sptr_t)&textRange);
+            SendScintilla(SCI_GETTEXTRANGE, paraStart, paraEnd, buffer.data());
 
             return bytesAsText(buffer.constData(), buffer.size());
         }

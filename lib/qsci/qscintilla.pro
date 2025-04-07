@@ -1,8 +1,8 @@
 # The project file for the QScintilla library.
 #
-# Copyright (c) 2023 Riverbank Computing Limited <info@riverbankcomputing.com>
+# Copyright (c) 2024 Riverbank Computing Limited <info@riverbankcomputing.com>
 # 
-# This file is part of QScintilla.
+# This file is part of QScintilla2.
 # 
 # This file may be used under the terms of the GNU General Public License
 # version 3.0 as published by the Free Software Foundation and appearing in
@@ -18,7 +18,7 @@
 # WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 
-!win32:VERSION = 15.2.0
+!win32:VERSION = 15.2.1
 
 TEMPLATE = lib
 CONFIG += qt warn_off thread exceptions hide_symbols

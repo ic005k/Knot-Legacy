@@ -110,7 +110,6 @@ INCLUDEPATH += $$PWD/lib/cmark-gfm/include
 SOURCES += \
     lib/qsci/InputMethod.cpp \
     lib/qsci/ListBoxQt.cpp \
-    lib/qsci/MacPasteboardMime.cpp \
     lib/qsci/PlatQt.cpp \
     lib/qsci/SciAccessibility.cpp \
     lib/qsci/SciClasses.cpp \
