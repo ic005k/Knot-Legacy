@@ -42,7 +42,7 @@
 #include "qmacfunctions_p.h"
 
 #include <QtCore/qlogging.h>
-#include <qpa/qplatformnativeinterface.h>
+#include "qplatformnativeinterface.h"
 
 QT_BEGIN_NAMESPACE
 

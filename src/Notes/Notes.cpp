@@ -2340,9 +2340,6 @@ void Notes::initMarkdownEditor(QsciScintilla *editor) {
              << "Color:" << markdownLexer->color(i)
              << "BG:" << markdownLexer->paper(i);
   }
-
-  qDebug() << "Scintilla Version:"
-           << editor->SendScintilla(QsciScintilla::SCI_GETVERSION);
 }
 
 // 查找关键词
