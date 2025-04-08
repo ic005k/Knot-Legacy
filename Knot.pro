@@ -50,10 +50,15 @@ INCLUDEPATH += $$PWD/lib/scintilla/lexlib
 INCLUDEPATH += $$PWD/lib/scintilla/src
 
 macx {
+    # 添加 QtWidgets 头文件路径
+    INCLUDEPATH += $$[QT_INSTALL_HEADERS]/QtWidgets
+
     QT_VERSION_MAJOR = $$[QT_VERSION]
     contains(QT_VERSION_MAJOR, ^5) {
         SOURCES += $$PWD/lib/qsci/QMacPasteboardMime.cpp
     }
+
+     LIBS += -framework ApplicationServices
 }
 
 ####################### QuaZip ##############################################
