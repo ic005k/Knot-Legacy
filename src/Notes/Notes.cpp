@@ -38,10 +38,10 @@ NoteIndexManager::NoteIndexManager(QObject *parent) : QObject{parent} {}
 Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->setupUi(this);
 
-  m_NoteIndexManager = new NoteIndexManager();
-
   m_EditSource = new QsciScintilla(this);
-  initMarkdownEditor(m_EditSource);
+  // initMarkdownEditor(m_EditSource);
+
+  m_NoteIndexManager = new NoteIndexManager();
 
   m_EditSource1 = new QTextEditHighlighter();
   ui->frameEdit->layout()->addWidget(m_EditSource);
@@ -2321,7 +2321,7 @@ void Notes::initMarkdownEditor(QsciScintilla *editor) {
                         true);  // 在文字下方绘制
 
   // 创建 Lexer
-  QsciLexerMarkdown *markdownLexer = new QsciLexerMarkdown(editor);
+  markdownLexer = new QsciLexerMarkdown(editor);
   //  强制编码和默认样式
   editor->setUtf8(true);
   // 配置关键样式

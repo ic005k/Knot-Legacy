@@ -286,6 +286,7 @@ class Notes : public QDialog {
   int m_currentMatchIndex = -1;
   void jumpToNextMatch();
   void jumpToPrevMatch();
+  QsciLexerMarkdown *markdownLexer;
 };
 
 class LimitedTextEdit : public QTextEdit {
