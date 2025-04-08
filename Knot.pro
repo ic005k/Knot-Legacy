@@ -54,8 +54,6 @@ macx {
     DEFINES += LEXILLA
 }
 
-INCLUDEPATH += $$PWD/lib/lexilla/include
-
 INCLUDEPATH += $$PWD/lib/scintilla/include
 INCLUDEPATH += $$PWD/lib/scintilla/src
 INCLUDEPATH += $$PWD/lib/scintilla/lexlib
@@ -701,6 +699,7 @@ DISTFILES += \
     android/res/values/libs.xml \
     android/res/values/libs.xml \
     android/res/xml/qtprovider_paths.xml \
+    lib/lexilla/include/LexicalStyles.iface \
     lib/qsci/features/qscintilla2.prf \
     lib/qsci/features_staticlib/qscintilla2.prf \
     lib/qsci/qscintilla_cs.qm \
