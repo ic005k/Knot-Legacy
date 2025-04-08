@@ -1080,6 +1080,8 @@ bool Notes::androidCopyFile(QString src, QString des) {
 
 void Notes::closeEvent(QCloseEvent *event) {
   Q_UNUSED(event);
+  saveQMLVPos();
+
   strNoteText = m_EditSource->text().trimmed();
 
   if (!m_TextSelector->isHidden()) {
@@ -1969,7 +1971,6 @@ void Notes::openEditUI() {
       iniNotes->value("/MainNotes/toolBarVisible", false).toBool();
 
   m_EditSource->verticalScrollBar()->setSliderPosition(vpos);
-  // m_EditSource->SendScintilla(QsciScintilla::SCI_SETCURRENTPOS, cpos);
   m_EditSource->SendScintilla(QsciScintilla::SCI_SETANCHOR, cpos);  // 起始位置
   m_EditSource->SendScintilla(QsciScintilla::SCI_SETCURRENTPOS,
                               cpos);  // 结束位置
@@ -1990,7 +1991,8 @@ void Notes::openEditUI() {
     if (findText.length() > 0) {
       if (ui->f_ToolBar->isHidden()) on_btnShowTools_clicked();
 
-      // m_EditSource->moveCursor(QTextCursor::Start);
+      m_EditSource->SendScintilla(QsciScintilla::SCI_SETANCHOR, 0);
+      m_EditSource->SendScintilla(QsciScintilla::SCI_SETCURRENTPOS, 0);
 
       ui->editFind->setText(findText);
       on_btnNext_clicked();
