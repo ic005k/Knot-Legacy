@@ -2258,46 +2258,6 @@ void Notes::updateMainnotesIniToSyncLists() {
 }
 
 void Notes::initMarkdownEditor(QsciScintilla *editor) {
-  // 创建 Lexer 并强制设置编码
-  QsciLexerMarkdown *markdownLexer = new QsciLexerMarkdown(editor);
-  //  强制编码和默认样式
-  editor->setUtf8(true);
-
-  // 配置关键样式
-  markdownLexer->setColor(Qt::darkBlue, QsciLexerMarkdown::Header1);
-  markdownLexer->setColor(Qt::darkGreen, QsciLexerMarkdown::Link);
-  markdownLexer->setPaper(QColor(240, 240, 240), QsciLexerMarkdown::CodeBlock);
-
-  //  跨平台字体设置
-  QFont codeFont;
-  codeFont.setFamily("Consolas, Menlo, Monaco");
-  codeFont.setPointSize(12);
-  markdownLexer->setFont(codeFont, QsciLexerMarkdown::CodeBlock);
-
-  // 颜色转换函数
-  auto scintillaColor = [](const QColor &c) {
-    return (c.blue() << 16) | (c.green() << 8) | c.red();
-  };
-
-  // 设置标题样式（Scintilla 原生方式）
-  editor->SendScintilla(QsciScintilla::SCI_STYLESETFORE,
-                        QsciLexerMarkdown::Header1, scintillaColor(Qt::red));
-
-  // 设置代码块背景色
-  editor->SendScintilla(QsciScintilla::SCI_STYLESETBACK,
-                        QsciLexerMarkdown::CodeBlock,
-                        scintillaColor(QColor("#F0F0F0")));
-
-  // 同时设置 QsciLexer 的颜色（保持 Qt 层一致）
-  markdownLexer->setColor(Qt::red, QsciLexerMarkdown::Header1);
-  markdownLexer->setPaper(QColor("#F0F0F0"), QsciLexerMarkdown::CodeBlock);
-
-  // 必须刷新
-  editor->SendScintilla(QsciScintilla::SCI_COLOURISE, 0, -1);
-
-  // 立即应用
-  editor->SendScintilla(QsciScintilla::SCI_COLOURISE, 0, -1);
-
   editor->setFolding(QsciScintilla::BoxedTreeFoldStyle);
 
   editor->setAutoIndent(true);                                // 自动缩进
@@ -2339,9 +2299,9 @@ void Notes::initMarkdownEditor(QsciScintilla *editor) {
   editor->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);  // 隐藏水平条
   editor->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);  // 按需显示垂直条
 
-  // 边缘参考线（90字符列）
+  // 边缘参考线
   editor->setEdgeMode(QsciScintilla::EdgeLine);
-  editor->setEdgeColumn(90);
+  editor->setEdgeColumn(100);
   editor->setEdgeColor(QColor("#FFA07A"));
 
   // 配置搜索高亮指示器
@@ -2355,21 +2315,15 @@ void Notes::initMarkdownEditor(QsciScintilla *editor) {
   editor->SendScintilla(QsciScintilla::SCI_INDICSETUNDER, INDICATOR_SEARCH,
                         true);  // 在文字下方绘制
 
+  // 创建 Lexer
+  QsciLexerMarkdown *markdownLexer = new QsciLexerMarkdown(editor);
+  //  强制编码和默认样式
+  editor->setUtf8(true);
+  // 配置关键样式
+  markdownLexer->setColor(Qt::darkBlue, QsciLexerMarkdown::Header1);
+  markdownLexer->setColor(Qt::darkGreen, QsciLexerMarkdown::Link);
+  markdownLexer->setPaper(QColor(240, 240, 240), QsciLexerMarkdown::CodeBlock);
   editor->setLexer(markdownLexer);
-  // 强制刷新高亮
-  QTimer::singleShot(100, [=]() {
-    editor->recolor();
-    editor->SendScintilla(QsciScintilla::SCI_COLOURISE, 0, -1);
-  });
-
-  // 强制重置所有样式缓存
-  editor->SendScintilla(QsciScintilla::SCI_CLEARDOCUMENTSTYLE);
-  editor->SendScintilla(QsciScintilla::SCI_COLOURISE, 0, -1);
-
-  // 触发完整重绘
-  editor->update();   // Qt 级刷新
-  editor->repaint();  // 强制立即绘制
-
   // 验证 Lexer
   qDebug() << "Lexer 状态：" << (editor->lexer() ? "已设置" : "未设置");
   if (editor->lexer()) {
@@ -2386,6 +2340,9 @@ void Notes::initMarkdownEditor(QsciScintilla *editor) {
              << "Color:" << markdownLexer->color(i)
              << "BG:" << markdownLexer->paper(i);
   }
+
+  qDebug() << "Scintilla Version:"
+           << editor->SendScintilla(QsciScintilla::SCI_GETVERSION);
 }
 
 // 查找关键词

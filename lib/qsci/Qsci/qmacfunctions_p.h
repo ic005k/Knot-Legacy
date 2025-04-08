@@ -56,7 +56,7 @@
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 #include <QtCore/QDebug>
 #include <QtGui/QGuiApplication>
-#include <qpa/qplatformnativeinterface.h>
+#include "qplatformnativeinterface.h"
 
 QT_BEGIN_NAMESPACE
 
