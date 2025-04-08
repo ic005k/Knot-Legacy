@@ -2265,6 +2265,11 @@ void Notes::initMarkdownEditor(QsciScintilla *editor) {
   editor->setMarginLineNumbers(1, true);                      // 显示行号
   editor->setMarginsBackgroundColor(QColor("#E0E0E0"));       // 行号区背景色
 
+  // 单独设置边距字体（非粗体）
+  QFont marginFont("Consolas", 10);
+  marginFont.setBold(false);
+  editor->setMarginsFont(marginFont);
+
   // 配置行号边距（Margin 0）
   editor->setMarginType(0, QsciScintilla::NumberMargin);  // 必须首先生效
   editor->setMarginWidth(0, 50);                          // 固定宽度或动态计算
