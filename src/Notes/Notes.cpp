@@ -39,7 +39,7 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->setupUi(this);
 
   m_EditSource = new QsciScintilla(this);
-  // initMarkdownEditor(m_EditSource);
+  initMarkdownEditor(m_EditSource);
 
   m_NoteIndexManager = new NoteIndexManager();
 
@@ -2297,7 +2297,7 @@ void Notes::initMarkdownEditor(QsciScintilla *editor) {
 
   // 自动换行配置
   editor->setWrapMode(QsciScintilla::WrapWord);               // 按单词换行
-  editor->setWrapVisualFlags(QsciScintilla::WrapFlagByText);  // 无视觉标记
+  editor->setWrapVisualFlags(QsciScintilla::WrapFlagByText);  // 视觉标记
   editor->setWrapIndentMode(QsciScintilla::WrapIndentSame);   // 缩进对齐
 
   // 滚动条控制
@@ -2322,13 +2322,19 @@ void Notes::initMarkdownEditor(QsciScintilla *editor) {
 
   // 创建 Lexer
   markdownLexer = new QsciLexerMarkdown(editor);
+
   //  强制编码和默认样式
   editor->setUtf8(true);
+
   // 配置关键样式
   markdownLexer->setColor(Qt::darkBlue, QsciLexerMarkdown::Header1);
   markdownLexer->setColor(Qt::darkGreen, QsciLexerMarkdown::Link);
   markdownLexer->setPaper(QColor(240, 240, 240), QsciLexerMarkdown::CodeBlock);
+
+  markdownLexer->setPaper(Qt::white);  // 背景白色
+
   editor->setLexer(markdownLexer);
+
   // 验证 Lexer
   qDebug() << "Lexer 状态：" << (editor->lexer() ? "已设置" : "未设置");
   if (editor->lexer()) {

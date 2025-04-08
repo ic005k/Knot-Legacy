@@ -11,8 +11,6 @@
 #ifndef PLATFORM_H
 #define PLATFORM_H
 
-#include <QPainter>
-
 // PLAT_GTK = GTK+ on Linux or Win32
 // PLAT_GTK_WIN32 is defined additionally when running PLAT_GTK under Win32
 // PLAT_WIN = Win32 API on Win32 OS
@@ -52,8 +50,7 @@
 #define PLAT_QT 1
 
 #include <Qsci/qsciglobal.h>
-QT_BEGIN_NAMESPACE
-class QPainter;
+QT_BEGIN_NAMESPACE class QPainter;
 QT_END_NAMESPACE
 
 // This is needed to work around an HP-UX bug with Qt4.
@@ -88,8 +85,9 @@ QT_END_NAMESPACE
 
 #endif
 
-namespace Scintilla {
+#include <QPainter>
 
+namespace Scintilla {
 typedef float XYPOSITION;
 typedef double XYACCUMULATOR;
 
@@ -128,8 +126,8 @@ class Point {
 /**
  * A geometric rectangle class.
  * PRectangle is similar to Win32 RECT.
- * PRectangles contain their top and left sides, but not their right and bottom
- * sides.
+ * PRectangles contain their top and left sides, but not their right and
+ * bottom sides.
  */
 class PRectangle {
  public:
@@ -519,7 +517,8 @@ class DynamicLibrary {
   /// @return true if the library was loaded successfully.
   virtual bool IsValid() = 0;
 
-  /// @return An instance of a DynamicLibrary subclass with "modulePath" loaded.
+  /// @return An instance of a DynamicLibrary subclass with "modulePath"
+  /// loaded.
   static DynamicLibrary *Load(const char *modulePath);
 };
 
@@ -568,7 +567,6 @@ class Platform {
 #define PLATFORM_ASSERT(c) \
   ((c) ? (void)(0) : Scintilla::Platform::Assert(#c, __FILE__, __LINE__))
 #endif
-
 }  // namespace Scintilla
 
 #endif

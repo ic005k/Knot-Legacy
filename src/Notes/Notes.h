@@ -41,6 +41,7 @@
 #include <QTextDocumentFragment>
 
 #include "MarkdownSyntax.h"
+#include "lib/qsci/Qsci/qscilexercpp.h"
 #include "lib/qsci/Qsci/qscilexermarkdown.h"
 #include "lib/qsci/Qsci/qsciscintilla.h"
 #include "src/Comm/ShowMessage.h"
