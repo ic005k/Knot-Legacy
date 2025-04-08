@@ -47,6 +47,7 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->frameEdit->layout()->addWidget(m_EditSource);
 
   ui->editSource->hide();
+  ui->btnColor->hide();
 
   QFont font0 = m_Method->getNewFont(15);
   QObjectList btnList0 =
@@ -950,25 +951,39 @@ void Notes::on_btnInsertTable_clicked() {
 void Notes::on_btnS1_clicked() {
   QString str = m_EditSource->selectedText();
   if (str == "") str = tr("Bold Italic");
-  m_EditSource->insert("_**" + str + "**_");
+  if (!m_EditSource->hasSelectedText())
+    m_EditSource->insert("_**" + str + "**_");
+  else
+    m_EditSource->replaceSelectedText("_**" + str + "**_");
 }
 
 void Notes::on_btnS2_clicked() {
   QString str = m_EditSource->selectedText();
   if (str == "") str = tr("Italic");
-  m_EditSource->insert("_" + str + "_");
+  if (!m_EditSource->hasSelectedText())
+    m_EditSource->insert("_" + str + "_");
+  else
+    m_EditSource->replaceSelectedText("_" + str + "_");
 }
 
 void Notes::on_btnS3_clicked() {
   QString str = m_EditSource->selectedText();
   if (str == "") str = tr("Underline");
-  m_EditSource->insert("<u>" + str + "</u>");
+
+  if (!m_EditSource->hasSelectedText())
+    m_EditSource->insert("<u>" + str + "</u>");
+  else
+    m_EditSource->replaceSelectedText("<u>" + str + "</u>");
 }
 
 void Notes::on_btnS4_clicked() {
   QString str = m_EditSource->selectedText();
   if (str == "") str = tr("Strickout");
-  m_EditSource->insert("~~" + str + "~~");
+
+  if (!m_EditSource->hasSelectedText())
+    m_EditSource->insert("~~" + str + "~~");
+  else
+    m_EditSource->replaceSelectedText("~~" + str + "~~");
 }
 
 void Notes::on_btnColor_clicked() {

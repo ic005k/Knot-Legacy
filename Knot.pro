@@ -41,12 +41,8 @@ android: {
 
 ####################### Qsci ##############################################
 
-DEFINES += SCI_LEXER=0
-# 或直接排除文件
+# 排除扩展语法文件
 SOURCES -= $$PWD/lib/scintilla/src/ExternalLexer.cpp
-
-# 增加 Scintilla 核心编译定义
-DEFINES += SCI_LEXER=0 SCI_DISABLE_PROVISIONAL=1
 
 INCLUDEPATH += $$PWD/lib/scintilla/include
 INCLUDEPATH += $$PWD/lib/scintilla/lexlib
@@ -59,7 +55,7 @@ INCLUDEPATH += $$PWD/lib/qsci/QSci
 INCLUDEPATH += $$PWD/lib/zlib
 DEFINES += QUAZIP_STATIC
 
-DEFINES += QUAZIP_USE_AES
+#DEFINES += QUAZIP_USE_AES
 #DEFINES += QUAZIP_ENABLE_CRYPTO
 #LIBS += -lquazip -lz
 
