@@ -518,6 +518,7 @@ HEADERS += \
     lib/scintilla/src/EditView.h \
     lib/scintilla/src/Editor.h \
     lib/scintilla/src/ElapsedPeriod.h \
+    lib/scintilla/src/ExternalLexer.h \
     lib/scintilla/src/FontQuality.h \
     lib/scintilla/src/Indicator.h \
     lib/scintilla/src/IntegerRectangle.h \
@@ -744,7 +745,6 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 # 排除扩展语法文件
 SOURCES -= $$PWD/lib/scintilla/src/ExternalLexer.cpp
-SOURCES -= $$PWD/lib/scintilla/src/ExternalLexer.h
 
 INCLUDEPATH += $$PWD/lib/scintilla/include
 INCLUDEPATH += $$PWD/lib/scintilla/lexlib
