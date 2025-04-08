@@ -245,6 +245,9 @@ class Notes : public QDialog {
  private:
   bool m_initialized = false;
 
+  QString m_lastSearchText;
+  int m_searchFlags = 0;
+
   QStringList orgRemoteFiles;
   QList<QDateTime> orgRemoteDateTime;
   QList<QString> remoteFiles;
@@ -272,6 +275,12 @@ class Notes : public QDialog {
 
   void setOpenSearchResultForAndroid(bool isValue, QString strSearchText);
   void initMarkdownEditor(QsciScintilla *editor);
+  void searchText(const QString &text, bool forward);
+  void searchNext();
+  void searchPrevious();
+  int getSearchMatchCountEx(const QString &text, bool caseSensitive, bool wholeWord);
+  int getSearchMatchCount(const QString &text);
+  void searchWithCount(const QString &text);
 };
 
 class LimitedTextEdit : public QTextEdit {

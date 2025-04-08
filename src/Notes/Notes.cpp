@@ -84,7 +84,6 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   }
 
   ui->btnFind->hide();
-  ui->lblCount->hide();
   ui->f_ToolBar->hide();
 
 #ifdef Q_OS_ANDROID
@@ -1282,13 +1281,16 @@ void Notes::on_btnFind_clicked() {
   show_findText();
 }
 
-void Notes::on_btnPrev_clicked() { show_findTextBack(); }
+void Notes::on_btnPrev_clicked() { searchPrevious(); }
 
-void Notes::on_btnNext_clicked() { show_findText(); }
+void Notes::on_btnNext_clicked() { searchNext(); }
 
 void Notes::on_editFind_returnPressed() { on_btnFind_clicked(); }
 
-void Notes::on_editFind_textChanged(const QString &arg1) { Q_UNUSED(arg1); }
+void Notes::on_editFind_textChanged(const QString &arg1) {
+  searchText(arg1.trimmed(), true);
+  searchWithCount(arg1.trimmed());
+}
 
 bool Notes::selectPDFFormat(QPrinter *printer) {
   QSettings settings;
@@ -2416,6 +2418,11 @@ void Notes::initMarkdownEditor(QsciScintilla *editor) {
   editor->setEdgeColumn(90);
   editor->setEdgeColor(QColor("#FFA07A"));
 
+  // 配置指示器（用于搜索高亮）
+  editor->setIndicatorForegroundColor(QColor("#FFD700"), 0);  // 金色高亮
+  editor->setIndicatorOutlineColor(QColor("#FFA500"), 0);     // 橙色边框
+  editor->setIndicatorDrawUnder(true, 0);                     // 在文字下方绘制
+
   editor->setLexer(markdownLexer);
   // 强制刷新高亮
   QTimer::singleShot(100, [=]() {
@@ -2447,4 +2454,114 @@ void Notes::initMarkdownEditor(QsciScintilla *editor) {
              << "Color:" << markdownLexer->color(i)
              << "BG:" << markdownLexer->paper(i);
   }
+}
+
+// 查找关键词
+void Notes::searchText(const QString &text, bool forward) {
+  m_lastSearchText = text;
+
+  bool found =
+      m_EditSource->findFirst(text, false, false, false, true, forward);
+
+  if (!found) {
+    // QMessageBox::information(this, "搜索",
+    // "已到达文档末尾，未找到更多匹配项");
+  }
+}
+
+// 查找下一个
+void Notes::searchNext() {
+  if (!m_lastSearchText.isEmpty()) {
+    searchText(m_lastSearchText, true);
+  }
+}
+
+// 查找上一个
+void Notes::searchPrevious() {
+  if (!m_lastSearchText.isEmpty()) {
+    searchText(m_lastSearchText, false);
+  }
+}
+
+// 获取搜索结果的匹配总数
+int Notes::getSearchMatchCount(const QString &text) {
+  if (text.isEmpty()) return 0;
+
+  // 保存当前编辑状态
+  int originalPos =
+      m_EditSource->SendScintilla(QsciScintilla::SCI_GETCURRENTPOS);
+  int originalAnchor =
+      m_EditSource->SendScintilla(QsciScintilla::SCI_GETANCHOR);
+
+  // 初始化搜索参数
+  int count = 0;
+  bool found = m_EditSource->findFirst(text,
+                                       false,  // 不使用正则表达式
+                                       false,  // 不区分大小写（根据需求调整）
+                                       false,  // 不全词匹配（根据需求调整）
+                                       false,  // 禁用循环查找
+                                       true);  // 正向搜索
+
+  // 遍历所有匹配项
+  while (found) {
+    count++;
+    found = m_EditSource->findNext();
+  }
+
+  // 恢复原始状态
+  m_EditSource->SendScintilla(QsciScintilla::SCI_SETCURRENTPOS, originalPos);
+  m_EditSource->SendScintilla(QsciScintilla::SCI_SETANCHOR, originalAnchor);
+
+  return count;
+}
+
+// 带搜索选项的增强版
+int Notes::getSearchMatchCountEx(const QString &text, bool caseSensitive,
+                                 bool wholeWord) {
+  if (text.isEmpty()) return 0;
+
+  // 保存当前选择状态
+  int originalStart =
+      m_EditSource->SendScintilla(QsciScintilla::SCI_GETSELECTIONSTART);
+  int originalEnd =
+      m_EditSource->SendScintilla(QsciScintilla::SCI_GETSELECTIONEND);
+
+  // 初始化计数器
+  int count = 0;
+  bool found = m_EditSource->findFirst(text,
+                                       false,          // regex
+                                       caseSensitive,  // case
+                                       wholeWord,      // whole word
+                                       false,          // wrap
+                                       true);          // forward
+
+  // 高效遍历算法（避免全文档扫描）
+  while (found) {
+    count++;
+    // 跳转到匹配末尾继续搜索
+    int endPos =
+        m_EditSource->SendScintilla(QsciScintilla::SCI_GETSELECTIONEND);
+    m_EditSource->SendScintilla(QsciScintilla::SCI_SETCURRENTPOS, endPos);
+    found = m_EditSource->findNext();
+  }
+
+  // 恢复原始选择状态
+  m_EditSource->SendScintilla(QsciScintilla::SCI_SETSELECTIONSTART,
+                              originalStart);
+  m_EditSource->SendScintilla(QsciScintilla::SCI_SETSELECTIONEND, originalEnd);
+
+  return count;
+}
+
+// 在搜索时显示统计结果
+void Notes::searchWithCount(const QString &text) {
+  int matchCount = getSearchMatchCountEx(text, false, true);
+  m_lastSearchText = text;
+
+  // 高亮第一个匹配项
+  if (matchCount > 0) {
+    m_EditSource->findFirst(text, false, false, false, true);
+    ui->lblCount->setText(QString::number(matchCount));
+  } else
+    ui->lblCount->setText(QString::number(0));
 }

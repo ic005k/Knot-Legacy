@@ -39,6 +39,15 @@ android: {
 
 }
 
+####################### Qsci ##############################################
+
+INCLUDEPATH += $$PWD/lib/scintilla/include
+INCLUDEPATH += $$PWD/lib/scintilla/lexlib
+INCLUDEPATH += $$PWD/lib/scintilla/src
+
+INCLUDEPATH += $$PWD/lib/qsci
+INCLUDEPATH += $$PWD/lib/qsci/QSci
+
 ####################### QuaZip ##############################################
 INCLUDEPATH += $$PWD/lib/zlib
 DEFINES += QUAZIP_STATIC
@@ -745,13 +754,6 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 # 排除扩展语法文件
 SOURCES -= $$PWD/lib/scintilla/src/ExternalLexer.cpp
-
-INCLUDEPATH += $$PWD/lib/scintilla/include
-INCLUDEPATH += $$PWD/lib/scintilla/lexlib
-INCLUDEPATH += $$PWD/lib/scintilla/src
-
-INCLUDEPATH += $$PWD/lib/qsci
-INCLUDEPATH += $$PWD/lib/qsci/QSci
 
 ######################### minizip-ng ##################################################
 #INCLUDEPATH += $$PWD/lib/zlib-ng
