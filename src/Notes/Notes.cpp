@@ -42,6 +42,13 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
 
   m_EditSource = new QsciScintilla(this);
   initMarkdownEditor(m_EditSource);
+  // 创建 Markdown 词法分析器实例
+  QsciLexerMarkdown *markdownLexer = new QsciLexerMarkdown(this);
+  m_EditSource->setLexer(markdownLexer);  // 必须显式设置
+
+  // 单独设置标题样式
+  markdownLexer->setColor(QColor("#FF0000"), QsciLexerMarkdown::Header1);
+  markdownLexer->setColor(QColor("#FF6600"), QsciLexerMarkdown::Header2);
 
   m_EditSource1 = new QTextEditHighlighter();
   ui->frameEdit->layout()->addWidget(m_EditSource);
@@ -2301,15 +2308,19 @@ void Notes::updateMainnotesIniToSyncLists() {
 
 void Notes::initMarkdownEditor(QsciScintilla *editor) {
   // 创建词法分析器
-  MarkdownLexer *lexer = new MarkdownLexer(editor);
+  // MarkdownLexer *lexer = new MarkdownLexer(editor);
 
   // 应用主题
-  lexer->applyVividTheme(isDark);
+  // lexer->applyVividTheme(isDark);
 
   // 配置编辑器
-  editor->setLexer(lexer);
+  // editor->setLexer(lexer);
   editor->setFolding(QsciScintilla::BoxedTreeFoldStyle);
-  editor->setAutoIndent(true);
+
+  editor->setAutoIndent(true);                                // 自动缩进
+  editor->setBraceMatching(QsciScintilla::SloppyBraceMatch);  // 括号匹配
+  editor->setMarginLineNumbers(1, true);                      // 显示行号
+  editor->setMarginsBackgroundColor(QColor("#E0E0E0"));       // 行号区背景色
 
   // 配置边距
   // 配置行号边距（Margin 0）
