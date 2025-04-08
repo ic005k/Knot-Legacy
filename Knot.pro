@@ -53,6 +53,9 @@ macx {
     #QT_VERSION_MAJOR = $$[QT_VERSION]
     #contains(QT_VERSION_MAJOR, ^5) {
         SOURCES += $$PWD/lib/qsci/qmacpasteboardmime.mm
+        SOURCES += $$PWD/lib/qsci/qmacfunctions.mm
+        SOURCES += $$PWD/lib/qsci/qmacfunctions_mac.mm
+
         HEADERS += $$PWD/lib/qsci/QSci/qmacpasteboardmime.h
         LIBS += -framework AppKit
     #}

@@ -2260,17 +2260,15 @@ void Notes::updateMainnotesIniToSyncLists() {
 void Notes::initMarkdownEditor(QsciScintilla *editor) {
   // 创建 Lexer 并强制设置编码
   QsciLexerMarkdown *markdownLexer = new QsciLexerMarkdown(editor);
-  // 1. 强制编码和默认样式
+  //  强制编码和默认样式
   editor->setUtf8(true);
-  markdownLexer->setDefaultColor(QColor("#333333"));
-  markdownLexer->setDefaultPaper(QColor("#FFFFFF"));
-  editor->setPaper(QColor("#FFFFFF"));
 
-  // 2. 按元素设置样式
-  markdownLexer->setColor(QColor("#FF0000"), QsciLexerMarkdown::Header1);
-  markdownLexer->setColor(QColor("#009900"), QsciLexerMarkdown::CodeBlock);
+  // 配置关键样式
+  markdownLexer->setColor(Qt::darkBlue, QsciLexerMarkdown::Header1);
+  markdownLexer->setColor(Qt::darkGreen, QsciLexerMarkdown::Link);
+  markdownLexer->setPaper(QColor(240, 240, 240), QsciLexerMarkdown::CodeBlock);
 
-  // 3. 跨平台字体设置
+  //  跨平台字体设置
   QFont codeFont;
   codeFont.setFamily("Consolas, Menlo, Monaco");
   codeFont.setPointSize(12);
