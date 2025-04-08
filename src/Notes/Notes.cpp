@@ -49,46 +49,11 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->editSource->hide();
   ui->btnColor->hide();
 
-  QFont font0 = m_Method->getNewFont(15);
-  QObjectList btnList0 =
-      mw_one->getAllToolButton(mw_one->getAllUIControls(ui->f_ToolBar));
-  for (int i = 0; i < btnList0.count(); i++) {
-    QToolButton *btn = (QToolButton *)btnList0.at(i);
-    btn->setFont(font0);
-
-#ifdef Q_OS_ANDROID
-    btn->setFixedHeight(25);
-    ui->editCol->setFixedHeight(25);
-    ui->editRow->setFixedHeight(25);
-    ui->editFind->setFixedHeight(25);
-#else
-    btn->setFixedHeight(30);
-    ui->editCol->setFixedHeight(30);
-    ui->editRow->setFixedHeight(30);
-    ui->editFind->setFixedHeight(30);
-#endif
-  }
-
-  ui->editFind->setFont(font0);
-  ui->editCol->setFont(font0);
-  ui->editRow->setFont(font0);
-  ui->lblCol->setFont(font0);
-  ui->lblRow->setFont(font0);
-
-  QFont font1 = m_Method->getNewFont(13);
-  QObjectList btnList1 =
-      mw_one->getAllToolButton(mw_one->getAllUIControls(ui->f_Panel));
-  for (int i = 0; i < btnList1.count(); i++) {
-    QToolButton *btn = (QToolButton *)btnList1.at(i);
-    btn->setFont(font1);
-  }
-
   ui->btnFind->hide();
   ui->f_ToolBar->hide();
 
 #ifdef Q_OS_ANDROID
 #else
-
   mw_one->set_ToolButtonStyle(this);
 #endif
 
@@ -196,43 +161,7 @@ void Notes::keyReleaseEvent(QKeyEvent *event) { event->accept(); }
 
 void Notes::editVSBarValueChanged() {}
 
-void Notes::resizeEvent(QResizeEvent *event) {
-  Q_UNUSED(event);
-
-#ifdef Q_OS_ANDROID
-
-  if (!this->isHidden()) {
-    if (this->height() != mw_one->mainHeight) {
-      newHeight = this->height();
-      androidKeyH = mw_one->mainHeight - newHeight;
-
-      QSettings Reg(privateDir + "android.ini", QSettings::IniFormat);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-      Reg.setIniCodec("utf-8");
-#endif
-      Reg.setValue("KeyHeight", androidKeyH);
-      Reg.setValue("newHeight", newHeight);
-    }
-
-    if (pAndroidKeyboard->isVisible()) {
-      this->setGeometry(mw_one->geometry().x(), mw_one->geometry().y(),
-                        mw_one->width(), newHeight);
-    }
-
-    if (this->height() == newHeight) {
-      int p = m_EditSource->textCursor().position();
-      QTextCursor tmpCursor = m_EditSource->textCursor();
-      tmpCursor.setPosition(p);
-      m_EditSource->setTextCursor(tmpCursor);
-    }
-  }
-
-  qDebug() << pAndroidKeyboard->keyboardRectangle().height()
-           << "this height=" << this->height();
-  qDebug() << "newHeight=" << newHeight << "main height=" << mw_one->mainHeight;
-
-#endif
-}
+void Notes::resizeEvent(QResizeEvent *event) { Q_UNUSED(event); }
 
 void Notes::on_btnDone_clicked() {
   saveMainNotes();
@@ -342,14 +271,6 @@ void Notes::getEditPanel(QTextEdit *textEdit, QEvent *evn) {
 
 #ifdef Q_OS_ANDROID
       m_TextSelector->setFixedWidth(mw_one->width() - 6);
-
-      if (textEdit == m_EditSource) {
-        y1 = 2;
-        if (!ui->f_ToolBar->isHidden()) {
-          m_TextSelector->setFixedHeight(ui->f_ToolBar->height());
-        } else
-          m_TextSelector->setFixedHeight(m_TextSelector->oriHeight);
-      }
 
       if (textEdit == mw_one->ui->editTodo)
         y1 = mw_one->geometry().y() + mw_one->ui->editTodo->y() +

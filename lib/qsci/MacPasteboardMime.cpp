@@ -3,22 +3,21 @@
 // data types.
 //
 // Copyright (c) 2024 Riverbank Computing Limited <info@riverbankcomputing.com>
-// 
+//
 // This file is part of QScintilla2.
-// 
+//
 // This file may be used under the terms of the GNU General Public License
 // version 3.0 as published by the Free Software Foundation and appearing in
 // the file LICENSE included in the packaging of this file.  Please review the
 // following information to ensure the GNU General Public License version 3.0
 // requirements will be met: http://www.gnu.org/copyleft/gpl.html.
-// 
+//
 // If you do not wish to use this file under the terms of the GPL version 3.0
 // then you may purchase a commercial license.  For more information contact
 // info@riverbankcomputing.com.
-// 
+//
 // This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
 // WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-
 
 #include <qglobal.h>
 
@@ -31,81 +30,62 @@
 #include <QStringList>
 #include <QVariant>
 
-#include <QMacPasteboardMime>
-
+#include "qmacpasteboardmime.h"
 
 static const QLatin1String mimeRectangular("text/x-qscintilla-rectangular");
-static const QLatin1String utiRectangularMac("com.scintilla.utf16-plain-text.rectangular");
+static const QLatin1String utiRectangularMac(
+    "com.scintilla.utf16-plain-text.rectangular");
 
+class RectangularPasteboardMime : public QMacPasteboardMime {
+ public:
+  RectangularPasteboardMime() : QMacPasteboardMime(MIME_ALL) {}
 
-class RectangularPasteboardMime : public QMacPasteboardMime
-{
-public:
-    RectangularPasteboardMime() : QMacPasteboardMime(MIME_ALL)
-    {
+  bool canConvert(const QString &mime, QString flav) {
+    return mime == mimeRectangular && flav == utiRectangularMac;
+  }
+
+  QList<QByteArray> convertFromMime(const QString &, QVariant data, QString) {
+    QList<QByteArray> converted;
+
+    converted.append(data.toByteArray());
+
+    return converted;
+  }
+
+  QVariant convertToMime(const QString &, QList<QByteArray> data, QString) {
+    QByteArray converted;
+
+    foreach (QByteArray i, data) {
+      converted += i;
     }
 
-    bool canConvert(const QString &mime, QString flav)
-    {
-        return mime == mimeRectangular && flav == utiRectangularMac;
-    }
+    return QVariant(converted);
+  }
 
-    QList<QByteArray> convertFromMime(const QString &, QVariant data, QString)
-    {
-        QList<QByteArray> converted;
+  QString convertorName() { return QString("QScintillaRectangular"); }
 
-        converted.append(data.toByteArray());
+  QString flavorFor(const QString &mime) {
+    if (mime == mimeRectangular) return QString(utiRectangularMac);
 
-        return converted;
-    }
+    return QString();
+  }
 
-    QVariant convertToMime(const QString &, QList<QByteArray> data, QString)
-    {
-        QByteArray converted;
+  QString mimeFor(QString flav) {
+    if (flav == utiRectangularMac) return QString(mimeRectangular);
 
-        foreach (QByteArray i, data)
-        {
-            converted += i;
-        }
-
-        return QVariant(converted);
-    }
-
-    QString convertorName()
-    {
-        return QString("QScintillaRectangular");
-    }
-
-    QString flavorFor(const QString &mime)
-    {
-        if (mime == mimeRectangular)
-            return QString(utiRectangularMac);
-
-        return QString();
-    }
-
-    QString mimeFor(QString flav)
-    {
-        if (flav == utiRectangularMac)
-            return QString(mimeRectangular);
-
-        return QString();
-    }
+    return QString();
+  }
 };
 
-
 // Initialise the singleton instance.
-void initialiseRectangularPasteboardMime()
-{
-    static RectangularPasteboardMime *instance = 0;
+void initialiseRectangularPasteboardMime() {
+  static RectangularPasteboardMime *instance = 0;
 
-    if (!instance)
-    {
-        instance = new RectangularPasteboardMime();
+  if (!instance) {
+    instance = new RectangularPasteboardMime();
 
-        qRegisterDraggedTypes(QStringList(utiRectangularMac));
-    }
+    qRegisterDraggedTypes(QStringList(utiRectangularMac));
+  }
 }
-
 
 #endif
