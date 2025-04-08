@@ -39,18 +39,6 @@ android: {
 
 }
 
-####################### Qsci ##############################################
-
-# 排除扩展语法文件
-SOURCES -= $$PWD/lib/scintilla/src/ExternalLexer.cpp
-
-INCLUDEPATH += $$PWD/lib/scintilla/include
-INCLUDEPATH += $$PWD/lib/scintilla/lexlib
-INCLUDEPATH += $$PWD/lib/scintilla/src
-
-INCLUDEPATH += $$PWD/lib/qsci
-INCLUDEPATH += $$PWD/lib/qsci/QSci
-
 ####################### QuaZip ##############################################
 INCLUDEPATH += $$PWD/lib/zlib
 DEFINES += QUAZIP_STATIC
@@ -297,7 +285,6 @@ SOURCES += \
     lib/scintilla/src/EditModel.cpp \
     lib/scintilla/src/EditView.cpp \
     lib/scintilla/src/Editor.cpp \
-    lib/scintilla/src/ExternalLexer.cpp \
     lib/scintilla/src/Indicator.cpp \
     lib/scintilla/src/KeyMap.cpp \
     lib/scintilla/src/LineMarker.cpp \
@@ -531,7 +518,6 @@ HEADERS += \
     lib/scintilla/src/EditView.h \
     lib/scintilla/src/Editor.h \
     lib/scintilla/src/ElapsedPeriod.h \
-    lib/scintilla/src/ExternalLexer.h \
     lib/scintilla/src/FontQuality.h \
     lib/scintilla/src/Indicator.h \
     lib/scintilla/src/IntegerRectangle.h \
@@ -753,6 +739,19 @@ DISTFILES += \
 
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+
+####################### Qsci ##############################################
+
+# 排除扩展语法文件
+SOURCES -= $$PWD/lib/scintilla/src/ExternalLexer.cpp
+SOURCES -= $$PWD/lib/scintilla/src/ExternalLexer.h
+
+INCLUDEPATH += $$PWD/lib/scintilla/include
+INCLUDEPATH += $$PWD/lib/scintilla/lexlib
+INCLUDEPATH += $$PWD/lib/scintilla/src
+
+INCLUDEPATH += $$PWD/lib/qsci
+INCLUDEPATH += $$PWD/lib/qsci/QSci
 
 ######################### minizip-ng ##################################################
 #INCLUDEPATH += $$PWD/lib/zlib-ng
