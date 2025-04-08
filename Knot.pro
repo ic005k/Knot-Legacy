@@ -40,6 +40,7 @@ android: {
 }
 
 ####################### Qsci ##############################################
+CONFIG+=lexer_markdown
 
 INCLUDEPATH += $$PWD/lib/qsci/QSci
 INCLUDEPATH += $$PWD/lib/qsci

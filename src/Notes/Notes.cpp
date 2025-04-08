@@ -878,7 +878,8 @@ void Notes::saveQMLVPos() {
 
   Reg.setValue("/MainNotes/editVPos" + strTag,
                m_EditSource->verticalScrollBar()->sliderPosition());
-  Reg.setValue("/MainNotes/editCPos" + strTag, m_EditSource->cursor().pos());
+  int cursorPos = m_EditSource->SendScintilla(QsciScintilla::SCI_GETCURRENTPOS);
+  Reg.setValue("/MainNotes/editCPos" + strTag, cursorPos);
 
   if (QFile(currentMDFile).exists()) {
     sliderPos = getVPos();
@@ -2045,11 +2046,12 @@ void Notes::openEditUI() {
   int cpos = iniNotes->value("/MainNotes/editCPos" + a).toInt();
   bool isToolBarVisible =
       iniNotes->value("/MainNotes/toolBarVisible", false).toBool();
-  m_EditSource->verticalScrollBar()->setSliderPosition(vpos);
 
-  // QTextCursor tmpCursor = m_EditSource->textCursor();
-  // tmpCursor.setPosition(cpos);
-  // m_EditSource->setTextCursor(tmpCursor);
+  m_EditSource->verticalScrollBar()->setSliderPosition(vpos);
+  // m_EditSource->SendScintilla(QsciScintilla::SCI_SETCURRENTPOS, cpos);
+  m_EditSource->SendScintilla(QsciScintilla::SCI_SETANCHOR, cpos);  // 起始位置
+  m_EditSource->SendScintilla(QsciScintilla::SCI_SETCURRENTPOS,
+                              cpos);  // 结束位置
 
   m_EditSource->setFocus();
   if (isToolBarVisible) {
