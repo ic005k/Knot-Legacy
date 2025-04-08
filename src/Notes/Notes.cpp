@@ -141,6 +141,7 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   //         &Notes::on_editSource_undoAvailable);
   // connect(m_EditSource, &QsciScintilla::redoAvailable, this,
   //         &Notes::on_editSource_redoAvailable);
+
   connect(m_EditSource, &QsciScintilla::textChanged, this,
           &Notes::on_editSource_textChanged);
 
@@ -1285,11 +1286,12 @@ void Notes::on_btnPrev_clicked() { searchPrevious(); }
 
 void Notes::on_btnNext_clicked() { searchNext(); }
 
-void Notes::on_editFind_returnPressed() { on_btnFind_clicked(); }
+void Notes::on_editFind_returnPressed() { searchNext(); }
 
 void Notes::on_editFind_textChanged(const QString &arg1) {
   searchText(arg1.trimmed(), true);
-  searchWithCount(arg1.trimmed());
+  // searchWithCount(arg1.trimmed());
+  m_lastSearchText = arg1.trimmed();
 }
 
 bool Notes::selectPDFFormat(QPrinter *printer) {
@@ -2418,10 +2420,16 @@ void Notes::initMarkdownEditor(QsciScintilla *editor) {
   editor->setEdgeColumn(90);
   editor->setEdgeColor(QColor("#FFA07A"));
 
-  // 配置指示器（用于搜索高亮）
-  editor->setIndicatorForegroundColor(QColor("#FFD700"), 0);  // 金色高亮
-  editor->setIndicatorOutlineColor(QColor("#FFA500"), 0);     // 橙色边框
-  editor->setIndicatorDrawUnder(true, 0);                     // 在文字下方绘制
+  // 配置搜索高亮指示器
+  const int INDICATOR_SEARCH = 1;  // 使用一个未使用的指示器编号
+  editor->SendScintilla(QsciScintilla::SCI_INDICSETSTYLE, INDICATOR_SEARCH,
+                        QsciScintilla::INDIC_ROUNDBOX);
+  editor->SendScintilla(QsciScintilla::SCI_INDICSETFORE, INDICATOR_SEARCH,
+                        QColor(Qt::yellow).rgb());
+  editor->SendScintilla(QsciScintilla::SCI_INDICSETALPHA, INDICATOR_SEARCH,
+                        100);
+  editor->SendScintilla(QsciScintilla::SCI_INDICSETUNDER, INDICATOR_SEARCH,
+                        true);  // 在文字下方绘制
 
   editor->setLexer(markdownLexer);
   // 强制刷新高亮
@@ -2483,6 +2491,39 @@ void Notes::searchPrevious() {
   }
 }
 
+void Notes::jumpToNextMatch() {
+  if (m_matchPositions.isEmpty()) return;
+
+  m_currentMatchIndex = (m_currentMatchIndex + 1) % m_matchPositions.size();
+  auto pos = m_matchPositions[m_currentMatchIndex];
+
+  // 设置选择范围
+  m_EditSource->SendScintilla(QsciScintilla::SCI_SETSELECTIONSTART, pos.first);
+  m_EditSource->SendScintilla(QsciScintilla::SCI_SETSELECTIONEND, pos.second);
+
+  // 滚动到可见区域
+  int line = m_EditSource->SendScintilla(QsciScintilla::SCI_LINEFROMPOSITION,
+                                         pos.first);
+  m_EditSource->ensureLineVisible(line);
+}
+
+void Notes::jumpToPrevMatch() {
+  if (m_matchPositions.isEmpty()) return;
+
+  m_currentMatchIndex = (m_currentMatchIndex - 1 + m_matchPositions.size()) %
+                        m_matchPositions.size();
+  auto pos = m_matchPositions[m_currentMatchIndex];
+
+  // 设置选择范围
+  m_EditSource->SendScintilla(QsciScintilla::SCI_SETSELECTIONSTART, pos.first);
+  m_EditSource->SendScintilla(QsciScintilla::SCI_SETSELECTIONEND, pos.second);
+
+  // 滚动到可见区域
+  int line = m_EditSource->SendScintilla(QsciScintilla::SCI_LINEFROMPOSITION,
+                                         pos.first);
+  m_EditSource->ensureLineVisible(line);
+}
+
 // 获取搜索结果的匹配总数
 int Notes::getSearchMatchCount(const QString &text) {
   if (text.isEmpty()) return 0;
@@ -2515,53 +2556,70 @@ int Notes::getSearchMatchCount(const QString &text) {
   return count;
 }
 
-// 带搜索选项的增强版
+// 增强版计数函数（带位置存储）
 int Notes::getSearchMatchCountEx(const QString &text, bool caseSensitive,
                                  bool wholeWord) {
+  m_matchPositions.clear();
   if (text.isEmpty()) return 0;
 
-  // 保存当前选择状态
-  int originalStart =
-      m_EditSource->SendScintilla(QsciScintilla::SCI_GETSELECTIONSTART);
-  int originalEnd =
-      m_EditSource->SendScintilla(QsciScintilla::SCI_GETSELECTIONEND);
+  // 强制重置搜索范围
+  m_EditSource->SendScintilla(QsciScintilla::SCI_SETTARGETSTART, 0);
+  m_EditSource->SendScintilla(QsciScintilla::SCI_SETTARGETEND,
+                              m_EditSource->text().length());
 
-  // 初始化计数器
+  // 保存原始状态
+  int origPos = m_EditSource->SendScintilla(QsciScintilla::SCI_GETCURRENTPOS);
+  int origAnchor = m_EditSource->SendScintilla(QsciScintilla::SCI_GETANCHOR);
+
+  // 开始搜索
   int count = 0;
-  bool found = m_EditSource->findFirst(text,
-                                       false,          // regex
-                                       caseSensitive,  // case
-                                       wholeWord,      // whole word
-                                       false,          // wrap
-                                       true);          // forward
+  bool found = m_EditSource->findFirst(text, false, caseSensitive, wholeWord,
+                                       false, true);
 
-  // 高效遍历算法（避免全文档扫描）
   while (found) {
+    int start =
+        m_EditSource->SendScintilla(QsciScintilla::SCI_GETSELECTIONSTART);
+    int end = m_EditSource->SendScintilla(QsciScintilla::SCI_GETSELECTIONEND);
+    m_matchPositions << QPair<int, int>(start, end);  // 存储位置
     count++;
-    // 跳转到匹配末尾继续搜索
-    int endPos =
-        m_EditSource->SendScintilla(QsciScintilla::SCI_GETSELECTIONEND);
-    m_EditSource->SendScintilla(QsciScintilla::SCI_SETCURRENTPOS, endPos);
+
+    // 跳转到下一个字符继续搜索
+    m_EditSource->SendScintilla(QsciScintilla::SCI_SETCURRENTPOS, end + 1);
     found = m_EditSource->findNext();
   }
 
-  // 恢复原始选择状态
-  m_EditSource->SendScintilla(QsciScintilla::SCI_SETSELECTIONSTART,
-                              originalStart);
-  m_EditSource->SendScintilla(QsciScintilla::SCI_SETSELECTIONEND, originalEnd);
+  // 恢复状态
+  m_EditSource->SendScintilla(QsciScintilla::SCI_SETCURRENTPOS, origPos);
+  m_EditSource->SendScintilla(QsciScintilla::SCI_SETANCHOR, origAnchor);
 
   return count;
 }
 
-// 在搜索时显示统计结果
+// 带高亮显示的搜索
 void Notes::searchWithCount(const QString &text) {
-  int matchCount = getSearchMatchCountEx(text, false, true);
+  bool caseSensitive = false;
+  bool wholeWord = true;
+
+  int matchCount = getSearchMatchCountEx(text, caseSensitive, wholeWord);
   m_lastSearchText = text;
 
-  // 高亮第一个匹配项
+  // 更新UI
+  ui->lblCount->setText(QString::number(matchCount));
+
+  // 高亮所有匹配项
+  const int INDICATOR_SEARCH = 1;
+  m_EditSource->SendScintilla(QsciScintilla::SCI_INDICATORCLEARRANGE, 0,
+                              m_EditSource->length());
+  foreach (auto pos, m_matchPositions) {
+    m_EditSource->SendScintilla(QsciScintilla::SCI_SETINDICATORCURRENT,
+                                INDICATOR_SEARCH);
+    m_EditSource->SendScintilla(QsciScintilla::SCI_INDICATORFILLRANGE,
+                                pos.first, pos.second - pos.first);
+  }
+
+  // 跳转到第一个匹配项
   if (matchCount > 0) {
-    m_EditSource->findFirst(text, false, false, false, true);
-    ui->lblCount->setText(QString::number(matchCount));
-  } else
-    ui->lblCount->setText(QString::number(0));
+    m_currentMatchIndex = -1;
+    jumpToNextMatch();
+  }
 }

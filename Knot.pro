@@ -41,12 +41,12 @@ android: {
 
 ####################### Qsci ##############################################
 
+INCLUDEPATH += $$PWD/lib/qsci/QSci
+INCLUDEPATH += $$PWD/lib/qsci
+
 INCLUDEPATH += $$PWD/lib/scintilla/include
 INCLUDEPATH += $$PWD/lib/scintilla/lexlib
 INCLUDEPATH += $$PWD/lib/scintilla/src
-
-INCLUDEPATH += $$PWD/lib/qsci
-INCLUDEPATH += $$PWD/lib/qsci/QSci
 
 ####################### QuaZip ##############################################
 INCLUDEPATH += $$PWD/lib/zlib

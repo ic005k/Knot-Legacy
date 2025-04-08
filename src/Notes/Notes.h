@@ -278,9 +278,14 @@ class Notes : public QDialog {
   void searchText(const QString &text, bool forward);
   void searchNext();
   void searchPrevious();
-  int getSearchMatchCountEx(const QString &text, bool caseSensitive, bool wholeWord);
+  int getSearchMatchCountEx(const QString &text, bool caseSensitive,
+                            bool wholeWord);
   int getSearchMatchCount(const QString &text);
   void searchWithCount(const QString &text);
+  QList<QPair<int, int>> m_matchPositions;
+  int m_currentMatchIndex = -1;
+  void jumpToNextMatch();
+  void jumpToPrevMatch();
 };
 
 class LimitedTextEdit : public QTextEdit {
