@@ -1955,6 +1955,8 @@ void Notes::openEditUI() {
 
   show();
 
+  m_Method->Sleep(100);
+
   QString a = currentMDFile;
   a.replace(iniDir, "");
 
