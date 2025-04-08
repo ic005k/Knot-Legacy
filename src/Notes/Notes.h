@@ -71,7 +71,7 @@ class Notes : public QDialog {
 
   QString new_title;
 
-  QsciScintilla *m_EditSource;
+  QsciScintilla *m_EditSource = nullptr;
   QTextEditHighlighter *m_EditSource1;
 
   QTimer *timerEditNote;
@@ -182,13 +182,12 @@ class Notes : public QDialog {
   bool eventFilter(QObject *obj, QEvent *event) override;
   void paintEvent(QPaintEvent *pEvent) override;
   void closeEvent(QCloseEvent *event) override;
+  void showEvent(QShowEvent *event) override;
 
  public slots:
   void on_btnNext_clicked();
 
   void setVPos();
-
-  void on_btnSyncToWebDAV_clicked();
 
   void on_btnShowTools_clicked();
 
@@ -244,6 +243,8 @@ class Notes : public QDialog {
   void on_editFind_textChanged(const QString &arg1);
 
  private:
+  bool m_initialized = false;
+
   QStringList orgRemoteFiles;
   QList<QDateTime> orgRemoteDateTime;
   QList<QString> remoteFiles;

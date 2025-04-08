@@ -41,22 +41,16 @@ android: {
 
 ####################### Qsci ##############################################
 
-DEFINES += LEXILLA_STATIC
+DEFINES += SCI_LEXER=0
+# 或直接排除文件
+SOURCES -= $$PWD/lib/scintilla/src/ExternalLexer.cpp
 
-linux {
-    LIBS += /usr/local/lib/liblexilla.a
-}
-
-macx {
-    LIBS += -L/usr/local/lib -llexilla -lscintilla
-    INCLUDEPATH += /usr/local/include
-    QMAKE_LFLAGS += -Wl,-rpath,/usr/local/lib
-    DEFINES += LEXILLA
-}
+# 增加 Scintilla 核心编译定义
+DEFINES += SCI_LEXER=0 SCI_DISABLE_PROVISIONAL=1
 
 INCLUDEPATH += $$PWD/lib/scintilla/include
-INCLUDEPATH += $$PWD/lib/scintilla/src
 INCLUDEPATH += $$PWD/lib/scintilla/lexlib
+INCLUDEPATH += $$PWD/lib/scintilla/src
 
 INCLUDEPATH += $$PWD/lib/qsci
 INCLUDEPATH += $$PWD/lib/qsci/QSci

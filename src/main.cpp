@@ -289,6 +289,7 @@ int main(int argc, char* argv[]) {
 
     qssAll = qssAll.replace("QToolButton", "QToolButton_1");
     app.setStyleSheet(qssAll);
+    app.setStyleSheet("QsciScintilla { background: white; color: black; }");
   }
 
   // Set Font

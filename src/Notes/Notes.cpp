@@ -166,6 +166,21 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   m_EditSource->setFocus();
 }
 
+void Notes::showEvent(QShowEvent *event) {
+  QWidget::showEvent(event);
+  if (!m_initialized) {
+    // initMarkdownEditor(m_EditSource);
+
+    // 调试输出
+    qDebug() << "当前字体是否有效："
+             << m_EditSource->lexer()
+                    ->font(QsciLexerMarkdown::CodeBlock)
+                    .exactMatch();
+
+    m_initialized = true;
+  }
+}
+
 void Notes::init() {
   int w = this->width();
   if (mw_one->width() > w) w = mw_one->width();
@@ -1394,8 +1409,6 @@ void Notes::on_btnPDF_clicked() {
   delete printer;
 }
 
-void Notes::on_btnSyncToWebDAV_clicked() { syncToWebDAV(); }
-
 void Notes::on_btnShowTools_clicked() {
   if (ui->f_ToolBar->isHidden()) {
     ui->f_ToolBar->show();
@@ -2300,13 +2313,47 @@ void Notes::updateMainnotesIniToSyncLists() {
 }
 
 void Notes::initMarkdownEditor(QsciScintilla *editor) {
-  // 创建 Markdown 词法分析器实例
+  // 创建 Lexer 并强制设置编码
   QsciLexerMarkdown *markdownLexer = new QsciLexerMarkdown(editor);
-  editor->setLexer(markdownLexer);  // 必须显式设置
+  // 1. 强制编码和默认样式
+  editor->setUtf8(true);
+  markdownLexer->setDefaultColor(QColor("#333333"));
+  markdownLexer->setDefaultPaper(QColor("#FFFFFF"));
+  editor->setPaper(QColor("#FFFFFF"));
 
-  for (int i = 0; i < QsciLexerMarkdown::Default; ++i) {
-    qDebug() << "样式" << i << ":" << markdownLexer->description(i);
-  }
+  // 2. 按元素设置样式
+  markdownLexer->setColor(QColor("#FF0000"), QsciLexerMarkdown::Header1);
+  markdownLexer->setColor(QColor("#009900"), QsciLexerMarkdown::CodeBlock);
+
+  // 3. 跨平台字体设置
+  QFont codeFont;
+  codeFont.setFamily("Consolas, Menlo, Monaco");
+  codeFont.setPointSize(12);
+  markdownLexer->setFont(codeFont, QsciLexerMarkdown::CodeBlock);
+
+  // 颜色转换函数
+  auto scintillaColor = [](const QColor &c) {
+    return (c.blue() << 16) | (c.green() << 8) | c.red();
+  };
+
+  // 设置标题样式（Scintilla 原生方式）
+  editor->SendScintilla(QsciScintilla::SCI_STYLESETFORE,
+                        QsciLexerMarkdown::Header1, scintillaColor(Qt::red));
+
+  // 设置代码块背景色
+  editor->SendScintilla(QsciScintilla::SCI_STYLESETBACK,
+                        QsciLexerMarkdown::CodeBlock,
+                        scintillaColor(QColor("#F0F0F0")));
+
+  // 同时设置 QsciLexer 的颜色（保持 Qt 层一致）
+  markdownLexer->setColor(Qt::red, QsciLexerMarkdown::Header1);
+  markdownLexer->setPaper(QColor("#F0F0F0"), QsciLexerMarkdown::CodeBlock);
+
+  // 必须刷新
+  editor->SendScintilla(QsciScintilla::SCI_COLOURISE, 0, -1);
+
+  // 立即应用
+  editor->SendScintilla(QsciScintilla::SCI_COLOURISE, 0, -1);
 
   editor->setFolding(QsciScintilla::BoxedTreeFoldStyle);
 
@@ -2315,7 +2362,6 @@ void Notes::initMarkdownEditor(QsciScintilla *editor) {
   editor->setMarginLineNumbers(1, true);                      // 显示行号
   editor->setMarginsBackgroundColor(QColor("#E0E0E0"));       // 行号区背景色
 
-  // 配置边距
   // 配置行号边距（Margin 0）
   editor->setMarginType(0, QsciScintilla::NumberMargin);  // 必须首先生效
   editor->setMarginWidth(0, 50);                          // 固定宽度或动态计算
@@ -2354,4 +2400,36 @@ void Notes::initMarkdownEditor(QsciScintilla *editor) {
   editor->setEdgeMode(QsciScintilla::EdgeLine);
   editor->setEdgeColumn(90);
   editor->setEdgeColor(QColor("#FFA07A"));
+
+  editor->setLexer(markdownLexer);
+  // 强制刷新高亮
+  QTimer::singleShot(100, [=]() {
+    editor->recolor();
+    editor->SendScintilla(QsciScintilla::SCI_COLOURISE, 0, -1);
+  });
+
+  // 强制重置所有样式缓存
+  editor->SendScintilla(QsciScintilla::SCI_CLEARDOCUMENTSTYLE);
+  editor->SendScintilla(QsciScintilla::SCI_COLOURISE, 0, -1);
+
+  // 触发完整重绘
+  editor->update();   // Qt 级刷新
+  editor->repaint();  // 强制立即绘制
+
+  // 验证 Lexer
+  qDebug() << "Lexer 状态：" << (editor->lexer() ? "已设置" : "未设置");
+  if (editor->lexer()) {
+    qDebug() << "Lexer 语言：" << editor->lexer()->language();
+  }
+
+  // 调试输出当前字体
+  qDebug() << "代码块字体："
+           << markdownLexer->font(QsciLexerMarkdown::CodeBlock).family();
+
+  // 打印所有样式详情
+  for (int i = 0; i < QsciLexerMarkdown::Default; ++i) {
+    qDebug() << "Style" << i << "Desc:" << markdownLexer->description(i)
+             << "Color:" << markdownLexer->color(i)
+             << "BG:" << markdownLexer->paper(i);
+  }
 }
