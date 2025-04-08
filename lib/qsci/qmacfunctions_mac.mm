@@ -50,7 +50,7 @@
 #include <QtGui/QWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
-#include <qpa/qplatformmenu.h>
+#include "qplatformmenu.h"
 #endif
 #endif // Q_CLANG_QDOC
 
