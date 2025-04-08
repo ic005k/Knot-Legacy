@@ -49,6 +49,13 @@ INCLUDEPATH += $$PWD/lib/scintilla/include
 INCLUDEPATH += $$PWD/lib/scintilla/lexlib
 INCLUDEPATH += $$PWD/lib/scintilla/src
 
+macx {
+    QT_VERSION_MAJOR = $$[QT_VERSION]
+    contains(QT_VERSION_MAJOR, ^5) {
+        SOURCES += $$PWD/lib/qsci/QMacPasteboardMime.cpp
+    }
+}
+
 ####################### QuaZip ##############################################
 INCLUDEPATH += $$PWD/lib/zlib
 DEFINES += QUAZIP_STATIC
@@ -98,6 +105,7 @@ INCLUDEPATH += $$PWD/lib/cmark-gfm/include
 SOURCES += \
     lib/qsci/InputMethod.cpp \
     lib/qsci/ListBoxQt.cpp \
+    lib/qsci/MacPasteboardMime.cpp \
     lib/qsci/PlatQt.cpp \
     lib/qsci/SciAccessibility.cpp \
     lib/qsci/SciClasses.cpp \

@@ -42,7 +42,7 @@
 
 #include "MarkdownSyntax.h"
 #include "lib/qsci/Qsci/qscilexermarkdown.h"
-#include "qsciscintilla.h"
+#include "lib/qsci/Qsci/qsciscintilla.h"
 #include "src/Comm/ShowMessage.h"
 #include "src/Notes/ColorDialog.h"
 #include "src/Notes/LineNumberArea.h"
