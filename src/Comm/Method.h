@@ -55,6 +55,8 @@ class Method : public QDialog {
   ~Method();
   Ui::Method *ui;
 
+  bool androidCopyFile(QString src, QString des);
+
   static QString getFileSize(const qint64 &size, int precision);
 
   bool isClickLink = false;

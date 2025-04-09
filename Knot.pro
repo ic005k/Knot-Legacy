@@ -40,6 +40,7 @@ android: {
 }
 
 ####################### Qsci ##############################################
+
 CONFIG+=lexer_markdown
 
 INCLUDEPATH += $$PWD/lib/qsci/QSci
@@ -62,6 +63,7 @@ macx {
 }
 
 ####################### QuaZip ##############################################
+
 INCLUDEPATH += $$PWD/lib/zlib
 DEFINES += QUAZIP_STATIC
 
@@ -91,14 +93,15 @@ macx {
 }
 
 ####################### 添加 cppjieba 和 limonp 头文件路径 ######################
+
 INCLUDEPATH += $$PWD/cppjieba/include
 INCLUDEPATH += $$PWD/cppjieba/limonp/include
 
 ############################ cmark-gfm ########################################
+
 INCLUDEPATH += $$PWD/lib/cmark-gfm/include
 
-#################################################################################
-
+###############################################################################
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -769,7 +772,8 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 # 排除扩展语法文件
 SOURCES -= $$PWD/lib/scintilla/src/ExternalLexer.cpp
 
-######################### minizip-ng ##################################################
+######################### minizip-ng ######################################
+
 #INCLUDEPATH += $$PWD/lib/zlib-ng
 #INCLUDEPATH += $$PWD/minizip-ng
 
@@ -823,7 +827,8 @@ SOURCES -= $$PWD/lib/scintilla/src/ExternalLexer.cpp
 #    DEFINES += MZ_USE_POSIX_API=ON
 #}
 
-######################### OpenSSL #####################################################
+######################### OpenSSL ########################################
+
 # 链接 OpenSSL 库（根据平台配置）
 win32 {
     INCLUDEPATH += $$PWD/openssl
@@ -849,7 +854,7 @@ macx {
 
 }
 
-#######################################################################################
+###########################################################################
 #Linux
 unix:!macx: {
     android: include(/home/zh/文档/android_openssl-master/openssl.pri)

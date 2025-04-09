@@ -114,7 +114,6 @@ class Notes : public QDialog {
   QString getDateTimeStr();
   void MD2Html(QString mdFile);
   void saveQMLVPos();
-  bool androidCopyFile(QString src, QString des);
 
   qreal getVPos();
   void unzip(QString zipfile);
@@ -177,6 +176,8 @@ class Notes : public QDialog {
 
   void updateMDFileToSyncLists(QString currentMDFile);
 
+  void initEditor();
+
  protected:
   void keyReleaseEvent(QKeyEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
@@ -233,8 +234,6 @@ class Notes : public QDialog {
 
   void on_editSource_textChanged();
 
-  void on_editSource_cursorPositionChanged();
-
   void on_btnFind_clicked();
 
   void on_btnPrev_clicked();
@@ -288,6 +287,7 @@ class Notes : public QDialog {
   void jumpToNextMatch();
   void jumpToPrevMatch();
   QsciLexerMarkdown *markdownLexer;
+  void initMarkdownLexer();
 };
 
 class LimitedTextEdit : public QTextEdit {

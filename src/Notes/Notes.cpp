@@ -37,63 +37,22 @@ NoteIndexManager::NoteIndexManager(QObject *parent) : QObject{parent} {}
 
 Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->setupUi(this);
-
-  m_EditSource = new QsciScintilla(this);
-  initMarkdownEditor(m_EditSource);
-
   m_NoteIndexManager = new NoteIndexManager();
-
   m_EditSource1 = new QTextEditHighlighter();
-  ui->frameEdit->layout()->addWidget(m_EditSource);
-
-  ui->editSource->hide();
-  ui->btnColor->hide();
-
-  ui->btnFind->hide();
-  ui->f_ToolBar->hide();
-
-#ifdef Q_OS_ANDROID
-#else
-  mw_one->set_ToolButtonStyle(this);
-#endif
 
   m_TextSelector = new TextSelector(this);
+  initEditor();
+  initMarkdownLexer();
+  initMarkdownEditor(m_EditSource);
 
   QString path = iniDir + "memo/";
   QDir dir(path);
   if (!dir.exists()) dir.mkdir(path);
 
-  connect(pAndroidKeyboard, &QInputMethod::visibleChanged, this,
-          &Notes::on_KVChanged);
-
   this->installEventFilter(this);
-  m_EditSource->installEventFilter(this);
-  m_EditSource->viewport()->installEventFilter(this);
   this->setModal(true);
   this->layout()->setContentsMargins(5, 5, 5, 5);
-
-  if (isAndroid) {
-    QScroller::grabGesture(m_EditSource, QScroller::LeftMouseButtonGesture);
-    m_Method->setSCrollPro(m_EditSource);
-  }
-
-  if (!isDark) {
-    // m_EditSource->verticalScrollBar()->setStyleSheet(
-    //     m_Method->vsbarStyleSmall);
-  }
-
   ui->frameEdit->layout()->setContentsMargins(0, 0, 0, 0);
-  m_EditSource->setContentsMargins(1, 1, 1, 1);
-  m_EditSource->setStyleSheet("border:none");
-  // m_EditSource->setCursorWidth(2);
-
-  QFont f = this->font();
-  f.setPointSize(fontSize - 1);
-
-  ui->f_ToolBar->setFont(f);
-
-  connect(m_EditSource->verticalScrollBar(), SIGNAL(valueChanged(int)), this,
-          SLOT(editVSBarValueChanged()));
 
   QValidator *validator =
       new QRegularExpressionValidator(regxNumber, ui->editRow);
@@ -101,22 +60,6 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->editRow->setPlaceholderText(tr("Row"));
   ui->editCol->setValidator(validator);
   ui->editCol->setPlaceholderText(tr("Column"));
-
-  // connect(m_EditSource, &QsciScintilla::undoAvailable, this,
-  //         &Notes::on_editSource_undoAvailable);
-  // connect(m_EditSource, &QsciScintilla::redoAvailable, this,
-  //         &Notes::on_editSource_redoAvailable);
-
-  connect(m_EditSource, &QsciScintilla::textChanged, this,
-          &Notes::on_editSource_textChanged);
-
-  // connect(m_EditSource, &QsciScintilla::cursorPositionChanged, this,
-  //        &Notes::highlightCurrentLine);
-
-  QFont font = this->font();
-  font.setLetterSpacing(QFont::AbsoluteSpacing, 2);  // 字间距
-  m_EditSource->setFont(font);
-  // m_EditSource->setAcceptRichText(false);
 
   timerEditPanel = new QTimer(this);
   connect(timerEditPanel, SIGNAL(timeout()), this, SLOT(on_showEditPanel()));
@@ -129,14 +72,33 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   connect(this, SIGNAL(sendUpdate()), this, SLOT(update()));
   connect(timerCur, SIGNAL(timeout()), this, SLOT(timerSlot()));
 
+  ui->btnColor->hide();
+  ui->lblCount->hide();
+
+  ui->btnFind->hide();
+  ui->f_ToolBar->hide();
+  mw_one->set_ToolButtonStyle(this);
+}
+
+void Notes::initEditor() {
+  m_EditSource = new QsciScintilla(this);
+
+  m_EditSource->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+  m_EditSource->installEventFilter(this);
+  m_EditSource->viewport()->installEventFilter(this);
+  m_EditSource->setContentsMargins(1, 1, 1, 1);
+  m_EditSource->setStyleSheet("border:none");
+  connect(m_EditSource->verticalScrollBar(), SIGNAL(valueChanged(int)), this,
+          SLOT(editVSBarValueChanged()));
+  connect(m_EditSource, &QsciScintilla::textChanged, this,
+          &Notes::on_editSource_textChanged);
+  ui->frameEdit->layout()->addWidget(m_EditSource);
   m_EditSource->setFocus();
 }
 
 void Notes::showEvent(QShowEvent *event) {
   QWidget::showEvent(event);
   if (!m_initialized) {
-    // initMarkdownEditor(m_EditSource);
-
     // 调试输出
     qDebug() << "当前字体是否有效："
              << m_EditSource->lexer()
@@ -1052,32 +1014,6 @@ void Notes::timerSlot() {
   emit sendUpdate();
 }
 
-bool Notes::androidCopyFile(QString src, QString des) {
-  bool result = false;
-
-#ifdef Q_OS_ANDROID
-
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  QAndroidJniObject srcObj = QAndroidJniObject::fromString(src);
-  QAndroidJniObject desObj = QAndroidJniObject::fromString(des);
-  QAndroidJniObject m_activity = QAndroidJniObject::fromString("copyFile");
-  result = m_activity.callStaticMethod<int>(
-      "com.x/MyActivity", "copyFile", "(Ljava/lang/String;Ljava/lang/String;)I",
-      srcObj.object<jstring>(), desObj.object<jstring>());
-#else
-  QJniObject srcObj = QJniObject::fromString(src);
-  QJniObject desObj = QJniObject::fromString(des);
-  QJniObject m_activity = QJniObject::fromString("copyFile");
-  result = m_activity.callStaticMethod<int>(
-      "com.x/MyActivity", "copyFile", "(Ljava/lang/String;Ljava/lang/String;)I",
-      srcObj.object<jstring>(), desObj.object<jstring>());
-#endif
-
-#endif
-  qDebug() << "copyFile " << src << des;
-  return result;
-}
-
 void Notes::closeEvent(QCloseEvent *event) {
   Q_UNUSED(event);
   saveQMLVPos();
@@ -1091,7 +1027,6 @@ void Notes::closeEvent(QCloseEvent *event) {
   m_Method->Sleep(100);
 
   if (isTextChange) {
-    m_Method->m_widget = new QWidget(this);
     ShowMessage *msg = new ShowMessage(this);
     if (msg->showMsg(tr("Notes"), tr("Do you want to save the notes?"), 2)) {
       saveMainNotes();
@@ -1127,8 +1062,6 @@ bool Notes::isSetNewNoteTitle() {
 }
 
 void Notes::on_editSource_textChanged() { isTextChange = true; }
-
-void Notes::on_editSource_cursorPositionChanged() {}
 
 void Notes::show_findText() {
   QString findtext = ui->editFind->text().trimmed().toLower();
@@ -1941,8 +1874,6 @@ void Notes::openEditUI() {
     return;
   }
 
-  QString mdString = loadText(currentMDFile);
-
   m_TextSelector->close();
   delete m_TextSelector;
   m_TextSelector = new TextSelector(mw_one->m_Notes);
@@ -1950,6 +1881,8 @@ void Notes::openEditUI() {
   mw_one->mainHeight = mw_one->height();
 
   init();
+
+  QString mdString = loadText(currentMDFile);
   m_EditSource->setText(mdString);
   // new MarkdownHighlighter(m_EditSource->document());
 
@@ -2257,22 +2190,72 @@ void Notes::updateMainnotesIniToSyncLists() {
   }
 }
 
+void Notes::initMarkdownLexer() {
+  // 创建 Lexer
+  markdownLexer = new QsciLexerMarkdown(m_EditSource);
+  m_EditSource->setLexer(markdownLexer);
+
+  // 关键样式配置（必须用 QColor 的显式构造函数）
+  markdownLexer->setColor(QColor(0, 0, 255),
+                          QsciLexerMarkdown::Header1);  // 蓝色标题
+  markdownLexer->setColor(QColor(0, 128, 0),
+                          QsciLexerMarkdown::Header2);  // 绿色标题
+  markdownLexer->setPaper(QColor(255, 255, 224),
+                          QsciLexerMarkdown::CodeBlock);  // 浅黄背景
+
+  markdownLexer->setFont(QFont("Consolas", 12), QsciLexerMarkdown::CodeBlock);
+
+  m_EditSource->SendScintilla(QsciScintilla::SCI_STYLERESETDEFAULT);
+  m_EditSource->recolor();
+
+  // 验证 Lexer
+  qDebug() << "Lexer 状态：" << (m_EditSource->lexer() ? "已设置" : "未设置");
+  if (m_EditSource->lexer()) {
+    qDebug() << "Lexer 语言：" << m_EditSource->lexer()->language();
+  }
+
+  // 调试输出当前字体
+  qDebug() << "代码块字体："
+           << markdownLexer->font(QsciLexerMarkdown::CodeBlock).family();
+
+  // 打印所有样式详情
+  for (int i = 0; i < QsciLexerMarkdown::Header1; ++i) {
+    qDebug() << "Style" << i << "Desc:" << markdownLexer->description(i)
+             << "Color:" << markdownLexer->color(i)
+             << "BG:" << markdownLexer->paper(i);
+  }
+
+  qDebug() << "Header1 颜色："
+           << markdownLexer->color(QsciLexerMarkdown::Header1);
+}
+
 void Notes::initMarkdownEditor(QsciScintilla *editor) {
+  // 强制编码和默认样式
+  editor->setUtf8(true);
+
   editor->setFolding(QsciScintilla::BoxedTreeFoldStyle);
 
-  editor->setAutoIndent(true);                                // 自动缩进
-  editor->setBraceMatching(QsciScintilla::SloppyBraceMatch);  // 括号匹配
-  editor->setMarginLineNumbers(1, true);                      // 显示行号
-  editor->setMarginsBackgroundColor(QColor("#E0E0E0"));       // 行号区背景色
+  // 自动缩进
+  editor->setAutoIndent(true);
+
+  // 括号匹配
+  editor->setBraceMatching(QsciScintilla::SloppyBraceMatch);
+
+  // 显示行号
+  editor->setMarginLineNumbers(1, true);
+
+  // 行号区背景色
+  editor->setMarginsBackgroundColor(QColor("#E0E0E0"));
 
   // 单独设置边距字体（非粗体）
-  QFont marginFont("Consolas", 10);
+  QFont marginFont("Courier New", 10);
   marginFont.setBold(false);
   editor->setMarginsFont(marginFont);
 
   // 配置行号边距（Margin 0）
   editor->setMarginType(0, QsciScintilla::NumberMargin);  // 必须首先生效
-  editor->setMarginWidth(0, 50);                          // 固定宽度或动态计算
+  editor->setMarginWidth(0, 50);                          //
+                                                          // 固定宽度或动态计算
   editor->SendScintilla(QsciScintilla::SCI_STYLESETFORE,
                         QsciScintilla::STYLE_LINENUMBER,
                         QColor("#000000").rgba());
@@ -2301,13 +2284,14 @@ void Notes::initMarkdownEditor(QsciScintilla *editor) {
   editor->setWrapIndentMode(QsciScintilla::WrapIndentSame);   // 缩进对齐
 
   // 滚动条控制
-  editor->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);  // 隐藏水平条
-  editor->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);  // 按需显示垂直条
+  editor->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  // 隐藏水平条 按需显示垂直条
+  editor->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
   // 边缘参考线
-  editor->setEdgeMode(QsciScintilla::EdgeLine);
-  editor->setEdgeColumn(100);
-  editor->setEdgeColor(QColor("#FFA07A"));
+  // editor->setEdgeMode(QsciScintilla::EdgeLine);
+  // editor->setEdgeColumn(100);
+  // editor->setEdgeColor(QColor("#FFA07A"));
 
   // 配置搜索高亮指示器
   const int INDICATOR_SEARCH = 1;  // 使用一个未使用的指示器编号
@@ -2319,38 +2303,6 @@ void Notes::initMarkdownEditor(QsciScintilla *editor) {
                         100);
   editor->SendScintilla(QsciScintilla::SCI_INDICSETUNDER, INDICATOR_SEARCH,
                         true);  // 在文字下方绘制
-
-  // 创建 Lexer
-  markdownLexer = new QsciLexerMarkdown(editor);
-
-  //  强制编码和默认样式
-  editor->setUtf8(true);
-
-  // 配置关键样式
-  markdownLexer->setColor(Qt::darkBlue, QsciLexerMarkdown::Header1);
-  markdownLexer->setColor(Qt::darkGreen, QsciLexerMarkdown::Link);
-  markdownLexer->setPaper(QColor(240, 240, 240), QsciLexerMarkdown::CodeBlock);
-
-  markdownLexer->setPaper(Qt::white);  // 背景白色
-
-  editor->setLexer(markdownLexer);
-
-  // 验证 Lexer
-  qDebug() << "Lexer 状态：" << (editor->lexer() ? "已设置" : "未设置");
-  if (editor->lexer()) {
-    qDebug() << "Lexer 语言：" << editor->lexer()->language();
-  }
-
-  // 调试输出当前字体
-  qDebug() << "代码块字体："
-           << markdownLexer->font(QsciLexerMarkdown::CodeBlock).family();
-
-  // 打印所有样式详情
-  for (int i = 0; i < QsciLexerMarkdown::Default; ++i) {
-    qDebug() << "Style" << i << "Desc:" << markdownLexer->description(i)
-             << "Color:" << markdownLexer->color(i)
-             << "BG:" << markdownLexer->paper(i);
-  }
 }
 
 // 查找关键词
