@@ -41,7 +41,9 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   m_EditSource1 = new QTextEditHighlighter();
 
   m_TextSelector = new TextSelector(this);
+
   initEditor();
+  m_EditSource->setUtf8(true);
   initMarkdownLexer();
   initMarkdownEditor(m_EditSource);
 
@@ -2195,13 +2197,13 @@ void Notes::initMarkdownLexer() {
   markdownLexer = new QsciLexerMarkdown(m_EditSource);
   m_EditSource->setLexer(markdownLexer);
 
-  // 关键样式配置（必须用 QColor 的显式构造函数）
-  markdownLexer->setColor(QColor(0, 0, 255),
-                          QsciLexerMarkdown::Header1);  // 蓝色标题
-  markdownLexer->setColor(QColor(0, 128, 0),
-                          QsciLexerMarkdown::Header2);  // 绿色标题
-  markdownLexer->setPaper(QColor(255, 255, 224),
-                          QsciLexerMarkdown::CodeBlock);  // 浅黄背景
+  // 关键样式配置 （这是自定义的范例）
+  // markdownLexer->setColor(QColor(0, 0, 255),
+  //                        QsciLexerMarkdown::Header1);  // 蓝色标题
+  // markdownLexer->setColor(QColor(0, 128, 0),
+  //                        QsciLexerMarkdown::Header2);  // 绿色标题
+  // markdownLexer->setPaper(QColor(255, 255, 224),
+  //                       QsciLexerMarkdown::CodeBlock);  // 浅黄背景
 
   markdownLexer->setFont(QFont("Consolas", 12), QsciLexerMarkdown::CodeBlock);
 
@@ -2231,7 +2233,7 @@ void Notes::initMarkdownLexer() {
 
 void Notes::initMarkdownEditor(QsciScintilla *editor) {
   // 强制编码和默认样式
-  editor->setUtf8(true);
+  // editor->setUtf8(true);
 
   editor->setFolding(QsciScintilla::BoxedTreeFoldStyle);
 

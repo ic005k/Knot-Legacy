@@ -41,14 +41,19 @@ android: {
 
 ####################### Qsci ##############################################
 
-CONFIG+=lexer_markdown
+# 确保启用 Markdown 支持
+DEFINES += SCI_LEXER
+DEFINES += LEXER_MARKDOWN_INCLUDED
+DEFINES += QSCINTILLA_HAVE_MARKDOWNLEXER
 
-INCLUDEPATH += $$PWD/lib/qsci/QSci
-INCLUDEPATH += $$PWD/lib/qsci
+CONFIGS += lexer_markdown
 
 INCLUDEPATH += $$PWD/lib/scintilla/include
 INCLUDEPATH += $$PWD/lib/scintilla/lexlib
 INCLUDEPATH += $$PWD/lib/scintilla/src
+
+INCLUDEPATH += $$PWD/lib/qsci/QSci
+INCLUDEPATH += $$PWD/lib/qsci
 
 macx {
     QT_VERSION_MAJOR = $$[QT_VERSION]
@@ -866,7 +871,7 @@ win32:{
 
 ANDROID_EXTRA_LIBS = $$PWD/android-openssl/libcrypto_1_1.so $$PWD/android-openssl/libssl_1_1.so
 
-SUBDIRS += \
-    lib/qsci/qscintilla.pro
+#SUBDIRS += \
+#    lib/qsci/qscintilla.pro
 
 
