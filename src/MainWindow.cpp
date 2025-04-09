@@ -423,6 +423,11 @@ MainWindow::MainWindow(QWidget *parent)
 
   init_CloudBacup();
   setEncSyncStatusTip();
+
+  if (QFile::exists(currentMDFile)) {
+    m_Notes->MD2Html(currentMDFile);
+    m_Notes->loadNoteToQML();
+  }
 }
 
 void MainWindow::initHardStepSensor() {
@@ -3082,8 +3087,6 @@ void MainWindow::on_actionPreferences_triggered() {
     x = geometry().x();
     y = geometry().y();
   } else {
-    m_Preferences->setMaximumWidth(320);
-
     x = geometry().x() + (width() - m_Preferences->width()) / 2;
     y = geometry().y() + (height() - m_Preferences->height()) / 2;
   }

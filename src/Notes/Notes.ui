@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>725</width>
+    <width>802</width>
     <height>386</height>
    </rect>
   </property>
@@ -81,7 +81,7 @@
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>25</height>
+               <height>16777215</height>
               </size>
              </property>
              <property name="styleSheet">
@@ -157,7 +157,7 @@ color: rgb(255, 255, 255);</string>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>25</height>
+               <height>16777215</height>
               </size>
              </property>
              <property name="font">
@@ -200,7 +200,7 @@ color: rgb(255, 255, 255);</string>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>25</height>
+               <height>16777215</height>
               </size>
              </property>
              <property name="text">
@@ -225,7 +225,7 @@ color: rgb(255, 255, 255);</string>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>25</height>
+               <height>16777215</height>
               </size>
              </property>
              <property name="font">
@@ -268,7 +268,7 @@ color: rgb(255, 255, 255);</string>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>25</height>
+               <height>16777215</height>
               </size>
              </property>
              <property name="font">
@@ -331,7 +331,7 @@ color: rgb(255, 255, 255);</string>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>25</height>
+               <height>16777215</height>
               </size>
              </property>
              <property name="font">
@@ -396,7 +396,7 @@ color: rgb(255, 255, 255);</string>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>25</height>
+               <height>16777215</height>
               </size>
              </property>
              <property name="text">
@@ -434,7 +434,7 @@ color: rgb(255, 255, 255);</string>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>25</height>
+               <height>16777215</height>
               </size>
              </property>
              <property name="text">
@@ -494,7 +494,7 @@ color: rgb(255, 255, 255);</string>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>25</height>
+               <height>16777215</height>
               </size>
              </property>
              <property name="font">

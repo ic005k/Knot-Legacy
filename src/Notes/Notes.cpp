@@ -101,6 +101,13 @@ void Notes::showEvent(QShowEvent *event) {
                     ->font(QsciLexerMarkdown::CodeBlock)
                     .exactMatch();
 
+    int btn_h = ui->btnNext->height();
+    ui->btnDone->setIconSize(QSize(btn_h, btn_h));
+
+    QFont font = mw_one->font();
+    m_EditSource->setFont(font);
+    markdownLexer->setFont(font);
+
     m_initialized = true;
   }
 }
