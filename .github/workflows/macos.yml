@@ -63,14 +63,13 @@ jobs:
           fetch-depth: 1
       - name: build macos
         run: |
+          # 定义 Qt 源码路径
           QT_SRC_PATH="/Users/runner/Qt/Src/qtbase"
-          QT_SRC_PATH="/Users/runner/Qt/Src/qtmacextras/include/QtMacExtras"
-          QT_SRC_PATH="/Users/runner/Qt/Src/qtmacextras/src/macextras"
-          
-          QT_PATH=$(find /Users/runner/Qt -maxdepth 1 -type d -name "${{ matrix.qt_ver }}*" | head -n 1)
-          QT_MAC_EXTRAS_INCLUDE="/Users/runner/Qt/${{ matrix.qt_ver }}/clang_64/lib/QtMacExtras.framework/Headers"
+
+          # 导出头文件路径
           export CPLUS_INCLUDE_PATH="$QT_SRC_PATH/src/plugins/platforms/cocoa:$CPLUS_INCLUDE_PATH"
-          export CPLUS_INCLUDE_PATH="/Users/runner/Qt/5.15.2/clang_64/include/QtMacExtras:$CPLUS_INCLUDE_PATH"
+
+          # 编译项目
           qmake "INCLUDEPATH += $QT_SRC_PATH/src/plugins/platforms/cocoa" "LIBS += -lQt5Gui"
           make
           
