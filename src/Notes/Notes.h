@@ -191,8 +191,6 @@ class Notes : public QDialog {
 
   void setVPos();
 
-  void on_btnShowTools_clicked();
-
   void editVSBarValueChanged();
 
   void timerSlot();

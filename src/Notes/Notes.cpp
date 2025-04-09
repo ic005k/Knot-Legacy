@@ -56,13 +56,6 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   this->layout()->setContentsMargins(5, 5, 5, 5);
   ui->frameEdit->layout()->setContentsMargins(0, 0, 0, 0);
 
-  QValidator *validator =
-      new QRegularExpressionValidator(regxNumber, ui->editRow);
-  ui->editRow->setValidator(validator);
-  ui->editRow->setPlaceholderText(tr("Row"));
-  ui->editCol->setValidator(validator);
-  ui->editCol->setPlaceholderText(tr("Column"));
-
   timerEditPanel = new QTimer(this);
   connect(timerEditPanel, SIGNAL(timeout()), this, SLOT(on_showEditPanel()));
 
@@ -78,7 +71,8 @@ Notes::Notes(QWidget *parent) : QDialog(parent), ui(new Ui::Notes) {
   ui->lblCount->hide();
 
   ui->btnFind->hide();
-  ui->f_ToolBar->hide();
+  ui->editFind->setMinimumWidth(65);
+
   mw_one->set_ToolButtonStyle(this);
 }
 
@@ -810,28 +804,10 @@ qreal Notes::getVHeight() {
 }
 
 void Notes::on_btnInsertTable_clicked() {
-  int row = ui->editRow->text().trimmed().toInt();
-  int col = ui->editCol->text().trimmed().toInt();
-
-  if (row == 0 || col == 0) return;
-
-  QString strTitle = tr("Title");
-  QString strCol = "|" + strTitle + "1|";
-  QString strHead = "|------|";
-  QString strRow = "|      |";
-
-  for (int i = 0; i < col - 1; i++) {
-    strCol = strCol + strTitle + QString::number(i + 2) + "|";
-    strHead = strHead + "------|";
-    strRow = strRow + "      |";
-  }
-
-  if (!m_EditSource->isHidden()) {
-    m_EditSource->insert(strCol + "\n" + strHead + "\n");
-    for (int j = 0; j < row; j++) {
-      m_EditSource->insert(strRow + "\n");
-    }
-  }
+  QString table1 = "|Title1|Title2|\n";
+  QString table2 = "|------|------|\n";
+  QString table = table1 + table2;
+  m_EditSource->insert(table);
 }
 
 void Notes::on_btnS1_clicked() {
@@ -1285,22 +1261,6 @@ void Notes::on_btnPDF_clicked() {
   }
 
   delete printer;
-}
-
-void Notes::on_btnShowTools_clicked() {
-  if (ui->f_ToolBar->isHidden()) {
-    ui->f_ToolBar->show();
-
-  } else {
-    ui->f_ToolBar->hide();
-  }
-
-  QSettings *iniNotes =
-      new QSettings(privateDir + "notes.ini", QSettings::IniFormat, NULL);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-  iniNotes->setIniCodec("utf-8");
-#endif
-  iniNotes->setValue("/MainNotes/toolBarVisible", ui->f_ToolBar->isVisible());
 }
 
 void Notes::editNote() { mw_one->on_btnEdit_clicked(); }
@@ -1903,8 +1863,6 @@ void Notes::openEditUI() {
 
   int vpos = iniNotes->value("/MainNotes/editVPos" + a).toInt();
   int cpos = iniNotes->value("/MainNotes/editCPos" + a).toInt();
-  bool isToolBarVisible =
-      iniNotes->value("/MainNotes/toolBarVisible", false).toBool();
 
   m_EditSource->verticalScrollBar()->setValue(vpos);
   m_EditSource->SendScintilla(QsciScintilla::SCI_SETANCHOR, cpos);  // 起始位置
@@ -1912,11 +1870,6 @@ void Notes::openEditUI() {
                               cpos);  // 结束位置
 
   m_EditSource->setFocus();
-  if (isToolBarVisible) {
-    if (ui->f_ToolBar->isHidden()) on_btnShowTools_clicked();
-  } else {
-    if (!ui->f_ToolBar->isHidden()) on_btnShowTools_clicked();
-  }
 
   m_Method->Sleep(200);
 
@@ -1925,8 +1878,6 @@ void Notes::openEditUI() {
   if (mw_one->isOpenSearchResult) {
     QString findText = mw_one->mySearchText;
     if (findText.length() > 0) {
-      if (ui->f_ToolBar->isHidden()) on_btnShowTools_clicked();
-
       m_EditSource->SendScintilla(QsciScintilla::SCI_SETANCHOR, 0);
       m_EditSource->SendScintilla(QsciScintilla::SCI_SETCURRENTPOS, 0);
 
@@ -2197,7 +2148,7 @@ void Notes::initMarkdownLexer() {
   markdownLexer = new QsciLexerMarkdown(m_EditSource);
   m_EditSource->setLexer(markdownLexer);
 
-  // 关键样式配置 （这是自定义的范例）
+  // 样式配置（自定义的范例）
   // markdownLexer->setColor(QColor(0, 0, 255),
   //                        QsciLexerMarkdown::Header1);  // 蓝色标题
   // markdownLexer->setColor(QColor(0, 128, 0),

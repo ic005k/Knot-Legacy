@@ -106,7 +106,7 @@ All dependencies are preserved in original format for maintenance and upgrades:
 ### UI & Auxiliary Tools
 | Project Name | Functionality | Repository Link |
 |--------------|---------------|-----------------|
-| **QSci** | Desktop note editor | [QSci](https://riverbankcomputing.com/software/qscintilla/download) |
+| **QScintilla** | Desktop note editor | [QScintilla](https://riverbankcomputing.com/software/qscintilla/download) |
 | **QDarkStyleSheet** | Dark theme support | [ColinDuquesnoy/QDarkStyleSheet](https://github.com/ColinDuquesnoy/QDarkStyleSheet) |
 | **ColorPicker** | Color selection component | [QuadFlask/colorpicker](https://github.com/QuadFlask/colorpicker) |
 | **PowerMenu** | Context menu component | [skydoves/PowerMenu](https://github.com/skydoves/PowerMenu) |
