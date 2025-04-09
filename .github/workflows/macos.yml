@@ -19,8 +19,8 @@ jobs:
         os: [macOS-latest]
         # os: [macos-11.0]
         # qt_ver: [5.9.9,5.12.10,5.15.2]
-        qt_ver: [5.12.10]
-        #qt_ver: [6.0.0]
+        qt_ver: [5.15.2]
+        #qt_ver: [6.6.2]
         qt_arch: [clang_64]
         
     env:
@@ -37,8 +37,7 @@ jobs:
           cached: 'false'
           modules: qtcharts qtwebengine
           install-deps: true
-          #tools: all
-          source: true
+          #source: true
 
       - name: Install Homebrew (x86_64)
         run: |
