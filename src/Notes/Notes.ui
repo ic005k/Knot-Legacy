@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>802</width>
+    <width>817</width>
     <height>386</height>
    </rect>
   </property>
@@ -112,8 +112,8 @@ color: rgb(255, 255, 255);</string>
              </property>
              <property name="maximumSize">
               <size>
-               <width>65535</width>
-               <height>65535</height>
+               <width>16777215</width>
+               <height>16777215</height>
               </size>
              </property>
              <property name="text">
@@ -131,8 +131,8 @@ color: rgb(255, 255, 255);</string>
              </property>
              <property name="maximumSize">
               <size>
-               <width>65535</width>
-               <height>65535</height>
+               <width>16777215</width>
+               <height>16777215</height>
               </size>
              </property>
              <property name="text">
@@ -305,8 +305,8 @@ color: rgb(255, 255, 255);</string>
              </property>
              <property name="maximumSize">
               <size>
-               <width>65535</width>
-               <height>65535</height>
+               <width>16777215</width>
+               <height>16777215</height>
               </size>
              </property>
              <property name="text">
@@ -367,8 +367,8 @@ color: rgb(255, 255, 255);</string>
              </property>
              <property name="maximumSize">
               <size>
-               <width>65535</width>
-               <height>65535</height>
+               <width>16777215</width>
+               <height>16777215</height>
               </size>
              </property>
              <property name="placeholderText">
@@ -465,8 +465,8 @@ color: rgb(255, 255, 255);</string>
              </property>
              <property name="maximumSize">
               <size>
-               <width>65535</width>
-               <height>65535</height>
+               <width>16777215</width>
+               <height>16777215</height>
               </size>
              </property>
              <property name="text">

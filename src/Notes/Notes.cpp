@@ -102,6 +102,9 @@ void Notes::showEvent(QShowEvent *event) {
                     .exactMatch();
 
     int btn_h = ui->btnNext->height();
+    ui->btnDone->setFixedHeight(btn_h);
+    ui->btnDone->setFixedWidth(btn_h);
+    btn_h = btn_h * 0.8;
     ui->btnDone->setIconSize(QSize(btn_h, btn_h));
 
     QFont font = mw_one->font();
