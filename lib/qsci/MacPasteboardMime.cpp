@@ -31,8 +31,8 @@
 #include <QStringList>
 #include <QVariant>
 
-// #include <QMacPasteboardMime>
-#include <qmacpasteboardmime.h>
+#include <QMacPasteboardMime>
+// #include <qmacpasteboardmime.h>
 
 
 static const QLatin1String mimeRectangular("text/x-qscintilla-rectangular");
