@@ -40,12 +40,20 @@ jobs:
           #tools: all
           source: true
 
+      - name: Clone qtmacextras
+        run: |
+          mkdir -p /Users/runner/Qt/Src
+          cd /Users/runner/Qt/Src
+          git clone https://code.qt.io/qt/qtmacextras.git
+          cd qtmacextras
+          git checkout 5.15.2  # 确认标签与 Qt 版本一致
+
       - name: Build and Install qtmacextras
         run: |
-          cd /Users/runner/Qt/5.15.2/Src/qtmacextras
+          cd /Users/runner/Qt/Src/qtmacextras
           /Users/runner/Qt/5.15.2/clang_64/bin/qmake
           make -j$(sysctl -n hw.ncpu)
-          sudo make install    
+          sudo make install
 
       - name: Install Homebrew (x86_64)
         run: |
