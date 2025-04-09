@@ -64,6 +64,9 @@ jobs:
       - name: build macos
         run: |
           QT_SRC_PATH="/Users/runner/Qt/Src/qtbase"
+          QT_SRC_PATH="/Users/runner/Qt/Src/qtmacextras/include/QtMacExtras"
+          QT_SRC_PATH="/Users/runner/Qt/Src/qtmacextras/src/macextras"
+          
           QT_PATH=$(find /Users/runner/Qt -maxdepth 1 -type d -name "${{ matrix.qt_ver }}*" | head -n 1)
           QT_MAC_EXTRAS_INCLUDE="/Users/runner/Qt/${{ matrix.qt_ver }}/clang_64/lib/QtMacExtras.framework/Headers"
           export CPLUS_INCLUDE_PATH="$QT_SRC_PATH/src/plugins/platforms/cocoa:$CPLUS_INCLUDE_PATH"
