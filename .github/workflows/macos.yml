@@ -42,7 +42,7 @@ jobs:
 
       - name: Build and Install qtmacextras
         run: |
-          cd /Users/runner/Qt/Src/qtmacextras
+          cd /Users/runner/Qt/5.15.2/Src/qtmacextras
           /Users/runner/Qt/5.15.2/clang_64/bin/qmake
           make -j$(sysctl -n hw.ncpu)
           sudo make install    
