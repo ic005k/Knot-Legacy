@@ -19,7 +19,7 @@ jobs:
         os: [macOS-latest]
         # os: [macos-11.0]
         # qt_ver: [5.9.9,5.12.10,5.15.2]
-        qt_ver: [5.15.2]
+        qt_ver: [5.12.10]
         #qt_ver: [6.0.0]
         qt_arch: [clang_64]
         
@@ -63,19 +63,19 @@ jobs:
           fetch-depth: 1
       - name: build macos
         run: |
-          QT_INSTALL_PATH="/Users/runner/Qt/5.15.2/clang_64"
+          #QT_INSTALL_PATH="/Users/runner/Qt/5.15.2/clang_64"
           # 设置私有头文件路径和宏
-          export CPLUS_INCLUDE_PATH="${QT_INSTALL_PATH}/include/QtGui/5.15.2/QtGui/private:${QT_INSTALL_PATH}/include"
+          # export CPLUS_INCLUDE_PATH="${QT_INSTALL_PATH}/include/QtGui/5.15.2/QtGui/private:${QT_INSTALL_PATH}/include"
     
           # 添加 qmake 参数
-          qmake "INCLUDEPATH += ${QT_INSTALL_PATH}/include/QtGui/5.15.2/QtGui/private" \
-          "DEFINES += QT_PRIVATE_HEADERS" \
-          "LIBS += -lQt5Gui -framework Cocoa"
-          make -j$(sysctl -n hw.ncpu)
+          #qmake "INCLUDEPATH += ${QT_INSTALL_PATH}/include/QtGui/5.15.2/QtGui/private" \
+          #"DEFINES += QT_PRIVATE_HEADERS" \
+          #"LIBS += -lQt5Gui -framework Cocoa"
+          #make -j$(sysctl -n hw.ncpu)
 
           # 编译项目
-          #qmake
-          #make
+          qmake
+          make
           
       # 打包
       - name: package
