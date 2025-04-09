@@ -63,15 +63,19 @@ jobs:
           fetch-depth: 1
       - name: build macos
         run: |
-          # 定义 Qt 源码路径
-          QT_SRC_PATH="/Users/runner/Qt/Src/qtbase"
-
-          # 导出头文件路径
-          export CPLUS_INCLUDE_PATH="$QT_SRC_PATH/src/plugins/platforms/cocoa:$CPLUS_INCLUDE_PATH"
+          QT_INSTALL_PATH="/Users/runner/Qt/${matrix.qt_ver}/clang_64"
+          # 设置私有头文件路径和宏
+          export CPLUS_INCLUDE_PATH="${QT_INSTALL_PATH}/include/QtGui/5.15.2/QtGui/private:${QT_INSTALL_PATH}/include"
+    
+          # 添加 qmake 参数
+          qmake "INCLUDEPATH += ${QT_INSTALL_PATH}/include/QtGui/5.15.2/QtGui/private" \
+          "DEFINES += QT_PRIVATE_HEADERS" \
+          "LIBS += -lQt5Gui -framework Cocoa"
+          make -j$(sysctl -n hw.ncpu)
 
           # 编译项目
-          qmake "INCLUDEPATH += $QT_SRC_PATH/src/plugins/platforms/cocoa" "LIBS += -lQt5Gui"
-          make
+          #qmake
+          #make
           
       # 打包
       - name: package
