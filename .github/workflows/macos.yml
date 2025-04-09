@@ -63,7 +63,7 @@ jobs:
           fetch-depth: 1
       - name: build macos
         run: |
-          QT_INSTALL_PATH="/Users/runner/Qt/${matrix.qt_ver}/clang_64"
+          QT_INSTALL_PATH="/Users/runner/Qt/5.15.2/clang_64"
           # 设置私有头文件路径和宏
           export CPLUS_INCLUDE_PATH="${QT_INSTALL_PATH}/include/QtGui/5.15.2/QtGui/private:${QT_INSTALL_PATH}/include"
     
