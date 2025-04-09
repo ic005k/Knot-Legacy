@@ -63,6 +63,7 @@ jobs:
           fetch-depth: 1
       - name: build macos
         run: |
+          QT_SRC_PATH="/Users/runner/Qt/Src/qtbase"
           QT_PATH=$(find /Users/runner/Qt -maxdepth 1 -type d -name "${{ matrix.qt_ver }}*" | head -n 1)
           export CPLUS_INCLUDE_PATH="$QT_PATH/Src/qtbase/src/plugins/platforms/cocoa:$CPLUS_INCLUDE_PATH"
           qmake
