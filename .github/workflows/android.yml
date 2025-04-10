@@ -39,8 +39,10 @@ jobs:
     - name: Install Qt and Android components
       run: |
         # 安装 Android 版本的 Qt
-        aqt install-qt ${{ env.QT_HOST }} ${{ env.QT_TARGET }} ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
-          --outputdir /opt/qt
+        aqt install-qt linux android ${{ env.QT_VERSION }} \
+            --archives qtbase qttools qtsvg qtcharts \
+            --outputdir /opt/qt \
+            -m android_arm64_v8a  # 明确指定模块架构
 
         # 安装 Android SDK/NDK
         aqt install-tool linux android --rootdir /opt/android-sdk tools
