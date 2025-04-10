@@ -1,4 +1,4 @@
-name: Android Qt 5.12 Build
+name: Android Qt 5.15.2 Build
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  QT_VERSION: 5.12.2
+  QT_VERSION: 5.15.2
   ANDROID_API: android-28
   NDK_VERSION: r21c
   QT_HOST: linux
@@ -43,11 +43,11 @@ jobs:
           --outputdir /opt/qt
 
         # 安装 Android SDK/NDK
-        aqt install-tool linux android \
-          --rootdir ${{ env.ANDROID_SDK_ROOT }} \
-          tools platform-tools platform ${{ env.ANDROID_API }} \
-          ndk ${{ env.NDK_VERSION }} \
-          build-tools 31
+        aqt install-tool linux android --rootdir /opt/android-sdk tools
+        aqt install-tool linux android --rootdir /opt/android-sdk platform-tools
+        aqt install-tool linux android --rootdir /opt/android-sdk platform android-28
+        aqt install-tool linux android --rootdir /opt/android-sdk ndk r21c
+        aqt install-tool linux android --rootdir /opt/android-sdk build-tools 31.0.0  # 注意版本号格式
 
     - name: Setup environment
       run: |
