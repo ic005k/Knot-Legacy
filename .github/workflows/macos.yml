@@ -29,12 +29,18 @@ jobs:
       orgName: Knot
       
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
      
         with:
           version: ${{ matrix.qt_ver }}
           cached: 'false'
+          host: mac
+          target: desktop
+          arch: x86_64 
           modules: qtcharts qtwebengine qtbase qttools qtmacextras
           install-deps: true
           source: false
