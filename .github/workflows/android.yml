@@ -11,6 +11,7 @@ env:
   ANDROID_API_LEVEL: 34
   BUILD_TOOLS_VERSION: 31.0.0
   NDK_VERSION: 21.4.7075529
+  QT_ARCH: android_arm64_v8a 
 
 jobs:
   build:
@@ -38,14 +39,21 @@ jobs:
           "cmdline-tools;latest"
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v4
+      uses: jurplel/install-qt-action@v3
       with:
         version: ${{ env.QT_VERSION }}
-        host: linux
-        target: android
-        arch: android_arm64_v8a  # 关键修改点
-        modules: qtcharts  # 添加必要的模块
-        archives: qtbase qtsvg qtdeclarative qtgamepad qtgraphicaleffects qtimageformats qtlocation
+        host: linux     # 宿主平台
+        target: android # 目标平台
+        arch: ${{ env.QT_ARCH }}
+        modules: "qtbase qtsvg qtdeclarative"  # 必须明确指定核心模块
+        archives: "qtbase qttools"  # 确保基础工具链
+        tools: auto     # 自动安装android sdk
+        install-deps: true  # 自动安装系统依赖
+        # 国内用户推荐镜像配置
+        mirror: "https://mirrors.ustc.edu.cn/qtproject"
+        # 高级调试参数
+        log-level: debug
+        timeout: 1800
 
     - name: Setup Android environment variables
       shell: bash
