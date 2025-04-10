@@ -47,7 +47,7 @@ jobs:
           --rootdir ${{ env.ANDROID_SDK_ROOT }} \
           tools platform-tools platform ${{ env.ANDROID_API }} \
           ndk ${{ env.NDK_VERSION }} \
-          build-tools 28.0.3
+          build-tools 31
 
     - name: Setup environment
       run: |
