@@ -22,10 +22,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Set up JDK 8
+    - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
-        java-version: '8'
+        java-version: '17'
         distribution: 'zulu'
 
     - name: Install system dependencies
@@ -51,9 +51,9 @@ jobs:
         echo "ANDROID_NDK_ROOT=/opt/android-sdk/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
         echo "PATH=$PATH:/opt/qt/${{ env.QT_VERSION }}/android_arm64_v8a/bin" >> $GITHUB_ENV
 
-    - name: Generate debug keystore
+    - name: Generate release keystore
       run: |
-        keytool -genkey -v -keystore debug.keystore \
+        keytool -genkey -v -keystore release.keystore \
           -storepass android -alias androiddebugkey \
           -keypass android -dname "CN=, OU=, O=, L=, S=, C=" \
           -keyalg RSA -keysize 2048 -validity 10000
