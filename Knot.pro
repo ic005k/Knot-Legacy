@@ -58,7 +58,7 @@ INCLUDEPATH += $$PWD/lib/qsci
 macx {
     QT_VERSION_MAJOR = $$[QT_VERSION]
     contains(QT_VERSION_MAJOR, ^5) {
-        QT += macextras
+        #QT += macextras
 
         #SOURCES += $$PWD/lib/qsci/qmacpasteboardmime.mm
         #SOURCES += $$PWD/lib/qsci/qmacfunctions.mm
@@ -66,8 +66,12 @@ macx {
 
         #HEADERS += $$PWD/lib/qsci/QSci/qmacpasteboardmime.h
 
-        LIBS += -framework AppKit
+        #LIBS += -framework AppKit
     }
+}
+
+macx:lessThan(QT_MAJOR_VERSION, 6) {
+    QT += macextras
 }
 
 ####################### QuaZip ##############################################
