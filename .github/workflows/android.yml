@@ -31,7 +31,7 @@ jobs:
 
     - name: Install Android components
       run: |
-        sdkmanager --licenses
+        yes | sdkmanager --licenses
         sdkmanager "platforms;android-${{ env.ANDROID_API_LEVEL }}" \
           "build-tools;${{ env.BUILD_TOOLS_VERSION }}" \
           "ndk;${{ env.NDK_VERSION }}" \
@@ -43,7 +43,7 @@ jobs:
         version: ${{ env.QT_VERSION }}
         host: linux
         target: android
-        arch: android_arm64_v8a  # 根据需求添加其他架构
+        arch: android_arm64_v8a
 
     - name: Setup Android environment variables
       shell: bash
@@ -54,9 +54,9 @@ jobs:
 
     - name: Prepare signing
       run: |
+        mkdir -p android/app
         echo "${{ secrets.SIGNING_KEY }}" > android/app/my-release-key.keystore.base64
         base64 -d android/app/my-release-key.keystore.base64 > android/app/my-release-key.keystore
-      working-directory: ${{ github.workspace }}
 
     - name: Build APK
       run: |
@@ -64,7 +64,6 @@ jobs:
         $QT_DIR/bin/qmake .. CONFIG+=release ANDROID_ABIS=arm64-v8a
         make -j$(nproc)
         make apk
-      working-directory: ${{ github.workspace }}
 
     - name: Sign APK
       run: |
@@ -77,12 +76,12 @@ jobs:
           build/android-build/build/outputs/apk/release/android-build-release-unsigned.apk \
           ${{ secrets.KEY_ALIAS }}
 
-        zipalign -v 4 \
+        $ANDROID_SDK_ROOT/build-tools/${{ env.BUILD_TOOLS_VERSION }}/zipalign -v 4 \
           build/android-build/build/outputs/apk/release/android-build-release-unsigned.apk \
           MyApp-release.apk
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4  # 更新到v4版本
       with:
         name: Android-APK
-        path: ${{ github.workspace }}/MyApp-release.apk
+        path: MyApp-release.apk
