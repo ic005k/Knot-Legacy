@@ -46,7 +46,7 @@ DEFINES += SCI_LEXER
 DEFINES += LEXER_MARKDOWN_INCLUDED
 DEFINES += QSCINTILLA_HAVE_MARKDOWNLEXER
 
-CONFIGS += lexer_markdown
+CONFIG += lexer_markdown
 
 INCLUDEPATH += $$PWD/lib/scintilla/include
 INCLUDEPATH += $$PWD/lib/scintilla/lexlib
@@ -55,23 +55,9 @@ INCLUDEPATH += $$PWD/lib/scintilla/src
 INCLUDEPATH += $$PWD/lib/qsci/QSci
 INCLUDEPATH += $$PWD/lib/qsci
 
-macx {
-    QT_VERSION_MAJOR = $$[QT_VERSION]
-    contains(QT_VERSION_MAJOR, ^5) {
-        #QT += macextras
-
-        #SOURCES += $$PWD/lib/qsci/qmacpasteboardmime.mm
-        #SOURCES += $$PWD/lib/qsci/qmacfunctions.mm
-        #SOURCES += $$PWD/lib/qsci/qmacfunctions_mac.mm
-
-        #HEADERS += $$PWD/lib/qsci/QSci/qmacpasteboardmime.h
-
-        #LIBS += -framework AppKit
-    }
-}
-
 macx:lessThan(QT_MAJOR_VERSION, 6) {
     QT += macextras
+    LIBS += -framework AppKit -framework Cocoa
 }
 
 ####################### QuaZip ##############################################
