@@ -41,7 +41,7 @@ jobs:
           host: mac
           target: desktop
           arch: clang_64 
-          modules: qtcharts qtwebengine qtmacextras
+          modules: qtcharts qtwebengine
           install-deps: true
           source: false
 
