@@ -57,7 +57,7 @@ jobs:
       - name: 编译 qtmacextras
         run: |
           cd qt5/qtmacextras
-          ${{ env.QT_DIR }}/bin/qmake -o Makefile qtmacextras.pro
+          qmake -o Makefile qtmacextras.pro
           make -j4
           sudo make install INSTALL_ROOT=${{ env.QT_DIR }}
 
