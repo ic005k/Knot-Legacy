@@ -8,13 +8,13 @@ on:
 
 env:
   QT_VERSION: 5.15.2
-  ANDROID_API: android-28
-  NDK_VERSION: r21c
+  ANDROID_API: android-30     # 必须升级到 API 30 以获得兼容性
+  NDK_VERSION: r21e           # Qt 5.15 官方验证的 NDK 版本
   QT_HOST: linux
   QT_TARGET: android
-  QT_ARCH: android_arm64_v8a
-  BUILD_TOOLS_VERSION: 31.0.0
-  ANDROID_SDK_ROOT: /opt/android-sdk
+  QT_ARCH: arm64_v8a          # 修正架构标识符
+  BUILD_TOOLS_VERSION: 30.0.3 # 匹配 API 30
+  ANDROID_SDK_ROOT: /opt/android-sdk  # 关键修复：提前定义路径
 
 jobs:
   build:
@@ -40,29 +40,30 @@ jobs:
 
     - name: Install Qt and Android components
       run: |
+        # 创建 SDK 安装目录（关键！）
+        sudo mkdir -p ${{ env.ANDROID_SDK_ROOT }}
+        sudo chmod 777 ${{ env.ANDROID_SDK_ROOT }}
+      
         # 安装 Android 版本的 Qt
-        aqt install-qt linux android ${{ env.QT_VERSION }} \
-            --archives qtbase qttools qtsvg qtcharts \
-            --outputdir /opt/qt \
-            #-m android_arm64_v8a  # 明确指定模块架构
+        aqt install-qt ${{ env.QT_HOST }} ${{ env.QT_TARGET }} ${{ env.QT_VERSION }} \
+          --arch ${{ env.QT_ARCH }} \
+          --outputdir /opt/qt \
+          --modules qtbase qttools qtsvg qtcharts
 
         # 安装 Android SDK/NDK
-        # 安装基础工具链
-          aqt install-tool linux android --rootdir ${{ env.ANDROID_SDK_ROOT }} tools
-          aqt install-tool linux android --rootdir ${{ env.ANDROID_SDK_ROOT }} platform-tools
-
-          # 安装平台和编译工具
-          aqt install-tool linux android --rootdir ${{ env.ANDROID_SDK_ROOT }} platform android-28
-          aqt install-tool linux android --rootdir ${{ env.ANDROID_SDK_ROOT }} build-tools ${{ env.BUILD_TOOLS_VERSION }}
-
-          # 安装 NDK
-          aqt install-tool linux android --rootdir ${{ env.ANDROID_SDK_ROOT }} ndk ${{ env.NDK_VERSION }}
+        aqt install-tool ${{ env.QT_HOST }} ${{ env.QT_TARGET }} \
+          --rootdir ${{ env.ANDROID_SDK_ROOT }} platform-tools
+        aqt install-tool ${{ env.QT_HOST }} ${{ env.QT_TARGET }} \
+          --rootdir ${{ env.ANDROID_SDK_ROOT }} platform ${{ env.ANDROID_API }}
+        aqt install-tool ${{ env.QT_HOST }} ${{ env.QT_TARGET }} \
+          --rootdir ${{ env.ANDROID_SDK_ROOT }} ndk ${{ env.NDK_VERSION }}
+        aqt install-tool ${{ env.QT_HOST }} ${{ env.QT_TARGET }} \
+          --rootdir ${{ env.ANDROID_SDK_ROOT }} build-tools ${{ env.BUILD_TOOLS_VERSION }}
 
     - name: Setup environment
       run: |
-        echo "ANDROID_SDK_ROOT=/opt/android-sdk" >> $GITHUB_ENV
-        echo "ANDROID_NDK_ROOT=/opt/android-sdk/ndk/r21c" >> $GITHUB_ENV
-        echo "PATH=$PATH:/opt/qt/5.15.2/android_arm64_v8a/bin" >> $GITHUB_ENV
+        echo "ANDROID_NDK_ROOT=${{ env.ANDROID_SDK_ROOT }}/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
+        echo "PATH=$PATH:/opt/qt/${{ env.QT_VERSION }}/android_${{ env.QT_ARCH }}/bin" >> $GITHUB_ENV
 
     - name: Generate release keystore
       run: |
