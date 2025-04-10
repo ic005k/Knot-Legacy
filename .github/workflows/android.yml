@@ -8,13 +8,13 @@ on:
 
 env:
   QT_VERSION: 5.15.2
-  ANDROID_API: android-30     # 必须升级到 API 30 以获得兼容性
-  NDK_VERSION: r21e           # Qt 5.15 官方验证的 NDK 版本
+  ANDROID_API: android-30
+  NDK_VERSION: r21e
   QT_HOST: linux
   QT_TARGET: android
-  QT_ARCH: arm64_v8a          
-  BUILD_TOOLS_VERSION: 30.0.3 
-  ANDROID_SDK_ROOT: /opt/android-sdk  
+  QT_ARCH: android_arm64_v8a  # 必须使用带 android_ 前缀的架构标识
+  BUILD_TOOLS_VERSION: 30.0.3
+  ANDROID_SDK_ROOT: /opt/android-sdk
 
 jobs:
   build:
@@ -43,18 +43,18 @@ jobs:
         # 创建 SDK 安装目录（关键！）
         sudo mkdir -p ${{ env.ANDROID_SDK_ROOT }}
         sudo chmod 777 ${{ env.ANDROID_SDK_ROOT }}
-      
-        # 安装 Android 版本的 Qt
-         aqt install-qt ${{ env.QT_HOST }} ${{ env.QT_TARGET }} ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
+        
+        # 安装 Qt（关键修复：使用正确的架构和模块名）
+        aqt install-qt ${{ env.QT_HOST }} ${{ env.QT_TARGET }} ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
           --outputdir /opt/qt \
-          --modules qtbase qttools qtsvg qtcharts
+          --modules qtbase qttools qtsvg qtcharts  # 确保模块名准确
 
-        # 安装 Android SDK/NDK
-        aqt install-tool ${{ env.QT_HOST }} ${{ env.QT_TARGET }} --rootdir ${{ env.ANDROID_SDK_ROOT }} platform-tools
-        aqt install-tool ${{ env.QT_HOST }} ${{ env.QT_TARGET }} --rootdir ${{ env.ANDROID_SDK_ROOT }} platform ${{ env.ANDROID_API }}
-        aqt install-tool ${{ env.QT_HOST }} ${{ env.QT_TARGET }} --rootdir ${{ env.ANDROID_SDK_ROOT }} ndk ${{ env.NDK_VERSION }}
-        aqt install-tool ${{ env.QT_HOST }} ${{ env.QT_TARGET }} --rootdir ${{ env.ANDROID_SDK_ROOT }} build-tools ${{ env.BUILD_TOOLS_VERSION }}
-
+        # 安装 Android 组件（保持参数顺序）
+        aqt install-tool linux android --rootdir ${{ env.ANDROID_SDK_ROOT }} platform-tools
+        aqt install-tool linux android --rootdir ${{ env.ANDROID_SDK_ROOT }} platform ${{ env.ANDROID_API }}
+        aqt install-tool linux android --rootdir ${{ env.ANDROID_SDK_ROOT }} ndk ${{ env.NDK_VERSION }}
+        aqt install-tool linux android --rootdir ${{ env.ANDROID_SDK_ROOT }} build-tools ${{ env.BUILD_TOOLS_VERSION }}
+       
     - name: Setup environment
       run: |
         echo "ANDROID_NDK_ROOT=${{ env.ANDROID_SDK_ROOT }}/ndk/${{ env.NDK_VERSION }}" >> $GITHUB_ENV
