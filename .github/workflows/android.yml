@@ -42,7 +42,7 @@ jobs:
         aqt install-qt linux android ${{ env.QT_VERSION }} \
             --archives qtbase qttools qtsvg qtcharts \
             --outputdir /opt/qt \
-            -m android_arm64_v8a  # 明确指定模块架构
+            #-m android_arm64_v8a  # 明确指定模块架构
 
         # 安装 Android SDK/NDK
         aqt install-tool linux android --rootdir /opt/android-sdk tools
