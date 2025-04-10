@@ -38,10 +38,11 @@ jobs:
 
     - name: Install Qt and Android components
       run: |
+        # 安装 Android 版本的 Qt
         aqt install-qt ${{ env.QT_HOST }} ${{ env.QT_TARGET }} ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
-          --autodesktop \
           --outputdir /opt/qt
 
+        # 安装 Android SDK/NDK
         aqt install-sdk --rootdir /opt/android-sdk ${{ env.QT_HOST }} ${{ env.QT_TARGET }} \
           tools platform-tools platform:${{ env.ANDROID_API }} ndk:${{ env.NDK_VERSION }} build-tools:28.0.3
 
