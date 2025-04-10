@@ -43,7 +43,8 @@ jobs:
         version: ${{ env.QT_VERSION }}
         host: linux
         target: android
-        arch: android_arm64_v8a
+        arch: android_arm64_v8a  # 关键修改点
+        modules: qtbase qtsvg qtdeclarative qtcharts  # 添加必要的模块
 
     - name: Setup Android environment variables
       shell: bash
