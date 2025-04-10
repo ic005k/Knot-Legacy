@@ -3,7 +3,7 @@
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
 #include "ui_MainWindow.h"
 
-QString ver = "1.2.27";
+QString ver = "1.2.28";
 QString appName = "Knot";
 
 QList<QPointF> PointList;
@@ -66,6 +66,8 @@ extern WebDavHelper *listWebDavFiles(const QString &url,
 
 extern bool compressDirectory(const QString &zipPath, const QString &sourceDir,
                               const QString &password);
+
+extern QSplashScreen *splash;
 
 void RegJni(const char *myClassName);
 
@@ -428,6 +430,8 @@ MainWindow::MainWindow(QWidget *parent)
     m_Notes->MD2Html(currentMDFile);
     m_Notes->loadNoteToQML();
   }
+
+  if (!isAndroid) splash->close();
 }
 
 void MainWindow::initHardStepSensor() {

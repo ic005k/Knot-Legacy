@@ -10,6 +10,7 @@
 #include <QGeoServiceProvider>
 #include <QGeoServiceProviderFactory>
 #include <QInputMethod>
+#include <QSplashScreen>
 
 #ifdef Q_OS_ANDROID
 

@@ -1,7 +1,9 @@
 #include <QApplication>
 #include <QDir>
 #include <QObject>
+#include <QProgressBar>
 #include <QQuickWindow>
+#include <QSplashScreen>
 #include <QTranslator>
 #include <QWidget>
 #include <QtWebView/QtWebView>
@@ -37,6 +39,8 @@ QString strJBDict3 = "";
 bool zh_cn = false;
 bool isAndroid, isIOS;
 
+QSplashScreen* splash;
+
 #define Cross_Origin
 
 int main(int argc, char* argv[]) {
@@ -47,6 +51,8 @@ int main(int argc, char* argv[]) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
   {
 #ifdef Q_OS_ANDROID
+    isAndroid = true;
+
     qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
     QGuiApplication::setHighDpiScaleFactorRoundingPolicy(
         Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
@@ -93,6 +99,37 @@ int main(int argc, char* argv[]) {
   QApplication app(argc, argv);
 #endif
 
+  loadLocal();
+
+  if (!isAndroid) {
+    QPixmap pixmap(":/res/icon.png");
+
+    //  按屏幕实际像素需求缩放
+    qreal dpr = qApp->devicePixelRatio();
+    QSize targetSize(220 * dpr, 220 * dpr);  // 适配高 DPI
+
+    // 使用高质量缩放算法
+    pixmap = pixmap.scaled(targetSize, Qt::KeepAspectRatio,
+                           Qt::SmoothTransformation);
+
+    // 直接绘制文本（自动适配 DPI）
+    QPainter painter(&pixmap);
+    painter.setPen(Qt::white);
+    QRect textRect(10 * dpr, (pixmap.height() - 30 * dpr),
+                   (pixmap.width() - 20 * dpr), 20 * dpr);
+    painter.drawText(textRect, Qt::AlignCenter,
+                     QObject::tr("Loading, please wait..."));
+    painter.end();
+
+    // 设置设备像素比
+    pixmap.setDevicePixelRatio(dpr);
+
+    splash = new QSplashScreen(pixmap);
+    splash->setFixedSize(targetSize / dpr);
+
+    splash->show();
+  }
+
   QTextCodec* codec = QTextCodec::codecForName("UTF-8");
   QTextCodec::setCodecForLocale(codec);
 
@@ -130,7 +167,6 @@ int main(int argc, char* argv[]) {
   RegJni("com/x/DefaultOpen");
   RegJni("com/x/DateTimePicker");
 
-  isAndroid = true;
   isIOS = false;
 
   iniDir = "/storage/emulated/0/KnotData/";
@@ -306,8 +342,6 @@ int main(int argc, char* argv[]) {
 
   m_font.setPointSize(fontSize);
   app.setFont(m_font);
-
-  loadLocal();
 
   MainWindow w;
   w.show();
