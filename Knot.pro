@@ -58,6 +58,8 @@ INCLUDEPATH += $$PWD/lib/qsci
 macx {
     QT_VERSION_MAJOR = $$[QT_VERSION]
     contains(QT_VERSION_MAJOR, ^5) {
+        QT += macextras
+
         #SOURCES += $$PWD/lib/qsci/qmacpasteboardmime.mm
         #SOURCES += $$PWD/lib/qsci/qmacfunctions.mm
         #SOURCES += $$PWD/lib/qsci/qmacfunctions_mac.mm
