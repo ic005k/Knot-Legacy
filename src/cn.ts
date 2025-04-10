@@ -7515,37 +7515,37 @@ in skydrive folder</source>
     <message>
         <location filename="../lib/qsci/qsciscintilla.cpp" line="4478"/>
         <source>&amp;Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>撤销</translation>
     </message>
     <message>
         <location filename="../lib/qsci/qsciscintilla.cpp" line="4482"/>
         <source>&amp;Redo</source>
-        <translation type="unfinished"></translation>
+        <translation>恢复</translation>
     </message>
     <message>
         <location filename="../lib/qsci/qsciscintilla.cpp" line="4488"/>
         <source>Cu&amp;t</source>
-        <translation type="unfinished"></translation>
+        <translation>剪切</translation>
     </message>
     <message>
         <location filename="../lib/qsci/qsciscintilla.cpp" line="4493"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>拷贝</translation>
     </message>
     <message>
         <location filename="../lib/qsci/qsciscintilla.cpp" line="4499"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>粘贴</translation>
     </message>
     <message>
         <location filename="../lib/qsci/qsciscintilla.cpp" line="4503"/>
         <source>Delete</source>
-        <translation type="unfinished">删除</translation>
+        <translation>删除</translation>
     </message>
     <message>
         <location filename="../lib/qsci/qsciscintilla.cpp" line="4510"/>
         <source>Select All</source>
-        <translation type="unfinished">全选</translation>
+        <translation>全选</translation>
     </message>
 </context>
 <context>
