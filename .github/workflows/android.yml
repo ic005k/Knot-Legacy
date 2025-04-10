@@ -45,20 +45,15 @@ jobs:
         sudo chmod 777 ${{ env.ANDROID_SDK_ROOT }}
       
         # 安装 Android 版本的 Qt
-         aqt install-qt ${{ env.QT_HOST }} ${{ env.QT_TARGET }} ${{ env.QT_VERSION }} \
-          ${{ env.QT_ARCH }} \  # 关键修改：直接作为位置参数
+         aqt install-qt ${{ env.QT_HOST }} ${{ env.QT_TARGET }} ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} \
           --outputdir /opt/qt \
           --modules qtbase qttools qtsvg qtcharts
 
         # 安装 Android SDK/NDK
-        aqt install-tool ${{ env.QT_HOST }} ${{ env.QT_TARGET }} \
-          --rootdir ${{ env.ANDROID_SDK_ROOT }} platform-tools
-        aqt install-tool ${{ env.QT_HOST }} ${{ env.QT_TARGET }} \
-          --rootdir ${{ env.ANDROID_SDK_ROOT }} platform ${{ env.ANDROID_API }}
-        aqt install-tool ${{ env.QT_HOST }} ${{ env.QT_TARGET }} \
-          --rootdir ${{ env.ANDROID_SDK_ROOT }} ndk ${{ env.NDK_VERSION }}
-        aqt install-tool ${{ env.QT_HOST }} ${{ env.QT_TARGET }} \
-          --rootdir ${{ env.ANDROID_SDK_ROOT }} build-tools ${{ env.BUILD_TOOLS_VERSION }}
+        aqt install-tool ${{ env.QT_HOST }} ${{ env.QT_TARGET }} --rootdir ${{ env.ANDROID_SDK_ROOT }} platform-tools
+        aqt install-tool ${{ env.QT_HOST }} ${{ env.QT_TARGET }} --rootdir ${{ env.ANDROID_SDK_ROOT }} platform ${{ env.ANDROID_API }}
+        aqt install-tool ${{ env.QT_HOST }} ${{ env.QT_TARGET }} --rootdir ${{ env.ANDROID_SDK_ROOT }} ndk ${{ env.NDK_VERSION }}
+        aqt install-tool ${{ env.QT_HOST }} ${{ env.QT_TARGET }} --rootdir ${{ env.ANDROID_SDK_ROOT }} build-tools ${{ env.BUILD_TOOLS_VERSION }}
 
     - name: Setup environment
       run: |
