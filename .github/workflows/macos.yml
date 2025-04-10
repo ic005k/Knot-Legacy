@@ -46,6 +46,7 @@ jobs:
           modules: qtcharts qtwebengine
           install-deps: true
           source: false
+          dir: ${{ env.QT_DIR }}  # 关键：指定安装到正确路径
 
       - name: 克隆 Qt 源码
         run: |
@@ -58,7 +59,7 @@ jobs:
           cd qt5/qtmacextras
           ${{ env.QT_DIR }}/bin/qmake -o Makefile qtmacextras.pro
           make -j4
-          sudo make install INSTALL_ROOT=${{ env.QT_DIR }}    
+          sudo make install INSTALL_ROOT=${{ env.QT_DIR }}
 
       - name: Install Homebrew (x86_64)
         run: |
