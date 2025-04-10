@@ -540,8 +540,12 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        AnimationWhenClosed();
+        if (isTextChanged)
+            showNormalDialog();
+        else {
+            super.onBackPressed();
+            AnimationWhenClosed();
+        }
 
     }
 
@@ -572,7 +576,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
 
         if (isTextChanged) {
-            saveNote();
+            // saveNote();
 
         } else {
             if (MyActivity.isEdit) {
@@ -1080,24 +1084,35 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
          * setXXX方法返回Dialog对象，因此可以链式设置属性
          */
         final AlertDialog.Builder normalDialog = new AlertDialog.Builder(NoteEditor.this);
-        // normalDialog.setIcon(R.drawable.alarm.png);
+        normalDialog.setIcon(R.drawable.alarm);
         normalDialog.setTitle("Knot");
-        normalDialog.setMessage("The text has been modified. Do you want to save?");
-        normalDialog.setPositiveButton("Yes",
+        String strYes, strNo;
+        if (!zh_cn) {
+            normalDialog.setMessage("The text has been modified. Do you want to save?");
+            strYes = "Yes";
+            strNo = "No";
+        } else {
+            normalDialog.setMessage("文本被修改，是否保存？");
+            strYes = "是";
+            strNo = "否";
+        }
+        normalDialog.setPositiveButton(strYes,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // ...To-do
                         saveNote();
+                        finish();
 
                     }
                 });
-        normalDialog.setNegativeButton("No",
+        normalDialog.setNegativeButton(strNo,
                 new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // ...To-do
+                        finish();
                     }
                 });
         // 显示
