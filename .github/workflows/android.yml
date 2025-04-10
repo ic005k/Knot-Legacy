@@ -44,7 +44,8 @@ jobs:
         host: linux
         target: android
         arch: android_arm64_v8a  # 关键修改点
-        modules: qtbase qtsvg qtdeclarative qtcharts  # 添加必要的模块
+        modules: qtcharts  # 添加必要的模块
+        archives: qtbase qtsvg qtdeclarative qtgamepad qtgraphicaleffects qtimageformats qtlocation
 
     - name: Setup Android environment variables
       shell: bash
