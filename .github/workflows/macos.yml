@@ -79,9 +79,10 @@ jobs:
          brew install openssl
          brew link openssl --force
                     
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
+      #- uses: actions/checkout@v4
+       # with:
+        #  fetch-depth: 1
+          
       - name: build macos
         run: |
           #QT_INSTALL_PATH="/Users/runner/Qt/5.15.2/clang_64"
