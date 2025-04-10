@@ -28,8 +28,7 @@ jobs:
       VERSION: Mac
       orgName: Knot
 
-      QT_VERSION: "5.15.2"
-      QT_DIR: ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/clang_64  # 显式定义 Qt 安装路径
+      QT_DIR: ${{ github.workspace }}/Qt/5.15.2/clang_64  # 自定义路径
       
     steps:
       - name: Checkout code
@@ -57,7 +56,6 @@ jobs:
       - name: 编译 qtmacextras
         run: |
           cd qt5/qtmacextras
-          # 使用绝对路径调用 qmake
           ${{ env.QT_DIR }}/bin/qmake -o Makefile qtmacextras.pro
           make -j4
           sudo make install INSTALL_ROOT=${{ env.QT_DIR }}    
