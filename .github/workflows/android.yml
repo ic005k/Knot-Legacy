@@ -9,7 +9,7 @@ on:
 env:
   QT_VERSION: 5.12.2
   ANDROID_API: android-28
-  NDK_VERSION: r19c
+  NDK_VERSION: r21c
   QT_HOST: linux
   QT_TARGET: android
   QT_ARCH: android_arm64_v8a
@@ -43,8 +43,11 @@ jobs:
           --outputdir /opt/qt
 
         # 安装 Android SDK/NDK
-        aqt install-tool --rootdir /opt/android-sdk ${{ env.QT_HOST }} ${{ env.QT_TARGET }} \
-          tools platform-tools platform ${{ env.ANDROID_API }} ndk ${{ env.NDK_VERSION }} build-tools 28.0.3
+        aqt install-tool linux android \
+          --rootdir ${{ env.ANDROID_SDK_ROOT }} \
+          tools platform-tools platform ${{ env.ANDROID_API }} \
+          ndk ${{ env.NDK_VERSION }} \
+          build-tools 28.0.3
 
     - name: Setup environment
       run: |
