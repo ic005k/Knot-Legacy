@@ -13,6 +13,7 @@ env:
   QT_HOST: linux
   QT_TARGET: android
   QT_ARCH: android_arm64_v8a
+  BUILD_TOOLS_VERSION: 31.0.0
 
 jobs:
   build:
@@ -45,11 +46,16 @@ jobs:
             #-m android_arm64_v8a  # 明确指定模块架构
 
         # 安装 Android SDK/NDK
-        aqt install-tool linux android --rootdir /opt/android-sdk tools
-        aqt install-tool linux android --rootdir /opt/android-sdk platform-tools
-        aqt install-tool linux android --rootdir /opt/android-sdk platform android-28
-        aqt install-tool linux android --rootdir /opt/android-sdk ndk r21c
-        aqt install-tool linux android --rootdir /opt/android-sdk build-tools 31.0.0  # 注意版本号格式
+        # 安装基础工具链
+          aqt install-tool linux android --rootdir ${{ env.ANDROID_SDK_ROOT }} tools
+          aqt install-tool linux android --rootdir ${{ env.ANDROID_SDK_ROOT }} platform-tools
+
+          # 安装平台和编译工具
+          aqt install-tool linux android --rootdir ${{ env.ANDROID_SDK_ROOT }} platform android-28
+          aqt install-tool linux android --rootdir ${{ env.ANDROID_SDK_ROOT }} build-tools ${{ env.BUILD_TOOLS_VERSION }}
+
+          # 安装 NDK
+          aqt install-tool linux android --rootdir ${{ env.ANDROID_SDK_ROOT }} ndk ${{ env.NDK_VERSION }}
 
     - name: Setup environment
       run: |
