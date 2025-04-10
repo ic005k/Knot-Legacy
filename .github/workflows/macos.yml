@@ -79,7 +79,7 @@ jobs:
          brew install openssl
          brew link openssl --force
                     
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 1
       - name: build macos
