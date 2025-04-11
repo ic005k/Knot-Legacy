@@ -3,10 +3,12 @@
 #include <QKeyEvent>
 
 #include "MainWindow.h"
+#include "src/onedrive/qtonedriveauthorizationdialog.h"
 #include "ui_MainWindow.h"
 #include "ui_Preferences.h"
+
 extern QString iniFile, iniDir, privateDir, defaultFontFamily, customFontFamily,
-    encPassword;
+    encPassword, bakfileDir;
 extern MainWindow* mw_one;
 extern Method* m_Method;
 extern bool isBreak, isDark, isEncrypt;
@@ -14,6 +16,7 @@ extern int fontSize;
 extern QSettings* iniPreferences;
 extern ReaderSet* m_ReaderSet;
 extern CloudBackup* m_CloudBackup;
+extern QtOneDriveAuthorizationDialog* dialog_;
 
 QFont::Weight readerFontWeight;
 
@@ -27,6 +30,7 @@ Preferences::Preferences(QWidget* parent)
   ui->chkAutoTime->setFont(font0);
   ui->chkZip->setFont(font0);
   ui->btnReStart->setFont(font0);
+  ui->tabWidget->setCurrentIndex(0);
 
 #ifdef Q_OS_ANDROID
   ui->sliderFontSize->setMinimum(15);
@@ -534,3 +538,92 @@ void Preferences::on_btnShowValidate_released() {
 }
 
 void Preferences::on_chkDark_clicked() {}
+
+void Preferences::on_btnWebDAVBackup_clicked() {
+  if (!mw_one->ui->btnReader->isEnabled()) return;
+  m_CloudBackup->startBakData();
+}
+
+void Preferences::on_btnWebDAVRestore_clicked() {
+  QString filePath;
+  filePath = bakfileDir + "memo.zip";
+
+  if (QFile(filePath).exists()) QFile(filePath).remove();
+  if (filePath.isEmpty()) return;
+
+  ShowMessage* m_ShowMsg = new ShowMessage(this);
+  if (!m_ShowMsg->showMsg(
+          "WebDAV",
+          tr("Downloading data?") + "\n\n" +
+              tr("This action overwrites local files with files in the cloud."),
+          2))
+    return;
+  m_CloudBackup->WEBDAV_URL = ui->editWebDAV->text().trimmed();
+  m_CloudBackup->USERNAME = ui->editWebDAVUsername->text().trimmed();
+  m_CloudBackup->APP_PASSWORD = ui->editWebDAVPassword->text().trimmed();
+  m_CloudBackup->downloadFile("Knot/memo.zip", filePath);
+  ui->progressBar->setValue(0);
+}
+
+void Preferences::on_btnSignIn_clicked() {
+  m_CloudBackup->on_pushButton_SignIn_clicked();
+}
+
+void Preferences::on_btnSignOut_clicked() {
+  m_CloudBackup->on_pushButton_SingOut_clicked();
+}
+
+void Preferences::on_btnRefreshToken_clicked() {
+  m_CloudBackup->on_pushButton_clicked();
+}
+
+void Preferences::on_btnUserInfo_clicked() {
+  // 获取openssl相关信息并自行编译安装 Qt6.4(1.1.1.m版本的openssl）
+  // openssl下载网址：https://www.openssl.org/source/old/
+  QNetworkAccessManager* manager = new QNetworkAccessManager(this);
+  qDebug() << manager->supportedSchemes();
+  qDebug() << QSslSocket::sslLibraryBuildVersionString();
+
+  m_CloudBackup->on_pushButton_GetUserInfo_clicked();
+}
+
+void Preferences::on_btnUpload_clicked() {
+  if (!mw_one->ui->btnReader->isEnabled()) return;
+  m_CloudBackup->startBakData();
+}
+
+void Preferences::on_btnDownload_clicked() {
+  m_CloudBackup->on_pushButton_downloadFile_clicked();
+}
+
+void Preferences::on_btnPasteCode_clicked() {
+  QClipboard* clipboard = QApplication::clipboard();
+  QString originalText = clipboard->text();
+  ui->editCode->setPlainText(originalText);
+}
+
+void Preferences::on_btnCode_clicked() {
+  QString str = ui->editCode->toPlainText().trimmed();
+  if (str != "" && str.contains("?code=")) {
+    dialog_->sendMsg(str);
+  }
+}
+
+void Preferences::on_btnRefreshWeb_clicked() {
+  ui->qwOneDriver->rootContext()->setContextProperty("initialUrl",
+                                                     strRefreshUrl);
+}
+
+void Preferences::on_chkWebDAV_clicked() {
+  if (ui->chkWebDAV->isChecked())
+    ui->chkOneDrive->setChecked(false);
+  else
+    ui->chkOneDrive->setChecked(true);
+}
+
+void Preferences::on_chkOneDrive_clicked() {
+  if (ui->chkOneDrive->isChecked())
+    ui->chkWebDAV->setChecked(false);
+  else
+    ui->chkWebDAV->setChecked(true);
+}

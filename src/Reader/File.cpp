@@ -101,7 +101,7 @@ QString File::webEnd() { return m_strUri; }
 
 void File::setWebEnd(QString &strUri) {
   m_strUri = strUri;
-  mw_one->strRefreshUrl = m_strUri;
+  mw_one->m_Preferences->strRefreshUrl = m_strUri;
 
   if (m_strUri.contains("?code=")) dialog_->sendMsg(m_strUri);
 

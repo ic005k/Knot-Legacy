@@ -17,6 +17,8 @@ class Preferences : public QDialog {
   ~Preferences();
   Ui::Preferences *ui;
 
+  QString strRefreshUrl;
+
   bool devMode = false;
   QString chkStyle;
   bool isFontChange = false;
@@ -47,6 +49,7 @@ class Preferences : public QDialog {
   bool eventFilter(QObject *watch, QEvent *evn) override;
   void closeEvent(QCloseEvent *event) override;
  public slots:
+  void on_btnUpload_clicked();
 
  private slots:
   void on_btnBack_clicked();
@@ -80,6 +83,30 @@ class Preferences : public QDialog {
   void on_btnShowValidate_released();
 
   void on_chkDark_clicked();
+
+  void on_btnWebDAVBackup_clicked();
+
+  void on_btnWebDAVRestore_clicked();
+
+  void on_btnSignIn_clicked();
+
+  void on_btnSignOut_clicked();
+
+  void on_btnRefreshToken_clicked();
+
+  void on_btnUserInfo_clicked();
+
+  void on_btnDownload_clicked();
+
+  void on_btnPasteCode_clicked();
+
+  void on_btnCode_clicked();
+
+  void on_btnRefreshWeb_clicked();
+
+  void on_chkWebDAV_clicked();
+
+  void on_chkOneDrive_clicked();
 
  private:
   QString iniBakFiles = "BakFiles.ini";

@@ -1,6 +1,5 @@
 ﻿#include "MainWindow.h"
 
-#include "src/onedrive/qtonedriveauthorizationdialog.h"
 #include "ui_MainWindow.h"
 
 QString ver = "1.2.28";
@@ -47,7 +46,7 @@ extern QString btnYearText, btnMonthText, strPage, ebookFile, strTitle,
 extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
     s_y2, s_m2, s_d2;
 extern QStringList readTextList, htmlFiles, listCategory;
-extern QtOneDriveAuthorizationDialog *dialog_;
+
 extern CategoryList *m_CategoryList;
 extern ReaderSet *m_ReaderSet;
 extern TextSelector *m_TextSelector;
@@ -3084,20 +3083,22 @@ void MainWindow::startInitReport() {
 }
 
 void MainWindow::on_actionPreferences_triggered() {
-  int x, y;
+  int x, y, h;
   if (isAndroid) {
     m_Preferences->setFixedWidth(this->width());
     m_Preferences->setFixedHeight(this->height());
     x = geometry().x();
     y = geometry().y();
+    h = this->height();
   } else {
-    x = geometry().x() + (width() - m_Preferences->width()) / 2;
-    y = geometry().y() + (height() - m_Preferences->height()) / 2;
+    x = m_Preferences->geometry().x();
+    y = m_Preferences->geometry().y();
+    h = m_Preferences->geometry().height();
   }
 
-  if (y < 0) y = 50;
+  if (y < 0) y = 0;
 
-  m_Preferences->setGeometry(x, y, m_Preferences->width(), height());
+  m_Preferences->setGeometry(x, y, m_Preferences->width(), h);
   m_Preferences->setModal(true);
   m_Preferences->ui->sliderFontSize->setStyleSheet(ui->hsM->styleSheet());
   m_Preferences->ui->sliderFontSize->setValue(fontSize);
@@ -4605,23 +4606,6 @@ void MainWindow::on_btnSelText_clicked() {
   m_Reader->selectText();
 }
 
-void MainWindow::on_btnSignIn_clicked() {
-  m_CloudBackup->on_pushButton_SignIn_clicked();
-}
-
-void MainWindow::on_btnSignOut_clicked() {
-  m_CloudBackup->on_pushButton_SingOut_clicked();
-}
-
-void MainWindow::on_btnUpload_clicked() {
-  if (!ui->btnReader->isEnabled()) return;
-  m_CloudBackup->startBakData();
-}
-
-void MainWindow::on_btnDownload_clicked() {
-  m_CloudBackup->on_pushButton_downloadFile_clicked();
-}
-
 void MainWindow::on_btnBack_One_clicked() {
   if (!ui->frameOne->isHidden()) {
     if (m_Preferences->ui->f_OneFun->isHidden()) {
@@ -4655,27 +4639,8 @@ void MainWindow::on_btnBack_One_clicked() {
   setEncSyncStatusTip();
 }
 
-void MainWindow::on_btnRefreshToken_clicked() {
-  m_CloudBackup->on_pushButton_clicked();
-}
-
 void MainWindow::on_btnStorageInfo_clicked() {
   m_CloudBackup->on_pushButton_storageInfo_clicked();
-}
-
-void MainWindow::on_btnRefreshWeb_clicked() {
-  m_Preferences->ui->qwOneDriver->rootContext()->setContextProperty(
-      "initialUrl", strRefreshUrl);
-}
-
-void MainWindow::on_btnUserInfo_clicked() {
-  // 获取openssl相关信息并自行编译安装 Qt6.4(1.1.1.m版本的openssl）
-  // openssl下载网址：https://www.openssl.org/source/old/
-  QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-  qDebug() << manager->supportedSchemes();
-  qDebug() << QSslSocket::sslLibraryBuildVersionString();
-
-  m_CloudBackup->on_pushButton_GetUserInfo_clicked();
 }
 
 void MainWindow::on_btnBackNotes_clicked() {
@@ -4691,13 +4656,6 @@ void MainWindow::on_btnBackNotes_clicked() {
 void MainWindow::on_btnSetKey_clicked() {}
 
 void MainWindow::on_btnEdit_clicked() { m_Notes->openEditUI(); }
-
-void MainWindow::on_btnCode_clicked() {
-  QString str = m_Preferences->ui->editCode->toPlainText().trimmed();
-  if (str != "" && str.contains("?code=")) {
-    dialog_->sendMsg(str);
-  }
-}
 
 void MainWindow::clearSelectBox() {
   QString tempFile = iniDir + "memo/texteditor.html";
@@ -4830,12 +4788,6 @@ void MainWindow::on_btnZoomOut_clicked() {
 void MainWindow::on_btnReport_clicked() {
   on_actionReport_triggered();
   ui->btnYear->setFixedHeight(ui->btnMonth->height());
-}
-
-void MainWindow::on_btnPasteCode_clicked() {
-  QClipboard *clipboard = QApplication::clipboard();
-  QString originalText = clipboard->text();
-  m_Preferences->ui->editCode->setPlainText(originalText);
 }
 
 void MainWindow::on_btnAdd_clicked() {
@@ -5152,7 +5104,7 @@ void MainWindow::on_btnCategory_clicked() {
   m_Report->on_btnCategory_clicked();
 }
 
-void MainWindow::on_btnSync_clicked() { on_btnUpload_clicked(); }
+void MainWindow::on_btnSync_clicked() { m_Preferences->on_btnUpload_clicked(); }
 
 void MainWindow::on_btnPDF_clicked() { m_Notes->on_btnPDF_clicked(); }
 
@@ -6006,48 +5958,6 @@ void MainWindow::on_btnRecentOpen0_clicked() { on_btnRecentOpen_clicked(); }
 void MainWindow::on_btnWebBack_clicked() {
   QQuickItem *root = mw_one->ui->qwNotes->rootObject();
   QMetaObject::invokeMethod((QObject *)root, "goBack");
-}
-
-void MainWindow::on_btnWebDAVBackup_clicked() {
-  if (!ui->btnReader->isEnabled()) return;
-  m_CloudBackup->startBakData();
-}
-
-void MainWindow::on_btnWebDAVRestore_clicked() {
-  QString filePath;
-  filePath = bakfileDir + "memo.zip";
-
-  if (QFile(filePath).exists()) QFile(filePath).remove();
-  if (filePath.isEmpty()) return;
-
-  ShowMessage *m_ShowMsg = new ShowMessage(this);
-  if (!m_ShowMsg->showMsg(
-          "WebDAV",
-          tr("Downloading data?") + "\n\n" +
-              tr("This action overwrites local files with files in the cloud."),
-          2))
-    return;
-  m_CloudBackup->WEBDAV_URL = m_Preferences->ui->editWebDAV->text().trimmed();
-  m_CloudBackup->USERNAME =
-      m_Preferences->ui->editWebDAVUsername->text().trimmed();
-  m_CloudBackup->APP_PASSWORD =
-      m_Preferences->ui->editWebDAVPassword->text().trimmed();
-  m_CloudBackup->downloadFile("Knot/memo.zip", filePath);
-  m_Preferences->ui->progressBar->setValue(0);
-}
-
-void MainWindow::on_chkWebDAV_clicked() {
-  if (m_Preferences->ui->chkWebDAV->isChecked())
-    m_Preferences->ui->chkOneDrive->setChecked(false);
-  else
-    m_Preferences->ui->chkOneDrive->setChecked(true);
-}
-
-void MainWindow::on_chkOneDrive_clicked() {
-  if (m_Preferences->ui->chkOneDrive->isChecked())
-    m_Preferences->ui->chkWebDAV->setChecked(false);
-  else
-    m_Preferences->ui->chkWebDAV->setChecked(true);
 }
 
 void MainWindow::on_btnBack_NotesSearchResult_clicked() {
