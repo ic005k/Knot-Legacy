@@ -198,8 +198,8 @@ void Todo::closeTodo() {
   refreshAlarm();
   mw_one->ui->qwTodo->rootContext()->setContextProperty("isBtnVisible", false);
 
-  if (isNeedSync && mw_one->m_Preferences->ui->chkAutoSync->isChecked() &&
-      mw_one->m_Preferences->ui->chkWebDAV->isChecked()) {
+  if (isNeedSync && mw_one->ui->chkAutoSync->isChecked() &&
+      mw_one->ui->chkWebDAV->isChecked()) {
     QString todoFile = iniDir + "todo.ini";
     QString todoZipFile = privateDir + "KnotData/todo.ini.zip";
 
@@ -1403,8 +1403,8 @@ void Todo::openTodo() {
   m_TextSelector = new TextSelector(mw_one);
   isPasswordError = false;
 
-  if (mw_one->m_Preferences->ui->chkAutoSync->isChecked() &&
-      mw_one->m_Preferences->ui->chkWebDAV->isChecked()) {
+  if (mw_one->ui->chkAutoSync->isChecked() &&
+      mw_one->ui->chkWebDAV->isChecked()) {
     mw_one->showProgress();
 
     m_CloudBackup->createRemoteWebDAVDir();

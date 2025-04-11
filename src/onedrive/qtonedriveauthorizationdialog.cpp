@@ -32,13 +32,12 @@ QtOneDriveAuthorizationDialog::QtOneDriveAuthorizationDialog(const QUrl &url,
   isExists_ = true;
 
 #ifdef Q_OS_ANDROID
-  mw_one->m_Preferences->ui->f_OneFun->hide();
-  mw_one->m_Preferences->ui->f_FunWeb->show();
+  mw_one->ui->f_OneFun->hide();
+  mw_one->ui->f_FunWeb->show();
 
-  mw_one->m_Preferences->ui->qwOneDriver->setSource(
+  mw_one->ui->qwOneDriver->setSource(
       QUrl(QStringLiteral("qrc:/src/onedrive/web.qml")));
-  mw_one->m_Preferences->ui->qwOneDriver->rootContext()->setContextProperty(
-      "initialUrl", url);
+  mw_one->ui->qwOneDriver->rootContext()->setContextProperty("initialUrl", url);
 
 #else
 
@@ -80,8 +79,8 @@ void QtOneDriveAuthorizationDialog::on_timer() {
   if (isNeedToClose_) {
     close();
     timer->stop();
-    mw_one->m_Preferences->ui->f_OneFun->show();
-    mw_one->m_Preferences->ui->f_FunWeb->hide();
+    mw_one->ui->f_OneFun->show();
+    mw_one->ui->f_FunWeb->hide();
     m_CloudBackup->loadLogQML();
   }
 }

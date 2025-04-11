@@ -195,7 +195,7 @@ class MainWindow : public QMainWindow {
   bool floatfun = true;
   int alertWindowsCount = 0;
   QString strText;
-
+  QString strRefreshUrl;
   QString CurrentYear = "20xx";
   qreal curx = 0;
   bool isMousePress = false;
@@ -405,6 +405,7 @@ class MainWindow : public QMainWindow {
   void on_btnPageUp_clicked();
   void on_btnPageNext_clicked();
 
+  void on_actionOneDriveBackupData();
   void on_AddRecord();
   void on_actionReport_triggered();
 
@@ -487,15 +488,31 @@ class MainWindow : public QMainWindow {
 
   void on_btnSelText_clicked();
 
+  void on_btnSignIn_clicked();
+
+  void on_btnSignOut_clicked();
+
+  void on_btnUpload_clicked();
+
+  void on_btnDownload_clicked();
+
   void on_btnBack_One_clicked();
 
+  void on_btnRefreshToken_clicked();
+
   void on_btnStorageInfo_clicked();
+
+  void on_btnRefreshWeb_clicked();
+
+  void on_btnUserInfo_clicked();
 
   void on_btnBackNotes_clicked();
 
   void on_btnSetKey_clicked();
 
   void on_btnEdit_clicked();
+
+  void on_btnCode_clicked();
 
   void on_btnNotes_clicked();
 
@@ -545,6 +562,8 @@ class MainWindow : public QMainWindow {
   void on_btnBackImg_clicked();
 
   void on_btnReport_clicked();
+
+  void on_btnPasteCode_clicked();
 
   void on_btnAdd_clicked();
 
@@ -824,6 +843,14 @@ class MainWindow : public QMainWindow {
   void on_btnRecentOpen0_clicked();
 
   void on_btnWebBack_clicked();
+
+  void on_btnWebDAVBackup_clicked();
+
+  void on_btnWebDAVRestore_clicked();
+
+  void on_chkWebDAV_clicked();
+
+  void on_chkOneDrive_clicked();
 
   void on_btnBack_NotesSearchResult_clicked();
 
