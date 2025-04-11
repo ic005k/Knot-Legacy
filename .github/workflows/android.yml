@@ -38,27 +38,32 @@ jobs:
           "ndk;${{ env.NDK_VERSION }}" \
           "cmdline-tools;latest"
 
-    - name: Install Qt
-      uses: jurplel/install-qt-action@v4
-      with:
-        cached: 'false'
-        version: ${{ env.QT_VERSION }}
-        host: linux     # 宿主平台
-        target: android # 目标平台
-        arch: ${{ env.QT_ARCH }}
-        tools: auto     # 自动安装android sdk
-        install-deps: true  # 自动安装系统依赖
+    #- name: Install Qt
+    #  uses: jurplel/install-qt-action@v4
+    #  with:
+     #   cached: 'false'
+      #  version: ${{ env.QT_VERSION }}
+       # host: linux     # 宿主平台
+        #target: android # 目标平台
+        #arch: ${{ env.QT_ARCH }}
+        #tools: auto     # 自动安装android sdk
+        #install-deps: true  # 自动安装系统依赖
         # modules: qtcharts qtwebengine
-        archives: qtbase qtsvg qtlocation
+       # archives: qtbase qtsvg qtlocation
 
-    - name: Debug Qt installation
+     # 使用 aqtinstall 安装 Qt（含安卓模块）
+    - name: Install Qt for Android
       run: |
-        if [ -d "${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android_arm64_v8a" ]; then
-          echo "Qt installed successfully at ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android_arm64_v8a"
-          ls -l ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android_arm64_v8a
-        else
-          echo "Qt installation failed."
-        fi
+        aqt install-qt \
+          linux android \
+          $QT_VERSION \
+          --archives \
+            android_arm64_v8a \
+            android_armv7 \
+            # 可选：额外模块如 qtcharts、qtquick3d
+            qtcharts \
+            qtquick3d \
+          --autodesktop    # 自动接受桌面依赖
         
     - name: Setup Android environment variables
       shell: bash
