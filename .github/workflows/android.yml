@@ -49,7 +49,16 @@ jobs:
         tools: auto     # 自动安装android sdk
         install-deps: true  # 自动安装系统依赖
         # modules: qtcharts qtwebengine
-        archives: qt_base qtsvg qtlocation
+        archives: qtbase qtsvg qtlocation
+
+    - name: Debug Qt installation
+      run: |
+        if [ -d "${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android_arm64_v8a" ]; then
+          echo "Qt installed successfully at ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android_arm64_v8a"
+          ls -l ${{ github.workspace }}/Qt/${{ env.QT_VERSION }}/android_arm64_v8a
+        else
+          echo "Qt installation failed."
+        fi
         
     - name: Setup Android environment variables
       shell: bash
