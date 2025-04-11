@@ -74,8 +74,7 @@ jobs:
             android_arm64_v8a \
             android_armv7 \
             # 可选：额外模块如 qtcharts、qtquick3d
-            qtcharts \
-            qtquick3d \
+          --modules qtcharts qtlocation qtsvg  
           --autodesktop    # 自动接受桌面依赖
         
     - name: Setup Android environment variables
