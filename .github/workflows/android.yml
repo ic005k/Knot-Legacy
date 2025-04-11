@@ -39,7 +39,7 @@ jobs:
           "cmdline-tools;latest"
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v3
+      uses: jurplel/install-qt-action@v4
       with:
         cached: 'false'
         version: ${{ env.QT_VERSION }}
@@ -49,6 +49,7 @@ jobs:
         tools: auto     # 自动安装android sdk
         install-deps: true  # 自动安装系统依赖
         # modules: qtcharts qtwebengine
+        archives: qtbase qtsvg qtlocation
         
     - name: Setup Android environment variables
       shell: bash
