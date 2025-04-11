@@ -119,7 +119,7 @@ void ShowMessage::init() {
   int nEditH = mw_one->m_Todo->getEditTextHeight(ui->editMsg);
   int nH = 0;
   nH = nEditH + ui->btnCancel->height() + ui->lblTitle->height() +
-       ui->hframe->height() + 50;
+       ui->hframe->height() + 70;
 
   if (nH > mw_one->height()) nH = mw_one->height() - 10;
   ui->frame->setFixedHeight(nH);

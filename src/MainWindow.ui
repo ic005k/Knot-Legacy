@@ -2378,7 +2378,7 @@ QTabBar::scroller {width:0}
        <item>
         <widget class="QTabWidget" name="twCloudBackup">
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tab_3">
           <attribute name="title">
@@ -2689,11 +2689,33 @@ QTabBar::scroller {width:0}
                </widget>
               </item>
               <item>
+               <widget class="QLabel" name="label_2">
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                  <bold>false</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Paste the URL with the authentication code to obtain authentication:</string>
+                </property>
+                <property name="wordWrap">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QFrame" name="f_FunWeb">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="maximumSize">
                  <size>
                   <width>16777215</width>
-                  <height>120</height>
+                  <height>16777215</height>
                  </size>
                 </property>
                 <property name="frameShape">
@@ -2720,7 +2742,7 @@ QTabBar::scroller {width:0}
                    <item>
                     <widget class="QToolButton" name="btnPasteCode">
                      <property name="sizePolicy">
-                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                        <horstretch>0</horstretch>
                        <verstretch>0</verstretch>
                       </sizepolicy>
@@ -2747,7 +2769,7 @@ QTabBar::scroller {width:0}
                      <property name="maximumSize">
                       <size>
                        <width>16777215</width>
-                       <height>16777215</height>
+                       <height>32</height>
                       </size>
                      </property>
                      <property name="verticalScrollBarPolicy">
@@ -2755,9 +2777,6 @@ QTabBar::scroller {width:0}
                      </property>
                      <property name="horizontalScrollBarPolicy">
                       <enum>Qt::ScrollBarAlwaysOff</enum>
-                     </property>
-                     <property name="placeholderText">
-                      <string>Url with authorization code</string>
                      </property>
                     </widget>
                    </item>
@@ -2886,50 +2905,90 @@ QTabBar::scroller {width:0}
                </layout>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_68">
-                <item>
-                 <widget class="QLabel" name="label_6">
-                  <property name="text">
-                   <string>WebDAV</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="editWebDAV">
-                  <property name="text">
-                   <string>https://dav.jianguoyun.com/dav/</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
+               <spacer name="verticalSpacer_6">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_69">
-                <item>
-                 <widget class="QLabel" name="label_7">
-                  <property name="text">
-                   <string>UserName</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="editWebDAVUsername"/>
-                </item>
-               </layout>
+               <widget class="QLabel" name="label_6">
+                <property name="text">
+                 <string>WebDAV Url:</string>
+                </property>
+               </widget>
               </item>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_70">
-                <item>
-                 <widget class="QLabel" name="label_8">
-                  <property name="text">
-                   <string>Password</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="editWebDAVPassword"/>
-                </item>
-               </layout>
+               <widget class="QLineEdit" name="editWebDAV">
+                <property name="text">
+                 <string>https://dav.jianguoyun.com/dav/</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_7">
+                <property name="text">
+                 <string>UserName:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="editWebDAVUsername"/>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_3">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_8">
+                <property name="text">
+                 <string>Password:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="editWebDAVPassword"/>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_4">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
               </item>
               <item>
                <widget class="QCheckBox" name="chkAutoSync">
