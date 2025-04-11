@@ -67,12 +67,8 @@ jobs:
      # 使用 aqtinstall 安装 Qt（含安卓模块）
     - name: Install Qt for Android
       run: |
-        aqt install-qt \
-          linux android \
-          $QT_VERSION \
-          android_arm64_v8a \  # 指定安卓架构（arm64）
-          --modules qtcharts qtlocation qtsvg \  # 安装模块
-          --autodesktop
+        aqt install-qt linux android 5.15.2 android_arm64_v8a \
+        --modules qtcharts qtlocation qtsvg
         
     - name: Setup Android environment variables
       shell: bash
