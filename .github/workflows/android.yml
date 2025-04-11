@@ -49,7 +49,7 @@ jobs:
         tools: auto     # 自动安装android sdk
         install-deps: true  # 自动安装系统依赖
         # modules: qtcharts qtwebengine
-        archives: qtbase qtsvg qtlocation
+        archives: qt_base qtsvg qtlocation
         
     - name: Setup Android environment variables
       shell: bash
