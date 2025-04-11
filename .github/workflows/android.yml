@@ -39,22 +39,17 @@ jobs:
           "cmdline-tools;latest"
 
     - name: Install Qt
-      uses: jurplel/install-qt-action@v4
+      uses: jurplel/install-qt-action@v3
       with:
+        cached: 'false'
         version: ${{ env.QT_VERSION }}
         host: linux     # 宿主平台
         target: android # 目标平台
         arch: ${{ env.QT_ARCH }}
-        modules: "qtcharts"  # 必须明确指定核心模块
-        archives: "qtlocation qtbase qtsvg"  # 确保基础工具链
         tools: auto     # 自动安装android sdk
         install-deps: true  # 自动安装系统依赖
-        # 国内用户推荐镜像配置
-        mirror: "https://mirrors.ustc.edu.cn/qtproject"
-        # 高级调试参数
-        log-level: debug
-        timeout: 1800
-
+        modules: qtcharts qtwebengine
+        
     - name: Setup Android environment variables
       shell: bash
       run: |
