@@ -54,6 +54,7 @@ Preferences::Preferences(QWidget* parent)
   ui->chkAutoTime->hide();
   ui->chkAniEffects->hide();
   ui->lblZipTip->hide();
+  ui->btnRefreshWeb->hide();
 
   ui->lblFontSize->setText(tr("Font Size") + " : " + QString::number(fontSize));
   isFontChange = false;
@@ -610,8 +611,8 @@ void Preferences::on_btnCode_clicked() {
 }
 
 void Preferences::on_btnRefreshWeb_clicked() {
-  ui->qwOneDriver->rootContext()->setContextProperty("initialUrl",
-                                                     strRefreshUrl);
+  // ui->qwOneDriver->rootContext()->setContextProperty("initialUrl",
+  //                                                    strRefreshUrl);
 }
 
 void Preferences::on_chkWebDAV_clicked() {

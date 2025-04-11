@@ -32,12 +32,13 @@ QtOneDriveAuthorizationDialog::QtOneDriveAuthorizationDialog(const QUrl &url,
   isExists_ = true;
 
 #ifdef Q_OS_ANDROID
-  mw_one->ui->f_OneFun->hide();
-  mw_one->ui->f_FunWeb->show();
+  mw_one->m_Preferences->ui->f_OneFun->hide();
+  mw_one->m_Preferences->ui->f_FunWeb->show();
 
-  mw_one->ui->qwOneDriver->setSource(
+  mw_one->m_Preferences->ui->qwOneDriver->setSource(
       QUrl(QStringLiteral("qrc:/src/onedrive/web.qml")));
-  mw_one->ui->qwOneDriver->rootContext()->setContextProperty("initialUrl", url);
+  mw_one->m_Preferences->ui->qwOneDriver->rootContext()->setContextProperty(
+      "initialUrl", url);
 
 #else
 

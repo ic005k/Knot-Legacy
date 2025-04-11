@@ -174,8 +174,8 @@ CloudBackup::CloudBackup(QWidget *parent)
   timer->start(15000);
   ui->label_info->setWordWrapMode(QTextOption::WrapAnywhere);
   connect(timer, &QTimer::timeout, [this]() {
-    if (!mw_one->ui->frameOne->isHidden()) {
-      loadText(oneDrive->debugInfo());
+    if (!mw_one->m_Preferences->isHidden()) {
+      qDebug() << oneDrive->debugInfo();
     }
 
     this->setEnabled(!oneDrive->isBusy());
@@ -348,16 +348,7 @@ void CloudBackup::on_btnBack_clicked() {
   }
 }
 
-void CloudBackup::loadLogQML() {
-  mw_one->m_Preferences->ui->qwOneDriver->setSource(
-      QUrl(QStringLiteral("qrc:/src/onedrive/log.qml")));
-  loadText(oneDrive->debugInfo());
-}
-
-void CloudBackup::loadText(QString str) {
-  QQuickItem *root = mw_one->m_Preferences->ui->qwOneDriver->rootObject();
-  QMetaObject::invokeMethod((QObject *)root, "loadText", Q_ARG(QVariant, str));
-}
+void CloudBackup::loadLogQML() { qDebug() << oneDrive->debugInfo(); }
 
 void CloudBackup::initQuick() {
   quickWidget = new QQuickWidget(ui->frameQuick);
@@ -365,14 +356,6 @@ void CloudBackup::initQuick() {
   const QSize size(400, 400);
   quickWidget->resize(size);
   quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
-}
-
-int CloudBackup::getProg() {
-  QQuickItem *root = mw_one->m_Preferences->ui->qwOneDriver->rootObject();
-  QVariant itemCount;
-  QMetaObject::invokeMethod((QObject *)root, "getPorg",
-                            Q_RETURN_ARG(QVariant, itemCount));
-  return itemCount.toInt();
 }
 
 void CloudBackup::startBakData() {

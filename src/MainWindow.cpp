@@ -37,7 +37,7 @@ bool isDelData = false;
 QRegularExpression regxNumber("^-?\[0-9.]*$");
 
 QSettings *iniPreferences;
-CloudBackup *m_CloudBackup;
+CloudBackup *m_CloudBackup = nullptr;
 
 extern bool isAndroid, isIOS, zh_cn, isEpub, isEpubError, isText, isPDF,
     isWholeMonth, isDateSection, isNeedSync, isPasswordError;
@@ -3083,29 +3083,29 @@ void MainWindow::startInitReport() {
 }
 
 void MainWindow::on_actionPreferences_triggered() {
-  int x, y, h;
+  int x, y;
   if (isAndroid) {
     m_Preferences->setFixedWidth(this->width());
     m_Preferences->setFixedHeight(this->height());
     x = geometry().x();
     y = geometry().y();
-    h = this->height();
+
   } else {
     x = m_Preferences->geometry().x();
     y = m_Preferences->geometry().y();
-    h = m_Preferences->geometry().height();
   }
 
   if (y < 0) y = 0;
 
-  m_Preferences->setGeometry(x, y, m_Preferences->width(), h);
+  m_Preferences->setGeometry(x, y, m_Preferences->width(),
+                             m_Preferences->height());
   m_Preferences->setModal(true);
   m_Preferences->ui->sliderFontSize->setStyleSheet(ui->hsM->styleSheet());
   m_Preferences->ui->sliderFontSize->setValue(fontSize);
   m_Preferences->show();
   m_Preferences->initCheckStatus();
 
-  delete m_CloudBackup;
+  if (m_CloudBackup != nullptr) delete m_CloudBackup;
   m_CloudBackup = new CloudBackup;
   m_CloudBackup->loadLogQML();
 }
@@ -3329,9 +3329,6 @@ void MainWindow::initQW() {
   ui->qwReportSub->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/details.qml")));
 
-  m_Preferences->ui->qwOneDriver->rootContext()->setContextProperty(
-      "m_CloudBackup", m_CloudBackup);
-
   ui->qwSearch->rootContext()->setContextProperty("m_Method", m_Method);
   ui->qwSearch->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/search.qml")));
 
@@ -3440,8 +3437,7 @@ void MainWindow::init_Theme() {
   ui->qwSteps->rootContext()->setContextProperty("isDark", isDark);
   ui->qwGpsList->rootContext()->setContextProperty("isDark", isDark);
   ui->qwReport->rootContext()->setContextProperty("isDark", isDark);
-  m_Preferences->ui->qwOneDriver->rootContext()->setContextProperty("isDark",
-                                                                    isDark);
+
   ui->qwCata->rootContext()->setContextProperty("isDark", isDark);
   ui->qwBookmark->rootContext()->setContextProperty("isDark", isDark);
 
@@ -3620,7 +3616,6 @@ void MainWindow::init_UIWidget() {
   ui->frameMain->setContentsMargins(1, 0, 1, 0);
   ui->frameMain->layout()->setSpacing(1);
 
-  m_Preferences->ui->qwOneDriver->hide();
   ui->frameOne->hide();
   m_Preferences->ui->f_FunWeb->hide();
   m_Preferences->ui->btnStorageInfo->hide();

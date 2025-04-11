@@ -46,10 +46,6 @@ class CloudBackup : public QDialog {
 
   void initQuick();
 
-  int getProg();
-
-  void loadText(QString str);
-
   void uploadData();
 
   void uploadFileToWebDAV(QString webdavUrl, QString localFilePath,
