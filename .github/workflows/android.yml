@@ -70,12 +70,9 @@ jobs:
         aqt install-qt \
           linux android \
           $QT_VERSION \
-          --archives \
-            android_arm64_v8a \
-            android_armv7 \
-            # 可选：额外模块如 qtcharts、qtquick3d
-          --modules qtcharts qtlocation qtsvg  
-          --autodesktop    # 自动接受桌面依赖
+          android_arm64_v8a \  # 指定安卓架构（arm64）
+          --modules qtcharts qtlocation qtsvg \  # 安装模块
+          --autodesktop
         
     - name: Setup Android environment variables
       shell: bash
