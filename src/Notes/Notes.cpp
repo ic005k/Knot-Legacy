@@ -1031,8 +1031,8 @@ void Notes::closeEvent(QCloseEvent *event) {
 }
 
 void Notes::syncToWebDAV() {
-  if (isNeedSync && mw_one->ui->chkAutoSync->isChecked() &&
-      mw_one->ui->chkWebDAV->isChecked()) {
+  if (isNeedSync && mw_one->m_Preferences->ui->chkAutoSync->isChecked() &&
+      mw_one->m_Preferences->ui->chkWebDAV->isChecked()) {
     if (notes_sync_files.count() > 0) {
       m_CloudBackup->uploadFilesToWebDAV(notes_sync_files);
     }
@@ -1904,8 +1904,8 @@ void Notes::openNotes() {
   mw_one->m_NotesList->needDelWebDAVFiles.clear();
   isPasswordError = false;
 
-  if (mw_one->ui->chkAutoSync->isChecked() &&
-      mw_one->ui->chkWebDAV->isChecked()) {
+  if (mw_one->m_Preferences->ui->chkAutoSync->isChecked() &&
+      mw_one->m_Preferences->ui->chkWebDAV->isChecked()) {
     mw_one->showProgress();
 
     m_CloudBackup->createRemoteWebDAVDir();

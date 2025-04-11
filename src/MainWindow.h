@@ -405,7 +405,6 @@ class MainWindow : public QMainWindow {
   void on_btnPageUp_clicked();
   void on_btnPageNext_clicked();
 
-  void on_actionOneDriveBackupData();
   void on_AddRecord();
   void on_actionReport_triggered();
 

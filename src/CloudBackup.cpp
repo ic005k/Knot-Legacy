@@ -147,7 +147,7 @@ CloudBackup::CloudBackup(QWidget *parent)
   connect(oneDrive, &QtOneDrive::progressUploadFile,
           [this](const QString, int percent) {
             Q_UNUSED(this);
-            mw_one->ui->progressBar->setValue(percent);
+            ui->progressBar->setValue(percent);
 
             mw_one->ui->progBar->setValue(percent);
             if (percent == 100) mw_one->ui->progBar->hide();
@@ -156,7 +156,7 @@ CloudBackup::CloudBackup(QWidget *parent)
   connect(oneDrive, &QtOneDrive::progressDownloadFile,
           [this](const QString, int percent) {
             Q_UNUSED(this);
-            mw_one->ui->progressBar->setValue(percent);
+            mw_one->m_Preferences->ui->progressBar->setValue(percent);
           });
 
   connect(oneDrive, &QtOneDrive::successTraverseFolder,
@@ -267,7 +267,7 @@ void CloudBackup::on_pushButton_getFolders_clicked() {
   if (filePath.isEmpty()) return;
 
   oneDrive->uploadFile(filePath, QFileInfo(filePath).fileName(), "");
-  mw_one->ui->progressBar->setValue(0);
+  mw_one->m_Preferences->ui->progressBar->setValue(0);
 }
 
 void CloudBackup::on_pushButton_downloadFile_clicked() {
@@ -285,7 +285,7 @@ void CloudBackup::on_pushButton_downloadFile_clicked() {
     return;
 
   oneDrive->downloadFile(filePath, ui->lineEdit_fileID->text().trimmed());
-  mw_one->ui->progressBar->setValue(0);
+  mw_one->m_Preferences->ui->progressBar->setValue(0);
 }
 
 void CloudBackup::on_pushButton_createFolder_clicked() {
@@ -298,7 +298,7 @@ void CloudBackup::on_pushButton_deleteFile_clicked() {
 
 void CloudBackup::uploadData() {
   QString strFlag;
-  if (mw_one->ui->chkOneDrive->isChecked())
+  if (mw_one->m_Preferences->ui->chkOneDrive->isChecked())
     strFlag = "OneDrive";
   else
     strFlag = "WebDAV";
@@ -312,12 +312,12 @@ void CloudBackup::uploadData() {
           2))
     return;
 
-  if (mw_one->ui->chkOneDrive->isChecked()) {
+  if (mw_one->m_Preferences->ui->chkOneDrive->isChecked()) {
     oneDrive->uploadFile(zipfile, "memo.zip",
                          ui->lineEdit_fileID->text().trimmed());
   }
 
-  if (mw_one->ui->chkWebDAV->isChecked()) {
+  if (mw_one->m_Preferences->ui->chkWebDAV->isChecked()) {
     QString url = getWebDAVArgument();
     createDirectory(url, "Knot/");
     uploadFileToWebDAV(url, zipfile, "Knot/memo.zip");
@@ -325,9 +325,10 @@ void CloudBackup::uploadData() {
 }
 
 QString CloudBackup::getWebDAVArgument() {
-  QString url = mw_one->ui->editWebDAV->text().trimmed();
-  USERNAME = mw_one->ui->editWebDAVUsername->text().trimmed();
-  APP_PASSWORD = mw_one->ui->editWebDAVPassword->text().trimmed();
+  QString url = mw_one->m_Preferences->ui->editWebDAV->text().trimmed();
+  USERNAME = mw_one->m_Preferences->ui->editWebDAVUsername->text().trimmed();
+  APP_PASSWORD =
+      mw_one->m_Preferences->ui->editWebDAVPassword->text().trimmed();
   return url;
 }
 
@@ -348,13 +349,13 @@ void CloudBackup::on_btnBack_clicked() {
 }
 
 void CloudBackup::loadLogQML() {
-  mw_one->ui->qwOneDriver->setSource(
+  mw_one->m_Preferences->ui->qwOneDriver->setSource(
       QUrl(QStringLiteral("qrc:/src/onedrive/log.qml")));
   loadText(oneDrive->debugInfo());
 }
 
 void CloudBackup::loadText(QString str) {
-  QQuickItem *root = mw_one->ui->qwOneDriver->rootObject();
+  QQuickItem *root = mw_one->m_Preferences->ui->qwOneDriver->rootObject();
   QMetaObject::invokeMethod((QObject *)root, "loadText", Q_ARG(QVariant, str));
 }
 
@@ -367,7 +368,7 @@ void CloudBackup::initQuick() {
 }
 
 int CloudBackup::getProg() {
-  QQuickItem *root = mw_one->ui->qwOneDriver->rootObject();
+  QQuickItem *root = mw_one->m_Preferences->ui->qwOneDriver->rootObject();
   QVariant itemCount;
   QMetaObject::invokeMethod((QObject *)root, "getPorg",
                             Q_RETURN_ARG(QVariant, itemCount));
@@ -384,7 +385,7 @@ void CloudBackup::startBakData() {
   isUpData = true;
   mw_one->showProgress();
 
-  mw_one->ui->progressBar->setValue(0);
+  mw_one->m_Preferences->ui->progressBar->setValue(0);
   mw_one->ui->progBar->show();
   mw_one->ui->progBar->setMaximum(100);
   mw_one->ui->progBar->setMinimum(0);
@@ -418,7 +419,7 @@ void CloudBackup::uploadFileToWebDAV(QString webdavUrl, QString localFilePath,
 
   mw_one->ui->progBar->show();
   mw_one->ui->progBar->setValue(0);
-  mw_one->ui->progressBar->setValue(0);
+  mw_one->m_Preferences->ui->progressBar->setValue(0);
 
   QNetworkReply *reply = manager->put(request, file);
 
@@ -467,7 +468,7 @@ void CloudBackup::updateUploadProgress(qint64 bytesSent, qint64 bytesTotal) {
   if (bytesTotal > 0) {
     int percent = static_cast<int>((bytesSent * 100) / bytesTotal);
     mw_one->ui->progBar->setValue(percent);
-    mw_one->ui->progressBar->setValue(percent);
+    mw_one->m_Preferences->ui->progressBar->setValue(percent);
   }
 }
 
@@ -528,7 +529,7 @@ void CloudBackup::downloadFile(QString remoteFileName, QString localSavePath) {
               (bytesTotal > 0)
                   ? static_cast<int>((bytesReceived * 100) / bytesTotal)
                   : 0;
-          mw_one->ui->progressBar->setValue(percent);
+          mw_one->m_Preferences->ui->progressBar->setValue(percent);
         });
       });
 
@@ -715,9 +716,11 @@ WebDavHelper *listWebDavFiles(const QString &url, const QString &username,
   QNetworkRequest request;
   request.setUrl(QUrl(url));
   request.setRawHeader("Depth", "1");  // 仅获取当前目录的直接子项
+
   // request.setRawHeader("Depth",
   //                      "infinity");  // 递归获取子目录，但有的webdav不支持
-  if (url.contains(mw_one->ui->editWebDAV->text().trimmed()))
+
+  if (url.contains(mw_one->m_Preferences->ui->editWebDAV->text().trimmed()))
     request.setRawHeader("Brief", "t");  // 坚果云需要此头
   request.setHeader(QNetworkRequest::ContentTypeHeader,
                     "text/xml; charset=utf-8");

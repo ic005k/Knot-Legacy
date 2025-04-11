@@ -188,6 +188,10 @@ int main(int argc, char* argv[]) {
   bak_dir = bak_dir.replace("KnotData", "KnotBak");
   p_dir.mkpath(bak_dir);
   bakfileDir = bak_dir;
+  p_dir.mkpath(privateDir + "KnotData");
+  p_dir.mkpath(privateDir + "KnotData/memo");
+  p_dir.mkpath(privateDir + "KnotData/memo/images");
+  p_dir.mkpath(privateDir + "KnotData/memo/gps");
 
   strJBDict1 = privateDir + "dict/jieba.dict.utf8";
   strJBDict2 = privateDir + "dict/hmm_model.utf8";

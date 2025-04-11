@@ -3103,6 +3103,10 @@ void MainWindow::on_actionPreferences_triggered() {
   m_Preferences->ui->sliderFontSize->setValue(fontSize);
   m_Preferences->show();
   m_Preferences->initCheckStatus();
+
+  delete m_CloudBackup;
+  m_CloudBackup = new CloudBackup;
+  m_CloudBackup->loadLogQML();
 }
 
 void MainWindow::on_tabCharts_currentChanged(int index) {
@@ -3324,8 +3328,8 @@ void MainWindow::initQW() {
   ui->qwReportSub->setSource(
       QUrl(QStringLiteral("qrc:/src/qmlsrc/details.qml")));
 
-  ui->qwOneDriver->rootContext()->setContextProperty("m_CloudBackup",
-                                                     m_CloudBackup);
+  m_Preferences->ui->qwOneDriver->rootContext()->setContextProperty(
+      "m_CloudBackup", m_CloudBackup);
 
   ui->qwSearch->rootContext()->setContextProperty("m_Method", m_Method);
   ui->qwSearch->setSource(QUrl(QStringLiteral("qrc:/src/qmlsrc/search.qml")));
@@ -3435,7 +3439,8 @@ void MainWindow::init_Theme() {
   ui->qwSteps->rootContext()->setContextProperty("isDark", isDark);
   ui->qwGpsList->rootContext()->setContextProperty("isDark", isDark);
   ui->qwReport->rootContext()->setContextProperty("isDark", isDark);
-  ui->qwOneDriver->rootContext()->setContextProperty("isDark", isDark);
+  m_Preferences->ui->qwOneDriver->rootContext()->setContextProperty("isDark",
+                                                                    isDark);
   ui->qwCata->rootContext()->setContextProperty("isDark", isDark);
   ui->qwBookmark->rootContext()->setContextProperty("isDark", isDark);
 
@@ -3614,11 +3619,11 @@ void MainWindow::init_UIWidget() {
   ui->frameMain->setContentsMargins(1, 0, 1, 0);
   ui->frameMain->layout()->setSpacing(1);
 
-  ui->qwOneDriver->hide();
+  m_Preferences->ui->qwOneDriver->hide();
   ui->frameOne->hide();
-  ui->f_FunWeb->hide();
-  ui->btnStorageInfo->hide();
-  ui->editCode->setLineWrapMode(QTextEdit::NoWrap);
+  m_Preferences->ui->f_FunWeb->hide();
+  m_Preferences->ui->btnStorageInfo->hide();
+  m_Preferences->ui->editCode->setLineWrapMode(QTextEdit::NoWrap);
   ui->lblEpubInfo->hide();
   ui->pEpubProg->hide();
 
@@ -3630,11 +3635,12 @@ void MainWindow::init_UIWidget() {
   ui->btnWebBack->hide();
   ui->btnRecentOpen0->hide();
 
-  ui->chkOneDrive->setStyleSheet(m_Preferences->chkStyle);
-  ui->chkWebDAV->setStyleSheet(m_Preferences->chkStyle);
-  ui->chkAutoSync->setStyleSheet(m_Preferences->chkStyle);
+  m_Preferences->ui->chkOneDrive->setStyleSheet(m_Preferences->chkStyle);
+  m_Preferences->ui->chkWebDAV->setStyleSheet(m_Preferences->chkStyle);
+  m_Preferences->ui->chkAutoSync->setStyleSheet(m_Preferences->chkStyle);
 
-  ui->editWebDAVPassword->setEchoMode(QLineEdit::EchoMode::Password);
+  m_Preferences->ui->editWebDAVPassword->setEchoMode(
+      QLineEdit::EchoMode::Password);
 
   this->installEventFilter(this);
   ui->textBrowser->installEventFilter(this);
@@ -3766,7 +3772,7 @@ void MainWindow::init_UIWidget() {
   ui->btnMove->setFont(f);
 
   f.setBold(true);
-  ui->lblSyncNote->setFont(f);
+  m_Preferences->ui->lblSyncNote->setFont(f);
   ui->lblShowLineSn->setFont(f);
   ui->lblShowLineSn->setWordWrap(true);
   ui->lblShowLineSn->adjustSize();
@@ -3967,7 +3973,6 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
   QAction *actPreferences = new QAction(tr("Preferences"));
 
   QAction *actAbout = new QAction(tr("About") + " (" + ver + ")");
-  QAction *actOneDrive = new QAction(tr("Cloud Backup and Restore Data"));
 
   QAction *actBakFileList = new QAction(tr("Backup File List"));
   QAction *actTabRecycle = new QAction(tr("Tab Recycle"));
@@ -3999,8 +4004,6 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
   connect(actPreferences, &QAction::triggered, this,
           &MainWindow::on_actionPreferences_triggered);
 
-  connect(actOneDrive, &QAction::triggered, this,
-          &MainWindow::on_actionOneDriveBackupData);
   connect(actAbout, &QAction::triggered, this, &MainWindow::on_actionAbout);
   connect(actShareFile, &QAction::triggered, this,
           &MainWindow::on_actionShareFile);
@@ -4030,7 +4033,6 @@ void MainWindow::init_Menu(QMenu *mainMenu) {
 
   mainMenu->addAction(actPreferences);
 
-  mainMenu->addAction(actOneDrive);
   mainMenu->addAction(actBakFileList);
   mainMenu->addAction(actTabRecycle);
   mainMenu->addAction(actShareFile);
@@ -4054,34 +4056,23 @@ void MainWindow::on_openKnotBakDir() {
 }
 
 void MainWindow::init_CloudBacup() {
-  ui->editWebDAV->setText(
+  m_Preferences->ui->editWebDAV->setText(
       iniPreferences->value("/webdav/url", "https://dav.jianguoyun.com/dav/")
           .toString());
 
-  ui->editWebDAVUsername->setText(
+  m_Preferences->ui->editWebDAVUsername->setText(
       iniPreferences->value("/webdav/username").toString());
 
   QString aesStr = iniPreferences->value("/webdav/password").toString();
   QString password = m_CloudBackup->aesDecrypt(aesStr, aes_key, aes_iv);
-  ui->editWebDAVPassword->setText(password);
+  m_Preferences->ui->editWebDAVPassword->setText(password);
 
-  ui->chkOneDrive->setChecked(
+  m_Preferences->ui->chkOneDrive->setChecked(
       iniPreferences->value("/cloudbak/onedrive", 0).toBool());
-  ui->chkWebDAV->setChecked(
+  m_Preferences->ui->chkWebDAV->setChecked(
       iniPreferences->value("/cloudbak/webdav", 1).toBool());
-  ui->chkAutoSync->setChecked(
+  m_Preferences->ui->chkAutoSync->setChecked(
       iniPreferences->value("/cloudbak/autosync", 0).toBool());
-}
-
-void MainWindow::on_actionOneDriveBackupData() {
-  floatfun = false;
-
-  ui->frameMain->hide();
-  ui->frameReader->hide();
-  ui->frameOne->show();
-  delete m_CloudBackup;
-  m_CloudBackup = new CloudBackup;
-  m_CloudBackup->loadLogQML();
 }
 
 void MainWindow::on_actionTabRecycle() {
@@ -4633,9 +4624,9 @@ void MainWindow::on_btnDownload_clicked() {
 
 void MainWindow::on_btnBack_One_clicked() {
   if (!ui->frameOne->isHidden()) {
-    if (ui->f_OneFun->isHidden()) {
-      ui->f_OneFun->show();
-      ui->f_FunWeb->hide();
+    if (m_Preferences->ui->f_OneFun->isHidden()) {
+      m_Preferences->ui->f_OneFun->show();
+      m_Preferences->ui->f_FunWeb->hide();
 
       m_CloudBackup->loadLogQML();
     } else {
@@ -4644,17 +4635,22 @@ void MainWindow::on_btnBack_One_clicked() {
     }
   }
 
-  iniPreferences->setValue("/webdav/url", ui->editWebDAV->text().trimmed());
+  iniPreferences->setValue("/webdav/url",
+                           m_Preferences->ui->editWebDAV->text().trimmed());
 
-  iniPreferences->setValue("/webdav/username",
-                           ui->editWebDAVUsername->text().trimmed());
-  QString password = ui->editWebDAVPassword->text().trimmed();
+  iniPreferences->setValue(
+      "/webdav/username",
+      m_Preferences->ui->editWebDAVUsername->text().trimmed());
+  QString password = m_Preferences->ui->editWebDAVPassword->text().trimmed();
   QString aesStr = m_CloudBackup->aesEncrypt(password, aes_key, aes_iv);
   iniPreferences->setValue("/webdav/password", aesStr);
 
-  iniPreferences->setValue("/cloudbak/onedrive", ui->chkOneDrive->isChecked());
-  iniPreferences->setValue("/cloudbak/webdav", ui->chkWebDAV->isChecked());
-  iniPreferences->setValue("/cloudbak/autosync", ui->chkAutoSync->isChecked());
+  iniPreferences->setValue("/cloudbak/onedrive",
+                           m_Preferences->ui->chkOneDrive->isChecked());
+  iniPreferences->setValue("/cloudbak/webdav",
+                           m_Preferences->ui->chkWebDAV->isChecked());
+  iniPreferences->setValue("/cloudbak/autosync",
+                           m_Preferences->ui->chkAutoSync->isChecked());
 
   setEncSyncStatusTip();
 }
@@ -4668,8 +4664,8 @@ void MainWindow::on_btnStorageInfo_clicked() {
 }
 
 void MainWindow::on_btnRefreshWeb_clicked() {
-  ui->qwOneDriver->rootContext()->setContextProperty("initialUrl",
-                                                     strRefreshUrl);
+  m_Preferences->ui->qwOneDriver->rootContext()->setContextProperty(
+      "initialUrl", strRefreshUrl);
 }
 
 void MainWindow::on_btnUserInfo_clicked() {
@@ -4697,7 +4693,7 @@ void MainWindow::on_btnSetKey_clicked() {}
 void MainWindow::on_btnEdit_clicked() { m_Notes->openEditUI(); }
 
 void MainWindow::on_btnCode_clicked() {
-  QString str = ui->editCode->toPlainText().trimmed();
+  QString str = m_Preferences->ui->editCode->toPlainText().trimmed();
   if (str != "" && str.contains("?code=")) {
     dialog_->sendMsg(str);
   }
@@ -4839,7 +4835,7 @@ void MainWindow::on_btnReport_clicked() {
 void MainWindow::on_btnPasteCode_clicked() {
   QClipboard *clipboard = QApplication::clipboard();
   QString originalText = clipboard->text();
-  ui->editCode->setPlainText(originalText);
+  m_Preferences->ui->editCode->setPlainText(originalText);
 }
 
 void MainWindow::on_btnAdd_clicked() {
@@ -5377,7 +5373,8 @@ void MainWindow::on_btnBackNoteRecycle_clicked() {
   ui->frameNoteRecycle->hide();
   ui->frameNoteList->show();
 
-  if (ui->chkAutoSync->isChecked() && ui->chkWebDAV->isChecked()) {
+  if (m_Preferences->ui->chkAutoSync->isChecked() &&
+      m_Preferences->ui->chkWebDAV->isChecked()) {
     int count = m_NotesList->needDelWebDAVFiles.count();
     if (count > 0) {
       QStringList files;
@@ -6030,25 +6027,27 @@ void MainWindow::on_btnWebDAVRestore_clicked() {
               tr("This action overwrites local files with files in the cloud."),
           2))
     return;
-  m_CloudBackup->WEBDAV_URL = ui->editWebDAV->text().trimmed();
-  m_CloudBackup->USERNAME = ui->editWebDAVUsername->text().trimmed();
-  m_CloudBackup->APP_PASSWORD = ui->editWebDAVPassword->text().trimmed();
+  m_CloudBackup->WEBDAV_URL = m_Preferences->ui->editWebDAV->text().trimmed();
+  m_CloudBackup->USERNAME =
+      m_Preferences->ui->editWebDAVUsername->text().trimmed();
+  m_CloudBackup->APP_PASSWORD =
+      m_Preferences->ui->editWebDAVPassword->text().trimmed();
   m_CloudBackup->downloadFile("Knot/memo.zip", filePath);
-  mw_one->ui->progressBar->setValue(0);
+  m_Preferences->ui->progressBar->setValue(0);
 }
 
 void MainWindow::on_chkWebDAV_clicked() {
-  if (ui->chkWebDAV->isChecked())
-    ui->chkOneDrive->setChecked(false);
+  if (m_Preferences->ui->chkWebDAV->isChecked())
+    m_Preferences->ui->chkOneDrive->setChecked(false);
   else
-    ui->chkOneDrive->setChecked(true);
+    m_Preferences->ui->chkOneDrive->setChecked(true);
 }
 
 void MainWindow::on_chkOneDrive_clicked() {
-  if (ui->chkOneDrive->isChecked())
-    ui->chkWebDAV->setChecked(false);
+  if (m_Preferences->ui->chkOneDrive->isChecked())
+    m_Preferences->ui->chkWebDAV->setChecked(false);
   else
-    ui->chkWebDAV->setChecked(true);
+    m_Preferences->ui->chkWebDAV->setChecked(true);
 }
 
 void MainWindow::on_btnBack_NotesSearchResult_clicked() {
@@ -6089,24 +6088,29 @@ void MainWindow::on_btnOpenEditFind_clicked() {
 void MainWindow::setEncSyncStatusTip() {
   ui->lblStats->setStyleSheet(labelNormalStyleSheet);
 
-  if (m_Preferences->ui->chkZip->isChecked() && ui->chkAutoSync->isChecked() &&
-      ui->chkWebDAV->isChecked())
+  if (m_Preferences->ui->chkZip->isChecked() &&
+      m_Preferences->ui->chkAutoSync->isChecked() &&
+      m_Preferences->ui->chkWebDAV->isChecked())
     ui->lblStats->setStyleSheet(labelEnSyncStyleSheet);
 
-  if (m_Preferences->ui->chkZip->isChecked() && !ui->chkAutoSync->isChecked() &&
-      !ui->chkWebDAV->isChecked())
+  if (m_Preferences->ui->chkZip->isChecked() &&
+      !m_Preferences->ui->chkAutoSync->isChecked() &&
+      !m_Preferences->ui->chkWebDAV->isChecked())
     ui->lblStats->setStyleSheet(labelEncStyleSheet);
 
-  if (m_Preferences->ui->chkZip->isChecked() && !ui->chkAutoSync->isChecked() &&
-      ui->chkWebDAV->isChecked())
+  if (m_Preferences->ui->chkZip->isChecked() &&
+      !m_Preferences->ui->chkAutoSync->isChecked() &&
+      m_Preferences->ui->chkWebDAV->isChecked())
     ui->lblStats->setStyleSheet(labelEncStyleSheet);
 
-  if (m_Preferences->ui->chkZip->isChecked() && ui->chkAutoSync->isChecked() &&
-      !ui->chkWebDAV->isChecked())
+  if (m_Preferences->ui->chkZip->isChecked() &&
+      m_Preferences->ui->chkAutoSync->isChecked() &&
+      !m_Preferences->ui->chkWebDAV->isChecked())
     ui->lblStats->setStyleSheet(labelEncStyleSheet);
 
-  if (!m_Preferences->ui->chkZip->isChecked() && ui->chkAutoSync->isChecked() &&
-      ui->chkWebDAV->isChecked())
+  if (!m_Preferences->ui->chkZip->isChecked() &&
+      m_Preferences->ui->chkAutoSync->isChecked() &&
+      m_Preferences->ui->chkWebDAV->isChecked())
     ui->lblStats->setStyleSheet(labelSyncStyleSheet);
 
   if (isAndroid) ui->lblVer->hide();

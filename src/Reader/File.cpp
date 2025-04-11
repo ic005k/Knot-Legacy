@@ -115,6 +115,6 @@ QString File::prog() const { return m_prog; }
 
 void File::setProg(const QString &prog) {
   m_prog = prog;
-  mw_one->ui->progressBar->setValue(m_prog.toInt());
+  mw_one->m_Preferences->ui->progressBar->setValue(m_prog.toInt());
   mw_one->ui->progBar->setValue(m_prog.toInt());
 }
