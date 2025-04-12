@@ -1,9 +1,8 @@
 [Desktop Entry]
 Type=Application
 Name=Knot
-Exec=env QT_IM_MODULE=fcitx5 GTK_IM_MODULE=fcitx5 XMODIFIERS=@im=fcitx5 Knot --wayland
+Exec=Knot
 Icon=icon
-Comment=Knot (Wayland Mode)
+Comment=Knot
 Categories=Application;
 Terminal=true
-DBusActivatable=true

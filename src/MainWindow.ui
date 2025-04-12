@@ -2730,7 +2730,7 @@ QTabBar::scroller {width:0}
                     </font>
                    </property>
                    <property name="text">
-                    <string>Paste the URL with the authentication code to obtain authentication:</string>
+                    <string>If the login fails in the preceding way,Paste the URL with the authentication code to obtain authentication:</string>
                    </property>
                    <property name="wordWrap">
                     <bool>true</bool>
