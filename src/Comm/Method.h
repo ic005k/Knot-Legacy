@@ -331,7 +331,11 @@ class Method : public QDialog {
   bool compressFileWithZlib(const QString &sourcePath, const QString &destPath,
                             int level);
 
- protected:
+  bool compressDirectory(const QString &zipPath, const QString &sourceDir,
+                         const QString &password);
+
+  void setOSFlag();
+  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:

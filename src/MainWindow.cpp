@@ -3,7 +3,7 @@
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
 #include "ui_MainWindow.h"
 
-QString ver = "1.2.29";
+QString ver = "1.2.30";
 QString appName = "Knot";
 
 QList<QPointF> PointList;
@@ -63,9 +63,6 @@ extern bool unzipToDir(const QString &zipPath, const QString &destDir);
 extern WebDavHelper *listWebDavFiles(const QString &url,
                                      const QString &username,
                                      const QString &password);
-
-extern bool compressDirectory(const QString &zipPath, const QString &sourceDir,
-                              const QString &password);
 
 extern QSplashScreen *splash;
 
@@ -134,6 +131,8 @@ void ImportDataThread::run() {
 }
 
 void MainWindow::importDataDone() {
+  m_Method->setOSFlag();
+
   if (isPasswordError) {
     closeProgress();
     ShowMessage *msg = new ShowMessage(this);
@@ -2647,12 +2646,6 @@ bool MainWindow::eventFilter(QObject *watch, QEvent *evn) {
 void MainWindow::on_actionExport_Data_triggered() {
   if (!isSaveEnd) return;
 
-  QSettings Reg(iniDir + "osflag.ini", QSettings::IniFormat);
-  if (isAndroid)
-    Reg.setValue("os", "mobile");
-  else
-    Reg.setValue("os", "desktop");
-
   isUpData = false;
   showProgress();
 
@@ -2678,7 +2671,7 @@ bool MainWindow::bakData() {
   //  mw_one->m_Notes->zipMemo();
 
   bool isZipResult = false;
-  isZipResult = compressDirectory(zipfile, iniDir, encPassword);
+  isZipResult = m_Method->compressDirectory(zipfile, iniDir, encPassword);
   if (isZipResult == false) {
     errorInfo = tr("An error occurred while compressing the file.");
     return false;
@@ -3561,6 +3554,8 @@ void MainWindow::init_Instance() {
 
   if (m_Preferences->getDefaultFont() == "None")
     m_Preferences->setDefaultFont(this->font().family());
+
+  m_Method->setOSFlag();
 }
 
 void MainWindow::init_UIWidget() {

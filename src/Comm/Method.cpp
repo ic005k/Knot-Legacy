@@ -29,10 +29,7 @@ extern QStringList readTextList, htmlFiles, listCategory;
 extern TextSelector *m_TextSelector;
 
 QStringList resultsList;
-bool compressDirectory(const QString &zipPath, const QString &sourceDir,
-                       const QString &password);
-bool compressSubDirectory(QuaZip *zip, const QString &subDirPath,
-                          const QString &rootDir, const QString &password);
+
 bool isPasswordError = false;
 
 Method::Method(QWidget *parent) : QDialog(parent) {
@@ -1843,8 +1840,8 @@ QString Method::quazipErrorString(int code) {
   }
 }
 
-bool compressDirectory(const QString &zipPath, const QString &sourceDir,
-                       const QString &password) {
+bool Method::compressDirectory(const QString &zipPath, const QString &sourceDir,
+                               const QString &password) {
   QuaZip zip(zipPath);
   zip.setFileNameCodec("UTF-8");
   zip.setZip64Enabled(false);  // 禁用 ZIP64（除非必要）
@@ -1873,8 +1870,13 @@ bool compressDirectory(const QString &zipPath, const QString &sourceDir,
       relativePath += "/";
       QuaZipFile dirFile(&zip);
       QuaZipNewInfo dirInfo(relativePath);
+
       // 设置目录的外部属性，使其更具兼容性
       dirInfo.externalAttr = (0755 << 16);
+
+      // 仅设置DOS目录属性,避免混合UNIX属性导致的兼容性问题
+      // dirInfo.externalAttr = (0 << 16) | 0x10;
+
       if (!dirFile.open(QIODevice::WriteOnly, dirInfo, nullptr, 0, 8)) {
         qWarning() << "Failed to add directory:" << relativePath;
         return false;
@@ -2610,4 +2612,12 @@ bool Method::androidCopyFile(QString src, QString des) {
 #endif
   qDebug() << "copyFile " << src << des;
   return result;
+}
+
+void Method::setOSFlag() {
+  QSettings Reg(iniDir + "osflag.ini", QSettings::IniFormat);
+  if (isAndroid)
+    Reg.setValue("os", "mobile");
+  else
+    Reg.setValue("os", "desktop");
 }

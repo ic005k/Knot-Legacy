@@ -375,12 +375,6 @@ int CloudBackup::getProg() {
 }
 
 void CloudBackup::startBakData() {
-  QSettings Reg(iniDir + "osflag.ini", QSettings::IniFormat);
-  if (isAndroid)
-    Reg.setValue("os", "mobile");
-  else
-    Reg.setValue("os", "desktop");
-
   isUpData = true;
   mw_one->showProgress();
 

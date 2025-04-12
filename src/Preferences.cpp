@@ -102,10 +102,7 @@ bool Preferences::eventFilter(QObject* watch, QEvent* evn) {
   return QWidget::eventFilter(watch, evn);
 }
 
-void Preferences::on_btnBack_clicked() {
-  saveOptions();
-  close();
-}
+void Preferences::on_btnBack_clicked() { close(); }
 
 void Preferences::saveOptions() {
   iniPreferences->setValue("/Options/FontSize", ui->sliderFontSize->value());
@@ -514,6 +511,7 @@ void Preferences::on_editValidate_textChanged(const QString& arg1) {
 
 void Preferences::closeEvent(QCloseEvent* event) {
   Q_UNUSED(event);
+  saveOptions();
   mw_one->setEncSyncStatusTip();
 }
 
