@@ -70,6 +70,8 @@ jobs:
         run: |
          cp res/icon.png bin/release/icon.png
          cp res/default.desktop bin/release/default.desktop
+         cp ExtBin/AppRun bin/release/AppRun
+         chmod +x bin/release/AppRun
          
          cp -r qml bin/release/qml
          cp ExtBin/libfcitx5platforminputcontextplugin.so /home/runner/work/Knot/Qt/5.15.2/gcc_64/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so
