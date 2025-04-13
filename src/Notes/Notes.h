@@ -286,6 +286,7 @@ class Notes : public QDialog {
   void jumpToPrevMatch();
   QsciLexerMarkdown *markdownLexer;
   void initMarkdownLexer();
+  QString imageToBase64(const QString &path);
 };
 
 class LimitedTextEdit : public QTextEdit {

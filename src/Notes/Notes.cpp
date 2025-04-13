@@ -145,24 +145,18 @@ void Notes::MD2Html(QString mdFile) {
 
   QString strmd = loadText(mdFile);
 
-  if (strmd.contains("===KnotData===")) {
-    strmd.replace("===KnotData===", imgDir);
-    StringToFile(strmd, currentMDFile);
-  } else
-
-      if (strmd.contains(imgDir)) {
-#ifdef Q_OS_WIN
-    strmd = strmd.replace(imgDir, "/" + iniDir);
-#else
-    strmd = strmd.replace(imgDir, iniDir);
-#endif
-  } else {
-    strmd = strmd.replace("images/", "file://" + iniDir + "memo/images/");
-  }
+  strmd = strmd.replace("images/", "file://" + iniDir + "memo/images/");
 
   QString htmlString;
   htmlString = markdownToHtmlWithMath(strmd);
   StringToFile(htmlString, htmlFileName);
+}
+
+QString Notes::imageToBase64(const QString &path) {
+  QFile file(path);
+  if (!file.open(QIODevice::ReadOnly)) return "";
+  QByteArray data = file.readAll();
+  return "data:image/png;base64," + data.toBase64();
 }
 
 void Notes::saveMainNotes() {
@@ -1244,6 +1238,7 @@ bool Notes::selectPDFFormat(QPrinter *printer) {
 void Notes::on_btnPDF_clicked() {
   MD2Html(currentMDFile);
   QString html = loadText(privateDir + "memo.html");
+  html = html.replace("file://", "");
   auto doc = new QTextDocument(this);
   doc->setHtml(html);
 
