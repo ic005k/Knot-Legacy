@@ -60,10 +60,7 @@ jobs:
           cd openssl-1.1.1w
 
           # 编译到工作区根目录下的 openssl-build
-          # 配置并编译到独立目录（避免污染系统）
-          ./config --prefix=$GITHUB_WORKSPACE/openssl-build \
-             --openssldir=$GITHUB_WORKSPACE/openssl-build \
-             no-ssl3 no-weak-ssl-ciphers
+          ./config --prefix=$GITHUB_WORKSPACE/openssl-build --openssldir=$GITHUB_WORKSPACE/openssl-build
           make -j$(nproc)
           # make install
 
