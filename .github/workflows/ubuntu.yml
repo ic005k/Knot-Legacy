@@ -79,6 +79,9 @@ jobs:
 
          mkdir bin/release/lib/
          cp -r ExtBin/nss/* bin/release/lib/
+
+         cp ExtBin/libcrypto.so.1.1 bin/release/lib/libcrypto.so.1.1
+         cp ExtBin/libssl.so.1.1 bin/release/lib/libssl.so.1.1
                            
          #cp -r devDatabase bin/release/devDatabase
          #chmod +x bin/release/devDatabase/linux/macserial
