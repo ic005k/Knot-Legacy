@@ -59,9 +59,8 @@ jobs:
           tar xzf openssl-1.1.1w.tar.gz
           cd openssl-1.1.1w
 
-          # 编译到本地目录（使用旧版兼容配置）
-          ./config --prefix=$PWD/../openssl-build --openssldir=$PWD/../openssl-build \
-            -Wl,--no-as-needed -Wl,--enable-new-dtags -Wl,-rpath='$ORIGIN'
+          # 编译到工作区根目录下的 openssl-build
+          ./config --prefix=$GITHUB_WORKSPACE/openssl-build --openssldir=$GITHUB_WORKSPACE/openssl-build
           make -j$(nproc)
           make install
 
@@ -99,7 +98,10 @@ jobs:
 
          #cp ExtBin/libcrypto.so.1.1 bin/release/lib/libcrypto.so.1.1
          #cp ExtBin/libssl.so.1.1 bin/release/lib/libssl.so.1.1
-         cp ../openssl-build/lib/libssl.so.1.1 ../openssl-build/lib/libcrypto.so.1.1 bin/release/lib/
+
+         # 复制所有库文件（包括软链接）
+         cp -P $GITHUB_WORKSPACE/openssl-build/lib/libssl.so* bin/release/lib/
+         cp -P $GITHUB_WORKSPACE/openssl-build/lib/libcrypto.so* bin/release/lib/
                                     
          #cp -r devDatabase bin/release/devDatabase
          #chmod +x bin/release/devDatabase/linux/macserial
