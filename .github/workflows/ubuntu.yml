@@ -52,11 +52,13 @@ jobs:
          sudo apt install libfuse2
          sudo apt-get install libsecret-1-dev
 
-      - name: Install dependencies
+      - name: Remove system OpenSSL
         run: |
-         sudo apt-get update
-         sudo apt-get install -y build-essential wget
-         sudo apt-get remove -y libssl-dev  # 移除系统 OpenSSL 开发包
+          # 移除系统安装的 OpenSSL 3.x 包（重要！）
+          sudo apt-get remove -y openssl libssl-dev
+          # 清理残留配置
+          sudo apt-get autoremove -y
+          sudo apt-get clean
       
       - name: Build OpenSSL 1.1.1w
         run: |
@@ -66,7 +68,10 @@ jobs:
           cd openssl-1.1.1w
 
           # 编译到工作区根目录下的 openssl-build
-          ./config --prefix=$GITHUB_WORKSPACE/openssl-build --openssldir=$GITHUB_WORKSPACE/openssl-build
+          # 配置并编译到独立目录（避免污染系统）
+          ./config --prefix=$GITHUB_WORKSPACE/openssl-1.1.1w \
+             --openssldir=$GITHUB_WORKSPACE/openssl-1.1.1w \
+             no-ssl3 no-weak-ssl-ciphers
           make -j$(nproc)
           make install
 
