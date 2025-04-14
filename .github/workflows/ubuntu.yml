@@ -52,6 +52,12 @@ jobs:
          sudo apt install libfuse2
          sudo apt-get install libsecret-1-dev
 
+      - name: Install dependencies
+        run: |
+         sudo apt-get update
+         sudo apt-get install -y build-essential wget
+         sudo apt-get remove -y libssl-dev  # 移除系统 OpenSSL 开发包
+      
       - name: Build OpenSSL 1.1.1w
         run: |
           # 下载源码
