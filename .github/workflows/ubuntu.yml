@@ -65,8 +65,10 @@ jobs:
           make install
 
           # 复制到应用目录
-          #mkdir -p your_app/lib
-          #cp ../openssl-build/lib/libssl.so.1.1 ../openssl-build/lib/libcrypto.so.1.1 your_app/lib/
+          #mkdir -p bin/release/lib
+          # 复制所有库文件（包括软链接）
+          cp -P $GITHUB_WORKSPACE/openssl-build/lib/libssl.so* bin/release/lib/
+          cp -P $GITHUB_WORKSPACE/openssl-build/lib/libcrypto.so* bin/release/lib/
     
       - uses: actions/checkout@v2
         with:
@@ -98,11 +100,7 @@ jobs:
 
          #cp ExtBin/libcrypto.so.1.1 bin/release/lib/libcrypto.so.1.1
          #cp ExtBin/libssl.so.1.1 bin/release/lib/libssl.so.1.1
-
-         # 复制所有库文件（包括软链接）
-         cp -P $GITHUB_WORKSPACE/openssl-1.1.1w/libssl.so* bin/release/lib/
-         cp -P $GITHUB_WORKSPACE/openssl-1.1.1w/libcrypto.so* bin/release/lib/
-                                    
+                                             
          #cp -r devDatabase bin/release/devDatabase
          #chmod +x bin/release/devDatabase/linux/macserial
          #chmod +x bin/release/devDatabase/linux/ocvalidate
