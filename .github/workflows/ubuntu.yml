@@ -52,12 +52,22 @@ jobs:
          sudo apt install libfuse2
          sudo apt-get install libsecret-1-dev
 
-      - name: Download Compatible OpenSSL
+      - name: Build OpenSSL 1.1.1w
         run: |
-            # 以 Ubuntu 20.04 的 OpenSSL 1.1.1 为例
-            wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb   
-            # 解压 deb 包到本地目录
-            dpkg -x libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb openssl-compat
+          # 下载源码
+          wget https://www.openssl.org/source/openssl-1.1.1w.tar.gz
+          tar xzf openssl-1.1.1w.tar.gz
+          cd openssl-1.1.1w
+
+          # 编译到本地目录（使用旧版兼容配置）
+          ./config --prefix=$PWD/../openssl-build --openssldir=$PWD/../openssl-build \
+            -Wl,--no-as-needed -Wl,--enable-new-dtags -Wl,-rpath='$ORIGIN'
+          make -j$(nproc)
+          make install
+
+          # 复制到应用目录
+          #mkdir -p your_app/lib
+          #cp ../openssl-build/lib/libssl.so.1.1 ../openssl-build/lib/libcrypto.so.1.1 your_app/lib/
     
       - uses: actions/checkout@v2
         with:
@@ -89,7 +99,7 @@ jobs:
 
          #cp ExtBin/libcrypto.so.1.1 bin/release/lib/libcrypto.so.1.1
          #cp ExtBin/libssl.so.1.1 bin/release/lib/libssl.so.1.1
-         cp openssl-compat/usr/lib/x86_64-linux-gnu/*.so.1.1 bin/release/lib/
+         cp ../openssl-build/lib/libssl.so.1.1 ../openssl-build/lib/libcrypto.so.1.1 bin/release/lib/
                                     
          #cp -r devDatabase bin/release/devDatabase
          #chmod +x bin/release/devDatabase/linux/macserial
