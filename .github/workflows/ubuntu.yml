@@ -65,7 +65,7 @@ jobs:
           make install
 
           # 复制到应用目录
-          #mkdir -p bin/release/lib
+          mkdir -p bin/release/lib
           # 复制所有库文件（包括软链接）
           cp -P $GITHUB_WORKSPACE/openssl-build/lib/libssl.so* bin/release/lib/
           cp -P $GITHUB_WORKSPACE/openssl-build/lib/libcrypto.so* bin/release/lib/
