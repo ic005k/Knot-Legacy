@@ -100,8 +100,8 @@ jobs:
          #cp ExtBin/libssl.so.1.1 bin/release/lib/libssl.so.1.1
 
          # 复制所有库文件（包括软链接）
-         cp -P $GITHUB_WORKSPACE/openssl-build/libssl.so* bin/release/lib/
-         cp -P $GITHUB_WORKSPACE/openssl-build/libcrypto.so* bin/release/lib/
+         cp -P $GITHUB_WORKSPACE/openssl-1.1.1w/libssl.so* bin/release/lib/
+         cp -P $GITHUB_WORKSPACE/openssl-1.1.1w/libcrypto.so* bin/release/lib/
                                     
          #cp -r devDatabase bin/release/devDatabase
          #chmod +x bin/release/devDatabase/linux/macserial
