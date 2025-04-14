@@ -51,15 +51,7 @@ jobs:
          sudo add-apt-repository universe
          sudo apt install libfuse2
          sudo apt-get install libsecret-1-dev
-
-      - name: Remove system OpenSSL
-        run: |
-          # 移除系统安装的 OpenSSL 3.x 包（重要！）
-          sudo apt-get remove -y openssl libssl-dev
-          # 清理残留配置
-          sudo apt-get autoremove -y
-          sudo apt-get clean
-      
+            
       - name: Build OpenSSL 1.1.1w
         run: |
           # 下载源码
