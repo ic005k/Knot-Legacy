@@ -55,9 +55,10 @@ jobs:
       - name: Download Compatible OpenSSL
         run: |
             # 以 Ubuntu 20.04 的 OpenSSL 1.1.1 为例
-            sudo apt-get download libssl1.1
-            sudo dpkg -x libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb openssl-compat    
-                                    
+            wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb   
+            # 解压 deb 包到本地目录
+            dpkg -x libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb openssl-compat
+    
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
@@ -89,7 +90,7 @@ jobs:
          #cp ExtBin/libcrypto.so.1.1 bin/release/lib/libcrypto.so.1.1
          #cp ExtBin/libssl.so.1.1 bin/release/lib/libssl.so.1.1
          cp openssl-compat/usr/lib/x86_64-linux-gnu/*.so.1.1 bin/release/lib/
-                           
+                                    
          #cp -r devDatabase bin/release/devDatabase
          #chmod +x bin/release/devDatabase/linux/macserial
          #chmod +x bin/release/devDatabase/linux/ocvalidate
