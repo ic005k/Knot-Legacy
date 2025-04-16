@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>347</width>
-    <height>580</height>
+    <height>304</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,27 +21,27 @@ background-color:white; border: 1px solid rgb(125,125,125);
 }</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="5" column="0">
-    <widget class="QToolButton" name="btnOk">
+   <item row="0" column="0">
+    <widget class="QLabel" name="lblFlag">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="minimumSize">
+     <property name="maximumSize">
       <size>
-       <width>0</width>
-       <height>42</height>
+       <width>16777215</width>
+       <height>30</height>
       </size>
      </property>
      <property name="text">
-      <string>Ok</string>
+      <string>Flag</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QGroupBox" name="gboxDay">
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="gboxMonth">
      <property name="maximumSize">
       <size>
        <width>16777215</width>
@@ -59,66 +59,25 @@ background-color:white; border: 1px solid rgb(125,125,125);
      <property name="alignment">
       <set>Qt::AlignCenter</set>
      </property>
-     <layout class="QGridLayout" name="gridLayout_4">
-      <item row="0" column="0">
-       <widget class="QLabel" name="lblDay">
-        <property name="font">
-         <font>
-          <pointsize>28</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Day</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QSlider" name="sliderDay">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>31</number>
-        </property>
-        <property name="pageStep">
-         <number>1</number>
-        </property>
-        <property name="value">
-         <number>1</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <layout class="QGridLayout" name="gridLayout_3"/>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="lblFlag">
+   <item row="3" column="0">
+    <widget class="QToolButton" name="btnOk">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="maximumSize">
+     <property name="minimumSize">
       <size>
-       <width>16777215</width>
-       <height>30</height>
+       <width>0</width>
+       <height>42</height>
       </size>
      </property>
      <property name="text">
-      <string>Flag</string>
+      <string>Ok</string>
      </property>
     </widget>
    </item>
@@ -146,131 +105,14 @@ background-color:white; border: 1px solid rgb(125,125,125);
        <widget class="QLabel" name="lblYear">
         <property name="font">
          <font>
-          <pointsize>28</pointsize>
+          <pointsize>20</pointsize>
          </font>
         </property>
         <property name="text">
-         <string>Year</string>
+         <string>Year-Month</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QSlider" name="sliderYear">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">QSlider::groove:horizontal {
-    border: 1px solid #999999;
-    height: 30px; /* the groove expands to the size of the slider by default. by giving it a height, it has a fixed size */
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);
-    margin: 2px 0;
-}
-
-QSlider::handle:horizontal {
-	background: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(60, 162, 160, 255), stop:0.531579 rgba(0, 58, 185, 255), stop:0.973684 rgba(54, 129, 160, 255));
-    border: 1px solid #5c5c5c;
-    width: 18px;
-    margin: -2px 0; /* handle is placed by default on the contents rect of the groove. Expand outside the groove */
-    border-radius: 3px;
-}</string>
-        </property>
-        <property name="minimum">
-         <number>2022</number>
-        </property>
-        <property name="maximum">
-         <number>2025</number>
-        </property>
-        <property name="pageStep">
-         <number>1</number>
-        </property>
-        <property name="value">
-         <number>2022</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="2" column="0">
-    <widget class="QGroupBox" name="gboxMonth">
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>300</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>30</pointsize>
-      </font>
-     </property>
-     <property name="title">
-      <string/>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_3">
-      <item row="0" column="0">
-       <widget class="QLabel" name="lblMonth">
-        <property name="font">
-         <font>
-          <pointsize>28</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Month</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QSlider" name="sliderMonth">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>13</number>
-        </property>
-        <property name="pageStep">
-         <number>1</number>
-        </property>
-        <property name="value">
-         <number>1</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </item>

@@ -338,48 +338,46 @@ in skydrive folder</source>
         <translation>日期选择</translation>
     </message>
     <message>
-        <location filename="DateSelector.ui" line="71"/>
-        <location filename="DateSelector.cpp" line="163"/>
+        <location filename="DateSelector.ui" line="112"/>
+        <source>Year-Month</source>
+        <translation>年-月</translation>
+    </message>
+    <message>
         <source>Day</source>
-        <translation>日</translation>
+        <translation type="vanished">日</translation>
     </message>
     <message>
-        <location filename="DateSelector.ui" line="153"/>
-        <location filename="DateSelector.cpp" line="148"/>
         <source>Year</source>
-        <translation>年</translation>
+        <translation type="vanished">年</translation>
     </message>
     <message>
-        <location filename="DateSelector.ui" line="121"/>
+        <location filename="DateSelector.ui" line="39"/>
         <source>Flag</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="DateSelector.ui" line="245"/>
-        <location filename="DateSelector.cpp" line="158"/>
         <source>Month</source>
-        <translation>月</translation>
+        <translation type="vanished">月</translation>
     </message>
     <message>
-        <location filename="DateSelector.ui" line="39"/>
+        <location filename="DateSelector.ui" line="80"/>
         <source>Ok</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="DateSelector.cpp" line="123"/>
+        <location filename="DateSelector.cpp" line="81"/>
         <source>Start Date</source>
         <oldsource>Start</oldsource>
         <translation>起始日期</translation>
     </message>
     <message>
-        <location filename="DateSelector.cpp" line="124"/>
+        <location filename="DateSelector.cpp" line="82"/>
         <source>End Date</source>
         <oldsource>End</oldsource>
         <translation>结束日期</translation>
     </message>
     <message>
-        <location filename="DateSelector.cpp" line="156"/>
-        <location filename="DateSelector.cpp" line="196"/>
+        <location filename="DateSelector.cpp" line="132"/>
         <source>Year-Round</source>
         <translation>全年</translation>
     </message>
@@ -7805,127 +7803,125 @@ in skydrive folder</source>
     <name>Report</name>
     <message>
         <location filename="Report.cpp" line="161"/>
-        <location filename="Report.cpp" line="175"/>
-        <location filename="Report.cpp" line="248"/>
-        <location filename="Report.cpp" line="376"/>
-        <location filename="Report.cpp" line="517"/>
-        <location filename="Report.cpp" line="633"/>
-        <location filename="Report.cpp" line="770"/>
-        <location filename="Report.cpp" line="790"/>
-        <location filename="Report.cpp" line="810"/>
+        <location filename="Report.cpp" line="172"/>
+        <location filename="Report.cpp" line="226"/>
+        <location filename="Report.cpp" line="354"/>
+        <location filename="Report.cpp" line="495"/>
+        <location filename="Report.cpp" line="611"/>
+        <location filename="Report.cpp" line="748"/>
+        <location filename="Report.cpp" line="768"/>
+        <location filename="Report.cpp" line="788"/>
         <source>Details</source>
         <translation>详细</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="246"/>
-        <location filename="Report.cpp" line="270"/>
-        <location filename="Report.cpp" line="589"/>
+        <location filename="Report.cpp" line="224"/>
+        <location filename="Report.cpp" line="248"/>
+        <location filename="Report.cpp" line="567"/>
         <source>Total</source>
         <translation>总计</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="246"/>
-        <location filename="Report.cpp" line="270"/>
-        <location filename="Report.cpp" line="282"/>
-        <location filename="Report.cpp" line="550"/>
-        <location filename="Report.cpp" line="590"/>
-        <location filename="Report.cpp" line="606"/>
+        <location filename="Report.cpp" line="224"/>
+        <location filename="Report.cpp" line="248"/>
+        <location filename="Report.cpp" line="260"/>
+        <location filename="Report.cpp" line="528"/>
+        <location filename="Report.cpp" line="568"/>
+        <location filename="Report.cpp" line="584"/>
         <source>Freq</source>
         <translation>频次</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="247"/>
-        <location filename="Report.cpp" line="271"/>
-        <location filename="Report.cpp" line="283"/>
-        <location filename="Report.cpp" line="457"/>
-        <location filename="Report.cpp" line="532"/>
-        <location filename="Report.cpp" line="552"/>
-        <location filename="Report.cpp" line="592"/>
-        <location filename="Report.cpp" line="607"/>
-        <location filename="Report.cpp" line="808"/>
+        <location filename="Report.cpp" line="225"/>
+        <location filename="Report.cpp" line="249"/>
+        <location filename="Report.cpp" line="261"/>
+        <location filename="Report.cpp" line="435"/>
+        <location filename="Report.cpp" line="510"/>
+        <location filename="Report.cpp" line="530"/>
+        <location filename="Report.cpp" line="570"/>
+        <location filename="Report.cpp" line="585"/>
+        <location filename="Report.cpp" line="786"/>
         <source>Amount</source>
         <translation>金额</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="282"/>
+        <location filename="Report.cpp" line="260"/>
         <source>Month Sum</source>
         <translation>月总计</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="274"/>
-        <location filename="Report.cpp" line="416"/>
-        <location filename="Report.cpp" line="469"/>
-        <location filename="Report.cpp" line="769"/>
+        <location filename="Report.cpp" line="252"/>
+        <location filename="Report.cpp" line="394"/>
+        <location filename="Report.cpp" line="447"/>
+        <location filename="Report.cpp" line="747"/>
         <source>View Category</source>
         <translation>查看分类</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="179"/>
-        <location filename="Report.cpp" line="188"/>
-        <location filename="Report.cpp" line="300"/>
+        <location filename="Report.cpp" line="278"/>
         <source>Year-Round</source>
         <translation>全年</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="455"/>
-        <location filename="Report.cpp" line="483"/>
-        <location filename="Report.cpp" line="809"/>
+        <location filename="Report.cpp" line="433"/>
+        <location filename="Report.cpp" line="461"/>
+        <location filename="Report.cpp" line="787"/>
         <source>Category</source>
         <translation>分类</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="456"/>
+        <location filename="Report.cpp" line="434"/>
         <source>Percent</source>
         <translation>百分比</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="531"/>
-        <location filename="Report.cpp" line="605"/>
+        <location filename="Report.cpp" line="509"/>
+        <location filename="Report.cpp" line="583"/>
         <source>Date</source>
         <translation>日期</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="660"/>
+        <location filename="Report.cpp" line="638"/>
         <source>Please turn on the storage permission of the app.</source>
         <translation>请开启APP的存储权限！</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="665"/>
+        <location filename="Report.cpp" line="643"/>
         <source>Picture output successful!</source>
         <translation>图片输出成功！</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="669"/>
+        <location filename="Report.cpp" line="647"/>
         <source>Save Config</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="671"/>
+        <location filename="Report.cpp" line="649"/>
         <source>PNG files(*.png)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="801"/>
+        <location filename="Report.cpp" line="779"/>
         <source>Time</source>
         <translation>时间</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="823"/>
+        <location filename="Report.cpp" line="801"/>
         <source>Output to Image</source>
         <translation>输出到图片</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="828"/>
+        <location filename="Report.cpp" line="806"/>
         <source>Create Image and Share</source>
         <translation>创建图片并分享</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="833"/>
+        <location filename="Report.cpp" line="811"/>
         <source>Share to</source>
         <translation>分享到</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="837"/>
+        <location filename="Report.cpp" line="815"/>
         <source>Year Month</source>
         <translation>年  月</translation>
     </message>
@@ -7934,17 +7930,17 @@ in skydrive folder</source>
         <translation type="vanished">年</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="842"/>
+        <location filename="Report.cpp" line="820"/>
         <source>Month</source>
         <translation>月</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="848"/>
+        <location filename="Report.cpp" line="826"/>
         <source>Start Date</source>
         <translation>起始日期</translation>
     </message>
     <message>
-        <location filename="Report.cpp" line="853"/>
+        <location filename="Report.cpp" line="831"/>
         <source>End Date</source>
         <translation>结束日期</translation>
     </message>
@@ -8483,59 +8479,59 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="Todo/TodoAlarm.ui" line="116"/>
-        <location filename="Todo/TodoAlarm.cpp" line="156"/>
-        <location filename="Todo/TodoAlarm.cpp" line="183"/>
-        <location filename="Todo/TodoAlarm.cpp" line="336"/>
-        <location filename="Todo/TodoAlarm.cpp" line="384"/>
+        <location filename="Todo/TodoAlarm.cpp" line="173"/>
+        <location filename="Todo/TodoAlarm.cpp" line="200"/>
+        <location filename="Todo/TodoAlarm.cpp" line="353"/>
+        <location filename="Todo/TodoAlarm.cpp" line="401"/>
         <source>Year</source>
         <translation>年</translation>
     </message>
     <message>
         <location filename="Todo/TodoAlarm.ui" line="129"/>
-        <location filename="Todo/TodoAlarm.cpp" line="157"/>
-        <location filename="Todo/TodoAlarm.cpp" line="188"/>
-        <location filename="Todo/TodoAlarm.cpp" line="341"/>
-        <location filename="Todo/TodoAlarm.cpp" line="387"/>
+        <location filename="Todo/TodoAlarm.cpp" line="174"/>
+        <location filename="Todo/TodoAlarm.cpp" line="205"/>
+        <location filename="Todo/TodoAlarm.cpp" line="358"/>
+        <location filename="Todo/TodoAlarm.cpp" line="404"/>
         <source>Month</source>
         <translation>月</translation>
     </message>
     <message>
         <location filename="Todo/TodoAlarm.ui" line="142"/>
-        <location filename="Todo/TodoAlarm.cpp" line="158"/>
-        <location filename="Todo/TodoAlarm.cpp" line="199"/>
-        <location filename="Todo/TodoAlarm.cpp" line="273"/>
-        <location filename="Todo/TodoAlarm.cpp" line="317"/>
-        <location filename="Todo/TodoAlarm.cpp" line="346"/>
-        <location filename="Todo/TodoAlarm.cpp" line="390"/>
+        <location filename="Todo/TodoAlarm.cpp" line="175"/>
+        <location filename="Todo/TodoAlarm.cpp" line="216"/>
+        <location filename="Todo/TodoAlarm.cpp" line="290"/>
+        <location filename="Todo/TodoAlarm.cpp" line="334"/>
+        <location filename="Todo/TodoAlarm.cpp" line="363"/>
+        <location filename="Todo/TodoAlarm.cpp" line="407"/>
         <source>Day</source>
         <translation>日</translation>
     </message>
     <message>
         <location filename="Todo/TodoAlarm.ui" line="155"/>
-        <location filename="Todo/TodoAlarm.cpp" line="159"/>
-        <location filename="Todo/TodoAlarm.cpp" line="204"/>
-        <location filename="Todo/TodoAlarm.cpp" line="250"/>
-        <location filename="Todo/TodoAlarm.cpp" line="351"/>
-        <location filename="Todo/TodoAlarm.cpp" line="393"/>
-        <location filename="Todo/TodoAlarm.cpp" line="444"/>
-        <location filename="Todo/TodoAlarm.cpp" line="453"/>
-        <location filename="Todo/TodoAlarm.cpp" line="473"/>
-        <location filename="Todo/TodoAlarm.cpp" line="492"/>
-        <location filename="Todo/TodoAlarm.cpp" line="505"/>
+        <location filename="Todo/TodoAlarm.cpp" line="176"/>
+        <location filename="Todo/TodoAlarm.cpp" line="221"/>
+        <location filename="Todo/TodoAlarm.cpp" line="267"/>
+        <location filename="Todo/TodoAlarm.cpp" line="368"/>
+        <location filename="Todo/TodoAlarm.cpp" line="410"/>
+        <location filename="Todo/TodoAlarm.cpp" line="461"/>
+        <location filename="Todo/TodoAlarm.cpp" line="470"/>
+        <location filename="Todo/TodoAlarm.cpp" line="490"/>
+        <location filename="Todo/TodoAlarm.cpp" line="497"/>
+        <location filename="Todo/TodoAlarm.cpp" line="510"/>
         <source>Hour</source>
         <translation>时</translation>
     </message>
     <message>
         <location filename="Todo/TodoAlarm.ui" line="168"/>
-        <location filename="Todo/TodoAlarm.cpp" line="160"/>
-        <location filename="Todo/TodoAlarm.cpp" line="209"/>
-        <location filename="Todo/TodoAlarm.cpp" line="250"/>
-        <location filename="Todo/TodoAlarm.cpp" line="356"/>
-        <location filename="Todo/TodoAlarm.cpp" line="396"/>
-        <location filename="Todo/TodoAlarm.cpp" line="450"/>
-        <location filename="Todo/TodoAlarm.cpp" line="470"/>
-        <location filename="Todo/TodoAlarm.cpp" line="497"/>
-        <location filename="Todo/TodoAlarm.cpp" line="510"/>
+        <location filename="Todo/TodoAlarm.cpp" line="177"/>
+        <location filename="Todo/TodoAlarm.cpp" line="226"/>
+        <location filename="Todo/TodoAlarm.cpp" line="267"/>
+        <location filename="Todo/TodoAlarm.cpp" line="373"/>
+        <location filename="Todo/TodoAlarm.cpp" line="413"/>
+        <location filename="Todo/TodoAlarm.cpp" line="467"/>
+        <location filename="Todo/TodoAlarm.cpp" line="487"/>
+        <location filename="Todo/TodoAlarm.cpp" line="502"/>
+        <location filename="Todo/TodoAlarm.cpp" line="515"/>
         <source>Minute</source>
         <translation>分</translation>
     </message>
@@ -8595,54 +8591,54 @@ in skydrive folder</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Todo/TodoAlarm.cpp" line="97"/>
+        <location filename="Todo/TodoAlarm.cpp" line="98"/>
         <source>Date:</source>
         <translation>日期：</translation>
     </message>
     <message>
-        <location filename="Todo/TodoAlarm.cpp" line="101"/>
+        <location filename="Todo/TodoAlarm.cpp" line="102"/>
         <source>Time:</source>
         <translation>时间：</translation>
     </message>
     <message>
-        <location filename="Todo/TodoAlarm.cpp" line="261"/>
-        <location filename="Todo/TodoAlarm.cpp" line="305"/>
+        <location filename="Todo/TodoAlarm.cpp" line="278"/>
+        <location filename="Todo/TodoAlarm.cpp" line="322"/>
         <source>Mon</source>
         <translation>一</translation>
     </message>
     <message>
-        <location filename="Todo/TodoAlarm.cpp" line="262"/>
-        <location filename="Todo/TodoAlarm.cpp" line="306"/>
+        <location filename="Todo/TodoAlarm.cpp" line="279"/>
+        <location filename="Todo/TodoAlarm.cpp" line="323"/>
         <source>Tue</source>
         <translation>二</translation>
     </message>
     <message>
-        <location filename="Todo/TodoAlarm.cpp" line="263"/>
-        <location filename="Todo/TodoAlarm.cpp" line="307"/>
+        <location filename="Todo/TodoAlarm.cpp" line="280"/>
+        <location filename="Todo/TodoAlarm.cpp" line="324"/>
         <source>Wed</source>
         <translation>三</translation>
     </message>
     <message>
-        <location filename="Todo/TodoAlarm.cpp" line="264"/>
-        <location filename="Todo/TodoAlarm.cpp" line="308"/>
+        <location filename="Todo/TodoAlarm.cpp" line="281"/>
+        <location filename="Todo/TodoAlarm.cpp" line="325"/>
         <source>Thur</source>
         <translation>四</translation>
     </message>
     <message>
-        <location filename="Todo/TodoAlarm.cpp" line="265"/>
-        <location filename="Todo/TodoAlarm.cpp" line="309"/>
+        <location filename="Todo/TodoAlarm.cpp" line="282"/>
+        <location filename="Todo/TodoAlarm.cpp" line="326"/>
         <source>Fri</source>
         <translation>五</translation>
     </message>
     <message>
-        <location filename="Todo/TodoAlarm.cpp" line="266"/>
-        <location filename="Todo/TodoAlarm.cpp" line="310"/>
+        <location filename="Todo/TodoAlarm.cpp" line="283"/>
+        <location filename="Todo/TodoAlarm.cpp" line="327"/>
         <source>Sat</source>
         <translation>六</translation>
     </message>
     <message>
-        <location filename="Todo/TodoAlarm.cpp" line="267"/>
-        <location filename="Todo/TodoAlarm.cpp" line="311"/>
+        <location filename="Todo/TodoAlarm.cpp" line="284"/>
+        <location filename="Todo/TodoAlarm.cpp" line="328"/>
         <source>Sun</source>
         <translation>日</translation>
     </message>

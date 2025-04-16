@@ -314,46 +314,32 @@ in skydrive folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/DateSelector.ui" line="39"/>
+        <location filename="../../src/DateSelector.ui" line="80"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/DateSelector.ui" line="71"/>
-        <location filename="../../src/DateSelector.cpp" line="163"/>
-        <source>Day</source>
+        <location filename="../../src/DateSelector.ui" line="112"/>
+        <source>Year-Month</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/DateSelector.ui" line="121"/>
+        <location filename="../../src/DateSelector.ui" line="39"/>
         <source>Flag</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/DateSelector.ui" line="153"/>
-        <location filename="../../src/DateSelector.cpp" line="148"/>
-        <source>Year</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/DateSelector.ui" line="245"/>
-        <location filename="../../src/DateSelector.cpp" line="158"/>
-        <source>Month</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/DateSelector.cpp" line="123"/>
+        <location filename="../../src/DateSelector.cpp" line="81"/>
         <source>Start Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/DateSelector.cpp" line="124"/>
+        <location filename="../../src/DateSelector.cpp" line="82"/>
         <source>End Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/DateSelector.cpp" line="156"/>
-        <location filename="../../src/DateSelector.cpp" line="196"/>
+        <location filename="../../src/DateSelector.cpp" line="132"/>
         <source>Year-Round</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7017,142 +7003,140 @@ in skydrive folder</source>
     <name>Report</name>
     <message>
         <location filename="../../src/Report.cpp" line="161"/>
-        <location filename="../../src/Report.cpp" line="175"/>
-        <location filename="../../src/Report.cpp" line="248"/>
-        <location filename="../../src/Report.cpp" line="376"/>
-        <location filename="../../src/Report.cpp" line="517"/>
-        <location filename="../../src/Report.cpp" line="633"/>
-        <location filename="../../src/Report.cpp" line="770"/>
-        <location filename="../../src/Report.cpp" line="790"/>
-        <location filename="../../src/Report.cpp" line="810"/>
+        <location filename="../../src/Report.cpp" line="172"/>
+        <location filename="../../src/Report.cpp" line="226"/>
+        <location filename="../../src/Report.cpp" line="354"/>
+        <location filename="../../src/Report.cpp" line="495"/>
+        <location filename="../../src/Report.cpp" line="611"/>
+        <location filename="../../src/Report.cpp" line="748"/>
+        <location filename="../../src/Report.cpp" line="768"/>
+        <location filename="../../src/Report.cpp" line="788"/>
         <source>Details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="179"/>
-        <location filename="../../src/Report.cpp" line="188"/>
-        <location filename="../../src/Report.cpp" line="300"/>
+        <location filename="../../src/Report.cpp" line="278"/>
         <source>Year-Round</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="246"/>
-        <location filename="../../src/Report.cpp" line="270"/>
-        <location filename="../../src/Report.cpp" line="589"/>
+        <location filename="../../src/Report.cpp" line="224"/>
+        <location filename="../../src/Report.cpp" line="248"/>
+        <location filename="../../src/Report.cpp" line="567"/>
         <source>Total</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="246"/>
-        <location filename="../../src/Report.cpp" line="270"/>
-        <location filename="../../src/Report.cpp" line="282"/>
-        <location filename="../../src/Report.cpp" line="550"/>
-        <location filename="../../src/Report.cpp" line="590"/>
-        <location filename="../../src/Report.cpp" line="606"/>
+        <location filename="../../src/Report.cpp" line="224"/>
+        <location filename="../../src/Report.cpp" line="248"/>
+        <location filename="../../src/Report.cpp" line="260"/>
+        <location filename="../../src/Report.cpp" line="528"/>
+        <location filename="../../src/Report.cpp" line="568"/>
+        <location filename="../../src/Report.cpp" line="584"/>
         <source>Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="247"/>
-        <location filename="../../src/Report.cpp" line="271"/>
-        <location filename="../../src/Report.cpp" line="283"/>
-        <location filename="../../src/Report.cpp" line="457"/>
-        <location filename="../../src/Report.cpp" line="532"/>
-        <location filename="../../src/Report.cpp" line="552"/>
-        <location filename="../../src/Report.cpp" line="592"/>
-        <location filename="../../src/Report.cpp" line="607"/>
-        <location filename="../../src/Report.cpp" line="808"/>
+        <location filename="../../src/Report.cpp" line="225"/>
+        <location filename="../../src/Report.cpp" line="249"/>
+        <location filename="../../src/Report.cpp" line="261"/>
+        <location filename="../../src/Report.cpp" line="435"/>
+        <location filename="../../src/Report.cpp" line="510"/>
+        <location filename="../../src/Report.cpp" line="530"/>
+        <location filename="../../src/Report.cpp" line="570"/>
+        <location filename="../../src/Report.cpp" line="585"/>
+        <location filename="../../src/Report.cpp" line="786"/>
         <source>Amount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="274"/>
-        <location filename="../../src/Report.cpp" line="416"/>
-        <location filename="../../src/Report.cpp" line="469"/>
-        <location filename="../../src/Report.cpp" line="769"/>
+        <location filename="../../src/Report.cpp" line="252"/>
+        <location filename="../../src/Report.cpp" line="394"/>
+        <location filename="../../src/Report.cpp" line="447"/>
+        <location filename="../../src/Report.cpp" line="747"/>
         <source>View Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="282"/>
+        <location filename="../../src/Report.cpp" line="260"/>
         <source>Month Sum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="455"/>
-        <location filename="../../src/Report.cpp" line="483"/>
-        <location filename="../../src/Report.cpp" line="809"/>
+        <location filename="../../src/Report.cpp" line="433"/>
+        <location filename="../../src/Report.cpp" line="461"/>
+        <location filename="../../src/Report.cpp" line="787"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="456"/>
+        <location filename="../../src/Report.cpp" line="434"/>
         <source>Percent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="531"/>
-        <location filename="../../src/Report.cpp" line="605"/>
+        <location filename="../../src/Report.cpp" line="509"/>
+        <location filename="../../src/Report.cpp" line="583"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="660"/>
+        <location filename="../../src/Report.cpp" line="638"/>
         <source>Please turn on the storage permission of the app.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="665"/>
+        <location filename="../../src/Report.cpp" line="643"/>
         <source>Picture output successful!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="669"/>
+        <location filename="../../src/Report.cpp" line="647"/>
         <source>Save Config</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="671"/>
+        <location filename="../../src/Report.cpp" line="649"/>
         <source>PNG files(*.png)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="801"/>
+        <location filename="../../src/Report.cpp" line="779"/>
         <source>Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="823"/>
+        <location filename="../../src/Report.cpp" line="801"/>
         <source>Output to Image</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="828"/>
+        <location filename="../../src/Report.cpp" line="806"/>
         <source>Create Image and Share</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="833"/>
+        <location filename="../../src/Report.cpp" line="811"/>
         <source>Share to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="837"/>
+        <location filename="../../src/Report.cpp" line="815"/>
         <source>Year Month</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="842"/>
+        <location filename="../../src/Report.cpp" line="820"/>
         <source>Month</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="848"/>
+        <location filename="../../src/Report.cpp" line="826"/>
         <source>Start Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Report.cpp" line="853"/>
+        <location filename="../../src/Report.cpp" line="831"/>
         <source>End Date</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7523,59 +7507,59 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="../../src/Todo/TodoAlarm.ui" line="116"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="156"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="183"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="336"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="384"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="173"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="200"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="353"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="401"/>
         <source>Year</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/Todo/TodoAlarm.ui" line="129"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="157"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="188"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="341"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="387"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="174"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="205"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="358"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="404"/>
         <source>Month</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/Todo/TodoAlarm.ui" line="142"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="158"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="199"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="273"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="317"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="346"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="390"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="175"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="216"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="290"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="334"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="363"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="407"/>
         <source>Day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/Todo/TodoAlarm.ui" line="155"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="159"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="204"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="250"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="351"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="393"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="444"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="453"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="473"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="492"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="505"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="176"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="221"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="267"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="368"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="410"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="461"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="470"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="490"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="497"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="510"/>
         <source>Hour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/Todo/TodoAlarm.ui" line="168"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="160"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="209"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="250"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="356"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="396"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="450"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="470"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="497"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="510"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="177"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="226"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="267"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="373"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="413"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="467"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="487"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="502"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="515"/>
         <source>Minute</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7660,54 +7644,54 @@ in skydrive folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="97"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="98"/>
         <source>Date:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="101"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="102"/>
         <source>Time:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="261"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="305"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="278"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="322"/>
         <source>Mon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="262"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="306"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="279"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="323"/>
         <source>Tue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="263"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="307"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="280"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="324"/>
         <source>Wed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="264"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="308"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="281"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="325"/>
         <source>Thur</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="265"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="309"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="282"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="326"/>
         <source>Fri</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="266"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="310"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="283"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="327"/>
         <source>Sat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="267"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="311"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="284"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="328"/>
         <source>Sun</source>
         <translation type="unfinished"></translation>
     </message>

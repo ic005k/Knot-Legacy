@@ -13,43 +13,16 @@ DateSelector::DateSelector(QWidget *parent)
   ui->setupUi(this);
   this->installEventFilter(this);
 
-  ui->sliderDay->hide();
-  ui->sliderMonth->hide();
-  ui->sliderYear->hide();
-
-  if (nWidgetType == 1) {
-    rboxYear = new RollingBox(this);
-    rboxMonth = new RollingBox(this);
-    rboxDay = new RollingBox(this);
-
-    int rw = 260;
-    initRBox(rboxYear, rw);
-    initRBox(rboxMonth, rw);
-    initRBox(rboxDay, rw);
-
-    ui->gboxYear->layout()->addWidget(rboxYear);
-    ui->gboxMonth->layout()->addWidget(rboxMonth);
-    ui->gboxDay->layout()->addWidget(rboxDay);
-  }
-
-  if (nWidgetType == 3) {
-    ui->sliderDay->setStyleSheet(ui->sliderYear->styleSheet());
-    ui->sliderMonth->setStyleSheet(ui->sliderYear->styleSheet());
-
-    ui->sliderDay->setMinimum(1);
-    ui->sliderDay->setMaximum(31);
-
-    ui->sliderMonth->setMinimum(1);
-    ui->sliderMonth->setMaximum(12);
-
-    ui->sliderYear->setMinimum(2022);
-
-    ui->sliderDay->show();
-    ui->sliderMonth->show();
-    ui->sliderYear->show();
-  }
-
   setModal(true);
+
+  m_datePickerYM = new DatePicker(false);
+  m_datePickerYMD = new DatePicker;
+
+  m_datePickerYM->setFixedHeight(150);
+  ui->gboxYear->layout()->addWidget(m_datePickerYM);
+
+  m_datePickerYMD->setFixedHeight(150);
+  ui->gboxMonth->layout()->addWidget(m_datePickerYMD);
 }
 
 void DateSelector::initRBox(RollingBox *rbox, int w) {
@@ -77,59 +50,39 @@ void DateSelector::closeEvent(QCloseEvent *event) {
 }
 
 void DateSelector::init() {
-  int cy = QDate::currentDate().year();
-  if (nWidgetType == 1) rboxYear->setRange(2022, cy);
-  if (nWidgetType == 3) ui->sliderYear->setRange(2022, cy);
-
-  if (nWidgetType == 1) rboxMonth->setRange(1, 13);
-  if (nWidgetType == 3) ui->sliderMonth->setRange(1, 13);
-
   if (dateFlag == 1) {
     ui->gboxMonth->hide();
-    ui->gboxDay->hide();
 
     ui->gboxYear->setHidden(false);
-    ui->gboxMonth->show();
+    ui->gboxMonth->hide();
 
     ui->lblYear->setHidden(false);
-    ui->lblMonth->show();
 
-    ui->lblDay->hide();
     ui->lblFlag->hide();
 
-    setFixedHeight(400);
+    setFixedHeight(320);
   }
 
   if (dateFlag == 2) {
     ui->gboxYear->hide();
-    ui->gboxDay->hide();
+
     ui->gboxMonth->setHidden(false);
 
-    ui->lblMonth->setHidden(false);
     ui->lblYear->hide();
-    ui->lblDay->hide();
-    ui->lblFlag->hide();
 
-    if (nWidgetType == 1) rboxMonth->setRange(1, 13);
-    if (nWidgetType == 3) ui->sliderMonth->setRange(1, 13);
+    ui->lblFlag->hide();
 
     setFixedHeight(200);
   }
 
   if (dateFlag == 3 || dateFlag == 4) {
     ui->lblYear->setHidden(false);
-    ui->lblMonth->setHidden(false);
-    ui->lblDay->setHidden(false);
+
     if (dateFlag == 3) ui->lblFlag->setText(tr("Start Date"));
     if (dateFlag == 4) ui->lblFlag->setText(tr("End Date"));
     ui->lblFlag->setHidden(false);
 
-    if (nWidgetType == 1) {
-      rboxMonth->setRange(1, 12);
-      rboxDay->setRange(1, 31);
-    }
-
-    setFixedHeight(490);
+    setFixedHeight(320);
   }
 
   setFixedWidth(mw_one->width() - 10);
@@ -144,45 +97,28 @@ void DateSelector::init() {
   show();
 }
 
-void DateSelector::on_hsYear_valueChanged(int value) {
-  ui->lblYear->setText(QString::number(value) + "  " + tr("Year"));
-}
-
-void DateSelector::on_hsMonth_valueChanged(int value)
-
-{
-  if (value == 13)
-    ui->lblMonth->setText(QString::number(rboxMonth->readValue()) + "  " +
-                          tr("Year-Round"));
-  else {
-    ui->lblMonth->setText(QString::number(value) + "  " + tr("Month"));
-  }
-}
-
-void DateSelector::on_hsDay_valueChanged(int value) {
-  ui->lblDay->setText(QString::number(value) + "  " + tr("Day"));
-}
-
 void DateSelector::on_btnOk_clicked() {
   QString y, m, d;
 
-  if (isAndroid) {
-    QStringList list = m_Method->getDateTimePickerValue();
-    y = list.at(0);
-    m = list.at(1);
-    d = list.at(2);
-  } else {
-    if (nWidgetType == 1) {
-      y = QString::number(rboxYear->readValue());
-      m = QString::number(rboxMonth->readValue());
-      d = QString::number(rboxDay->readValue());
-    }
+  // if (isAndroid) {
+  //   QStringList list = m_Method->getDateTimePickerValue();
+  //   y = list.at(0);
+  //   m = list.at(1);
+  //   d = list.at(2);
+  // }
 
-    if (nWidgetType == 3) {
-      y = QString::number(ui->sliderYear->value());
-      m = QString::number(ui->sliderMonth->value());
-      d = QString::number(ui->sliderDay->value());
-    }
+  if (!ui->gboxYear->isHidden()) {
+    QDate date = m_datePickerYM->date();
+    y = QString::number(date.year());
+    m = QString::number(date.month());
+    d = QString::number(date.day());
+  }
+
+  if (!ui->gboxMonth->isHidden()) {
+    QDate date = m_datePickerYMD->date();
+    y = QString::number(date.year());
+    m = QString::number(date.month());
+    d = QString::number(date.day());
   }
 
   if (m.length() == 1) m = "0" + m;
@@ -237,27 +173,16 @@ void DateSelector::initStartEndDate(QString flag) {
   m = list.at(1).toInt();
   d = list.at(2).toInt();
 
-  if (isAndroid) {
-    m_Method->setDateTimePickerFlag("ymd", y, m, d, 0, 0, flag);
-    m_Method->openDateTimePicker();
-    return;
-  }
+  // if (isAndroid) {
+  //   m_Method->setDateTimePickerFlag("ymd", y, m, d, 0, 0, flag);
+  //   m_Method->openDateTimePicker();
+  //   return;
+  // }
 
-  if (nWidgetType == 1) {
-    rboxYear->setValue(y);
-    rboxMonth->setValue(m);
-    rboxDay->setValue(d);
-  }
-
-  if (nWidgetType == 3) {
-    ui->sliderYear->setValue(y);
-    ui->sliderMonth->setValue(m);
-    ui->sliderDay->setValue(d);
-  }
-
-  ui->gboxYear->setHidden(false);
+  ui->gboxYear->hide();
   ui->gboxMonth->setHidden(false);
-  ui->gboxDay->setHidden(false);
+
+  m_datePickerYMD->setDate(QDate(y, m, d));
 
   init();
 }

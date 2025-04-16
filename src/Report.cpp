@@ -149,23 +149,20 @@ void Report::closeEvent(QCloseEvent* event) { Q_UNUSED(event); }
 void Report::on_btnYear_clicked() {
   m_DateSelector->dateFlag = 1;
 
-  if (isAndroid) {
-    int y, m;
-    y = mw_one->ui->btnYear->text().toInt();
-    m = mw_one->ui->btnMonth->text().toInt();
-    m_Method->setDateTimePickerFlag("ym", y, m, 0, 0, 0, "");
-    m_Method->openDateTimePicker();
-    return;
-  }
+  // if (isAndroid) {
+  //   int y, m;
+  //   y = mw_one->ui->btnYear->text().toInt();
+  //   m = mw_one->ui->btnMonth->text().toInt();
+  //   m_Method->setDateTimePickerFlag("ym", y, m, 0, 0, 0, "");
+  //   m_Method->openDateTimePicker();
+  //   return;
+  // }
 
   mw_one->ui->lblDetails->setText(tr("Details"));
 
-  if (m_DateSelector->nWidgetType == 1)
-    m_DateSelector->rboxYear->setValue(mw_one->ui->btnYear->text().toInt());
-
-  if (m_DateSelector->nWidgetType == 3)
-    m_DateSelector->ui->sliderYear->setValue(
-        mw_one->ui->btnYear->text().toInt());
+  QDate date(mw_one->ui->btnYear->text().toInt(),
+             mw_one->ui->btnMonth->text().toInt(), 1);
+  m_DateSelector->m_datePickerYM->setDate(date);
 
   m_DateSelector->init();
 }
@@ -173,25 +170,6 @@ void Report::on_btnYear_clicked() {
 void Report::on_btnMonth_clicked() {
   m_DateSelector->dateFlag = 2;
   mw_one->ui->lblDetails->setText(tr("Details"));
-
-  if (m_DateSelector->nWidgetType == 1) {
-    m_DateSelector->rboxYear->setValue(mw_one->ui->btnYear->text().toInt());
-    if (mw_one->ui->btnMonth->text().trimmed() == tr("Year-Round"))
-      m_DateSelector->rboxMonth->setValue(13);
-    else
-      m_DateSelector->rboxMonth->setValue(mw_one->ui->btnMonth->text().toInt());
-  }
-
-  if (m_DateSelector->nWidgetType == 3) {
-    m_DateSelector->ui->sliderYear->setValue(
-        mw_one->ui->btnYear->text().toInt());
-    if (mw_one->ui->btnMonth->text().trimmed() == tr("Year-Round")) {
-      m_DateSelector->ui->sliderMonth->setValue(13);
-    } else {
-      m_DateSelector->ui->sliderMonth->setValue(
-          mw_one->ui->btnMonth->text().toInt());
-    }
-  }
 
   m_DateSelector->init();
 }
