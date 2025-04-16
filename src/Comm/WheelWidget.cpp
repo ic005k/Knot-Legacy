@@ -9,6 +9,8 @@
 extern bool isDark;
 
 WheelWidget::WheelWidget(QWidget* parent) : QWidget(parent) {
+  setFixedHeight(150);
+
   // 惯性动画定时器（60FPS）
   m_inertiaTimer.setInterval(16);
   connect(&m_inertiaTimer, &QTimer::timeout, this,
@@ -31,7 +33,7 @@ void WheelWidget::paintEvent(QPaintEvent* event) {
   const int centerY = height() / 2;
 
   // 动态计算需要绘制的项数（覆盖两倍屏幕高度）
-  const int visibleItemCount = qCeil(height() / (qreal)m_itemHeight) * 2 + 5;
+  const int visibleItemCount = qCeil(height() / (qreal)m_itemHeight) * 2 + 3;
   for (int i = -visibleItemCount; i <= visibleItemCount; ++i) {
     // 循环核心算法：虚拟索引计算
     int virtualIndex =

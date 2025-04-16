@@ -89,10 +89,8 @@ TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
   ui->frameSel->setLayout(vLayout);
   ui->frameSel->setMinimumHeight(380);
   m_timePicker = new Time24Picker(ui->frameSel);
-  m_timePicker->setFixedHeight(150);
 
   m_datePicker = new DatePicker(true, ui->frameSel);
-  m_datePicker->setFixedHeight(150);
 
   QLabel* lblYMD = new QLabel();
   lblYMD->setText(tr("Date:"));
