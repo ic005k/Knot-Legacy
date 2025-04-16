@@ -43,7 +43,8 @@ TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
 
   initDlg();
 
-  if (isAndroid) ui->frameSel->hide();
+  // if (isAndroid) ui->frameSel->hide();
+
   ui->dateTimeEdit->hide();
   ui->dateTimeEdit->setReadOnly(true);
   ui->lblTodoText->setStyleSheet(mw_one->ui->lblTitleEditRecord->styleSheet());
@@ -54,6 +55,11 @@ TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
   ui->btnDay->setFont(font);
   ui->btnHour->setFont(font);
   ui->btnMinute->setFont(font);
+
+  ui->frameDT->hide();
+  ui->btnToday->hide();
+  ui->btnTomorrow->hide();
+  ui->btnNextWeek->hide();
 
   QString strStyleChk = mw_one->m_Preferences->chkStyle;
   ui->chk1->setStyleSheet(strStyleChk);
@@ -76,6 +82,46 @@ TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
   } else {
     getChkVoice();
   }
+
+  QVBoxLayout* vLayout = new QVBoxLayout();
+  vLayout->setSpacing(10);
+  vLayout->setMargin(10);
+  ui->frameSel->setLayout(vLayout);
+  ui->frameSel->setMinimumHeight(380);
+  m_timePicker = new Time24Picker(ui->frameSel);
+  m_timePicker->setFixedHeight(150);
+
+  m_datePicker = new DatePicker(true, ui->frameSel);
+  m_datePicker->setFixedHeight(150);
+
+  QLabel* lblYMD = new QLabel();
+  lblYMD->setText(tr("Date:"));
+  lblYMD->setStyleSheet(ui->lblTodoText->styleSheet());
+
+  QLabel* lblTime = new QLabel();
+  lblTime->setText(tr("Time:"));
+  lblTime->setStyleSheet(ui->lblTodoText->styleSheet());
+
+  QSpacerItem* spacer1 =
+      new QSpacerItem(20,                     // 宽度（实际由布局决定）
+                      0,                      // 初始高度
+                      QSizePolicy::Minimum,   // 水平策略
+                      QSizePolicy::Expanding  // 垂直策略（关键）
+      );
+
+  QSpacerItem* spacer2 =
+      new QSpacerItem(20,                     // 宽度（实际由布局决定）
+                      0,                      // 初始高度
+                      QSizePolicy::Minimum,   // 水平策略
+                      QSizePolicy::Expanding  // 垂直策略（关键）
+      );
+
+  vLayout->addWidget(lblYMD);
+  vLayout->addWidget(m_datePicker);
+  vLayout->addSpacerItem(spacer1);
+  vLayout->addWidget(lblTime);
+  vLayout->addWidget(m_timePicker);
+  vLayout->addSpacerItem(spacer2);
 }
 
 TodoAlarm::~TodoAlarm() { delete ui; }
@@ -181,6 +227,8 @@ void TodoAlarm::on_btnMinute_clicked() {
 }
 
 void TodoAlarm::addBtn(int start, int total, int col, QString flag, bool week) {
+  return;
+
   QObjectList lstOfChildren0 =
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frameDT));
   for (int i = 0; i < lstOfChildren0.count(); i++) {
@@ -371,9 +419,16 @@ void TodoAlarm::onBtnClick(QToolButton* btn, QString flag) {
 
 void TodoAlarm::on_btnDelDT_clicked() { mw_one->m_Todo->on_DelAlarm(); }
 
-void TodoAlarm::on_btnSetDT_clicked() { mw_one->m_Todo->on_SetAlarm(); }
+void TodoAlarm::on_btnSetDT_clicked() {
+  ui->dateTimeEdit->setDate(m_datePicker->date());
+  ui->dateTimeEdit->setTime(m_timePicker->time());
+
+  mw_one->m_Todo->on_SetAlarm();
+}
 
 void TodoAlarm::addDial(int min, int max, QString flag) {
+  return;
+
   QObjectList lstOfChildren0 =
       mw_one->getAllToolButton(mw_one->getAllUIControls(ui->frameDT));
   for (int i = 0; i < lstOfChildren0.count(); i++) {

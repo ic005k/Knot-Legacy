@@ -342,11 +342,14 @@ SOURCES += \
     src/AutoUpdate.cpp \
     src/CategoryList.cpp \
     src/CloudBackup.cpp \
+    src/Comm/DatePicker.cpp \
     src/Comm/FileSystemWatcher.cpp \
     src/Comm/Method.cpp \
     src/Comm/ReceiveShare.cpp \
     src/Comm/RollingBox.cpp \
     src/Comm/ShowMessage.cpp \
+    src/Comm/Time24Picker.cpp \
+    src/Comm/WheelWidget.cpp \
     src/Comm/qaesencryption.cpp \
     src/DateSelector.cpp \
     src/EditRecord.cpp \
@@ -579,11 +582,14 @@ HEADERS += \
     src/AutoUpdate.h \
     src/CategoryList.h \
     src/CloudBackup.h \
+    src/Comm/DatePicker.h \
     src/Comm/FileSystemWatcher.h \
     src/Comm/Method.h \
     src/Comm/ReceiveShare.h \
     src/Comm/RollingBox.h \
     src/Comm/ShowMessage.h \
+    src/Comm/Time24Picker.h \
+    src/Comm/WheelWidget.h \
     src/Comm/qaesencryption.h \
     src/DateSelector.h \
     src/EditRecord.h \

@@ -499,6 +499,9 @@ void Todo::on_btnSetTime_clicked() {
   QFontMetrics fm(this->font());
   QString qsLine = fm.elidedText(txt, Qt::ElideRight, mw_one->width() - 10);
   mw_one->m_TodoAlarm->ui->lblTodoText->setText(qsLine);
+
+  mw_one->m_TodoAlarm->m_datePicker->setDate(date);
+  mw_one->m_TodoAlarm->m_timePicker->setTime(time);
   mw_one->m_TodoAlarm->show();
 }
 

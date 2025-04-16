@@ -5,9 +5,12 @@
 #include <QDialog>
 #include <QHBoxLayout>
 #include <QObjectList>
+#include <QSpacerItem>
 #include <QToolButton>
 
+#include "src/Comm/DatePicker.h"
 #include "src/Comm/RollingBox.h"
+#include "src/Comm/Time24Picker.h"
 
 namespace Ui {
 class TodoAlarm;
@@ -21,6 +24,9 @@ class TodoAlarm : public QDialog {
   ~TodoAlarm();
   Ui::TodoAlarm *ui;
 
+  Time24Picker *m_timePicker;
+  DatePicker *m_datePicker;
+
   void initDlg();
 
   QString btnSelStyle =
@@ -32,7 +38,8 @@ class TodoAlarm : public QDialog {
   void addBtn(int start, int total, int col, QString flag, bool week);
 
   void setDateTime();
-  protected:
+
+ protected:
   bool eventFilter(QObject *obj, QEvent *evn) override;
  public slots:
   void on_btnBack_clicked();
@@ -73,7 +80,8 @@ class TodoAlarm : public QDialog {
   void onRollBox(RollingBox *btn, QString flag);
   void addDial(int min, int max, QString flag);
 
-  int WidgetType = 2; /*1=Dial  2=RollBox*/
+  int WidgetType = 2;
+  /*1=Dial  2=RollBox* 3=New */
   void getChkVoice();
   void showTimePicker();
   void showDatePicker();
