@@ -43,7 +43,7 @@ class WheelWidget : public QWidget {
   qreal m_baseOffset;  // 拖拽基准偏移量
 
   QStringList m_items;
-  int m_itemHeight = 42;
+  int m_itemHeight = 40;
   int m_currentIndex;
   bool m_circular;
   int m_visibleItems;

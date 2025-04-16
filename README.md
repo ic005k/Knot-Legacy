@@ -80,13 +80,6 @@ graph LR
 ## 📜 Complete Open Source Acknowledgments
 All dependencies are preserved in original format for maintenance and upgrades:
 
-### Core Function Components
-| Project Name | Functionality | Repository Link |
-|--------------|---------------|-----------------|
-| **Pedometer** | Basic step-counting algorithm | [vikasy/Pedometer](https://github.com/vikasy/Pedometer) |
-| **android-qt-pedometer-accelerometer** | Motion sensor integration | [adct-the-experimenter/android-qt-pedometer-accelerometer](https://github.com/adct-the-experimenter/android-qt-pedometer-accelerometer) |
-| **QtOneDrive** | OneDrive sync engine | [AndreyMacritskiy/QtOneDrive](https://github.com/AndreyMacritskiy/QtOneDrive) |
-
 ### Document Processing Components
 | Project Name | Functionality | Repository Link |
 |--------------|---------------|-----------------|
@@ -101,15 +94,14 @@ All dependencies are preserved in original format for maintenance and upgrades:
 | **Qt-AES** | Data encryption module | [bricke/Qt-AES](https://github.com/bricke/Qt-AES) |
 | **quazip** | Compression/archive support | [stachenov/quazip](https://github.com/stachenov/quazip) |
 | **ini4j** | Configuration file management | [ini4j](https://ini4j.sourceforge.net/) |
-| **zlib** | Data compression algorithm | [zlib.net](https://zlib.net/) |
+| **zlib** | Data compression algorithm | [zlib.net](https://zlib.net/) |
+| **QtOneDrive** | OneDrive sync engine | [AndreyMacritskiy/QtOneDrive](https://github.com/AndreyMacritskiy/QtOneDrive) |
 
 ### UI & Auxiliary Tools
 | Project Name | Functionality | Repository Link |
 |--------------|---------------|-----------------|
 | **QScintilla** | Desktop note editor | [QScintilla](https://riverbankcomputing.com/software/qscintilla/download) |
 | **QDarkStyleSheet** | Dark theme support | [ColinDuquesnoy/QDarkStyleSheet](https://github.com/ColinDuquesnoy/QDarkStyleSheet) |
-| **ColorPicker** | Color selection component | [QuadFlask/colorpicker](https://github.com/QuadFlask/colorpicker) |
-| **PowerMenu** | Context menu component | [skydoves/PowerMenu](https://github.com/skydoves/PowerMenu) |
 
 ### Android-specific Components
 | Project Name | Functionality | Repository Link |

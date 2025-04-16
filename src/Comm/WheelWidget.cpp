@@ -9,7 +9,8 @@
 extern bool isDark;
 
 WheelWidget::WheelWidget(QWidget* parent) : QWidget(parent) {
-  setFixedHeight(150);
+  m_itemHeight = 40;
+  setFixedHeight(40 * 3);
 
   // 惯性动画定时器（60FPS）
   m_inertiaTimer.setInterval(16);

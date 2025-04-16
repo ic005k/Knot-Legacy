@@ -49,7 +49,6 @@ void DateSelector::closeEvent(QCloseEvent *event) {
 void DateSelector::init() {
   if (dateFlag == 1) {
     ui->gboxMonth->hide();
-    ui->gboxYear->setFixedHeight(250);
 
     ui->gboxYear->setHidden(false);
     ui->gboxMonth->hide();
@@ -58,7 +57,7 @@ void DateSelector::init() {
 
     ui->lblFlag->hide();
 
-    setMinimumHeight(320);
+    setMinimumHeight(300);
   }
 
   if (dateFlag == 2) {
@@ -70,18 +69,17 @@ void DateSelector::init() {
 
     ui->lblFlag->hide();
 
-    setMinimumHeight(320);
+    setMinimumHeight(300);
   }
 
   if (dateFlag == 3 || dateFlag == 4) {
     ui->lblYear->setHidden(false);
-    ui->gboxMonth->setFixedHeight(200);
 
     if (dateFlag == 3) ui->lblFlag->setText(tr("Start Date"));
     if (dateFlag == 4) ui->lblFlag->setText(tr("End Date"));
     ui->lblFlag->setHidden(false);
 
-    setMinimumHeight(320);
+    setMinimumHeight(300);
   }
 
   setFixedWidth(mw_one->width() - 10);

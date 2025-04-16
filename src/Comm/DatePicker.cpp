@@ -7,6 +7,11 @@
 DatePicker::DatePicker(bool showDay, QWidget *parent)
     : QWidget(parent), m_showDay(showDay) {
   setupUI();
+
+  m_yearWheel->setCircular(true);
+  m_monthWheel->setCircular(true);
+  m_dayWheel->setCircular(true);
+
   updateDayWheelVisibility();
 }
 
