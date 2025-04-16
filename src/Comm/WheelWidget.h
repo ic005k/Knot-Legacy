@@ -58,4 +58,7 @@ class WheelWidget : public QWidget {
   QTimer m_inertiaTimer;
   QElapsedTimer m_dragTimer;
   void updateIndex();
+  void updateIndex0();
+  void wheelEvent0(QWheelEvent *event);
+  qreal calculateOvershoot();
 };
