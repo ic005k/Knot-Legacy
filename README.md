@@ -94,8 +94,8 @@ All dependencies are preserved in original format for maintenance and upgrades:
 | **Qt-AES** | Data encryption module | [bricke/Qt-AES](https://github.com/bricke/Qt-AES) |
 | **quazip** | Compression/archive support | [stachenov/quazip](https://github.com/stachenov/quazip) |
 | **ini4j** | Configuration file management | [ini4j](https://ini4j.sourceforge.net/) |
-| **zlib** | Data compression algorithm | [zlib.net](https://zlib.net/) |
-| **QtOneDrive** | OneDrive sync engine | [AndreyMacritskiy/QtOneDrive](https://github.com/AndreyMacritskiy/QtOneDrive) |
+| **zlib** | Data compression algorithm | [zlib.net](https://zlib.net/) |
+| **QtOneDrive** | OneDrive sync engine | [AndreyMacritskiy/QtOneDrive](https://github.com/AndreyMacritskiy/QtOneDrive) |
 
 ### UI & Auxiliary Tools
 | Project Name | Functionality | Repository Link |
