@@ -148,7 +148,7 @@ Rectangle {
 
         delegate: Flickable {
             id: flack
-            property int myw: m_width - 0
+            property int myw: m_width - 18
             width: myw
             height: rectan.getItemHeight()
             contentWidth: myw + donebtn.width + flagColor.width
