@@ -65,10 +65,6 @@ macx:lessThan(QT_MAJOR_VERSION, 6) {
 INCLUDEPATH += $$PWD/lib/zlib
 DEFINES += QUAZIP_STATIC
 
-#DEFINES += QUAZIP_USE_AES
-#DEFINES += QUAZIP_ENABLE_CRYPTO
-#LIBS += -lquazip -lz
-
 linux {
     # 强制定义关键宏
     DEFINES += Z_HAVE_UNISTD_H HAVE_FSEEKO
@@ -384,61 +380,61 @@ SOURCES += \
     src/SyncInfo.cpp \
     src/Todo/Todo.cpp \
     src/Todo/TodoAlarm.cpp \
-    src/cmark-gfm/extensions/autolink.c \
-    src/cmark-gfm/extensions/core-extensions.c \
-    src/cmark-gfm/extensions/ext_scanners.c \
-    src/cmark-gfm/extensions/strikethrough.c \
-    src/cmark-gfm/extensions/table.c \
-    src/cmark-gfm/extensions/tagfilter.c \
-    src/cmark-gfm/extensions/tasklist.c \
-    src/cmark-gfm/src/arena.c \
-    src/cmark-gfm/src/blocks.c \
-    src/cmark-gfm/src/buffer.c \
-    src/cmark-gfm/src/cmark.c \
-    src/cmark-gfm/src/cmark_ctype.c \
-    src/cmark-gfm/src/commonmark.c \
-    src/cmark-gfm/src/footnotes.c \
-    src/cmark-gfm/src/houdini_href_e.c \
-    src/cmark-gfm/src/houdini_html_e.c \
-    src/cmark-gfm/src/houdini_html_u.c \
-    src/cmark-gfm/src/html.c \
-    src/cmark-gfm/src/inlines.c \
-    src/cmark-gfm/src/iterator.c \
-    src/cmark-gfm/src/latex.c \
-    src/cmark-gfm/src/linked_list.c \
-    src/cmark-gfm/src/man.c \
-    src/cmark-gfm/src/map.c \
-    src/cmark-gfm/src/node.c \
-    src/cmark-gfm/src/plaintext.c \
-    src/cmark-gfm/src/plugin.c \
-    src/cmark-gfm/src/references.c \
-    src/cmark-gfm/src/registry.c \
-    src/cmark-gfm/src/render.c \
-    src/cmark-gfm/src/scanners.c \
-    src/cmark-gfm/src/syntax_extension.c \
-    src/cmark-gfm/src/utf8.c \
-    src/cmark-gfm/src/xml.c \
+    lib/cmark-gfm/extensions/autolink.c \
+    lib/cmark-gfm/extensions/core-extensions.c \
+    lib/cmark-gfm/extensions/ext_scanners.c \
+    lib/cmark-gfm/extensions/strikethrough.c \
+    lib/cmark-gfm/extensions/table.c \
+    lib/cmark-gfm/extensions/tagfilter.c \
+    lib/cmark-gfm/extensions/tasklist.c \
+    lib/cmark-gfm/src/arena.c \
+    lib/cmark-gfm/src/blocks.c \
+    lib/cmark-gfm/src/buffer.c \
+    lib/cmark-gfm/src/cmark.c \
+    lib/cmark-gfm/src/cmark_ctype.c \
+    lib/cmark-gfm/src/commonmark.c \
+    lib/cmark-gfm/src/footnotes.c \
+    lib/cmark-gfm/src/houdini_href_e.c \
+    lib/cmark-gfm/src/houdini_html_e.c \
+    lib/cmark-gfm/src/houdini_html_u.c \
+    lib/cmark-gfm/src/html.c \
+    lib/cmark-gfm/src/inlines.c \
+    lib/cmark-gfm/src/iterator.c \
+    lib/cmark-gfm/src/latex.c \
+    lib/cmark-gfm/src/linked_list.c \
+    lib/cmark-gfm/src/man.c \
+    lib/cmark-gfm/src/map.c \
+    lib/cmark-gfm/src/node.c \
+    lib/cmark-gfm/src/plaintext.c \
+    lib/cmark-gfm/src/plugin.c \
+    lib/cmark-gfm/src/references.c \
+    lib/cmark-gfm/src/registry.c \
+    lib/cmark-gfm/src/render.c \
+    lib/cmark-gfm/src/scanners.c \
+    lib/cmark-gfm/src/syntax_extension.c \
+    lib/cmark-gfm/src/utf8.c \
+    lib/cmark-gfm/src/xml.c \
     src/main.cpp \
-    src/md4c/entity.c \
-    src/md4c/md4c-html.c \
-    src/md4c/md4c.c \
+    lib/md4c/entity.c \
+    lib/md4c/md4c-html.c \
+    lib/md4c/md4c.c \
     src/onedrive/qtonedrive.cpp \
     src/onedrive/qtonedriveauthorizationdialog.cpp \
     src/onedrive/qtonedrivewebview.cpp \
-    src/quazip/JlCompress.cpp \
-    src/quazip/qioapi.cpp \
-    src/quazip/quaadler32.cpp \
-    src/quazip/quachecksum32.cpp \
-    src/quazip/quacrc32.cpp \
-    src/quazip/quagzipfile.cpp \
-    src/quazip/quaziodevice.cpp \
-    src/quazip/quazip.cpp \
-    src/quazip/quazipdir.cpp \
-    src/quazip/quazipfile.cpp \
-    src/quazip/quazipfileinfo.cpp \
-    src/quazip/quazipnewinfo.cpp \
-    src/quazip/unzip.c \
-    src/quazip/zip.c \
+    lib/quazip/JlCompress.cpp \
+    lib/quazip/qioapi.cpp \
+    lib/quazip/quaadler32.cpp \
+    lib/quazip/quachecksum32.cpp \
+    lib/quazip/quacrc32.cpp \
+    lib/quazip/quagzipfile.cpp \
+    lib/quazip/quaziodevice.cpp \
+    lib/quazip/quazip.cpp \
+    lib/quazip/quazipdir.cpp \
+    lib/quazip/quazipfile.cpp \
+    lib/quazip/quazipfileinfo.cpp \
+    lib/quazip/quazipnewinfo.cpp \
+    lib/quazip/unzip.c \
+    lib/quazip/zip.c \
 
 
 HEADERS += \
@@ -623,30 +619,30 @@ HEADERS += \
     src/SyncInfo.h \
     src/Todo/Todo.h \
     src/Todo/TodoAlarm.h \
-    src/md4c/entity.h \
-    src/md4c/md4c-html.h \
-    src/md4c/md4c.h \
+    lib/md4c/entity.h \
+    lib/md4c/md4c-html.h \
+    lib/md4c/md4c.h \
     src/onedrive/qtonedrive.h \
     src/onedrive/qtonedriveauthorizationdialog.h \
     src/onedrive/qtonedrivelib_global.h \
     src/onedrive/qtonedrivewebview.h \
-    src/quazip/JlCompress.h \
-    src/quazip/ioapi.h \
-    src/quazip/minizip_crypt.h \
-    src/quazip/quaadler32.h \
-    src/quazip/quachecksum32.h \
-    src/quazip/quacrc32.h \
-    src/quazip/quagzipfile.h \
-    src/quazip/quaziodevice.h \
-    src/quazip/quazip.h \
-    src/quazip/quazip_global.h \
-    src/quazip/quazip_qt_compat.h \
-    src/quazip/quazipdir.h \
-    src/quazip/quazipfile.h \
-    src/quazip/quazipfileinfo.h \
-    src/quazip/quazipnewinfo.h \
-    src/quazip/unzip.h \
-    src/quazip/zip.h \
+    lib/quazip/JlCompress.h \
+    lib/quazip/ioapi.h \
+    lib/quazip/minizip_crypt.h \
+    lib/quazip/quaadler32.h \
+    lib/quazip/quachecksum32.h \
+    lib/quazip/quacrc32.h \
+    lib/quazip/quagzipfile.h \
+    lib/quazip/quaziodevice.h \
+    lib/quazip/quazip.h \
+    lib/quazip/quazip_global.h \
+    lib/quazip/quazip_qt_compat.h \
+    lib/quazip/quazipdir.h \
+    lib/quazip/quazipfile.h \
+    lib/quazip/quazipfileinfo.h \
+    lib/quazip/quazipnewinfo.h \
+    lib/quazip/unzip.h \
+    lib/quazip/zip.h \
     win.rc
 
 FORMS += \
@@ -761,7 +757,7 @@ DISTFILES += \
     src/qmlsrc/tree_main.qml \
     src/qmlsrc/type.qml \
     src/qmlsrc/viewcate.qml \
-    src/quazip/quazip.pc.cmakein \
+    lib/quazip/quazip.pc.cmakein \
     src/reader.qml \
     src/steps.qml
 
@@ -777,7 +773,7 @@ SOURCES -= $$PWD/lib/scintilla/src/ExternalLexer.cpp
 ######################### minizip-ng ######################################
 
 #INCLUDEPATH += $$PWD/lib/zlib-ng
-#INCLUDEPATH += $$PWD/minizip-ng
+#INCLUDEPATH += $$PWD/lib/minizip-ng
 
 # 关闭不需要的功能
 #DEFINES += MZ_ZLIB=1 \
@@ -789,25 +785,25 @@ SOURCES -= $$PWD/lib/scintilla/src/ExternalLexer.cpp
 #           MZ_PKCRYPT=0
 
 # 包含路径
-#INCLUDEPATH += $$PWD/minizip-ng
+#INCLUDEPATH += $$PWD/lib/minizip-ng
 
 # 源文件（核心功能）
 #SOURCES += \
-#    $$PWD/minizip-ng/mz_crypt.c \
-#    $$PWD/minizip-ng/mz_crypt_openssl.c \
-#    $$PWD/minizip-ng/mz_os.c \
-#    $$PWD/minizip-ng/mz_zip.c \
-#    $$PWD/minizip-ng/mz_strm.c \
-#    $$PWD/minizip-ng/mz_strm_mem.c \
-#    $$PWD/minizip-ng/mz_strm_buf.c \
-#    $$PWD/minizip-ng/mz_strm_split.c \
-#    $$PWD/minizip-ng/mz_strm_zlib.c \
-#    $$PWD/minizip-ng/mz_zip_rw.c
+#    $$PWD/lib/minizip-ng/mz_crypt.c \
+#    $$PWD/lib/minizip-ng/mz_crypt_openssl.c \
+#    $$PWD/lib/minizip-ng/mz_os.c \
+#    $$PWD/lib/minizip-ng/mz_zip.c \
+#    $$PWD/lib/minizip-ng/mz_strm.c \
+#    $$PWD/lib/minizip-ng/mz_strm_mem.c \
+#    $$PWD/lib/minizip-ng/mz_strm_buf.c \
+#    $$PWD/lib/minizip-ng/mz_strm_split.c \
+#    $$PWD/lib/minizip-ng/mz_strm_zlib.c \
+#    $$PWD/lib/minizip-ng/mz_zip_rw.c
 
 #win32 {
 #SOURCES += \
-#    $$PWD/minizip-ng/mz_os_win32.c \
-#    $$PWD/minizip-ng/mz_strm_os_win32.c
+#    $$PWD/lib/minizip-ng/mz_os_win32.c \
+#    $$PWD/lib/minizip-ng/mz_strm_os_win32.c
 
 #    LIBS += -lShell32  # 确保路径创建支持宽字符
 #    DEFINES += MZ_USE_WIN32_API=ON
@@ -817,8 +813,8 @@ SOURCES -= $$PWD/lib/scintilla/src/ExternalLexer.cpp
 
 #!win32 {
 #SOURCES += \
-#    $$PWD/minizip-ng/mz_os_posix.c \
-#    $$PWD/minizip-ng/mz_strm_os_posix.c
+#    $$PWD/lib/minizip-ng/mz_os_posix.c \
+#    $$PWD/lib/minizip-ng/mz_strm_os_posix.c
 #}
 
 #unix:!macx {
