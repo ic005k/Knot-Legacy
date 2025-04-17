@@ -9,7 +9,6 @@
 #include <QToolButton>
 
 #include "src/Comm/DatePicker.h"
-#include "src/Comm/RollingBox.h"
 #include "src/Comm/Time24Picker.h"
 
 namespace Ui {
@@ -77,7 +76,7 @@ class TodoAlarm : public QDialog {
   QString y, m, d, h, mm;
   void setBtnTitle();
   void onDial(QDial *btn, QString flag);
-  void onRollBox(RollingBox *btn, QString flag);
+
   void addDial(int min, int max, QString flag);
 
   int WidgetType = 2;

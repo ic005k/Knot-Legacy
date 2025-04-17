@@ -346,7 +346,6 @@ SOURCES += \
     src/Comm/FileSystemWatcher.cpp \
     src/Comm/Method.cpp \
     src/Comm/ReceiveShare.cpp \
-    src/Comm/RollingBox.cpp \
     src/Comm/ShowMessage.cpp \
     src/Comm/Time24Picker.cpp \
     src/Comm/WheelWidget.cpp \
@@ -586,7 +585,6 @@ HEADERS += \
     src/Comm/FileSystemWatcher.h \
     src/Comm/Method.h \
     src/Comm/ReceiveShare.h \
-    src/Comm/RollingBox.h \
     src/Comm/ShowMessage.h \
     src/Comm/Time24Picker.h \
     src/Comm/WheelWidget.h \
@@ -870,7 +868,6 @@ win32:{
 
 ANDROID_EXTRA_LIBS = $$PWD/android-openssl/libcrypto_1_1.so $$PWD/android-openssl/libssl_1_1.so
 
-#SUBDIRS += \
-#    lib/qsci/qscintilla.pro
+
 
 

@@ -469,26 +469,6 @@ void TodoAlarm::addDial(int min, int max, QString flag) {
       btn->setSliderPosition(h.toInt());
     }
   }
-
-  if (WidgetType == 2) {
-    RollingBox* btn = new RollingBox(ui->frameSel);
-    btn->setFixedHeight(150);
-    btn->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    btn->setObjectName("btn");
-    btn->setRange(min, max);
-
-    connect(btn, &RollingBox::currentValueChanged,
-            [=]() { onRollBox(btn, flag); });
-
-    gl->addWidget(btn, 0, 0, 1, 1);
-
-    if (flag == tr("Minute")) {
-      btn->setValue(mm.toInt());
-    }
-    if (flag == tr("Hour")) {
-      btn->setValue(h.toInt());
-    }
-  }
 }
 
 void TodoAlarm::onDial(QDial* btn, QString flag) {
@@ -499,19 +479,6 @@ void TodoAlarm::onDial(QDial* btn, QString flag) {
 
   if (flag == tr("Minute")) {
     mm = QString::number(btn->sliderPosition());
-    if (mm.length() == 1) mm = "0" + mm;
-  }
-  setBtnTitle();
-}
-
-void TodoAlarm::onRollBox(RollingBox* btn, QString flag) {
-  if (flag == tr("Hour")) {
-    h = QString::number(btn->readValue());
-    if (h.length() == 1) h = "0" + h;
-  }
-
-  if (flag == tr("Minute")) {
-    mm = QString::number(btn->readValue());
     if (mm.length() == 1) mm = "0" + mm;
   }
   setBtnTitle();

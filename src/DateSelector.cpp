@@ -22,11 +22,6 @@ DateSelector::DateSelector(QWidget *parent)
   ui->gboxMonth->layout()->addWidget(m_datePickerYMD);
 }
 
-void DateSelector::initRBox(RollingBox *rbox, int w) {
-  rbox->setFixedHeight(50);
-  rbox->setFixedWidth(w);
-}
-
 DateSelector::~DateSelector() { delete ui; }
 
 bool DateSelector::eventFilter(QObject *watch, QEvent *evn) {
