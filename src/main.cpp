@@ -10,8 +10,8 @@
 
 #include "MainWindow.h"
 #include "cppjieba/Jieba.hpp"
-#include "src/quazip/quazip.h"
-#include "src/quazip/quazipfile.h"
+#include "lib/quazip/quazip.h"
+#include "lib/quazip/quazipfile.h"
 
 std::unique_ptr<cppjieba::Jieba> jieba;
 

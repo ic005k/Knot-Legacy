@@ -1,13 +1,13 @@
 #ifndef METHOD_H
 #define METHOD_H
 
+#include <lib/quazip/quazip.h>
+#include <lib/quazip/quazipfile.h>
+#include <lib/quazip/quazipnewinfo.h>
+#include <lib/quazip/unzip.h>
 #include <openssl/err.h>
 #include <openssl/evp.h>
 #include <openssl/rand.h>
-#include <src/quazip/quazip.h>
-#include <src/quazip/quazipfile.h>
-#include <src/quazip/quazipnewinfo.h>
-#include <src/quazip/unzip.h>
 #include <zlib.h>
 
 #include <QByteArray>
@@ -335,7 +335,8 @@ class Method : public QDialog {
                          const QString &password);
 
   void setOSFlag();
-  protected:
+
+ protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;
 
  public slots:
