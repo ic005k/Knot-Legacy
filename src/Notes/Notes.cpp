@@ -2267,26 +2267,40 @@ void Notes::initMarkdownEditor(QsciScintilla *editor) {
 void Notes::searchText(const QString &text, bool forward) {
   m_lastSearchText = text;
 
+  // 调整光标起始位置，避免重复匹配
+  int line, index;
+  m_EditSource->getCursorPosition(&line, &index);
+  if (!forward) {
+    if (index > 0) {
+      index--;  // 向后搜索时，光标左移一个字符
+    } else if (line > 0) {
+      line--;
+      index = m_EditSource->lineLength(line);  // 跳转到上一行末尾
+    }
+    m_EditSource->setCursorPosition(line, index);
+  }
+
+  // 参数顺序：text, 正则, 区分大小写, 全词匹配, 循环搜索, 向前
   bool found =
       m_EditSource->findFirst(text, false, false, false, true, forward);
 
   if (!found) {
     // QMessageBox::information(this, "搜索",
-    // "已到达文档末尾，未找到更多匹配项");
+    //                          forward ? "已到达文档末尾" : "已到达文档开头");
   }
 }
 
 // 查找下一个
 void Notes::searchNext() {
   if (!m_lastSearchText.isEmpty()) {
-    searchText(m_lastSearchText, true);
+    searchText(m_lastSearchText, true);  // 使用 true 表示向前搜索
   }
 }
 
 // 查找上一个
 void Notes::searchPrevious() {
   if (!m_lastSearchText.isEmpty()) {
-    searchText(m_lastSearchText, false);
+    searchText(m_lastSearchText, false);  // 使用 false 表示向后搜索
   }
 }
 
