@@ -6,7 +6,7 @@
 #include <memory>
 
 #include "SearchResultModel.h"
-#include "cppjieba/Jieba.hpp"
+#include "lib/cppjieba/Jieba.hpp"
 
 extern std::unique_ptr<cppjieba::Jieba> jieba;
 

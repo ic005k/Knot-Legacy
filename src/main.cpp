@@ -9,7 +9,7 @@
 #include <QtWebView/QtWebView>
 
 #include "MainWindow.h"
-#include "cppjieba/Jieba.hpp"
+#include "lib/cppjieba/Jieba.hpp"
 #include "lib/quazip/quazip.h"
 #include "lib/quazip/quazipfile.h"
 

@@ -88,8 +88,8 @@ macx {
 
 ####################### 添加 cppjieba 和 limonp 头文件路径 ######################
 
-INCLUDEPATH += $$PWD/cppjieba/include
-INCLUDEPATH += $$PWD/cppjieba/limonp/include
+INCLUDEPATH += $$PWD/lib/cppjieba/include
+INCLUDEPATH += $$PWD/lib/cppjieba/limonp/include
 
 ############################ cmark-gfm ########################################
 

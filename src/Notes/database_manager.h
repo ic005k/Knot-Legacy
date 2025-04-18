@@ -11,7 +11,7 @@
 #include <QStandardPaths>
 #include <QThread>
 #include <QVector>
-#include <cppjieba/Jieba.hpp>
+#include <lib/cppjieba/Jieba.hpp>
 
 #include "Notes.h"
 
