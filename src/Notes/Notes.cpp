@@ -1737,6 +1737,16 @@ QString markdownToHtmlWithMath(const QString &md) {
                 vertical-align: sub;
                 font-size: smaller;
             }
+
+            /* 新增块引用样式 */
+            blockquote {
+                border-left: 4px solid #dee2e6;  /* 左侧竖线颜色（与表格边框一致） */
+                padding-left: 1.5em;             /* 左侧缩进距离 */
+                margin-left: 0;                  /* 取消默认外边距 */
+                color: #6c757d;                  /* 文字颜色（与副文本颜色一致） */
+                margin: 1em 0;                   /* 上下外边距 */
+            }
+
         </style>
     )";
 
