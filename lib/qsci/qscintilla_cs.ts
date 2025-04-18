@@ -319,7 +319,7 @@ in skydrive folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/DateSelector.ui" line="112"/>
+        <location filename="../../src/DateSelector.ui" line="118"/>
         <source>Year-Month</source>
         <translation type="unfinished"></translation>
     </message>
@@ -329,17 +329,17 @@ in skydrive folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/DateSelector.cpp" line="81"/>
+        <location filename="../../src/DateSelector.cpp" line="73"/>
         <source>Start Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/DateSelector.cpp" line="82"/>
+        <location filename="../../src/DateSelector.cpp" line="74"/>
         <source>End Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/DateSelector.cpp" line="132"/>
+        <location filename="../../src/DateSelector.cpp" line="124"/>
         <source>Year-Round</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6873,22 +6873,22 @@ in skydrive folder</source>
 <context>
     <name>QuaGzipFile</name>
     <message>
-        <location filename="../../src/quazip/quagzipfile.cpp" line="60"/>
+        <location filename="../quazip/quagzipfile.cpp" line="60"/>
         <source>QIODevice::Append is not supported for GZIP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/quazip/quagzipfile.cpp" line="66"/>
+        <location filename="../quazip/quagzipfile.cpp" line="66"/>
         <source>Opening gzip for both reading and writing is not supported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/quazip/quagzipfile.cpp" line="75"/>
+        <location filename="../quazip/quagzipfile.cpp" line="75"/>
         <source>You can open a gzip either for reading or for writing. Which is it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/quazip/quagzipfile.cpp" line="81"/>
+        <location filename="../quazip/quagzipfile.cpp" line="81"/>
         <source>Could not gzopen() file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6896,12 +6896,12 @@ in skydrive folder</source>
 <context>
     <name>QuaZIODevice</name>
     <message>
-        <location filename="../../src/quazip/quaziodevice.cpp" line="178"/>
+        <location filename="../quazip/quaziodevice.cpp" line="178"/>
         <source>QIODevice::Append is not supported for QuaZIODevice</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/quazip/quaziodevice.cpp" line="183"/>
+        <location filename="../quazip/quaziodevice.cpp" line="183"/>
         <source>QIODevice::ReadWrite is not supported for QuaZIODevice</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6909,7 +6909,7 @@ in skydrive folder</source>
 <context>
     <name>QuaZipFile</name>
     <message>
-        <location filename="../../src/quazip/quazipfile.cpp" line="251"/>
+        <location filename="../quazip/quazipfile.cpp" line="251"/>
         <source>ZIP/UNZIP API error %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7404,86 +7404,86 @@ in skydrive folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/Todo.cpp" line="83"/>
+        <location filename="../../src/Todo/Todo.cpp" line="78"/>
         <source>Modi Todo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/Todo.cpp" line="210"/>
+        <location filename="../../src/Todo/Todo.cpp" line="205"/>
         <source>An error occurred while compressing the file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/Todo/Todo.cpp" line="301"/>
         <location filename="../../src/Todo/Todo.cpp" line="306"/>
-        <location filename="../../src/Todo/Todo.cpp" line="311"/>
-        <location filename="../../src/Todo/Todo.cpp" line="763"/>
+        <location filename="../../src/Todo/Todo.cpp" line="758"/>
         <source>Alarm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/Todo.cpp" line="497"/>
-        <location filename="../../src/Todo/Todo.cpp" line="575"/>
+        <location filename="../../src/Todo/Todo.cpp" line="492"/>
+        <location filename="../../src/Todo/Todo.cpp" line="570"/>
         <source>Todo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/Todo.cpp" line="726"/>
-        <location filename="../../src/Todo/Todo.cpp" line="793"/>
+        <location filename="../../src/Todo/Todo.cpp" line="721"/>
+        <location filename="../../src/Todo/Todo.cpp" line="788"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/Todo.cpp" line="1088"/>
-        <location filename="../../src/Todo/Todo.cpp" line="1245"/>
-        <location filename="../../src/Todo/Todo.cpp" line="1323"/>
-        <location filename="../../src/Todo/Todo.cpp" line="1335"/>
-        <location filename="../../src/Todo/Todo.cpp" line="1348"/>
+        <location filename="../../src/Todo/Todo.cpp" line="1083"/>
+        <location filename="../../src/Todo/Todo.cpp" line="1240"/>
+        <location filename="../../src/Todo/Todo.cpp" line="1318"/>
+        <location filename="../../src/Todo/Todo.cpp" line="1330"/>
+        <location filename="../../src/Todo/Todo.cpp" line="1343"/>
         <source>Voice</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/Todo.cpp" line="1122"/>
+        <location filename="../../src/Todo/Todo.cpp" line="1117"/>
         <source>Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/Todo.cpp" line="1150"/>
+        <location filename="../../src/Todo/Todo.cpp" line="1145"/>
         <source>Cancel</source>
         <translation type="unfinished">Zrušit</translation>
     </message>
     <message>
-        <location filename="../../src/Todo/Todo.cpp" line="1151"/>
+        <location filename="../../src/Todo/Todo.cpp" line="1146"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/Todo.cpp" line="1152"/>
+        <location filename="../../src/Todo/Todo.cpp" line="1147"/>
         <source>Share</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/Todo.cpp" line="1153"/>
+        <location filename="../../src/Todo/Todo.cpp" line="1148"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/Todo.cpp" line="1190"/>
+        <location filename="../../src/Todo/Todo.cpp" line="1185"/>
         <source>Share to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/Todo.cpp" line="1228"/>
+        <location filename="../../src/Todo/Todo.cpp" line="1223"/>
         <source>Done</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/Todo.cpp" line="1255"/>
-        <location filename="../../src/Todo/Todo.cpp" line="1277"/>
+        <location filename="../../src/Todo/Todo.cpp" line="1250"/>
+        <location filename="../../src/Todo/Todo.cpp" line="1272"/>
         <source>Recording audio in progress...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/Todo.cpp" line="1472"/>
+        <location filename="../../src/Todo/Todo.cpp" line="1467"/>
         <source>Decompression failed. Please check in Preferences that the passwords are consistent across all platforms.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7507,59 +7507,55 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="../../src/Todo/TodoAlarm.ui" line="116"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="173"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="200"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="353"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="401"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="171"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="198"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="351"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="399"/>
         <source>Year</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/Todo/TodoAlarm.ui" line="129"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="174"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="205"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="358"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="404"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="172"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="203"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="356"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="402"/>
         <source>Month</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/Todo/TodoAlarm.ui" line="142"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="175"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="216"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="290"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="334"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="363"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="407"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="173"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="214"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="288"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="332"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="361"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="405"/>
         <source>Day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/Todo/TodoAlarm.ui" line="155"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="176"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="221"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="267"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="368"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="410"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="461"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="470"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="490"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="497"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="510"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="174"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="219"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="265"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="366"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="408"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="459"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="468"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="475"/>
         <source>Hour</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/Todo/TodoAlarm.ui" line="168"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="177"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="226"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="267"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="373"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="413"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="467"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="487"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="502"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="515"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="175"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="224"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="265"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="371"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="411"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="465"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="480"/>
         <source>Minute</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7644,54 +7640,54 @@ in skydrive folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="98"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="96"/>
         <source>Date:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="102"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="100"/>
         <source>Time:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="276"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="320"/>
+        <source>Mon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="277"/>
+        <location filename="../../src/Todo/TodoAlarm.cpp" line="321"/>
+        <source>Tue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/Todo/TodoAlarm.cpp" line="278"/>
         <location filename="../../src/Todo/TodoAlarm.cpp" line="322"/>
-        <source>Mon</source>
+        <source>Wed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/Todo/TodoAlarm.cpp" line="279"/>
         <location filename="../../src/Todo/TodoAlarm.cpp" line="323"/>
-        <source>Tue</source>
+        <source>Thur</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/Todo/TodoAlarm.cpp" line="280"/>
         <location filename="../../src/Todo/TodoAlarm.cpp" line="324"/>
-        <source>Wed</source>
+        <source>Fri</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/Todo/TodoAlarm.cpp" line="281"/>
         <location filename="../../src/Todo/TodoAlarm.cpp" line="325"/>
-        <source>Thur</source>
+        <source>Sat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/Todo/TodoAlarm.cpp" line="282"/>
         <location filename="../../src/Todo/TodoAlarm.cpp" line="326"/>
-        <source>Fri</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="283"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="327"/>
-        <source>Sat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="284"/>
-        <location filename="../../src/Todo/TodoAlarm.cpp" line="328"/>
         <source>Sun</source>
         <translation type="unfinished"></translation>
     </message>

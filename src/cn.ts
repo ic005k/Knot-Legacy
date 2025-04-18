@@ -338,7 +338,7 @@ in skydrive folder</source>
         <translation>日期选择</translation>
     </message>
     <message>
-        <location filename="DateSelector.ui" line="112"/>
+        <location filename="DateSelector.ui" line="118"/>
         <source>Year-Month</source>
         <translation>年-月</translation>
     </message>
@@ -365,19 +365,19 @@ in skydrive folder</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="DateSelector.cpp" line="81"/>
+        <location filename="DateSelector.cpp" line="73"/>
         <source>Start Date</source>
         <oldsource>Start</oldsource>
         <translation>起始日期</translation>
     </message>
     <message>
-        <location filename="DateSelector.cpp" line="82"/>
+        <location filename="DateSelector.cpp" line="74"/>
         <source>End Date</source>
         <oldsource>End</oldsource>
         <translation>结束日期</translation>
     </message>
     <message>
-        <location filename="DateSelector.cpp" line="132"/>
+        <location filename="DateSelector.cpp" line="124"/>
         <source>Year-Round</source>
         <translation>全年</translation>
     </message>
@@ -7539,37 +7539,37 @@ in skydrive folder</source>
     <message>
         <location filename="../lib/qsci/qsciscintilla.cpp" line="4478"/>
         <source>&amp;Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>撤销</translation>
     </message>
     <message>
         <location filename="../lib/qsci/qsciscintilla.cpp" line="4482"/>
         <source>&amp;Redo</source>
-        <translation type="unfinished"></translation>
+        <translation>恢复</translation>
     </message>
     <message>
         <location filename="../lib/qsci/qsciscintilla.cpp" line="4488"/>
         <source>Cu&amp;t</source>
-        <translation type="unfinished"></translation>
+        <translation>剪切</translation>
     </message>
     <message>
         <location filename="../lib/qsci/qsciscintilla.cpp" line="4493"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>拷贝</translation>
     </message>
     <message>
         <location filename="../lib/qsci/qsciscintilla.cpp" line="4499"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>粘贴</translation>
     </message>
     <message>
         <location filename="../lib/qsci/qsciscintilla.cpp" line="4503"/>
         <source>Delete</source>
-        <translation type="unfinished">删除</translation>
+        <translation>删除</translation>
     </message>
     <message>
         <location filename="../lib/qsci/qsciscintilla.cpp" line="4510"/>
         <source>Select All</source>
-        <translation type="unfinished">全选</translation>
+        <translation>全选</translation>
     </message>
 </context>
 <context>
@@ -7596,22 +7596,22 @@ in skydrive folder</source>
 <context>
     <name>QuaGzipFile</name>
     <message>
-        <location filename="quazip/quagzipfile.cpp" line="60"/>
+        <location filename="../lib/quazip/quagzipfile.cpp" line="60"/>
         <source>QIODevice::Append is not supported for GZIP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="quazip/quagzipfile.cpp" line="66"/>
+        <location filename="../lib/quazip/quagzipfile.cpp" line="66"/>
         <source>Opening gzip for both reading and writing is not supported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="quazip/quagzipfile.cpp" line="75"/>
+        <location filename="../lib/quazip/quagzipfile.cpp" line="75"/>
         <source>You can open a gzip either for reading or for writing. Which is it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="quazip/quagzipfile.cpp" line="81"/>
+        <location filename="../lib/quazip/quagzipfile.cpp" line="81"/>
         <source>Could not gzopen() file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7619,12 +7619,12 @@ in skydrive folder</source>
 <context>
     <name>QuaZIODevice</name>
     <message>
-        <location filename="quazip/quaziodevice.cpp" line="178"/>
+        <location filename="../lib/quazip/quaziodevice.cpp" line="178"/>
         <source>QIODevice::Append is not supported for QuaZIODevice</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="quazip/quaziodevice.cpp" line="183"/>
+        <location filename="../lib/quazip/quaziodevice.cpp" line="183"/>
         <source>QIODevice::ReadWrite is not supported for QuaZIODevice</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7632,7 +7632,7 @@ in skydrive folder</source>
 <context>
     <name>QuaZipFile</name>
     <message>
-        <location filename="quazip/quazipfile.cpp" line="251"/>
+        <location filename="../lib/quazip/quazipfile.cpp" line="251"/>
         <source>ZIP/UNZIP API error %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8347,86 +8347,86 @@ in skydrive folder</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Todo/Todo.cpp" line="83"/>
+        <location filename="Todo/Todo.cpp" line="78"/>
         <source>Modi Todo</source>
         <translation>修改待办</translation>
     </message>
     <message>
+        <location filename="Todo/Todo.cpp" line="301"/>
         <location filename="Todo/Todo.cpp" line="306"/>
-        <location filename="Todo/Todo.cpp" line="311"/>
-        <location filename="Todo/Todo.cpp" line="763"/>
+        <location filename="Todo/Todo.cpp" line="758"/>
         <source>Alarm</source>
         <translation>定时提醒</translation>
     </message>
     <message>
-        <location filename="Todo/Todo.cpp" line="497"/>
-        <location filename="Todo/Todo.cpp" line="575"/>
+        <location filename="Todo/Todo.cpp" line="492"/>
+        <location filename="Todo/Todo.cpp" line="570"/>
         <source>Todo</source>
         <translation>待办事项</translation>
     </message>
     <message>
-        <location filename="Todo/Todo.cpp" line="1088"/>
-        <location filename="Todo/Todo.cpp" line="1245"/>
-        <location filename="Todo/Todo.cpp" line="1323"/>
-        <location filename="Todo/Todo.cpp" line="1335"/>
-        <location filename="Todo/Todo.cpp" line="1348"/>
+        <location filename="Todo/Todo.cpp" line="1083"/>
+        <location filename="Todo/Todo.cpp" line="1240"/>
+        <location filename="Todo/Todo.cpp" line="1318"/>
+        <location filename="Todo/Todo.cpp" line="1330"/>
+        <location filename="Todo/Todo.cpp" line="1343"/>
         <source>Voice</source>
         <translation>语音</translation>
     </message>
     <message>
-        <location filename="Todo/Todo.cpp" line="726"/>
-        <location filename="Todo/Todo.cpp" line="793"/>
+        <location filename="Todo/Todo.cpp" line="721"/>
+        <location filename="Todo/Todo.cpp" line="788"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="Todo/Todo.cpp" line="210"/>
+        <location filename="Todo/Todo.cpp" line="205"/>
         <source>An error occurred while compressing the file.</source>
         <translation type="unfinished">压缩文件时发生错误。</translation>
     </message>
     <message>
-        <location filename="Todo/Todo.cpp" line="1122"/>
+        <location filename="Todo/Todo.cpp" line="1117"/>
         <source>Editor</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="Todo/Todo.cpp" line="1150"/>
+        <location filename="Todo/Todo.cpp" line="1145"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="Todo/Todo.cpp" line="1151"/>
+        <location filename="Todo/Todo.cpp" line="1146"/>
         <source>Copy</source>
         <translation>拷贝</translation>
     </message>
     <message>
-        <location filename="Todo/Todo.cpp" line="1152"/>
+        <location filename="Todo/Todo.cpp" line="1147"/>
         <source>Share</source>
         <translation>分享</translation>
     </message>
     <message>
-        <location filename="Todo/Todo.cpp" line="1153"/>
+        <location filename="Todo/Todo.cpp" line="1148"/>
         <source>OK</source>
         <translation>确定</translation>
     </message>
     <message>
-        <location filename="Todo/Todo.cpp" line="1190"/>
+        <location filename="Todo/Todo.cpp" line="1185"/>
         <source>Share to</source>
         <translation>分享到</translation>
     </message>
     <message>
-        <location filename="Todo/Todo.cpp" line="1228"/>
+        <location filename="Todo/Todo.cpp" line="1223"/>
         <source>Done</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="Todo/Todo.cpp" line="1255"/>
-        <location filename="Todo/Todo.cpp" line="1277"/>
+        <location filename="Todo/Todo.cpp" line="1250"/>
+        <location filename="Todo/Todo.cpp" line="1272"/>
         <source>Recording audio in progress...</source>
         <translation>音频记录进行中...</translation>
     </message>
     <message>
-        <location filename="Todo/Todo.cpp" line="1472"/>
+        <location filename="Todo/Todo.cpp" line="1467"/>
         <source>Decompression failed. Please check in Preferences that the passwords are consistent across all platforms.</source>
         <translation>解压文件不成功，请在偏好设置里面检查各平台的密码是否一致。</translation>
     </message>
@@ -8479,59 +8479,55 @@ in skydrive folder</source>
     </message>
     <message>
         <location filename="Todo/TodoAlarm.ui" line="116"/>
-        <location filename="Todo/TodoAlarm.cpp" line="173"/>
-        <location filename="Todo/TodoAlarm.cpp" line="200"/>
-        <location filename="Todo/TodoAlarm.cpp" line="353"/>
-        <location filename="Todo/TodoAlarm.cpp" line="401"/>
+        <location filename="Todo/TodoAlarm.cpp" line="171"/>
+        <location filename="Todo/TodoAlarm.cpp" line="198"/>
+        <location filename="Todo/TodoAlarm.cpp" line="351"/>
+        <location filename="Todo/TodoAlarm.cpp" line="399"/>
         <source>Year</source>
         <translation>年</translation>
     </message>
     <message>
         <location filename="Todo/TodoAlarm.ui" line="129"/>
-        <location filename="Todo/TodoAlarm.cpp" line="174"/>
-        <location filename="Todo/TodoAlarm.cpp" line="205"/>
-        <location filename="Todo/TodoAlarm.cpp" line="358"/>
-        <location filename="Todo/TodoAlarm.cpp" line="404"/>
+        <location filename="Todo/TodoAlarm.cpp" line="172"/>
+        <location filename="Todo/TodoAlarm.cpp" line="203"/>
+        <location filename="Todo/TodoAlarm.cpp" line="356"/>
+        <location filename="Todo/TodoAlarm.cpp" line="402"/>
         <source>Month</source>
         <translation>月</translation>
     </message>
     <message>
         <location filename="Todo/TodoAlarm.ui" line="142"/>
-        <location filename="Todo/TodoAlarm.cpp" line="175"/>
-        <location filename="Todo/TodoAlarm.cpp" line="216"/>
-        <location filename="Todo/TodoAlarm.cpp" line="290"/>
-        <location filename="Todo/TodoAlarm.cpp" line="334"/>
-        <location filename="Todo/TodoAlarm.cpp" line="363"/>
-        <location filename="Todo/TodoAlarm.cpp" line="407"/>
+        <location filename="Todo/TodoAlarm.cpp" line="173"/>
+        <location filename="Todo/TodoAlarm.cpp" line="214"/>
+        <location filename="Todo/TodoAlarm.cpp" line="288"/>
+        <location filename="Todo/TodoAlarm.cpp" line="332"/>
+        <location filename="Todo/TodoAlarm.cpp" line="361"/>
+        <location filename="Todo/TodoAlarm.cpp" line="405"/>
         <source>Day</source>
         <translation>日</translation>
     </message>
     <message>
         <location filename="Todo/TodoAlarm.ui" line="155"/>
-        <location filename="Todo/TodoAlarm.cpp" line="176"/>
-        <location filename="Todo/TodoAlarm.cpp" line="221"/>
-        <location filename="Todo/TodoAlarm.cpp" line="267"/>
-        <location filename="Todo/TodoAlarm.cpp" line="368"/>
-        <location filename="Todo/TodoAlarm.cpp" line="410"/>
-        <location filename="Todo/TodoAlarm.cpp" line="461"/>
-        <location filename="Todo/TodoAlarm.cpp" line="470"/>
-        <location filename="Todo/TodoAlarm.cpp" line="490"/>
-        <location filename="Todo/TodoAlarm.cpp" line="497"/>
-        <location filename="Todo/TodoAlarm.cpp" line="510"/>
+        <location filename="Todo/TodoAlarm.cpp" line="174"/>
+        <location filename="Todo/TodoAlarm.cpp" line="219"/>
+        <location filename="Todo/TodoAlarm.cpp" line="265"/>
+        <location filename="Todo/TodoAlarm.cpp" line="366"/>
+        <location filename="Todo/TodoAlarm.cpp" line="408"/>
+        <location filename="Todo/TodoAlarm.cpp" line="459"/>
+        <location filename="Todo/TodoAlarm.cpp" line="468"/>
+        <location filename="Todo/TodoAlarm.cpp" line="475"/>
         <source>Hour</source>
         <translation>时</translation>
     </message>
     <message>
         <location filename="Todo/TodoAlarm.ui" line="168"/>
-        <location filename="Todo/TodoAlarm.cpp" line="177"/>
-        <location filename="Todo/TodoAlarm.cpp" line="226"/>
-        <location filename="Todo/TodoAlarm.cpp" line="267"/>
-        <location filename="Todo/TodoAlarm.cpp" line="373"/>
-        <location filename="Todo/TodoAlarm.cpp" line="413"/>
-        <location filename="Todo/TodoAlarm.cpp" line="467"/>
-        <location filename="Todo/TodoAlarm.cpp" line="487"/>
-        <location filename="Todo/TodoAlarm.cpp" line="502"/>
-        <location filename="Todo/TodoAlarm.cpp" line="515"/>
+        <location filename="Todo/TodoAlarm.cpp" line="175"/>
+        <location filename="Todo/TodoAlarm.cpp" line="224"/>
+        <location filename="Todo/TodoAlarm.cpp" line="265"/>
+        <location filename="Todo/TodoAlarm.cpp" line="371"/>
+        <location filename="Todo/TodoAlarm.cpp" line="411"/>
+        <location filename="Todo/TodoAlarm.cpp" line="465"/>
+        <location filename="Todo/TodoAlarm.cpp" line="480"/>
         <source>Minute</source>
         <translation>分</translation>
     </message>
@@ -8591,54 +8587,54 @@ in skydrive folder</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="Todo/TodoAlarm.cpp" line="98"/>
+        <location filename="Todo/TodoAlarm.cpp" line="96"/>
         <source>Date:</source>
         <translation>日期：</translation>
     </message>
     <message>
-        <location filename="Todo/TodoAlarm.cpp" line="102"/>
+        <location filename="Todo/TodoAlarm.cpp" line="100"/>
         <source>Time:</source>
         <translation>时间：</translation>
     </message>
     <message>
-        <location filename="Todo/TodoAlarm.cpp" line="278"/>
-        <location filename="Todo/TodoAlarm.cpp" line="322"/>
+        <location filename="Todo/TodoAlarm.cpp" line="276"/>
+        <location filename="Todo/TodoAlarm.cpp" line="320"/>
         <source>Mon</source>
         <translation>一</translation>
     </message>
     <message>
-        <location filename="Todo/TodoAlarm.cpp" line="279"/>
-        <location filename="Todo/TodoAlarm.cpp" line="323"/>
+        <location filename="Todo/TodoAlarm.cpp" line="277"/>
+        <location filename="Todo/TodoAlarm.cpp" line="321"/>
         <source>Tue</source>
         <translation>二</translation>
     </message>
     <message>
-        <location filename="Todo/TodoAlarm.cpp" line="280"/>
-        <location filename="Todo/TodoAlarm.cpp" line="324"/>
+        <location filename="Todo/TodoAlarm.cpp" line="278"/>
+        <location filename="Todo/TodoAlarm.cpp" line="322"/>
         <source>Wed</source>
         <translation>三</translation>
     </message>
     <message>
-        <location filename="Todo/TodoAlarm.cpp" line="281"/>
-        <location filename="Todo/TodoAlarm.cpp" line="325"/>
+        <location filename="Todo/TodoAlarm.cpp" line="279"/>
+        <location filename="Todo/TodoAlarm.cpp" line="323"/>
         <source>Thur</source>
         <translation>四</translation>
     </message>
     <message>
-        <location filename="Todo/TodoAlarm.cpp" line="282"/>
-        <location filename="Todo/TodoAlarm.cpp" line="326"/>
+        <location filename="Todo/TodoAlarm.cpp" line="280"/>
+        <location filename="Todo/TodoAlarm.cpp" line="324"/>
         <source>Fri</source>
         <translation>五</translation>
     </message>
     <message>
-        <location filename="Todo/TodoAlarm.cpp" line="283"/>
-        <location filename="Todo/TodoAlarm.cpp" line="327"/>
+        <location filename="Todo/TodoAlarm.cpp" line="281"/>
+        <location filename="Todo/TodoAlarm.cpp" line="325"/>
         <source>Sat</source>
         <translation>六</translation>
     </message>
     <message>
-        <location filename="Todo/TodoAlarm.cpp" line="284"/>
-        <location filename="Todo/TodoAlarm.cpp" line="328"/>
+        <location filename="Todo/TodoAlarm.cpp" line="282"/>
+        <location filename="Todo/TodoAlarm.cpp" line="326"/>
         <source>Sun</source>
         <translation>日</translation>
     </message>
