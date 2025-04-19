@@ -35,15 +35,7 @@ TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
   ui->chkDaily->setFont(font0);
   ui->chkSpeech->setFont(font0);
 
-  this->layout()->setContentsMargins(1, 1, 1, 1);
-  ui->frameDaily->setContentsMargins(1, 1, 1, 1);
-  ui->frameDT->setContentsMargins(1, 1, 1, 1);
-  ui->frameSel->setContentsMargins(1, 1, 1, 1);
-  this->layout()->setSpacing(1);
-
   initDlg();
-
-  // if (isAndroid) ui->frameSel->hide();
 
   ui->dateTimeEdit->hide();
   ui->dateTimeEdit->setReadOnly(true);
@@ -72,6 +64,7 @@ TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
   ui->chkDaily->setStyleSheet(strStyleChk);
   ui->chkSpeech->setStyleSheet(strStyleChk);
   ui->frameDaily->setContentsMargins(10, 1, 10, 1);
+  ui->lblSelByWeek->setStyleSheet(ui->lblTodoText->styleSheet());
 
   mw_one->set_ToolButtonStyle(this);
 
@@ -84,12 +77,8 @@ TodoAlarm::TodoAlarm(QWidget* parent) : QDialog(parent), ui(new Ui::TodoAlarm) {
   }
 
   QVBoxLayout* vLayout = new QVBoxLayout();
-  vLayout->setSpacing(10);
-  vLayout->setMargin(10);
   ui->frameSel->setLayout(vLayout);
-  ui->frameSel->setMinimumHeight(380);
   m_timePicker = new Time24Picker(ui->frameSel);
-
   m_datePicker = new DatePicker(true, ui->frameSel);
 
   QLabel* lblYMD = new QLabel();
@@ -149,7 +138,7 @@ void TodoAlarm::initDlg() {
       w = mw_one->width();
     else
       w = 500;
-    h = mw_one->height() - 20;
+    h = mw_one->height() - 10;
   }
   setFixedWidth(w);
 

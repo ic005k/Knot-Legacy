@@ -288,16 +288,15 @@ void Todo::on_SetAlarm() {
     mw_one->m_TodoAlarm->ui->chkDaily->setChecked(false);
   }
 
-  if (mw_one->m_TodoAlarm->ui->chkDaily->isChecked()) {
-    QString str;
-    if (mw_one->m_TodoAlarm->ui->chk1->isChecked()) str = str + "1";
-    if (mw_one->m_TodoAlarm->ui->chk2->isChecked()) str = str + "2";
-    if (mw_one->m_TodoAlarm->ui->chk3->isChecked()) str = str + "3";
-    if (mw_one->m_TodoAlarm->ui->chk4->isChecked()) str = str + "4";
-    if (mw_one->m_TodoAlarm->ui->chk5->isChecked()) str = str + "5";
-    if (mw_one->m_TodoAlarm->ui->chk6->isChecked()) str = str + "6";
-    if (mw_one->m_TodoAlarm->ui->chk7->isChecked()) str = str + "7";
-
+  QString str;
+  if (mw_one->m_TodoAlarm->ui->chk1->isChecked()) str = str + "1";
+  if (mw_one->m_TodoAlarm->ui->chk2->isChecked()) str = str + "2";
+  if (mw_one->m_TodoAlarm->ui->chk3->isChecked()) str = str + "3";
+  if (mw_one->m_TodoAlarm->ui->chk4->isChecked()) str = str + "4";
+  if (mw_one->m_TodoAlarm->ui->chk5->isChecked()) str = str + "5";
+  if (mw_one->m_TodoAlarm->ui->chk6->isChecked()) str = str + "6";
+  if (mw_one->m_TodoAlarm->ui->chk7->isChecked()) str = str + "7";
+  if (str.length() > 0) {
     strTime = tr("Alarm") + "  " + str + "  " +
               mw_one->m_TodoAlarm->ui->dateTimeEdit->time().toString("HH:mm");
 
