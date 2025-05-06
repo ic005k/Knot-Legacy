@@ -256,6 +256,7 @@ class NotesList : public QDialog {
   void clearInvalidMDFile();
 
   SearchModel m_searchModel;
+  void startBackgroundTaskUpdateFilesIndex();
 };
 
 class SearchMapper {

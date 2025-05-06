@@ -1766,6 +1766,7 @@ public class MyActivity
 
   public void openNoteEditor() {
     Intent i = new Intent(context, NoteEditor.class);
+    i.putExtra("MD_FILE_PATH", strMDFile);
     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     context.startActivity(i);
   }

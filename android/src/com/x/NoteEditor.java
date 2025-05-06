@@ -73,6 +73,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.io.IOException;
 import java.io.File;
@@ -101,6 +102,7 @@ import android.widget.Toast;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.sql.Time;
 import android.text.SpannableStringBuilder;
 import android.text.style.BackgroundColorSpan;
@@ -125,10 +127,9 @@ import androidx.core.content.FileProvider;
 import android.widget.PopupMenu;
 import android.widget.ImageButton;
 import android.util.TypedValue;
+import android.widget.ProgressBar;
 
 public class NoteEditor extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
-
-    private Handler mHandler = new Handler(Looper.getMainLooper());
 
     private MediaPlayer mediaPlayer;
     private static int curVol;
@@ -232,21 +233,24 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     private void bindViews() {
+
         // editNote = (LineNumberedEditText) findViewById(R.id.editNote);
         editNote = (EditText) findViewById(R.id.editNote);
         editNote.setTextSize(TypedValue.COMPLEX_UNIT_SP, MyActivity.myFontSize);
 
-        // 初始化 Markwon
-        final Markwon markwon = Markwon.create(this);
-
-        // 初始化 MarkwonEditor
-        final MarkwonEditor editor = MarkwonEditor.create(markwon);
-
-        // 添加 MarkwonEditorTextWatcher 到 EditText
-        editNote.addTextChangedListener(MarkwonEditorTextWatcher.withPreRender(
-                editor,
-                Executors.newCachedThreadPool(),
-                editNote));
+        String str_file = MyActivity.strMDFile;
+        File file = new File(str_file);
+        if (getFileSizeInKB(file) < 200) {
+            // 初始化 Markwon
+            final Markwon markwon = Markwon.create(context);
+            // 初始化 MarkwonEditor
+            final MarkwonEditor editor = MarkwonEditor.create(markwon);
+            // 添加 MarkwonEditorTextWatcher 到 EditText
+            editNote.addTextChangedListener(MarkwonEditorTextWatcher.withPreRender(
+                    editor,
+                    Executors.newCachedThreadPool(),
+                    editNote));
+        }
 
         btn_cancel = (Button) findViewById(R.id.btn_cancel);
         btnFind = (Button) findViewById(R.id.btnFind);
@@ -449,30 +453,36 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             setContentView(R.layout.noteeditor);
         }
 
+        final String mdfile = MyActivity.strMDFile; // getIntent().getStringExtra("MD_FILE_PATH");
+
         bindViews();
-        init_all();
 
         // 启动子线程执行耗时操作
+        Handler mHandler = new Handler(Looper.getMainLooper());
+
         new Thread(new Runnable() {
+
             @Override
             public void run() {
                 // 子线程读取文件
-                String mdfile = MyActivity.strMDFile;
                 final String data = readTextFile(mdfile);
-
-                // initTextFormat();
 
                 // 文件读取完成后，通过 Handler 发送消息到主线程
                 mHandler.post(new Runnable() {
+
                     @Override
                     public void run() {
                         editNote.setText(data);
+
                         setCursorPos();
                         openSearchResult();
 
                         isTextChanged = false;
                         initRedoUndo();
                         initEditTextChangedListener();
+
+                        init_all();
+
                     }
                 });
             }
@@ -760,22 +770,54 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     }
 
+    /*
+     * public String readTextFile(String filename) {
+     * try {
+     * File file = new File(filename);
+     * StringBuffer strBuf = new StringBuffer();
+     * BufferedReader bufferedReader = new BufferedReader(
+     * new InputStreamReader(new FileInputStream(file), "UTF-8"));
+     * int tempchar;
+     * while ((tempchar = bufferedReader.read()) != -1) {
+     * strBuf.append((char) tempchar);
+     * }
+     * bufferedReader.close();
+     * return strBuf.toString();
+     * } catch (Exception ex) {
+     * ex.printStackTrace();
+     * }
+     * return "";
+     * }
+     */
+
     public String readTextFile(String filename) {
+        BufferedReader reader = null;
         try {
             File file = new File(filename);
-            StringBuffer strBuf = new StringBuffer();
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(new FileInputStream(file), "UTF-8"));
-            int tempchar;
-            while ((tempchar = bufferedReader.read()) != -1) {
-                strBuf.append((char) tempchar);
+            reader = new BufferedReader(
+                    new InputStreamReader(
+                            new FileInputStream(file),
+                            Charset.defaultCharset() // ✅ 自动适配系统编码
+                    ));
+
+            char[] buffer = new char[8192]; // 8KB 缓冲区
+            StringBuilder sb = new StringBuilder();
+            int charsRead;
+            while ((charsRead = reader.read(buffer)) != -1) {
+                sb.append(buffer, 0, charsRead);
             }
-            bufferedReader.close();
-            return strBuf.toString();
+            return sb.toString();
         } catch (Exception ex) {
             ex.printStackTrace();
+            return "";
+        } finally {
+            try {
+                if (reader != null)
+                    reader.close(); // ✅ 确保关闭
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        return "";
     }
 
     public void writeTextFile(String content, String filename) {
@@ -2208,6 +2250,13 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     public void closeAndroidProgressBar() {
         if (MyProgBar.m_MyProgBar != null)
             MyProgBar.m_MyProgBar.finish();
+    }
+
+    // 获取文件大小（单位：KB）
+    public static long getFileSizeInKB(File file) {
+        if (file == null || !file.exists())
+            return 0;
+        return file.length() / 1024; // 转换为 KB
     }
 
 }

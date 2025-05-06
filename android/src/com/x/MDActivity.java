@@ -169,6 +169,7 @@ import android.view.KeyEvent;
 import android.widget.TextView.OnEditorActionListener;
 import android.view.inputmethod.InputMethodManager;
 import java.util.regex.*;
+import android.widget.ProgressBar;
 
 import android.widget.LinearLayout;
 import android.view.LayoutInflater;
