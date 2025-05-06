@@ -4239,6 +4239,7 @@ static void JavaNotify_0() {
 
 static void JavaNotify_1() {
   // Android NoteEditor Close Progress
+  mw_one->closeProgress();
 
   qDebug() << "C++ JavaNotify_1";
 }

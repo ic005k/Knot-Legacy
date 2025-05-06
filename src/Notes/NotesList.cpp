@@ -2277,8 +2277,6 @@ void NotesList::clickNoteBook() {
 }
 
 void NotesList::clickNoteList() {
-  mw_one->m_Notes->saveQMLVPos();
-
   int index = m_Method->getCurrentIndexFromQW(mw_one->ui->qwNoteList);
   QString strMD = m_Method->getText3(mw_one->ui->qwNoteList, index);
   currentMDFile = iniDir + strMD;

@@ -1843,6 +1843,7 @@ void Notes::openEditUI() {
   }
 
   if (isAndroid) {
+    // mw_one->showProgress();
     m_Method->setMDFile(currentMDFile);
     setAndroidNoteConfig("/cpos/currentMDFile",
                          QFileInfo(currentMDFile).baseName());

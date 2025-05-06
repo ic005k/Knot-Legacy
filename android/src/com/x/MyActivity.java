@@ -1765,8 +1765,6 @@ public class MyActivity
   }
 
   public void openNoteEditor() {
-    showAndroidProgressBar();
-
     Intent i = new Intent(context, NoteEditor.class);
     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     context.startActivity(i);
@@ -1949,13 +1947,13 @@ public class MyActivity
     m_handler.sendMessage(m_handler.obtainMessage(1, msg));
   }
 
-  public static void showAndroidProgressBar() {
+  public void showAndroidProgressBar() {
     Intent i = new Intent(context, MyProgBar.class);
     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     context.startActivity(i);
   }
 
-  public static void closeAndroidProgressBar() {
+  public void closeAndroidProgressBar() {
     if (MyProgBar.m_MyProgBar != null)
       MyProgBar.m_MyProgBar.finish();
   }
