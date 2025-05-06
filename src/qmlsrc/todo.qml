@@ -1,8 +1,9 @@
 import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+import QtQuick.Controls.Fusion 2.14
 import QtQuick.Window 2.15
-import QtQml 2.3
-import QtQuick.Controls 2.5
-import QtQuick.Layouts 1.1
+import QtQml 2.15
 
 Rectangle {
     id: root
@@ -132,18 +133,53 @@ Rectangle {
         id: view
         width: parent.width
         height: parent.height
+        boundsBehavior: Flickable.StopAtBounds // 禁止滚动到边界外的弹性效果
 
         anchors {
             fill: parent
             margins: 0
         }
+
+        // 条目和条目之间的间隔
         spacing: 4
+        anchors.rightMargin: 0 // 确保右侧无留白
+
         cacheBuffer: 50
         model: TodoModel {}
 
+        // 核心配置：绑定滚动状态
+        property bool isScrolling: false
+        onMovementStarted: isScrolling = true
+        onMovementEnded: isScrolling = false
+
         ScrollBar.vertical: ScrollBar {
-            width: 8
+            id: vbar
             policy: ScrollBar.AsNeeded
+            interactive: false // 关键！禁止拖动操作
+            width: 8
+
+            // 动态显隐控制
+            visible: opacity > 0
+            opacity: view.isScrolling ? 1 : 0
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 300
+                }
+            }
+
+            // 极简样式
+            contentItem: Rectangle {
+                color: isDark ? "#3498db" : "#606060"
+                opacity: vbar.active ? (isDark ? 0.8 : 0.7) : 0
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 200 // 更流畅的动画
+                        easing.type: Easing.OutQuad
+                    }
+                }
+                radius: 3
+            }
+            background: null // 彻底消除背景容器
         }
 
         delegate: Flickable {
@@ -153,48 +189,90 @@ Rectangle {
             height: rectan.getItemHeight()
             contentWidth: myw + donebtn.width + flagColor.width
             contentHeight: rectan.getItemHeight()
-            boundsBehavior: Flickable.StopAtBounds //该属性设置过后，边界不会被拉出
 
+            //boundsBehavior: Flickable.StopAtBounds //该属性设置过后，边界不会被拉出
+            interactive: true
+
+            // 新增：启用水平滑动和边界限制
+            flickableDirection: Flickable.HorizontalFlick
+            boundsBehavior: Flickable.StopAtBounds
+
+            // 新增：弹性动画
+            PropertyAnimation {
+                id: resetAnimation
+                target: flack
+                property: "contentX"
+                duration: 200
+                easing.type: Easing.OutQuad
+            }
+            // 增加状态标记
+            property bool autoAnimation: false
+            // 增加速度跟踪支持
+            flickDeceleration: 1500 // 增加滑动减速度
+            maximumFlickVelocity: 2000 // 限制最大滑动速度
+
+            // 新增：滑动结束处理
+            onMovementEnded: {
+                const posThreshold = donebtn.width * 0.5
+                // 调整阈值到按钮一半宽度
+                if (flack.contentX > posThreshold) {
+                    resetAnimation.to = donebtn.width
+                } else {
+                    resetAnimation.to = 0
+                }
+                resetAnimation.start()
+            }
+
+            // 增加动画完成回调
+
+            /*Component.onCompleted: {
+                springAnimation.onStopped.connect(() => {
+                                                      if (autoAnimation) {
+                                                          contentX = springAnimation.to
+                                                          autoAnimation = false
+                                                      }
+                                                  })
+            }*/
             Rectangle {
+
                 id: rectan
 
                 anchors.fill: parent
                 width: parent.width
-                height: getItemHeight()
+
                 border.width: isDark ? 0 : 1
                 border.color: "lightgray"
                 radius: 0
                 //选中颜色设置
                 color: view.currentIndex === index ? "lightblue" : getColor()
 
-                //color: view.currentIndex === index ? "#DCDCDC" : "#ffffff"
                 function getItemHeight() {
                     var item0H
                     var item1H
                     var item2H
                     var item3H
 
-                    if (text1.visible == false)
+                    if (text1.visible === false)
                         item0H = 0
                     else
                         item0H = text1.contentHeight
 
-                    if (text2.visible == false)
+                    if (text2.visible === false)
                         item1H = 0
                     else
                         item1H = text2.contentHeight
 
-                    if (text3.visible == false)
+                    if (text3.visible === false)
                         item2H = 0
                     else
                         item2H = text3.contentHeight
 
-                    if (text4.visible == false)
+                    if (text4.visible === false)
                         item3H = 0
                     else
                         item3H = text4.contentHeight
 
-                    return item0H + item1H + item2H + item3H + text2.height + 5
+                    return item0H + item1H + item2H + item3H + 20
                 }
 
                 Rectangle {
@@ -212,15 +290,16 @@ Rectangle {
 
                 RowLayout {
                     id: idlistElemnet
-                    height: parent.height
+
                     width: parent.width
-                    spacing: 2
+                    spacing: 0
                     Layout.fillWidth: true
 
                     ColumnLayout {
-                        height: parent.height
+                        id: m_col
+
                         width: parent.width - flagColor.width - donebtn.width - 4
-                        spacing: 2
+                        spacing: 0
                         Layout.fillWidth: false
                         anchors.leftMargin: 0
                         anchors.rightMargin: 0
@@ -261,10 +340,12 @@ Rectangle {
 
                                 visible: row1.showImg()
                             }
-                            TextArea {
+                            Text {
                                 id: text1
+
                                 width: text1Img.visible ? parent.width - text1Img.width
                                                           - 5 : parent.width
+                                Layout.preferredWidth: rectan.width - flagColor.width
                                 color: view.currentIndex === index ? "black" : getText1FontColor()
                                 font.pointSize: FontSize - 2
                                                 > maxFontSize ? maxFontSize : FontSize - 2
@@ -274,6 +355,11 @@ Rectangle {
                                 verticalAlignment: Text.AlignVCenter
                                 text: time
                                 visible: true
+
+                                leftPadding: 10
+                                rightPadding: 10
+                                topPadding: 5
+                                bottomPadding: 5
                             }
                         }
 
@@ -289,8 +375,6 @@ Rectangle {
                         RowLayout {
 
                             id: row3
-                            height: text3.contentHeight
-                            width: parent.width
 
                             function showImg3() {
 
@@ -325,18 +409,26 @@ Rectangle {
                                 visible: row3.showImg3()
                             }
 
-                            TextArea {
+                            Text {
                                 id: text3
+                                height: text3.contentHeight
                                 width: text3Img.visible ? parent.width - text3Img.width
                                                           - 5 : parent.width
+                                Layout.preferredWidth: rectan.width - 52
                                 font.pointSize: FontSize
-                                wrapMode: Text.Wrap
+                                wrapMode: TextArea.WordWrap
                                 color: view.currentIndex === index ? "black" : getFontColor()
                                 horizontalAlignment: Text.AlignLeft
                                 verticalAlignment: Text.AlignVCenter
                                 text: dototext
+                                textFormat: Text.PlainText
 
                                 visible: true
+
+                                leftPadding: 10
+                                rightPadding: 10
+                                topPadding: 5
+                                bottomPadding: 5
                             }
                         }
 
@@ -376,7 +468,17 @@ Rectangle {
                     width: 55
                     color: "red"
                     anchors.right: parent.right
-                    visible: isBtnVisible
+
+                    //visible: isBtnVisible
+
+                    // 修改：使用透明度动画替代直接显示/隐藏
+                    opacity: flack.contentX !== 0 ? 1 : 0
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 200
+                        }
+                    }
+                    visible: opacity > 0
 
                     Image {
                         id: doneImg

@@ -18,7 +18,6 @@
             android:layout_weight="1"
             android:textSize="10sp" 
             android:gravity="center_vertical"
-            android:textColor="#3498DB"
             android:text="Note Image" />
 
         <Button
@@ -26,8 +25,6 @@
             android:textAllCaps="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#3498DB"
-            android:textColor="#FFFFFF"
             android:text="分享" />
 
     </LinearLayout>

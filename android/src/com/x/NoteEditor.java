@@ -146,7 +146,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private Button btnNext;
     private ImageButton btnStartFind;
 
-    public static LineNumberedEditText editNote;
+    // public static LineNumberedEditText editNote;
+    public static EditText editNote;
     public static EditText editFind;
     public static TextView lblResult;
     private ArrayList<Integer> arrayFindResult = new ArrayList<Integer>();
@@ -229,7 +230,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     private void bindViews(String str) {
-        editNote = (LineNumberedEditText) findViewById(R.id.editNote);
+        // editNote = (LineNumberedEditText) findViewById(R.id.editNote);
+        editNote = (EditText) findViewById(R.id.editNote);
         editNote.setTextSize(TypedValue.COMPLEX_UNIT_SP, MyActivity.myFontSize);
 
         editNote.setText(str);
@@ -496,6 +498,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // HomeKey
         registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
         initMenuTitle();
+
+        MyActivity.closeAndroidProgressBar();
     }
 
     private BroadcastReceiver mHomeKeyEvent = new BroadcastReceiver() {

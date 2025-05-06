@@ -45,6 +45,12 @@ import java.util.Map;
 import java.util.Properties;
 import org.ini4j.Wini;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+import android.content.pm.ActivityInfo;
+import android.content.res.TypedArray;
+
 public class ClockActivity
     extends Activity
     implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
@@ -159,6 +165,8 @@ public class ClockActivity
           e.printStackTrace();
         }
 
+        MyActivity.isBackMainUI = true;
+
         onBackPressed();
         break;
       case R.id.btn_play_voice:
@@ -177,6 +185,7 @@ public class ClockActivity
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
+
     super.onCreate(savedInstanceState);
 
     // 先关闭笔记编辑器和文件选择器
@@ -221,19 +230,23 @@ public class ClockActivity
 
     int maxVol = getMediaMaxVolume();
     strMute = internalConfigure.getIniKey("mute");
+    if (strMute == null || strMute.isEmpty())
+      strMute = "true";
     System.out.println("Mute: " + strMute);
     double vol = 0;
     mediaPlayer = new MediaPlayer();
-    if (strMute.equals("false")) {
-      vol = maxVol * 0.75;
-      setMediaVolume((int) Math.round(vol));
+    if (strMute != null) {
+      if (strMute.equals("false")) {
+        vol = maxVol * 0.75;
+        setMediaVolume((int) Math.round(vol));
 
-      try {
-        mediaPlayer.setDataSource("/data/data/com.x/files/msg.mp3");
-        mediaPlayer.prepare();
-        mediaPlayer.start();
-      } catch (Exception e) {
-        e.printStackTrace();
+        try {
+          mediaPlayer.setDataSource("/data/data/com.x/files/msg.mp3");
+          mediaPlayer.prepare();
+          mediaPlayer.start();
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
       }
     }
     System.out.println("maxVol:  " + maxVol + "    setvol:  " + vol);
@@ -255,7 +268,7 @@ public class ClockActivity
       }
     }
 
-    if (strEnInfo.equals(strInfo)) {
+    if (strEnInfo != null && strEnInfo.equals(strInfo)) {
       isRefreshAlarm = false;
       strInfo = internalConfigure.getIniKey("msg");
     }
@@ -285,27 +298,30 @@ public class ClockActivity
     boolean isVoice = false;
     String[] the_splic = mystr.split(" ");
 
-    if (the_splic[0].equals("语音") || the_splic[0].equals("Voice")) {
-      isVoice = true;
-    }
+    if (the_splic[0] != null) {
+      if (the_splic[0].equals("语音") || the_splic[0].equals("Voice")) {
+        isVoice = true;
+      }
 
-    if (isVoice) {
-      String strNumber = "";
-      for (int i = 0; i < mystr.length(); i++) {
-        String subStr = mystr.substring(i, i + 1);
-        if (!subStr.equals(" ")) {
-          if (isNumer(subStr)) {
-            strNumber = strNumber + subStr;
+      if (isVoice) {
+        String strNumber = "";
+        for (int i = 0; i < mystr.length(); i++) {
+          String subStr = mystr.substring(i, i + 1);
+          if (subStr != null && !subStr.equals(" ")) {
+            if (isNumer(subStr)) {
+              strNumber = strNumber + subStr;
+            }
           }
         }
-      }
-      voiceFile = "/storage/emulated/0/KnotData/memo/voice/" + strNumber + ".aac";
-      playRecord(voiceFile);
-      btn_play_voice.setVisibility(View.VISIBLE);
-    } else {
-      String strVoice = internalConfigure.getIniKey("voice");
-      if (strVoice.equals("true")) {
-        MyActivity.playMyText(str2);
+        voiceFile = "/storage/emulated/0/KnotData/memo/voice/" + strNumber + ".aac";
+        playRecord(voiceFile);
+        btn_play_voice.setVisibility(View.VISIBLE);
+      } else {
+        String strVoice = internalConfigure.getIniKey("voice");
+        String strValue = "true";
+        if (strVoice != null && strVoice.equals(strValue)) {
+          MyActivity.playMyText(str2);
+        }
       }
     }
 

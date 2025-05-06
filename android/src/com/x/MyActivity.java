@@ -148,6 +148,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import android.os.SystemClock;
 import android.os.Vibrator;
+import android.content.SharedPreferences;
 
 //Qt5
 import org.qtproject.qt5.android.bindings.QtActivity;
@@ -155,6 +156,10 @@ import org.qtproject.qt5.android.bindings.QtActivity;
 public class MyActivity
     extends QtActivity
     implements Application.ActivityLifecycleCallbacks {
+
+  // 安卓版本>=11时存储授权
+  private static final String PREFS_NAME = "app_prefs";
+  private static final String KEY_SHOULD_REQUEST = "should_request_storage";
 
   public static boolean isOpenSearchResult = false;
   public static String strSearchText = "";
@@ -281,24 +286,9 @@ public class MyActivity
 
   // ------------------------------------------------------------------------
 
-  public void setDark(String strDark) {
-    if (strDark.equals("dark_yes"))
-      isDark = true;
-    if (strDark.equals("dark_no"))
-      isDark = false;
-    if (isDark) {
-      this.setStatusBarColor("#19232D"); // 深色
-      getWindow()
-          .getDecorView()
-          .setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE); // 白色文字
-    } else {
-      this.setStatusBarColor("#F3F3F3"); // 灰
-      getWindow()
-          .getDecorView()
-          .setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR); // 黑色文字
-    }
+  public void setDark(boolean dark) {
+    isDark = dark;
 
-    System.out.println("strDark=" + strDark + "    isDark=" + isDark);
   }
 
   public static int startAlarm(String str) {
@@ -596,14 +586,19 @@ public class MyActivity
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    // 在onCreate方法这里调用来动态获取存储权限
-    verifyStoragePermissions(this);
+    // 安卓11及以上的存储权限
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      checkStoragePermission();
+    } else {
+      // 安卓11以下的存储授权
+      verifyStoragePermissions(this);
+    }
 
     // File Watch FileWatcher
-    if (null == mFileWatcher) {
-      mFileWatcher = new FileWatcher("/storage/emulated/0/KnotData/");
-      mFileWatcher.startWatching(); // 开始监听
-    }
+    // if (null == mFileWatcher) {
+    // mFileWatcher = new FileWatcher("/storage/emulated/0/KnotData/");
+    // mFileWatcher.startWatching(); // 开始监听
+    // }
 
     if (m_instance != null) {
       Log.d(TAG, "App is already running... this won't work");
@@ -628,9 +623,6 @@ public class MyActivity
     Log.d(TAG, "Android activity created");
 
     isZh(m_instance);
-
-    // 唤醒锁（手机上不推荐使用，其它插电安卓系统可考虑，比如广告机等）
-    // acquireWakeLock();
 
     mySerivece = new PersistService();
     mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -669,10 +661,6 @@ public class MyActivity
     // 设置状态栏全透明
     // this.setStatusBarFullTransparent();
 
-    // 控制状态栏显示，在setContentView之前设置全屏的flag
-    // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-    // WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
     Application application = this.getApplication();
     application.registerActivityLifecycleCallbacks(this);
 
@@ -695,18 +683,20 @@ public class MyActivity
     alarmCount = 0;
     alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
     intent = new Intent(MyActivity.this, ClockActivity.class);
-    pi = PendingIntent.getActivity(MyActivity.this, 0, intent, 0);
+    // 在 Android 12（API 31）及更高版本中，系统强制要求所有 PendingIntent 必须明确声明可变性标志​（FLAG_IMMUTABLE
+    // 或 FLAG_MUTABLE）
+    // pi = PendingIntent.getActivity(MyActivity.this, 0, intent, 0);
+    // 使用 FLAG_IMMUTABLE（推荐）
+    pi = PendingIntent.getActivity(
+        MyActivity.this,
+        0,
+        intent,
+        PendingIntent.FLAG_IMMUTABLE);
 
     // HomeKey
     registerReceiver(
         mHomeKeyEvent,
         new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
-
-    // 解除对file域访问的限制
-    if (Build.VERSION.SDK_INT >= 24) {
-      // Builder builder = new Builder();
-      // StrictMode.setVmPolicy(builder.build());
-    }
 
     addDeskShortcuts();
 
@@ -1003,21 +993,6 @@ public class MyActivity
     super.onStop();
   }
 
-  /*
-   * @Override
-   * public boolean onKeyDown(int keyCode, KeyEvent event) {
-   * if (keyCode == KeyEvent.KEYCODE_BACK) {
-   * Log.e(TAG, "onBackPressed  2 : 按下了返回键");
-   * CallJavaNotify_9();
-   *
-   * return true;
-   * } else {
-   * Log.e(TAG, "onBackPressed  2 : " + keyCode + "  " + event);
-   * return super.onKeyDown(keyCode, event);
-   * }
-   * }
-   */
-
   @Override
   protected void onDestroy() {
     Log.i(TAG, "Main onDestroy...");
@@ -1143,7 +1118,7 @@ public class MyActivity
         if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
           // 表示按了home键,程序直接进入到后台
           System.out.println("MyActivity HOME键被按下...");
-          CallJavaNotify_1();
+
         } else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
           // 表示长按home键,显示最近使用的程序
           System.out.println("MyActivity 长按HOME键...");
@@ -1301,6 +1276,21 @@ public class MyActivity
   }
 
   // ==============================================================================================
+  private void checkStoragePermission() {
+    SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+    boolean shouldRequest = prefs.getBoolean(KEY_SHOULD_REQUEST, true);
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+      if (!Environment.isExternalStorageManager() && shouldRequest) {
+        // 更新标记，避免重复跳转
+        prefs.edit().putBoolean(KEY_SHOULD_REQUEST, false).apply();
+
+        Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+        startActivity(intent);
+      }
+    }
+  }
+
   // 动态获取权限需要添加的常量
   private static final int REQUEST_EXTERNAL_STORAGE = 1;
   private static String[] PERMISSIONS_STORAGE = {
@@ -1775,6 +1765,8 @@ public class MyActivity
   }
 
   public void openNoteEditor() {
+    showAndroidProgressBar();
+
     Intent i = new Intent(context, NoteEditor.class);
     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     context.startActivity(i);
@@ -1957,13 +1949,13 @@ public class MyActivity
     m_handler.sendMessage(m_handler.obtainMessage(1, msg));
   }
 
-  public void showAndroidProgressBar() {
+  public static void showAndroidProgressBar() {
     Intent i = new Intent(context, MyProgBar.class);
     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     context.startActivity(i);
   }
 
-  public void closeAndroidProgressBar() {
+  public static void closeAndroidProgressBar() {
     if (MyProgBar.m_MyProgBar != null)
       MyProgBar.m_MyProgBar.finish();
   }

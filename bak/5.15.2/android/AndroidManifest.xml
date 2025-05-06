@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http:// schemas.android.com/ tools" package="com.x" android:installLocation="auto"
-    android:versionCode="1" android:versionName="1.2.01">
+    android:versionCode="1" android:versionName="1.2.36">
     <!-- The following comment will be replaced upon deployment with default permissions based on
     the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
@@ -15,7 +15,10 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.REORDER_TASKS" />
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> <!-- Android 10+ 需要 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <uses-feature android:name="android.hardware.sensor.stepcounter" android:required="true" />
     <uses-feature android:name="android.hardware.sensor.stepdetector" android:required="true" />
@@ -124,6 +127,14 @@
         </activity>
 
         <activity android:name="com.x.NoteEditor" android:label="Knot"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name="com.x.MDActivity" android:label="Knot"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name="com.x.ImageViewerActivity" android:label="Knot"
             android:screenOrientation="portrait">
         </activity>
 
@@ -246,8 +257,19 @@
         </activity>
 
         <activity android:name="com.x.ContinueReading" android:exported="true"
-            android:label="ContinueReading" android:theme="@style/splashScreenTheme">
+            android:label="ContinueReading" 
+            android:theme="@style/splashScreenTheme">
+            <meta-data android:name="android.app.splash_screen_drawable"
+                android:resource="@drawable/splashscreen" />
+            <meta-data android:name="android.app.splash_screen_drawable_portrait"
+                android:resource="@drawable/splashscreen_port" />
+            <meta-data android:name="android.app.splash_screen_drawable_landscape"
+                android:resource="@drawable/splashscreen_land" />
+        </activity>
 
+        <activity android:name="com.x.Desk_Exercise" android:exported="true"
+            android:label="Exercise"
+            android:theme="@style/splashScreenTheme">
             <meta-data android:name="android.app.splash_screen_drawable"
                 android:resource="@drawable/splashscreen" />
             <meta-data android:name="android.app.splash_screen_drawable_portrait"
@@ -286,8 +308,11 @@
 
         <!-- android:name="androidx.core.content.FileProvider" -->
         <!-- android:name="android.support.v4.content.FileProvider"-->
-        <provider android:name="androidx.core.content.FileProvider" android:authorities="com.x"
-            android:exported="false" android:grantUriPermissions="true">
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.x"
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>

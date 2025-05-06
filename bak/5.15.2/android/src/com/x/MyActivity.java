@@ -3,11 +3,7 @@ package com.x;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
-import android.app.AlertDialog;
-import android.app.AlertDialog;
 import android.app.Application;
-import android.app.Application;
-import android.app.PendingIntent;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -16,9 +12,7 @@ import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentUris;
-import android.content.ContentUris;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -52,7 +46,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
-import android.os.Looper;
 import android.os.Message;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
@@ -65,7 +58,6 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
@@ -77,23 +69,23 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodSession.EventCallback;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-//import android.support.v4.app.ActivityCompat;
 import androidx.core.app.ActivityCompat;
-//import android.support.v4.content.FileProvider;
 import androidx.core.content.FileProvider;
+
 import com.x.FilePicker;
 import com.x.MyActivity.FileWatcher;
 import com.x.MyService;
 import com.x.ShareReceiveActivity;
 import com.x.TTSUtils;
+
 import com.xhh.pdfui.PDFActivity;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -112,6 +104,7 @@ import java.net.URLDecoder;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -126,6 +119,8 @@ import java.util.Random;
 import java.util.Stack;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
@@ -133,12 +128,43 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.location.LocationListenerCompat;
+import androidx.core.location.LocationManagerCompat;
+import androidx.core.location.LocationRequestCompat;
+import android.location.LocationRequest;
+import android.location.LocationProvider;
+import android.location.GpsSatellite;
+import android.location.GpsStatus;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.provider.Settings;
+import androidx.appcompat.app.AlertDialog;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import android.os.SystemClock;
+import android.os.Vibrator;
+
 //Qt5
 import org.qtproject.qt5.android.bindings.QtActivity;
 
 public class MyActivity
     extends QtActivity
     implements Application.ActivityLifecycleCallbacks {
+
+  public static boolean isOpenSearchResult = false;
+  public static String strSearchText = "";
+  public static boolean isEdit = false;
+  public static String strMDTitle = "MarkDown";
+  public static String strMDFile = "";
+  public static String strImageFile;
+  public static int myFontSize;
+  public static boolean isBackMainUI = false;
+
   public static boolean isDark = false;
   private static MyActivity m_instance = null;
   private static SensorManager mSensorManager;
@@ -205,14 +231,52 @@ public class MyActivity
   public static boolean isReadShareData = false;
   public static boolean zh_cn;
 
-  public MyActivity() {
+  private LocationManager locationManager;
+  private double latitude = 0;
+  private double longitude = 0;
+  private Executor executor;
+
+  private boolean isTracking = false;
+  private long startTime = 0L;
+  private long movingTime;
+  private float totalDistance = 0f;
+  private float maxSpeed = 0f;
+  private float mySpeed = 0f;
+  private float totalClimb = 0f;
+  private Location previousLocation;
+  private double previousAltitude;
+
+  private String strGpsStatus = "GPS Status";
+  private String strRunTime = "00:00:00";
+  private String strAltitude = "Altitude";
+  private String strTotalDistance = "0 km";
+  private String strMaxSpeed = "Max Speed";
+  private String strTotalClimb = "Total Climb";
+  private String strAverageSpeed = "0 km/h";
+
+  public class VibrateUtils {
+    // 产生震动
+    public static void vibrate(Context context, long milliseconds) {
+      // 获取Vibrator实例
+      Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+      // 检查设备是否支持震动
+      if (vibrator != null && vibrator.hasVibrator()) {
+        // 震动
+        vibrator.vibrate(milliseconds);
+      }
+    }
   }
 
-  // ------------------------------------------------------------------------
-  public void setStatusBarHide() {
-  }
+  public void setVibrate() {
+    // 方法1：
+    // 让设备震动100毫秒
+    // Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+    // if (vibrator != null && vibrator.hasVibrator()) {
+    // vibrator.vibrate(100);
+    // }
 
-  public void setStatusBarShow() {
+    // 方法2：
+    VibrateUtils.vibrate(this, 50);
   }
 
   // ------------------------------------------------------------------------
@@ -647,6 +711,271 @@ public class MyActivity
     addDeskShortcuts();
 
     mytts = TTSUtils.getInstance(this);
+
+  }
+
+  // 使用LocationListenerCompat定义位置监听器
+  private final LocationListenerCompat locationListener1 = new LocationListenerCompat() {
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+      // 位置更新时触发
+      latitude = location.getLatitude();
+      longitude = location.getLongitude();
+      updateTrackingData(location);
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+      switch (status) {
+        case LocationProvider.AVAILABLE:
+          strGpsStatus = "GPS: Available";
+          break;
+        case LocationProvider.OUT_OF_SERVICE:
+          strGpsStatus = "GPS: Out of Service";
+          break;
+        case LocationProvider.TEMPORARILY_UNAVAILABLE:
+          strGpsStatus = "GPS: Temporarily Unavailable";
+          break;
+      }
+      Log.i(TAG, "GPS Status: " + strGpsStatus);
+    }
+
+    @Override
+    public void onProviderEnabled(@NonNull String provider) {
+      Log.d(TAG, "Provider enabled: " + provider);
+    }
+
+    @Override
+    public void onProviderDisabled(@NonNull String provider) {
+      Log.d(TAG, "Provider disabled: " + provider);
+    }
+  };
+
+  private final GpsStatus.Listener gpsStatusListener = new GpsStatus.Listener() {
+    @Override
+    public void onGpsStatusChanged(int event) {
+      if (locationManager != null) {
+        GpsStatus gpsStatus = locationManager.getGpsStatus(null);
+        switch (event) {
+          case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
+            Iterable<GpsSatellite> satellites = gpsStatus.getSatellites();
+            Iterator<GpsSatellite> it = satellites.iterator();
+            int satelliteCount = 0;
+            StringBuilder statusText = new StringBuilder();
+            while (it.hasNext()) {
+              GpsSatellite satellite = it.next();
+              satelliteCount++;
+              statusText.append("卫星 ").append(satelliteCount).append(" 强度: ")
+                  .append(satellite.getSnr()).append("\n");
+            }
+            statusText.insert(0, "可见卫星数量: ").append(satelliteCount).append("\n");
+            strGpsStatus = statusText.toString();
+            break;
+          case GpsStatus.GPS_EVENT_FIRST_FIX:
+            // 首次定位成功
+            break;
+          case GpsStatus.GPS_EVENT_STARTED:
+            // GPS启动
+            break;
+          case GpsStatus.GPS_EVENT_STOPPED:
+            // GPS停止
+            break;
+        }
+      }
+    }
+  };
+
+  public String getGpsStatus() {
+    return strTotalDistance + "\n" + strRunTime + "\n" + strAverageSpeed + "\n" + strMaxSpeed + "\n" + strAltitude
+        + "\n" + strTotalClimb + "\n" + strGpsStatus;
+  }
+
+  public double startGpsUpdates() {
+    setVibrate();
+    latitude = 0;
+    longitude = 0;
+    startTime = System.currentTimeMillis();
+    totalDistance = 0f;
+    maxSpeed = 0f;
+    mySpeed = 0f;
+    totalClimb = 0f;
+    previousLocation = null;
+    movingTime = 0;
+    previousAltitude = 0f;
+
+    // 初始化LocationManager
+    locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+    executor = Executors.newSingleThreadExecutor();
+
+    // 检查位置服务是否开启
+    boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    if (!isGpsEnabled && !isNetworkEnabled) {
+      new AlertDialog.Builder(this)
+          .setMessage("位置服务未开启，请开启位置服务以获取位置信息。")
+          .setPositiveButton("去开启", (dialog, which) -> {
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
+          })
+          .setNegativeButton("取消", null)
+          .show();
+    }
+
+    if (locationManager != null) {
+      // 检测是否有定位权限
+      int permission = ActivityCompat.checkSelfPermission(
+          this,
+          "android.permission.ACCESS_FINE_LOCATION");
+      if (permission != PackageManager.PERMISSION_GRANTED) {
+        // 没有定位权限，去申请定位权限，会弹出对话框
+        ActivityCompat.requestPermissions(this,
+            new String[] { "android.permission.ACCESS_FINE_LOCATION" },
+            1);
+      }
+
+      if (ActivityCompat.checkSelfPermission(this,
+          "android.permission.ACCESS_FINE_LOCATION") == PackageManager.PERMISSION_GRANTED) {
+
+        // locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+        // 3000, // 更新间隔时间（毫秒）
+        // 1, // 最小距离变化（米）
+        // locationListener);
+
+        // 创建 LocationRequestCompat 对象
+        // .setPriority(LocationRequestCompat.PRIORITY_HIGH_ACCURACY) // 高精度模式
+        LocationRequestCompat locationRequest = new LocationRequestCompat.Builder(2000L) // 最小时间间隔
+            .setMinUpdateDistanceMeters(1.0f) // 最小距离间隔
+            .build();
+        // 使用 LocationManagerCompat 请求位置更新（兼容 Android 6.0+）
+        LocationManagerCompat.requestLocationUpdates(
+            locationManager,
+            LocationManager.GPS_PROVIDER, // 使用 GPS 提供者
+            locationRequest,
+            executor,
+            locationListener1);
+
+        // 添加GPS状态侦听
+        if (locationManager != null) {
+          locationManager.addGpsStatusListener(gpsStatusListener);
+        }
+
+        return 1;
+      }
+    }
+    return 0;
+  }
+
+  public double getTotalDistance() {
+
+    return totalDistance;
+
+  }
+
+  public double getMySpeed() {
+
+    return mySpeed;
+
+  }
+
+  public double getLatitude() {
+
+    return latitude;
+
+  }
+
+  public double getLongitude() {
+
+    return longitude;
+
+  }
+
+  // 停止 GPS 更新
+  public double stopGpsUpdates() {
+    setVibrate();
+    if (locationManager != null && locationListener1 != null) {
+      try {
+        // locationManager.removeUpdates(locationListener1);
+        LocationManagerCompat.removeUpdates(locationManager, locationListener1);
+
+        // 停止GPS状态侦听
+        if (locationManager != null) {
+          locationManager.removeGpsStatusListener(gpsStatusListener);
+        }
+      } catch (SecurityException e) {
+        e.printStackTrace();
+      }
+    }
+    return totalDistance;
+  }
+
+  // 更新运动数据
+  private void updateTrackingData(Location currentLocation) {
+    if (previousLocation != null) {
+      if (currentLocation.getSpeed() > 0) {
+        // 运动状态
+        long currentTime = System.currentTimeMillis();
+        movingTime += currentTime - startTime;
+        startTime = currentTime;
+
+        // 计算距离
+        totalDistance += previousLocation.distanceTo(currentLocation) / 1000; // 转换为公里
+
+        // 计算最大速度
+        mySpeed = currentLocation.getSpeed() * 3.6f;// 转换为 km/h
+        if (mySpeed > maxSpeed) {
+          maxSpeed = mySpeed;
+        }
+
+        // 计算爬升
+        double currentAltitude = currentLocation.getAltitude();
+        if (currentAltitude > previousAltitude) {
+          totalClimb += currentAltitude - previousAltitude;
+        }
+        previousAltitude = currentAltitude;
+      } else {
+        // 静止状态，更新开始时间
+        startTime = System.currentTimeMillis();
+      }
+    } else {
+      previousAltitude = currentLocation.getAltitude();
+    }
+
+    // 更新 UI
+    updateUI(currentLocation);
+
+    previousLocation = currentLocation;
+  }
+
+  private void updateUI(Location location) {
+    // 运动距离
+    strTotalDistance = String.format("%.2f km", totalDistance);
+
+    // 运动时间
+    long seconds = movingTime / 1000;
+    strRunTime = String.format("%02d:%02d:%02d", seconds / 3600, (seconds % 3600) / 60, seconds % 60);
+
+    // 平均速度
+    double avgSpeed = totalDistance / (movingTime / 3600000f);
+    strAverageSpeed = String.format("%.2f km/h", avgSpeed);
+
+    // 最大速度
+    if (zh_cn)
+      strMaxSpeed = String.format("最大速度: %.2f km/h", maxSpeed);
+    else
+      strMaxSpeed = String.format("Max Speed: %.2f km/h", maxSpeed);
+
+    // 海拔
+    if (zh_cn)
+      strAltitude = String.format("海拔: %.2f 米", location.getAltitude());
+    else
+      strAltitude = String.format("Altitude: %.2f 米", location.getAltitude());
+
+    // 爬升
+    if (zh_cn)
+      strTotalClimb = String.format("累计爬升: %.2f 米", totalClimb);
+    else
+      strTotalClimb = String.format("Total Climb: %.2f 米", totalClimb);
   }
 
   private static ServiceConnection mCon = new ServiceConnection() {
@@ -752,10 +1081,8 @@ public class MyActivity
       public void onReceive(Context context, Intent intent) {
         if (mSensorManager != null) { // 取消监听后重写监听，以保持后台运行
           mSensorManager.unregisterListener(PersistService.this);
-          mSensorManager.registerListener(
-              PersistService.this,
-              mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER),
-              SensorManager.SENSOR_DELAY_NORMAL);
+          mSensorManager.registerListener(PersistService.this,
+              mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_NORMAL);
         }
       }
     };
@@ -1453,6 +1780,12 @@ public class MyActivity
     context.startActivity(i);
   }
 
+  public void openMDWindow() {
+    Intent i = new Intent(context, MDActivity.class);
+    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    context.startActivity(i);
+  }
+
   public void openDateTimePicker() {
     Intent i = new Intent(context, DateTimePicker.class);
     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -1501,16 +1834,19 @@ public class MyActivity
       String lblNewTodo = null;
       String lblNewNote = null;
       String lblContinueReading = null;
+      String lblExercise = null;
       if (MyService.zh_cn) {
         lblAddRecoed = getString(R.string.addRecord_shortcut_short_label_zh);
         lblNewTodo = getString(R.string.newTodo_shortcut_short_label_zh);
         lblNewNote = getString(R.string.newNote_shortcut_short_label_zh);
         lblContinueReading = getString(R.string.continueReading_shortcut_short_label_zh);
+        lblExercise = getString(R.string.exercise_shortcut_short_label_zh);
       } else {
         lblAddRecoed = getString(R.string.addRecord_shortcut_short_label);
         lblNewTodo = getString(R.string.newTodo_shortcut_short_label);
         lblNewNote = getString(R.string.newNote_shortcut_short_label);
         lblContinueReading = getString(R.string.continueReading_shortcut_short_label);
+        lblExercise = getString(R.string.exercise_shortcut_short_label);
       }
 
       // ShortcutInfo.Builder构建快捷方式
@@ -1546,9 +1882,15 @@ public class MyActivity
               new Intent(Intent.ACTION_MAIN, null, this, ContinueReading.class))
           .build();
 
+      ShortcutInfo shortcut4 = new ShortcutInfo.Builder(this, "New_Exercise")
+          .setShortLabel(lblExercise)
+          .setIcon(Icon.createWithResource(this, R.drawable.exercise))
+          .setIntent(new Intent(Intent.ACTION_MAIN, null, this, Desk_Exercise.class))
+          .build();
+
       // setDynamicShortcuts()方法来设置快捷方式
       shortcutManager.setDynamicShortcuts(
-          Arrays.asList(shortcut0, shortcut1, shortcut2, shortcut3));
+          Arrays.asList(shortcut0, shortcut1, shortcut2, shortcut4, shortcut3));
       // Toast.makeText(MyActivity.this, "已添加", Toast.LENGTH_SHORT).show();
     }
   }
@@ -1601,13 +1943,8 @@ public class MyActivity
     public void handleMessage(Message msg) {
       switch (msg.what) {
         case 1:
-          Toast toast = Toast.makeText(
-              m_instance,
-              (String) msg.obj,
-              Toast.LENGTH_LONG);
-          TextView v = (TextView) toast
-              .getView()
-              .findViewById(android.R.id.message);
+          Toast toast = Toast.makeText(m_instance, (String) msg.obj, Toast.LENGTH_LONG);
+          TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
           // v.setTextColor(Color.RED);
           // v.setTextSize(20);
           toast.show();
@@ -1835,6 +2172,42 @@ public class MyActivity
       zh_cn = false;
 
     return zh_cn;
+  }
+
+  public double getEditStatus() {
+    if (isEdit == true) {
+      return 1;
+    }
+
+    return 0;
+  }
+
+  public void setMDTitle(String strTitle) {
+    strMDTitle = strTitle;
+  }
+
+  public void setMDFile(String file) {
+    strMDFile = file;
+  }
+
+  public void setFontSize(int nSize) {
+    myFontSize = nSize - 3;
+  }
+
+  public void setOpenSearchResult(boolean value) {
+    isOpenSearchResult = value;
+  }
+
+  public void setSearchText(String text) {
+    strSearchText = text;
+  }
+
+  public boolean getIsBackMainUI() {
+    return isBackMainUI;
+  }
+
+  public void setIsBackMainUI(boolean value) {
+    isBackMainUI = value;
   }
 
 }

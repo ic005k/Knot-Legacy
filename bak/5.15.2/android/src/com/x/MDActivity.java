@@ -213,6 +213,8 @@ import android.graphics.Color;
 import android.text.style.ForegroundColorSpan;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import org.commonmark.node.Emphasis;
+
 import io.noties.markwon.core.CoreProps;
 import io.noties.markwon.html.HtmlTag;
 import io.noties.markwon.html.tag.SimpleTagHandler;
@@ -270,16 +272,7 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
         // 去除title(App Name)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        if (MyActivity.isDark) {
-            this.setStatusBarColor("#19232D"); // 深色
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-            setContentView(R.layout.activity_md_dark);
-        } else {
-            this.setStatusBarColor("#F3F3F3"); // 灰
-            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            setContentView(R.layout.activity_md);
-        }
-
+        setContentView(R.layout.activity_md);
         markdownView = findViewById(R.id.markdownView);
         markdownView.setTextSize(TypedValue.COMPLEX_UNIT_SP, MyActivity.myFontSize);
 
@@ -572,14 +565,6 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
             startActivity(intent);
         }
 
-    }
-
-    private void setStatusBarColor(String color) {
-        // 需要安卓版本大于5.0以上
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            getWindow().setStatusBarColor(Color.parseColor(color));
-        }
     }
 
 }

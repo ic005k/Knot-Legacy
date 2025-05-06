@@ -1,6 +1,7 @@
 package com.x;
 
 import com.x.MyActivity;
+import com.x.MDActivity;
 import com.x.TextViewUndoRedo;
 import com.x.PopupMenuCustomLayout;
 import com.x.LineNumberedEditText;
@@ -22,6 +23,10 @@ import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
 import com.skydoves.powermenu.MenuAnimation;
 */
+
+import io.noties.markwon.Markwon;
+import io.noties.markwon.editor.MarkwonEditor;
+import io.noties.markwon.editor.MarkwonEditorTextWatcher;
 
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.core.content.ContextCompat;
@@ -68,6 +73,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Executors;
 import java.io.IOException;
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -118,6 +124,7 @@ import android.annotation.SuppressLint;
 import androidx.core.content.FileProvider;
 import android.widget.PopupMenu;
 import android.widget.ImageButton;
+import android.util.TypedValue;
 
 public class NoteEditor extends Activity implements View.OnClickListener, Application.ActivityLifecycleCallbacks {
 
@@ -223,7 +230,21 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     private void bindViews(String str) {
         editNote = (LineNumberedEditText) findViewById(R.id.editNote);
+        editNote.setTextSize(TypedValue.COMPLEX_UNIT_SP, MyActivity.myFontSize);
+
         editNote.setText(str);
+
+        // 初始化 Markwon
+        final Markwon markwon = Markwon.create(this);
+
+        // 初始化 MarkwonEditor
+        final MarkwonEditor editor = MarkwonEditor.create(markwon);
+
+        // 添加 MarkwonEditorTextWatcher 到 EditText
+        editNote.addTextChangedListener(MarkwonEditorTextWatcher.withPreRender(
+                editor,
+                Executors.newCachedThreadPool(),
+                editNote));
 
         btn_cancel = (Button) findViewById(R.id.btn_cancel);
         btnFind = (Button) findViewById(R.id.btnFind);
@@ -418,7 +439,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // 去除title(App Name)
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        String filename = "/storage/emulated/0/.Knot/mymd.txt";
+        String filename = MyActivity.strMDFile;// "/storage/emulated/0/.Knot/mymd.txt";
         strInfo = readTextFile(filename);
 
         if (MyActivity.isDark) {
@@ -440,15 +461,18 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
             try {
                 Wini ini = new Wini(new File(filename));
-                currentMDFile = ini.get("cpos", "currentMDFile");
+                currentMDFile = ini.get("cpos", "currentMDFile", String.class);
                 s_cpos = ini.get("cpos", currentMDFile);
+                if (s_cpos == null || s_cpos.isEmpty()) {
+                    s_cpos = ""; // 设置默认值
+                }
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             int cpos = 0;
-            if (s_cpos != null)
+            if (!s_cpos.equals(""))
                 cpos = Integer.parseInt(s_cpos);
             int nLength = editNote.getText().length();
             if (cpos > nLength)
@@ -460,6 +484,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         initColorValue();
         initTextFormat();
+        openSearchResult();
 
         // pass edittext object to TextViewUndoRedo class
         helper = new TextViewUndoRedo(editNote);
@@ -515,8 +540,13 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        AnimationWhenClosed();
+        if (isTextChanged)
+            showNormalDialog();
+        else {
+            super.onBackPressed();
+            AnimationWhenClosed();
+        }
+
     }
 
     @Override
@@ -546,8 +576,14 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
 
         if (isTextChanged) {
-            saveNote();
+            // saveNote();
 
+        } else {
+            if (MyActivity.isEdit) {
+                Intent i = new Intent(this, MDActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                this.startActivity(i);
+            }
         }
 
         unregisterReceiver(mHomeKeyEvent);
@@ -777,10 +813,11 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     private void saveNote() {
+
         // save current text
         String mContent = editNote.getText().toString();
-        String mPath = "/storage/emulated/0/.Knot/";
-        String filename = mPath + "note_text.txt";
+        // String mPath = "/storage/emulated/0/.Knot/";
+        String filename = MyActivity.strMDFile; // mPath + "note_text.txt";
         writeTextFile(mContent, filename);
 
         CallJavaNotify_6();
@@ -1047,24 +1084,35 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
          * setXXX方法返回Dialog对象，因此可以链式设置属性
          */
         final AlertDialog.Builder normalDialog = new AlertDialog.Builder(NoteEditor.this);
-        // normalDialog.setIcon(R.drawable.alarm.png);
+        normalDialog.setIcon(R.drawable.alarm);
         normalDialog.setTitle("Knot");
-        normalDialog.setMessage("The text has been modified. Do you want to save?");
-        normalDialog.setPositiveButton("Yes",
+        String strYes, strNo;
+        if (!zh_cn) {
+            normalDialog.setMessage("The text has been modified. Do you want to save?");
+            strYes = "Yes";
+            strNo = "No";
+        } else {
+            normalDialog.setMessage("文本被修改，是否保存？");
+            strYes = "是";
+            strNo = "否";
+        }
+        normalDialog.setPositiveButton(strYes,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // ...To-do
                         saveNote();
+                        finish();
 
                     }
                 });
-        normalDialog.setNegativeButton("No",
+        normalDialog.setNegativeButton(strNo,
                 new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // ...To-do
+                        finish();
                     }
                 });
         // 显示
@@ -1145,6 +1193,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         // popupMenu.show(anchorView, Gravity.CENTER, 0, 0);
     }
 
+    // 当前正在使用 main.xml main_cn.xml
     private void showPopupMenu(View view) {
 
         // View当前PopupMenu显示的相对View的位置
@@ -1305,8 +1354,13 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             initTextFormat();
         }
 
-        // Font Color
+        // Font Color --> Separator
         if (strTitle.equals(listMenuTitle.get(9))) {
+            insertNote("\n\n---\n\n");
+            initTextFormat();
+            if (3 > 2) {
+                return;
+            }
 
             String strChoose = "Choose Color";
             String strOk = "Ok";
@@ -1465,7 +1519,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             listMenuTitle.add("h3 标题");
             listMenuTitle.add("h4 标题");
             listMenuTitle.add("h5 标题");
-            listMenuTitle.add("字色");
+            listMenuTitle.add("分隔线");
             listMenuTitle.add("粗体");
             listMenuTitle.add("斜体");
             listMenuTitle.add("删除线");
@@ -1483,7 +1537,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             listMenuTitle.add("h3");
             listMenuTitle.add("h4");
             listMenuTitle.add("h5");
-            listMenuTitle.add("Font Color");
+            listMenuTitle.add("Separator");
             listMenuTitle.add("Bold");
             listMenuTitle.add("Italic");
             listMenuTitle.add("Strickout");
@@ -1498,6 +1552,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     /*
+     * // PowerMenu插件，目前暂停使用，不是很轻量，但根据需要可随时启用
      * private void showPowerMenu(View view) {
      * 
      * ArrayList<PowerMenuItem> list = new ArrayList<>();
@@ -1912,6 +1967,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     private void initTextFormat() {
+
         String strOrg = editNote.getText().toString();
         if (strOrg == null || strOrg.equals(""))
             return;
@@ -1920,6 +1976,17 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         for (int i = 0; i < 10; i++)
             strOrg = strOrg.replace("\n\n\n", "\n\n");
+
+        // 在此处返回，目前只需要去除多余的空格即可
+        if (strOrg != null) {
+            editNote.setText(strOrg);
+            int nLength = editNote.getText().length();
+            if (curIndex > nLength)
+                curIndex = nLength;
+
+            editNote.setSelection(curIndex);
+            return;
+        }
 
         style = new SpannableStringBuilder(strOrg);
 
@@ -2081,6 +2148,19 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             // 错误处理
         }
         return image;
+    }
+
+    private void openSearchResult() {
+        if (MyActivity.isOpenSearchResult) {
+            if (!MyActivity.strSearchText.equals("")) {
+                btnFind.performClick();
+                editFind.setText(MyActivity.strSearchText);
+                btnStartFind.performClick();
+                btnNext.performClick();
+                btnPrev.performClick();
+            }
+        }
+        MyActivity.isOpenSearchResult = false;
     }
 
 }

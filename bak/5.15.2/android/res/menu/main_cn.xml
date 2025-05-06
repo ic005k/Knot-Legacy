@@ -33,7 +33,7 @@
         android:title="h5 标题" />
 
     <item android:id="@+id/fontcolor"
-        android:title="字色" />
+        android:title="分隔线" />
 
     <item android:id="@+id/bold"
         android:title="粗体" />

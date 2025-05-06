@@ -3,7 +3,7 @@
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
 #include "ui_MainWindow.h"
 
-QString ver = "1.2.36";
+QString ver = "1.2.37";
 QString appName = "Knot";
 
 QList<QPointF> PointList;
@@ -4238,7 +4238,7 @@ static void JavaNotify_0() {
 }
 
 static void JavaNotify_1() {
-  // Press the Home button
+  // Android NoteEditor Close Progress
 
   qDebug() << "C++ JavaNotify_1";
 }
