@@ -171,6 +171,9 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private int end = 0;
     private ArrayList<String> listMenuTitle = new ArrayList<>();
 
+    // 使用 volatile 确保可见性
+    private volatile boolean isLoadUI = false;
+
     // 用于存储拍照后的图片Uri
     private Uri photoUri;
 
@@ -453,10 +456,19 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             setContentView(R.layout.noteeditor);
         }
 
-        final String mdfile = MyActivity.strMDFile; // getIntent().getStringExtra("MD_FILE_PATH");
-
         bindViews();
 
+        isLoadUI = true;
+
+        // 监听 UI 绘制完成
+        findViewById(android.R.id.content).post(() -> {
+            // 启动异步任务
+            loadMDFile();
+        });
+    }
+
+    private void loadMDFile() {
+        final String mdfile = MyActivity.strMDFile; // getIntent().getStringExtra("MD_FILE_PATH");
         // 启动子线程执行耗时操作
         Handler mHandler = new Handler(Looper.getMainLooper());
 
@@ -464,6 +476,16 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
             @Override
             public void run() {
+                /*
+                 * while (!isLoadUI) {
+                 * try {
+                 * // 添加短暂休眠（降低 CPU 占用）
+                 * Thread.sleep(100); // 间隔 100ms 检查一次
+                 * } catch (InterruptedException e) {
+                 * e.printStackTrace();
+                 * }
+                 * }
+                 */
                 // 子线程读取文件
                 final String data = readTextFile(mdfile);
 
