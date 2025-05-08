@@ -37,6 +37,12 @@
         <item name="colorPrimary">@color/green</item>
         <item name="windowActionBar">true</item>
     </style>
+
+    <style name="CircularProgressStyle" parent="Theme.AppCompat">
+        <item name="colorControlActivated">#2196F3</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:minWidth">0dp</item>
+    </style>
    
 
 </resources>

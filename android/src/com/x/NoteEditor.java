@@ -912,14 +912,29 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     private void saveNote() {
-
         // save current text
-        String mContent = editNote.getText().toString();
+        final String mContent = editNote.getText().toString();
         // String mPath = "/storage/emulated/0/.Knot/";
-        String filename = MyActivity.strMDFile; // mPath + "note_text.txt";
-        writeTextFile(mContent, filename);
+        final String filename = MyActivity.strMDFile;
+        MyActivity.showAndroidProgressBar();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // 1. 执行耗时操作
+                writeTextFile(mContent, filename);
+                CallJavaNotify_6();
+                // 2. 完成后切换回主线程更新 UI
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // 在主线程执行后续操作
+                        MyActivity.closeAndroidProgressBar();
 
-        CallJavaNotify_6();
+                    }
+                });
+            }
+        }).start();
+
     }
 
     private void openFilePicker() {

@@ -1948,13 +1948,13 @@ public class MyActivity
     m_handler.sendMessage(m_handler.obtainMessage(1, msg));
   }
 
-  public void showAndroidProgressBar() {
+  public static void showAndroidProgressBar() {
     Intent i = new Intent(context, MyProgBar.class);
     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     context.startActivity(i);
   }
 
-  public void closeAndroidProgressBar() {
+  public static void closeAndroidProgressBar() {
     if (MyProgBar.m_MyProgBar != null)
       MyProgBar.m_MyProgBar.finish();
   }

@@ -82,6 +82,7 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.Spannable;
 import android.text.Spanned;
+import android.graphics.drawable.ColorDrawable;
 
 public class MyProgBar extends Activity {
 
