@@ -284,7 +284,11 @@
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name="com.x.MyProgBar" android:exported="true" android:label="MyProgBar">
+        <activity 
+        android:name="com.x.MyProgBar" 
+        android:theme="@style/TransparentTheme"
+        android:exported="true" 
+        android:label="MyProgBar">
         </activity>
 
         <activity android:name="com.x.TempActivity" android:exported="true"

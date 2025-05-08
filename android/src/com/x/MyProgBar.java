@@ -95,9 +95,11 @@ public class MyProgBar extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         m_MyProgBar = this;
         setContentView(R.layout.myprogbar);
+
         mProgressBar = (ProgressBar) findViewById(R.id.progBar);
         mProgressBar.setVisibility(View.VISIBLE);
 

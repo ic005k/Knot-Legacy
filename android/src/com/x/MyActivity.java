@@ -171,7 +171,7 @@ public class MyActivity
   public static boolean isBackMainUI = false;
 
   public static boolean isDark = false;
-  private static MyActivity m_instance = null;
+  public static MyActivity m_instance = null;
   private static SensorManager mSensorManager;
   public static int isStepCounter = -1;
   public static float stepCounts;

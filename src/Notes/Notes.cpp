@@ -1527,6 +1527,8 @@ void Notes::javaNoteToQMLNote() {
   notes_sync_files.append(zipMD);
 
   mw_one->m_NotesList->m_dbManager.updateFileIndex(currentMDFile);
+
+  m_Method->closeAndroidProgressBar();
 }
 
 QString Notes::formatMDText(QString text) {

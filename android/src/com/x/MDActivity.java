@@ -70,6 +70,7 @@ import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 import org.w3c.dom.Node;
+import org.w3c.dom.Text;
 
 import java.util.Iterator;
 import java.util.List;
@@ -226,6 +227,7 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
     private Button btnEdit;
     private ScrollView scrollView;
     private String strmdFileName;
+    private Markwon markwon;
 
     public native static void CallJavaNotify_0();
 
@@ -302,7 +304,7 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
 
         // 初始化 Markwon
         // .usePlugin(ImagesPlugin.create())
-        final Markwon markwon = Markwon.builder(this)
+        markwon = Markwon.builder(this)
                 .usePlugin(StrikethroughPlugin.create())
                 .usePlugin(TablePlugin.create(this))
                 .usePlugin(TaskListPlugin.create(this))
@@ -326,15 +328,34 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
                 .usePlugin(HtmlPlugin.create())
                 .build();
 
+        loadMD();
+
+        // HomeKey
+        registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+
+        MyActivity.isEdit = false;
+
+    }
+
+    // 恢复滚动位置（原有逻辑）
+    private void restoreScrollPosition() {
+        SharedPreferences sharedPreferences = getSharedPreferences(strmdFileName + "scroll_position", MODE_PRIVATE);
+        int savedScrollX = sharedPreferences.getInt("scrollX", 0);
+        int savedScrollY = sharedPreferences.getInt("scrollY", 0);
+        scrollView.scrollTo(savedScrollX, savedScrollY);
+    }
+
+    private void loadMD() {
         // 监听 UI 绘制完成
         findViewById(android.R.id.content).post(() -> {
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     // 1. 执行耗时操作（如下载、计算等）
                     StringBuilder markdownContent = new StringBuilder();
                     try {
-                        // "/storage/emulated/0/.Knot/mymd.md"
+
                         File file = new File(MyActivity.strMDFile);
                         BufferedReader reader = new BufferedReader(new FileReader(file));
                         String line;
@@ -350,6 +371,7 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+
                             // 在主线程执行后续操作
                             String strMD = markdownContent.toString();
                             strMD = strMD.replace("images/", "/storage/emulated/0/KnotData/memo/images/");
@@ -381,11 +403,6 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
                 }
             }).start();
         });
-
-        // HomeKey
-        registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
-
-        MyActivity.isEdit = false;
 
     }
 
