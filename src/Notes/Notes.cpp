@@ -1336,7 +1336,7 @@ void Notes::openMDWindow() {
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject activity = QtAndroid::androidActivity();
-  activity.callMethod<void>("openMDWindow", "()V");
+  activity.callStaticMethod<void>("com.x/MyActivity", "openMDWindow", "()V");
 #else
   QJniObject activity = QJniObject::fromString("openMDWindow");
   activity.callMethod<void>("openMDWindow", "()V");
@@ -1502,10 +1502,10 @@ void Notes::javaNoteToQMLNote() {
   }
 
 #ifdef Q_OS_ANDROID
-  QAndroidJniObject m_activity = QtAndroid::androidActivity();
-  if (m_activity.callMethod<jdouble>("getEditStatus", "()D") == 1) {
-    mw_one->ui->btnOpenNote->click();
-  }
+  // QAndroidJniObject m_activity = QtAndroid::androidActivity();
+  // if (m_activity.callMethod<jdouble>("getEditStatus", "()D") == 1) {
+  //  mw_one->ui->btnOpenNote->click();
+  //}
 #endif
 
   QString zipMD = privateDir + "KnotData/memo/" +
@@ -1527,8 +1527,6 @@ void Notes::javaNoteToQMLNote() {
   notes_sync_files.append(zipMD);
 
   mw_one->m_NotesList->m_dbManager.updateFileIndex(currentMDFile);
-
-  m_Method->closeAndroidProgressBar();
 }
 
 QString Notes::formatMDText(QString text) {

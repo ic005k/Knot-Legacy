@@ -1016,6 +1016,7 @@ public class MyActivity
     android.os.Process.killProcess(android.os.Process.myPid());
 
     super.onDestroy();
+    m_instance = null;
   }
 
   @Override
@@ -1771,7 +1772,7 @@ public class MyActivity
     context.startActivity(i);
   }
 
-  public void openMDWindow() {
+  public static void openMDWindow() {
     Intent i = new Intent(context, MDActivity.class);
     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     context.startActivity(i);

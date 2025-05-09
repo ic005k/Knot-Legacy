@@ -995,6 +995,9 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                             @Override
                             public void run() {
                                 myActivity.closeAndroidProgressBar();
+                                if (MyActivity.isEdit) {
+                                    MyActivity.openMDWindow();
+                                }
                             }
                         });
                     }
@@ -1292,6 +1295,9 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // ...To-do
+                        if (MyActivity.isEdit) {
+                            MyActivity.openMDWindow();
+                        }
                         finish();
                     }
                 });

@@ -231,7 +231,7 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
     private Button btnEdit;
     private ScrollView scrollView;
     private String strmdFileName;
-    private Markwon markwon;
+    private static Markwon markwon;
 
     private RecyclerView recyclerView;
     private MarkdownAdapter adapter;
@@ -294,8 +294,9 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
 
         // markdownView = findViewById(R.id.markdownView);
         // markdownView.setTextSize(TypedValue.COMPLEX_UNIT_SP, MyActivity.myFontSize);
-
         // markdownView.setText("Loading, please wait...");
+
+        initMarkdwon();
 
         initRecyclerView();
 
@@ -311,8 +312,13 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
 
         // scrollView = findViewById(R.id.scroll_view);
 
-        final Prism4j prism4j = new Prism4j(new MyGrammarLocator());
+        loadMD();
 
+        MyActivity.isEdit = false;
+
+    }
+
+    private void initMarkdwon() {
         float fixedTextSize = 16; // 单位：sp
 
         // 将 sp 转换为像素（JLatexMathPlugin 需要像素值）
@@ -320,16 +326,17 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
                 TypedValue.COMPLEX_UNIT_SP,
                 fixedTextSize,
                 getResources().getDisplayMetrics());
+        final Prism4j prism4j = new Prism4j(new MyGrammarLocator());
 
         // 初始化 Markwon
-        // .usePlugin(ImagesPlugin.create())
-        markwon = Markwon.builder(this)
+        Context appContext = getApplicationContext();
+        markwon = Markwon.builder(appContext)
                 .usePlugin(StrikethroughPlugin.create())
-                .usePlugin(TablePlugin.create(this))
-                .usePlugin(TaskListPlugin.create(this))
+                .usePlugin(TablePlugin.create(appContext))
+                .usePlugin(TaskListPlugin.create(appContext))
                 .usePlugin(LinkifyPlugin.create())
                 .usePlugin(SimpleExtPlugin.create())
-                .usePlugin(GlideImagesPlugin.create(this))
+                .usePlugin(GlideImagesPlugin.create(appContext))
                 .usePlugin(MarkwonInlineParserPlugin.create())
                 .usePlugin(JLatexMathPlugin.create(textSizeInPx, builder -> {
                     builder.inlinesEnabled(true); // 启用行内公式
@@ -346,14 +353,6 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
                 .usePlugin(SyntaxHighlightPlugin.create(prism4j, Prism4jThemeDarkula.create()))
                 .usePlugin(HtmlPlugin.create())
                 .build();
-
-        loadMD();
-
-        // HomeKey
-        registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
-
-        MyActivity.isEdit = false;
-
     }
 
     // 恢复滚动位置（原有逻辑）
@@ -492,16 +491,23 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        // HomeKey
+        registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+    }
+
+    @Override
     public void onStop() {
         System.out.println("NoteEditor onStop...");
-
+        unregisterReceiver(mHomeKeyEvent);
         super.onStop();
 
     }
 
     @Override
     public void onBackPressed() {
-
+        MyActivity.closeAndroidProgressBar();
         super.onBackPressed();
         // AnimationWhenClosed();
 
@@ -509,7 +515,7 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(mHomeKeyEvent);
+        getApplication().unregisterActivityLifecycleCallbacks(this); // 注销回调
 
         super.onDestroy();
 
@@ -703,7 +709,8 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
             // 应用固定字体大小
             holder.textView.setTextSize(textSize);
 
-            Markwon markwon = Markwon.create(MDActivity.this);
+            // Markwon markwon= Markwon.create(MDActivity.this);
+
             markwon.setMarkdown(holder.textView, chunks.get(position));
         }
 
