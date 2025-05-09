@@ -284,10 +284,6 @@ public class ImageViewerActivity extends Activity
     protected void onDestroy() {
         unregisterReceiver(mHomeKeyEvent);
 
-        Intent i = new Intent(this, MDActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        this.startActivity(i);
-
         super.onDestroy();
 
     }

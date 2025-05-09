@@ -681,9 +681,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
         } else {
             if (MyActivity.isEdit) {
-                Intent i = new Intent(this, MDActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                this.startActivity(i);
+
             }
         }
 
@@ -960,16 +958,16 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             public void run() {
                 try {
                     writeTextFile(mContent, filename);
+
                     CallJavaNotify_6();
+
                 } finally {
                     if (myActivity != null && !myActivity.isFinishing()) {
                         myActivity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 myActivity.closeAndroidProgressBar();
-                                if (MyActivity.isEdit) {
-                                    MyActivity.openMDWindow();
-                                }
+
                             }
                         });
                     }
@@ -1230,14 +1228,6 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     }
 
     private void showNormalDialog() {
-        /*
-         * @setIcon 设置对话框图标
-         * 
-         * @setTitle 设置对话框标题
-         * 
-         * @setMessage 设置对话框消息提示
-         * setXXX方法返回Dialog对象，因此可以链式设置属性
-         */
         final AlertDialog.Builder normalDialog = new AlertDialog.Builder(NoteEditor.this);
         normalDialog.setIcon(R.drawable.alarm);
         normalDialog.setTitle("Knot");
@@ -1257,6 +1247,9 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                     public void onClick(DialogInterface dialog, int which) {
                         // ...To-do
                         saveNote();
+                        if (MyActivity.isEdit) {
+                            setResult(MDActivity.RESULT_SAVE);
+                        }
                         finish();
 
                     }
@@ -1267,9 +1260,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // ...To-do
-                        if (MyActivity.isEdit) {
-                            MyActivity.openMDWindow();
-                        }
+
                         finish();
                     }
                 });

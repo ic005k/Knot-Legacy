@@ -238,6 +238,9 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
     private List<String> chunks = new ArrayList<>();
     private static final int CHUNK_SIZE = 100; // 每100行作为一个块
 
+    private static final int REQUEST_EDIT = 1; // 可以是任意整数（建议从 1 开始）
+    public static final int RESULT_SAVE = 1001;
+
     public native static void CallJavaNotify_0();
 
     public native static void CallJavaNotify_1();
@@ -356,10 +359,24 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
 
                 MyActivity.isEdit = true;
                 Intent i = new Intent(this, NoteEditor.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                this.startActivity(i);
-                onBackPressed();
+                // i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                // this.startActivity(i);
+                startActivityForResult(i, REQUEST_EDIT);
+
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_EDIT && resultCode == RESULT_SAVE) {
+            // 1. 关闭当前
+            finish();
+
+            // 2. 启动新的实例
+            MyActivity.openMDWindow();
+
         }
     }
 
@@ -494,8 +511,6 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
 
             callImageView(link);
             // callThirdPartyImageViewer(link);
-
-            onBackPressed();
 
         }
     }
