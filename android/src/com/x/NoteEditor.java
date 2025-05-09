@@ -499,8 +499,13 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     private void loadMDFileChunks() {
         final String mdfile = MyActivity.strMDFile;
-        final Handler mHandler = new Handler(Looper.getMainLooper());
-        MyActivity.showAndroidProgressBar();
+        // final Handler mHandler = new Handler(Looper.getMainLooper());
+        // 获取 MyActivity 实例
+        MyActivity myActivity = MyActivity.m_instance;
+
+        if (myActivity != null && !myActivity.isFinishing()) {
+            myActivity.showAndroidProgressBar();
+        }
 
         new Thread(new Runnable() {
             @Override
@@ -520,7 +525,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                     final String chunk = data.substring(start, end);
 
                     // 主线程追加文本并更新进度
-                    mHandler.post(new Runnable() {
+                    // mHandler.post(new Runnable() {
+                    myActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             if (currentChunk.get() == 0) {
@@ -552,7 +558,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                 }
 
                 // 4. 最终关闭进度条并执行其他操作
-                mHandler.post(new Runnable() {
+                // mHandler.post(new Runnable() {
+                myActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         setCursorPos();
