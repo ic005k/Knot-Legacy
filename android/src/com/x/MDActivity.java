@@ -229,7 +229,7 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
     private TextView markdownView;
     private TextView titleView;
     private Button btnEdit;
-    private ScrollView scrollView;
+
     private String strmdFileName;
     private static Markwon markwon;
 
@@ -292,10 +292,6 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
             setContentView(R.layout.activity_md);
         }
 
-        // markdownView = findViewById(R.id.markdownView);
-        // markdownView.setTextSize(TypedValue.COMPLEX_UNIT_SP, MyActivity.myFontSize);
-        // markdownView.setText("Loading, please wait...");
-
         initMarkdwon();
 
         initRecyclerView();
@@ -309,8 +305,6 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
         else
             btnEdit.setText("Edit");
         btnEdit.setOnClickListener(this);
-
-        // scrollView = findViewById(R.id.scroll_view);
 
         loadMD();
 
@@ -355,102 +349,6 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
                 .build();
     }
 
-    // 恢复滚动位置（原有逻辑）
-    private void restoreScrollPositionOld() {
-        SharedPreferences sharedPreferences = getSharedPreferences(strmdFileName + "scroll_position", MODE_PRIVATE);
-        int savedScrollX = sharedPreferences.getInt("scrollX", 0);
-        int savedScrollY = sharedPreferences.getInt("scrollY", 0);
-        scrollView.scrollTo(savedScrollX, savedScrollY);
-    }
-
-    private void loadMDOld() {
-        // 监听 UI 绘制完成
-        findViewById(android.R.id.content).post(() -> {
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    // 1. 执行耗时操作（如下载、计算等）
-                    StringBuilder markdownContent = new StringBuilder();
-                    try {
-
-                        File file = new File(MyActivity.strMDFile);
-                        BufferedReader reader = new BufferedReader(new FileReader(file));
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            markdownContent.append(line).append("\n");
-                        }
-                        reader.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    // 2. 完成后切换回主线程更新 UI
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            // 在主线程执行后续操作
-                            String strMD = markdownContent.toString();
-                            strMD = strMD.replace("images/", "/storage/emulated/0/KnotData/memo/images/");
-                            markwon.setMarkdown(markdownView, strMD);
-
-                            markdownView.getViewTreeObserver()
-                                    .addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-
-                                        public boolean onPreDraw() {
-                                            // 确保只执行一次
-                                            markdownView.getViewTreeObserver().removeOnPreDrawListener(this);
-
-                                            // 恢复滚动条位置
-                                            SharedPreferences sharedPreferences = getSharedPreferences(
-                                                    strmdFileName + "scroll_position",
-                                                    MODE_PRIVATE);
-                                            int savedScrollX = sharedPreferences.getInt("scrollX", 0);
-                                            int savedScrollY = sharedPreferences.getInt("scrollY", 0);
-                                            scrollView.scrollTo(savedScrollX, savedScrollY);
-                                            // Toast.makeText(MDActivity.this, savedScrollX + " " + savedScrollY,
-                                            // Toast.LENGTH_LONG).show();
-
-                                            return true; // 返回 true 表示继续绘制
-                                        }
-                                    });
-
-                        }
-                    });
-                }
-            }).start();
-        });
-
-    }
-
-    private BroadcastReceiver mHomeKeyEvent = new BroadcastReceiver() {
-        String SYSTEM_REASON = "reason";
-        String SYSTEM_HOME_KEY = "homekey";
-        String SYSTEM_HOME_KEY_LONG = "recentapps";
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)) {
-                String reason = intent.getStringExtra(SYSTEM_REASON);
-                if (TextUtils.equals(reason, SYSTEM_HOME_KEY)) {
-                    // 表示按了home键,程序直接进入到后台
-                    System.out.println("NoteEditor HOME键被按下...");
-
-                    onBackPressed();
-
-                } else if (TextUtils.equals(reason, SYSTEM_HOME_KEY_LONG)) {
-                    // 表示长按home键,显示最近使用的程序
-                    System.out.println("NoteEditor 长按HOME键...");
-
-                    onBackPressed();
-
-                }
-            }
-        }
-    };
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -493,14 +391,13 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
     @Override
     protected void onStart() {
         super.onStart();
-        // HomeKey
-        registerReceiver(mHomeKeyEvent, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+
     }
 
     @Override
     public void onStop() {
         System.out.println("NoteEditor onStop...");
-        unregisterReceiver(mHomeKeyEvent);
+
         super.onStop();
 
     }
@@ -559,16 +456,13 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("scrollY", scrollView.getScrollY());
+
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null) {
-            int scrollY = savedInstanceState.getInt("scrollY");
-            scrollView.post(() -> scrollView.scrollTo(0, scrollY));
-        }
+
     }
 
     private void AnimationWhenClosed() {
@@ -581,19 +475,6 @@ public class MDActivity extends Activity implements View.OnClickListener, Applic
 
     private void AnimationWhenOpen() {
         overridePendingTransition(0, R.anim.enter_anim);
-    }
-
-    private void saveScrollPosOld() {
-        // 保存滚动条位置
-        int scrollX = scrollView.getScrollX();
-        int scrollY = scrollView.getScrollY();
-        // 可以将scrollX和scrollY存储起来，例如保存在SharedPreferences中
-        SharedPreferences sharedPreferences = getSharedPreferences(strmdFileName + "scroll_position",
-                MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("scrollX", scrollX);
-        editor.putInt("scrollY", scrollY);
-        editor.apply();
     }
 
     // 使用系统图片查看器打开图片
