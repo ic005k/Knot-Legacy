@@ -968,6 +968,11 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                             public void run() {
                                 myActivity.closeAndroidProgressBar();
 
+                                if (MyActivity.isEdit) {
+                                    setResult(MDActivity.RESULT_SAVE);
+                                }
+                                finish();
+
                             }
                         });
                     }
@@ -1247,10 +1252,6 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                     public void onClick(DialogInterface dialog, int which) {
                         // ...To-do
                         saveNote();
-                        if (MyActivity.isEdit) {
-                            setResult(MDActivity.RESULT_SAVE);
-                        }
-                        finish();
 
                     }
                 });
