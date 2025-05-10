@@ -217,6 +217,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
     private static boolean isGoBackKnot = false;
 
+    private ProgressBar progressBar;
+
     public static boolean isZh(Context context) {
         Locale locale = context.getResources().getConfiguration().locale;
         String language = locale.getLanguage();
@@ -455,6 +457,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
             setContentView(R.layout.noteeditor);
         }
 
+        progressBar = findViewById(R.id.progressBar);
+
         bindViews();
 
         // 监听 UI 绘制完成
@@ -500,12 +504,10 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
     private void loadMDFileChunks() {
         final String mdfile = MyActivity.strMDFile;
         // final Handler mHandler = new Handler(Looper.getMainLooper());
-        // 获取 MyActivity 实例
-        MyActivity myActivity = MyActivity.m_instance;
 
-        if (myActivity != null && !myActivity.isFinishing()) {
-            myActivity.showAndroidProgressBar();
-        }
+        // showAndroidProgressBar();
+        // progressBar.setVisibility(View.VISIBLE);
+        findViewById(R.id.progressContainer).setVisibility(View.VISIBLE);
 
         new Thread(new Runnable() {
             @Override
@@ -526,7 +528,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
                     // 主线程追加文本并更新进度
                     // mHandler.post(new Runnable() {
-                    myActivity.runOnUiThread(new Runnable() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             if (currentChunk.get() == 0) {
@@ -536,9 +538,9 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                             }
                             currentChunk.incrementAndGet();
 
-                            // 更新进度条（假设 MyActivity 支持进度百分比）
+                            // 更新进度条（假设进度条支持进度百分比）
                             // int progress = (int) ((currentChunk.get() / (float) totalChunks) * 100);
-                            // MyActivity.updateProgressBar(progress);
+                            // updateProgressBar(progress);
                         }
                     });
 
@@ -559,7 +561,7 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
 
                 // 4. 最终关闭进度条并执行其他操作
                 // mHandler.post(new Runnable() {
-                myActivity.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         setCursorPos();
@@ -568,7 +570,9 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                         initRedoUndo();
                         initEditTextChangedListener();
                         init_all();
-                        MyActivity.closeAndroidProgressBar();
+                        // closeAndroidProgressBar();
+                        // progressBar.setVisibility(View.GONE);
+                        findViewById(R.id.progressContainer).setVisibility(View.GONE);
                     }
                 });
             }
@@ -686,6 +690,8 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         }
 
         MyService.clearNotify();
+
+        getApplication().unregisterActivityLifecycleCallbacks(this); // 注销回调
 
         super.onDestroy();
 
@@ -946,12 +952,9 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
         final String mContent = editNote.getText().toString();
         final String filename = MyActivity.strMDFile;
 
-        // 获取 MyActivity 实例
-        MyActivity myActivity = MyActivity.m_instance;
-
-        if (myActivity != null && !myActivity.isFinishing()) {
-            myActivity.showAndroidProgressBar();
-        }
+        // showAndroidProgressBar();
+        // progressBar.setVisibility(View.VISIBLE); // 显示进度条
+        findViewById(R.id.progressContainer).setVisibility(View.VISIBLE);
 
         new Thread(new Runnable() {
             @Override
@@ -962,20 +965,22 @@ public class NoteEditor extends Activity implements View.OnClickListener, Applic
                     CallJavaNotify_6();
 
                 } finally {
-                    if (myActivity != null && !myActivity.isFinishing()) {
-                        myActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                myActivity.closeAndroidProgressBar();
 
-                                if (MyActivity.isEdit) {
-                                    setResult(MDActivity.RESULT_SAVE);
-                                }
-                                finish();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            // closeAndroidProgressBar();
+                            // progressBar.setVisibility(View.GONE);
+                            findViewById(R.id.progressContainer).setVisibility(View.GONE);
 
+                            if (MyActivity.isEdit) {
+                                setResult(MDActivity.RESULT_SAVE);
                             }
-                        });
-                    }
+                            finish();
+
+                        }
+                    });
+
                 }
             }
         }).start();
