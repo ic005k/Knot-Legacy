@@ -7,6 +7,7 @@
 #include <QDomElement>
 #include <QDomNamedNodeMap>
 #include <QEvent>
+#include <QFile>
 #include <QFontDialog>
 #include <QPlainTextEdit>
 #include <QProcess>
@@ -14,6 +15,7 @@
 #include <QQmlEngine>
 #include <QQuickView>
 #include <QQuickWidget>
+#include <QSaveFile>
 #include <QString>
 #include <QStringList>
 #include <QTextBlock>
@@ -38,6 +40,10 @@ class Reader : public QDialog {
   explicit Reader(QWidget *parent = nullptr);
   ~Reader();
   Ui::Reader *ui;
+
+  // 样式配置接口
+  void setBodyStyle(const QString &style);
+  void addGlobalStyle(const QString &selector, const QString &style);
 
   qreal scrollValue = 1;
   bool isOpenBookListClick = false;
@@ -100,7 +106,7 @@ class Reader : public QDialog {
   void setReaderStyle();
   qreal getVHeight();
   qreal getNewVPos(qreal pos1, qreal h1, qreal h2);
-  static QString processHtml(QString htmlFile, bool isWriteFile);
+  static QString processHtmlOld(QString htmlFile, bool isWriteFile);
 
   void on_btnPageNext_clicked();
   void on_btnPageUp_clicked();
@@ -147,6 +153,7 @@ class Reader : public QDialog {
 
   void setDefaultOpen(QString value);
   void setTextAreaCursorPos(int nCursorPos);
+  QString processHtmlNew(const QString &htmlFile, bool isWriteFile);
  public slots:
   void setPageScroll0();
   void setPageScroll1();
@@ -190,8 +197,15 @@ class Reader : public QDialog {
   int currentCataIndex = 0;
   void startBackgroundTaskOpenFile();
 
-  TextChunkModel *chunkModel;
-  QVector<QString> m_textChunks;
+  bool safeParseXml(QDomDocument &doc, QString &content);
+  void removeInlineStyles(QString &content);
+  void injectStyles(QString &content);
+  void normalizePaths(QDomDocument &doc);
+  void mobileAdaptation(QString &content);
+
+  // 样式存储
+  QString m_bodyStyle;
+  QHash<QString, QString> m_globalStyles;
 };
 
 class TextChunkModel : public QAbstractListModel {
@@ -214,12 +228,15 @@ class TextChunkModel : public QAbstractListModel {
   Q_INVOKABLE void appendChunks(const QStringList &chunks);
   Q_INVOKABLE void clear();
 
+  Q_INVOKABLE void splitContent1(const QString &fullText);
  signals:
   void chunksChanged(const QVector<QString> &chunks);
 
  private:
   QHash<int, QByteArray> m_roleNames;  // 存储角色定义
   QStringList m_chunks;                // 存储分割后的文本块
+  void handleComplexStructure(QString &text, int &currentPos);
+  bool isValidNesting(const QString &htmlBlock);
 };
 
 #endif  // READER_H

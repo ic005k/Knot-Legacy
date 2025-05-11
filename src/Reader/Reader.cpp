@@ -28,20 +28,19 @@ QString strOpfPath, oldOpfPath, fileName, ebookFile, strTitle, catalogueFile,
     strShowMsg, strEpubTitle, strPercent;
 
 int iPage, sPos, totallines;
-int baseLines = 50;
+int baseLines = 50;  // txt文本分割
 int htmlIndex = 0;
 int minBytes = 200000;
 int maxBytes = 400000;
 int unzipMethod = 3; /* 1 system  2 QZipReader 3 ziplib */
 int zlibMethod = 1;
 int readerFontSize = 18;
-int epubFileMethod = 2;
+int epubFileMethod = 2; /* 1.分割 2.不分割 */
 
 QByteArray bookFileData;
 
 Reader::Reader(QWidget *parent) : QDialog(parent) {
   qmlRegisterType<TextChunkModel>("EBook.Models", 1, 0, "TextChunkModel");
-  chunkModel = new TextChunkModel(this);
 
   this->installEventFilter(this);
 
@@ -100,6 +99,12 @@ Reader::Reader(QWidget *parent) : QDialog(parent) {
   mw_one->ui->pEpubProg->setFont(f);
 
   strEndFlag = "<p align=center>-----" + tr("bottom") + "-----</p>";
+
+  // 初始化默认样式
+  m_bodyStyle =
+      "font-family: 'Noto Serif', serif; line-height: 1.6; margin: 0 auto; "
+      "max-width: 800px;";
+  m_globalStyles["img"] = "max-width: 100%; height: auto;";
 }
 
 Reader::~Reader() {}
@@ -432,7 +437,7 @@ void Reader::openFile(QString openfile) {
       int count_1 = tempList.count();
       for (int i = 0; i < count_1; i++) {
         QString qfile = tempList.at(i);
-        qDebug() << "qfile=" << qfile;
+        // qDebug() << "qfile=" << qfile;
         QFileInfo fi(qfile);
         if (fi.exists() && !tempHtmlList.contains(qfile)) {
           if (epubFileMethod == 1) {
@@ -467,10 +472,14 @@ void Reader::openFile(QString openfile) {
 
         strShowMsg = "Del temp ...";
         deleteDirfile(dirpath1);
-        strShowMsg = "Copy temp0 to temp ...";
-        copyDirectoryFiles(dirpath, dirpath1, true);
-        strShowMsg = "Del temp0 ...";
-        deleteDirfile(dirpath);
+        // strShowMsg = "Copy temp0 to temp ...";
+        // copyDirectoryFiles(dirpath, dirpath1, true);
+        // strShowMsg = "Del temp0 ...";
+        // deleteDirfile(dirpath);
+        strShowMsg = "Rename temp0 to temp...";
+        QDir dir;
+        dir.rename(dirpath, dirpath1);
+
         htmlFiles.clear();
 
         strOpfPath.replace(dirpath, dirpath1);
@@ -917,15 +926,175 @@ void Reader::setEpubPagePosition(int index, QString htmlFile) {
   showInfo();
 }
 
-QString Reader::processHtml(QString htmlFile, bool isWriteFile) {
+QString Reader::processHtmlNew(const QString &htmlFile, bool isWriteFile) {
+  QFile file(htmlFile);
+  if (!file.open(QIODevice::ReadOnly)) {
+    return QString("Error: Cannot open file - %1").arg(file.errorString());
+  }
+  QString content = QString::fromUtf8(file.readAll());
+  file.close();
+
+  // 第一步：清理内联样式
+  removeInlineStyles(content);
+
+  // 第二步：XML结构处理
+  QDomDocument doc;
+  if (safeParseXml(doc, content)) {
+    normalizePaths(doc);
+    content = doc.toString(-1);  // 保留缩进格式
+  }
+
+  // 第三步：样式注入
+  injectStyles(content);
+
+  // 第四步：移动端适配
+  mobileAdaptation(content);
+
+  // 写入文件或返回结果
+  if (isWriteFile) {
+    QSaveFile output(htmlFile);
+    if (output.open(QIODevice::WriteOnly)) {
+      output.write(content.toUtf8());
+      if (!output.commit()) {
+        return "Error: Failed to save file";
+      }
+    }
+  }
+
+  return content;
+}
+
+void Reader::setBodyStyle(const QString &style) { m_bodyStyle = style; }
+
+void Reader::addGlobalStyle(const QString &selector, const QString &style) {
+  m_globalStyles.insert(selector, style);
+}
+
+bool Reader::safeParseXml(QDomDocument &doc, QString &content) {
+  QString errorMsg;
+  int errorLine, errorColumn;
+
+  // 预处理非法字符
+  content.replace(QRegularExpression("[\\x00-\\x08\\x0B-\\x0C\\x0E-\\x1F]"),
+                  "");
+
+  // 宽松解析模式
+  QString normalized = content;
+  normalized.replace(QRegularExpression("<!DOCTYPE[^>]*>"), "");
+
+  if (!doc.setContent(normalized, false, &errorMsg, &errorLine, &errorColumn)) {
+    qWarning() << "XML解析失败，行:" << errorLine << "列:" << errorColumn
+               << "错误:" << errorMsg;
+    return false;
+  }
+  return true;
+}
+
+void Reader::removeInlineStyles(QString &content) {
+  // 删除内联style属性（含大小写敏感匹配）
+  QRegularExpression styleRegex(
+      R"(style\s*=\s*(["']).*?\1)",
+      QRegularExpression::CaseInsensitiveOption |
+          QRegularExpression::InvertedGreedinessOption);
+  content.replace(styleRegex, "");
+}
+
+void Reader::injectStyles(QString &content) {
+  // 构建CSS字符串
+  QString css =
+      QString(
+          "img { max-width: 100% !important; height: auto !important; }\n") +
+      QString("a > img { border: 1px solid #ddd !important; }\n");
+
+  for (auto it = m_globalStyles.constBegin(); it != m_globalStyles.constEnd();
+       ++it) {
+    css += QString("%1 { %2 }\n").arg(it.key()).arg(it.value());
+  }
+
+  // 查找或创建head标签
+  int headStart = content.indexOf("<head>", 0, Qt::CaseInsensitive);
+  int headEnd = content.indexOf("</head>", 0, Qt::CaseInsensitive);
+
+  QString styleTag = QString("<style type=\"text/css\">\n%1</style>").arg(css);
+
+  if (headStart != -1 && headEnd != -1) {
+    // 在现有head末尾插入
+    content.insert(headEnd, styleTag);
+  } else {
+    // 自动添加head标签
+    QString replacement = QString("<head>%1</head>\n").arg(styleTag);
+    QRegularExpression htmlTagRegex(R"(<html[^>]*>)",
+                                    QRegularExpression::CaseInsensitiveOption);
+    content.replace(htmlTagRegex, R"(\0\n)" + replacement);
+  }
+}
+
+void Reader::normalizePaths(QDomDocument &doc) {
+  // 处理图片路径
+  QDomNodeList images = doc.elementsByTagName("img");
+  for (int i = 0; i < images.size(); ++i) {
+    QDomElement img = images.at(i).toElement();
+    QString src = img.attribute("src");
+
+    if (!src.isEmpty()) {
+      // 转换相对路径为绝对路径
+      QString fullPath = QDir(strOpfPath).filePath(src);
+      fullPath = QDir::cleanPath(fullPath);
+
+      // 生成file://格式的URL
+      QString fileUrl = QUrl::fromLocalFile(fullPath).toString();
+      img.setAttribute("src", fileUrl);
+
+      // 添加点击查看的链接（保留旧代码逻辑）
+      QDomElement anchor = doc.createElement("a");
+      anchor.setAttribute("href", fileUrl);
+      img.parentNode().replaceChild(anchor, img);
+      anchor.appendChild(img);
+
+      // 封面图片特殊处理
+      if (fullPath.contains("cover", Qt::CaseInsensitive)) {
+        img.setAttribute("width", mw_one->ui->qwReader->width() - 25);
+      } else if (QImage(fullPath).width() > 500) {
+        img.setAttribute("width", "100%");
+      }
+    }
+  }
+
+  // 规范化链接路径
+  QDomNodeList anchors = doc.elementsByTagName("a");
+  for (int i = 0; i < anchors.size(); ++i) {
+    QDomElement a = anchors.at(i).toElement();
+    QString href = a.attribute("href");
+    if (!href.isEmpty() && href.startsWith("http")) {
+      a.setAttribute("rel", "external nofollow");
+    }
+  }
+}
+
+void Reader::mobileAdaptation(QString &content) {
+  // 添加视口适配标签
+  QRegularExpression headRegex(R"(<head\b[^>]*>)",
+                               QRegularExpression::CaseInsensitiveOption);
+  QString viewportMeta =
+      "<meta name=\"viewport\" content=\"width=device-width, "
+      "initial-scale=1.0, minimum-scale=1.0\">\n";
+
+  if (content.contains(headRegex)) {
+    content.replace(headRegex, "\\0\n" + viewportMeta);  // 使用双反斜杠转义
+  } else {
+    content.prepend("<head>" + viewportMeta + "</head>\n");
+  }
+
+  // 移动端字体优化
+  content.replace(QRegularExpression(R"((font-size\s*:\s*)(\d+)(pt|px))",
+                                     QRegularExpression::CaseInsensitiveOption),
+                  R"(\1calc(\2\3 * 1.1))");
+}
+
+QString Reader::processHtmlOld(QString htmlFile, bool isWriteFile) {
   if (!isEpub) return "";
 
   QString strHtml = loadText(htmlFile);
-
-  return strHtml;
-
-  QPlainTextEdit *plain_edit = new QPlainTextEdit;
-  QTextEdit *text_edit = new QTextEdit;
 
   strHtml.replace("　", " ");
   strHtml.replace("<", "\n<");
@@ -939,6 +1108,8 @@ QString Reader::processHtml(QString htmlFile, bool isWriteFile) {
   strHtml.replace("font color", "font color0");
   strHtml = strHtml.trimmed();
 
+  QPlainTextEdit *plain_edit = new QPlainTextEdit;
+  QTextEdit *text_edit = new QTextEdit;
   text_edit->setPlainText(strHtml);
 
   for (int i = 0; i < text_edit->document()->lineCount(); i++) {
@@ -1033,19 +1204,20 @@ QString Reader::processHtml(QString htmlFile, bool isWriteFile) {
 }
 
 void Reader::setQMLHtml(QString htmlFile, QString htmlBuffer, QString skipID) {
-  if (QFile::exists(htmlFile)) {
-    htmlBuffer = processHtml(htmlFile, false);
+  Q_UNUSED(htmlBuffer);
+  if (!QFile::exists(htmlFile)) {
+    return;
   }
-  htmlBuffer.append(strEndFlag);
-  currentTxt = htmlBuffer;
 
-  // chunkModel->splitContent(htmlBuffer);
+  currentTxt = processHtmlOld(htmlFile, false);
+  // currentTxt = loadText(htmlFile);
+  currentTxt.append(strEndFlag);
 
   mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", false);
   QQuickItem *root = mw_one->ui->qwReader->rootObject();
 
   QMetaObject::invokeMethod((QObject *)root, "loadHtmlBuffer",
-                            Q_ARG(QVariant, htmlBuffer));
+                            Q_ARG(QVariant, currentTxt));
 
   //  QMetaObject::invokeMethod((QObject*)root, "loadHtml",
   //                          Q_ARG(QVariant, htmlFile), Q_ARG(QVariant,
@@ -1427,6 +1599,9 @@ void Reader::SplitFile(QString qfile) {
                  QString::number(x) + "->" + QString::number(n) + "  " +
                  fi.baseName();
   }
+
+  delete plain_edit;
+  delete plain_editHead;
 }
 
 QString Reader::getNCX_File(QString path) {
@@ -2055,7 +2230,7 @@ void Reader::readBookDone() {
     mw_one->ui->pEpubProg->hide();
     mw_one->ui->btnReader->setEnabled(true);
     mw_one->ui->f_ReaderFun->setEnabled(true);
-    mw_one->closeProgress();
+    mw_one->on_DelayCloseProgressBar();
     isReadEBookEnd = true;
     ShowMessage *msg = new ShowMessage(mw_one);
     msg->showMsg("Knot", tr("The EPUB file was opened with an error."), 1);
@@ -2610,16 +2785,9 @@ void Reader::setTextAreaCursorPos(int nCursorPos) {
 //===============================================================================================
 // TextChunkModel
 //===============================================================================================
-// TextChunkModel.cpp
 
-// 修改1：正确初始化
-TextChunkModel::TextChunkModel(QObject *parent) : QAbstractListModel(parent) {
-  // 初始化角色名
-  m_roleNames[TextRole] = "text";
-}
-
-// 修改2：正确的分割逻辑
-void TextChunkModel::splitContent(const QString &fullText) {
+// 2：正确的分割逻辑
+void TextChunkModel::splitContent1(const QString &fullText) {
   beginResetModel();  // 开始重置模型
 
   m_chunks.clear();
@@ -2642,7 +2810,99 @@ void TextChunkModel::splitContent(const QString &fullText) {
   endResetModel();  // 结束重置，触发视图更新
 }
 
-// 修改3：完善角色定义
+// 1：正确初始化
+TextChunkModel::TextChunkModel(QObject *parent) : QAbstractListModel(parent) {
+  // 初始化角色名
+  m_roleNames[TextRole] = "text";
+}
+
+void TextChunkModel::splitContent(const QString &fullText) {
+  beginResetModel();
+  m_chunks.clear();
+  m_chunks.append(fullText);
+  endResetModel();
+
+  return;
+
+  // 扩展正则表达式匹配范围
+  static QRegularExpression regex(
+      R"((</?([a-zA-Z]+)[^>]*>)(.*?)(?=</?\2[^>]*>|$))",  // 匹配完整标签结构
+      QRegularExpression::CaseInsensitiveOption |
+          QRegularExpression::DotMatchesEverythingOption |
+          QRegularExpression::UseUnicodePropertiesOption);
+
+  // 分阶段处理策略
+  QString remainingText = fullText;
+  int lastPos = 0;
+
+  // 第一阶段：匹配完整标签块
+  QRegularExpressionMatchIterator it = regex.globalMatch(remainingText);
+  while (it.hasNext()) {
+    QRegularExpressionMatch match = it.next();
+    QString fullTagBlock = match.captured(0);
+
+    // 验证嵌套层级
+    if (isValidNesting(fullTagBlock)) {
+      m_chunks.append(fullTagBlock);
+      lastPos = match.capturedEnd();
+    } else {
+      // 处理异常情况
+      handleComplexStructure(remainingText, lastPos);
+    }
+  }
+
+  // 第二阶段：处理剩余文本
+  if (lastPos < remainingText.length()) {
+    QString remaining = remainingText.mid(lastPos);
+    if (!remaining.trimmed().isEmpty()) {
+      m_chunks.append(remaining);
+    }
+  }
+
+  endResetModel();
+}
+
+// 辅助方法：验证标签嵌套有效性
+bool TextChunkModel::isValidNesting(const QString &htmlBlock) {
+  QStack<QString> tagStack;
+  QRegularExpression tagRegex(R"(<(/?)([a-zA-Z]+)[^>]*>)");
+
+  QRegularExpressionMatchIterator it = tagRegex.globalMatch(htmlBlock);
+  while (it.hasNext()) {
+    QRegularExpressionMatch match = it.next();
+    QString tagName = match.captured(2).toLower();
+    if (match.captured(1).isEmpty()) {  // 开始标签
+      tagStack.push(tagName);
+    } else {  // 结束标签
+      if (tagStack.isEmpty() || tagStack.pop() != tagName) {
+        return false;
+      }
+    }
+  }
+  return tagStack.isEmpty();
+}
+
+// 处理复杂结构（递归实现）
+void TextChunkModel::handleComplexStructure(QString &text, int &currentPos) {
+  QRegularExpression deepRegex(R"(<(div|section|article)\b[^>]*>)",
+                               QRegularExpression::CaseInsensitiveOption);
+  QRegularExpressionMatch match = deepRegex.match(text, currentPos);
+
+  if (match.hasMatch()) {
+    QString containerTag = match.captured(1);
+    QString endTag = QString("</%1>").arg(containerTag);
+
+    int start = match.capturedStart();
+    int end = text.indexOf(endTag, match.capturedEnd());
+
+    if (end != -1) {
+      m_chunks.append(text.mid(start, end - start + endTag.length()));
+      currentPos = end + endTag.length();
+    }
+  }
+}
+
+// 3：完善角色定义
 QHash<int, QByteArray> TextChunkModel::roleNames() const {
   return {
       {TextRole, "text"},           // 自定义角色
@@ -2650,7 +2910,7 @@ QHash<int, QByteArray> TextChunkModel::roleNames() const {
   };
 }
 
-// 修改4：正确实现数据访问
+// 4：正确实现数据访问
 QVariant TextChunkModel::data(const QModelIndex &index, int role) const {
   if (!index.isValid() || index.row() >= m_chunks.size()) return QVariant();
 
@@ -2660,14 +2920,14 @@ QVariant TextChunkModel::data(const QModelIndex &index, int role) const {
   return QVariant();
 }
 
-// 修改5：正确清空数据
+// 5：正确清空数据
 void TextChunkModel::clear() {
   beginResetModel();
   m_chunks.clear();
   endResetModel();
 }
 
-// 修改6：正确实现追加方法
+// 6：正确实现追加方法
 void TextChunkModel::appendChunks(const QStringList &chunks) {
   if (chunks.isEmpty()) return;
 

@@ -18,30 +18,16 @@ Rectangle {
     property bool isPDF: false
     property bool isEPUBText: false
 
-    property var textChunks: [] // 存储分块后的 HTML 片段
-
-    property variant stringList: null
-
-    function updateText(str) {
-        textChunks = []
-        // 优化分割逻辑，确保 HTML 结构完整
-        let rawChunks = str.split(/(?=<div class="page-break")/i)
-        // 按分页符分割
-        textChunks = rawChunks.filter(chunk => chunk.trim() !== "")
-    }
-
     function getText() {
-        return textArea.text
+        return m_text.text
     }
 
     function setText(str) {
-        //textArea.text = str
-        updateText(str)
+        textModel.splitContent(str) // 调用C++处理
     }
 
     function loadText(str) {
-        //strText = str
-        updateText(str)
+        textModel.splitContent(str) // 调用C++处理
         isPDF = false
         isEPUBText = true
     }
@@ -58,8 +44,8 @@ Rectangle {
 
     function loadHtmlStr(str) {
 
-        //strText = str
-        updateText(str)
+        textModel.splitContent(str) // 调用C++处理
+
         isPDF = false
         isEPUBText = true
     }
@@ -74,8 +60,7 @@ Rectangle {
     function loadHtmlBuffer(strhtml) {
 
         //document.loadBuffer(strhtml)
-        //updateText(strhtml)
-        textModel.splitContent(strhtml); // 调用C++处理
+        textModel.splitContent(strhtml) // 调用C++处理
         isEPUBText = true
     }
 
@@ -139,13 +124,9 @@ Rectangle {
         id: document
         objectName: "dochandler"
 
-        //document: textArea.textDocument
-        //cursorPosition: textArea.cursorPosition
-        //selectionStart: textArea.selectionStart
-        //selectionEnd: textArea.selectionEnd
         onLoaded: {
-            //textArea.text = text
-            updateText(text)
+
+            textModel.splitContent(text) // 调用C++处理
         }
         onError: {
             errorDialog.text = message
@@ -174,55 +155,33 @@ Rectangle {
         visible: backImgFile === "" ? true : false
     }
 
-
-    /*Flickable {
-        id: flickable
-        flickableDirection: Flickable.VerticalFlick
+    ListView {
+        id: contentListView
+        width: parent.width
         anchors.fill: parent
-        boundsBehavior: Flickable.StopAtBounds
+        spacing: 5 // 段落间距
+        cacheBuffer: 500 // 预加载区域
 
-        states: State {
-            name: "autoscroll"
-            PropertyChanges {
-                target: flickable
-            }
+        // 声明 C++ 模型
+        model: TextChunkModel {
+            id: textModel
         }
 
-        onMovementEnded: {
-            state = "autoscroll"
-        }
-
-        TextArea.flickable: TextArea {
-            id: textArea
-
-            visible: isEPUBText
+        clip: true
+        delegate: Text {
+            id: m_text
+            width: m_Rect.width - 10 // 留出滚动条空间
+            leftPadding: 10
+            textFormat: Text.RichText // 必须启用富文本
+            text: model.text
+            wrapMode: Text.Wrap
             font.pixelSize: FontSize
             font.family: FontName
-            font.weight: FontWeight
-            font.letterSpacing: 2
-            renderType: Text.NativeRendering
-            font.hintingPreference: Font.PreferVerticalHinting
-            textFormat: Qt.AutoText
-            cursorPosition: 0
-
-            wrapMode: TextArea.Wrap
-            readOnly: true
-            focus: true
-            persistentSelection: isSelText
-            selectByMouse: isSelText
-            smooth: true
             color: myTextColor
-            text: strText
 
-            onLinkActivated: {
+            renderType: Text.NativeRendering // 使用原生渲染引擎
 
-                console.log("reader htmlPath=" + htmlPath)
-                console.log("reader Link=" + link)
-                document.setBackDir(link)
-                document.parsingLink(link, "reader")
-            }
-
-
+            onLinkActivated: handleLinkClicked(link) // 处理链接点击
 
             PropertyAnimation on x {
                 easing.type: Easing.Linear
@@ -232,79 +191,50 @@ Rectangle {
                 duration: 200
                 loops: 1
             }
-
-            SequentialAnimation on opacity {
-                //应用于透明度上的序列动画
-                running: false
-                loops: 1 //Animation.Infinite //无限循环
-                NumberAnimation {
-                    from: 0
-                    to: 1
-                    duration: 1000
-                } //淡出效果
-                PauseAnimation {
-                    duration: 0
-                } //暂停400ms
-            }
         }
 
-        ScrollBar.vertical: ScrollBar {
-            id: vbar
-            position: 0.2
-            policy: ScrollBar.AsNeeded
-            width: 15
-            hoverEnabled: true
-            active: hovered || pressed
-            orientation: Qt.Vertical
-            size: 0.3
-            anchors.top: parent.top
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            visible: textArea.contentHeight > myH ? true : false
 
-            contentItem: Rectangle {
-                color: "#1E90FF"
-            }
-        }
-
-        Component.onCompleted: {
-
-        }
-    }*/
-    ListView {
-        id: contentListView
-        anchors.fill: parent
-        //model: textChunks // 数据模型（需新增）
-        //model: textChunkModel // 绑定到 C++ 模型
-        spacing: 5 // 段落间距
-        cacheBuffer: 500 // 预加载区域
-
-        // 声明 C++ 模型
-        model: TextChunkModel {
-                id: textModel
-            }
-
-        clip: true
-        delegate: Text {
-            width: parent.width - 10 // 留出滚动条空间
-            textFormat: Text.RichText // 必须启用富文本
-            text: model.text //modelData + (index === textChunks.length - 1 ? "" : "</html>") // 修复分割后的闭合
-            wrapMode: Text.Wrap
-            font.pixelSize: FontSize
-            font.family: FontName
-            color: myTextColor
-
-            renderType: Text.NativeRendering // 使用原生渲染引擎
-
-            onLinkActivated: handleLinkClicked(link) // 处理链接点击
-        }
-
-        ScrollBar.vertical: ScrollBar {
+        /*ScrollBar.vertical: ScrollBar {
             width: 10
             policy: contentListView.contentHeight
                     > contentListView.height ? ScrollBar.AsNeeded : ScrollBar.AlwaysOff
+        }*/
+        ScrollBar.vertical: ScrollBar {
+            id: vbar
+            policy: ScrollBar.AsNeeded
+            interactive: false // 关键！禁止拖动操作
+            width: 10
+
+            // 关键：size 绑定到可视区域比例
+            size: contentListView.visibleArea.heightRatio
+            // 可选：设置滑块最小尺寸（避免过小）
+            minimumSize: 0.1
+
+            // 动态显隐控制
+            visible: opacity > 0
+
+            //用于某个view中，如果没有则忽略
+            //opacity: view.isScrolling ? 1 : 0
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: 300
+                }
+            }
+
+            // 极简样式
+            contentItem: Rectangle {
+                color: isDark ? "#3498db" : "#606060"
+                opacity: vbar.active ? (isDark ? 0.8 : 0.7) : 0
+                Behavior on opacity {
+                    NumberAnimation {
+                        duration: 200 // 更流畅的动画
+                        easing.type: Easing.OutQuad
+                    }
+                }
+                radius: 3
+            }
+
+            background: null // 彻底消除背景容器
         }
     }
-
-
 }
