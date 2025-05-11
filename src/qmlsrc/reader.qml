@@ -4,6 +4,8 @@ import QtQuick.Window 2.15
 import QtQuick.Layouts 1.15
 import MyModel2 1.0
 
+import EBook.Models 1.0
+
 Rectangle {
     id: textitem
     visible: true
@@ -16,11 +18,16 @@ Rectangle {
     property bool isPDF: false
     property bool isEPUBText: false
 
+    property var textChunks: [] // 存储分块后的 HTML 片段
+
     property variant stringList: null
 
     function updateText(str) {
-        stringList = str.split('</html>')
-        //idContentListView.positionViewAtEnd()
+        textChunks = []
+        // 优化分割逻辑，确保 HTML 结构完整
+        let rawChunks = str.split(/(?=<div class="page-break")/i)
+        // 按分页符分割
+        textChunks = rawChunks.filter(chunk => chunk.trim() !== "")
     }
 
     function getText() {
@@ -28,11 +35,13 @@ Rectangle {
     }
 
     function setText(str) {
-        textArea.text = str
+        //textArea.text = str
+        updateText(str)
     }
 
     function loadText(str) {
-        strText = str
+        //strText = str
+        updateText(str)
         isPDF = false
         isEPUBText = true
     }
@@ -49,7 +58,8 @@ Rectangle {
 
     function loadHtmlStr(str) {
 
-        strText = str
+        //strText = str
+        updateText(str)
         isPDF = false
         isEPUBText = true
     }
@@ -63,23 +73,23 @@ Rectangle {
 
     function loadHtmlBuffer(strhtml) {
 
-        document.loadBuffer(strhtml)
+        //document.loadBuffer(strhtml)
+        //updateText(strhtml)
+        textModel.splitContent(strhtml); // 调用C++处理
         isEPUBText = true
     }
 
+    // 修改为基于 ListView 的滚动控制
     function setVPos(vpos) {
-        flickable.contentY = vpos
-        // console.log(vpos)
+        contentListView.contentY = vpos
     }
 
     function getVPos() {
-
-        return flickable.contentY
+        return contentListView.contentY
     }
 
     function getVHeight() {
-
-        return textArea.contentHeight
+        return contentListView.contentHeight
     }
 
     function getSelectedText() {
@@ -98,38 +108,44 @@ Rectangle {
     }
 
     function getBookmarkText() {
-        var x = 0
-        var y = flickable.contentY
+        // 基于当前可视区域的首个可见项计算
+        let firstVisibleIndex = contentListView.indexAt(
+                0, contentListView.contentY)
+        if (firstVisibleIndex === -1)
+            return "Bookmark"
 
-        var start = textArea.positionAt(x, y + FontSize)
-        var end = textArea.positionAt(x + textArea.width, y + FontSize * 6)
-        var txt = textArea.getText(start, end)
+        let delegateItem = contentListView.itemAtIndex(firstVisibleIndex)
+        if (!delegateItem)
+            return "Bookmark"
 
-        if (txt === "") {
-            txt = "Bookmark"
-        }
-
-        console.log("bookmark txt=" + txt + "  x=" + x + "  start=" + start + "  end=" + end)
-
-        return txt
+        // 获取该段落中坐标对应的字符位置
+        let relY = contentListView.contentY - delegateItem.y
+        let pos = delegateItem.positionAt(0, relY)
+        return delegateItem.text.substring(pos, pos + 100) // 取前100字符
     }
 
-    function setTextAreaCursorPos(nCursorPos)
-    {
+    function setTextAreaCursorPos(nCursorPos) {
         textArea.cursorPosition = nCursorPos
+    }
+
+    function handleLinkClicked(link) {
+        console.log("Clicked link:", link)
+        document.setBackDir(link)
+        document.parsingLink(link, "reader")
+        // 如果需要保持滚动位置，可在此处记录位置
     }
 
     DocumentHandler {
         id: document
         objectName: "dochandler"
-        document: textArea.textDocument
-        cursorPosition: textArea.cursorPosition
-        selectionStart: textArea.selectionStart
-        selectionEnd: textArea.selectionEnd
 
+        //document: textArea.textDocument
+        //cursorPosition: textArea.cursorPosition
+        //selectionStart: textArea.selectionStart
+        //selectionEnd: textArea.selectionEnd
         onLoaded: {
-            textArea.text = text
-            //updateText(text)
+            //textArea.text = text
+            updateText(text)
         }
         onError: {
             errorDialog.text = message
@@ -158,7 +174,8 @@ Rectangle {
         visible: backImgFile === "" ? true : false
     }
 
-    Flickable {
+
+    /*Flickable {
         id: flickable
         flickableDirection: Flickable.VerticalFlick
         anchors.fill: parent
@@ -206,38 +223,7 @@ Rectangle {
             }
 
 
-            /*MouseArea {
-                id: mouse_area
-                anchors.fill: parent
-                hoverEnabled: true
-                acceptedButtons: Qt.LeftButton
-                propagateComposedEvents: true // 是否将事件传递给父元素
 
-                onClicked: {
-
-                    var my = mouseY - flickable.contentY
-                    console.log("clicked..." + mouseY + " " + my + myH)
-
-                    if (my < myH / 3) {
-                        m_Reader.setPageScroll0()
-                    }
-
-                    if (my > myH / 3 && my < (myH * 2) / 3) {
-                        m_Reader.setPanelVisible()
-                    }
-
-                    if (my > (myH * 2) / 3) {
-                        m_Reader.setPageScroll1()
-                    }
-                }
-                onDoubleClicked: {
-                    console.log("double...")
-                    m_Reader.selectText()
-                }
-                onPressAndHold: {
-                    console.log("press and hold...")
-                }
-            }*/
             PropertyAnimation on x {
                 easing.type: Easing.Linear
                 running: isAni
@@ -284,35 +270,41 @@ Rectangle {
         Component.onCompleted: {
 
         }
-    }
-
+    }*/
     ListView {
-        id: idContentListView
-        model: stringList
-        visible: false
+        id: contentListView
+        anchors.fill: parent
+        //model: textChunks // 数据模型（需新增）
+        //model: textChunkModel // 绑定到 C++ 模型
+        spacing: 5 // 段落间距
+        cacheBuffer: 500 // 预加载区域
 
-        anchors {
-            fill: parent
-            margins: 2
-        }
-        delegate: Text {
-
-            anchors {
-                left: parent.left
-                right: parent.right
+        // 声明 C++ 模型
+        model: TextChunkModel {
+                id: textModel
             }
 
-            Layout.preferredWidth: parent.width
-            textFormat: Qt.AutoText //Text.PlainText
+        clip: true
+        delegate: Text {
+            width: parent.width - 10 // 留出滚动条空间
+            textFormat: Text.RichText // 必须启用富文本
+            text: model.text //modelData + (index === textChunks.length - 1 ? "" : "</html>") // 修复分割后的闭合
             wrapMode: Text.Wrap
             font.pixelSize: FontSize
             font.family: FontName
-            font.weight: FontWeight
-            font.letterSpacing: 2
             color: myTextColor
 
-            text: model.modelData
+            renderType: Text.NativeRendering // 使用原生渲染引擎
+
+            onLinkActivated: handleLinkClicked(link) // 处理链接点击
         }
-        ScrollBar.vertical: ScrollBar {}
+
+        ScrollBar.vertical: ScrollBar {
+            width: 10
+            policy: contentListView.contentHeight
+                    > contentListView.height ? ScrollBar.AsNeeded : ScrollBar.AlwaysOff
+        }
     }
+
+
 }

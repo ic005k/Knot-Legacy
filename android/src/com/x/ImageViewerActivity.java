@@ -283,6 +283,7 @@ public class ImageViewerActivity extends Activity
     @Override
     protected void onDestroy() {
         unregisterReceiver(mHomeKeyEvent);
+        getApplication().unregisterActivityLifecycleCallbacks(this); // 注销回调
 
         super.onDestroy();
 

@@ -1,6 +1,7 @@
 #ifndef READER_H
 #define READER_H
 
+#include <QAbstractListModel>
 #include <QDialog>
 #include <QDomDocument>
 #include <QDomElement>
@@ -14,6 +15,7 @@
 #include <QQuickView>
 #include <QQuickWidget>
 #include <QString>
+#include <QStringList>
 #include <QTextBlock>
 #include <QTextBrowser>
 #include <QTextCodec>
@@ -22,6 +24,8 @@
 
 #include "src/Reader/DocumentHandler.h"
 #include "src/Reader/File.h"
+
+class TextChunkModel;
 
 namespace Ui {
 class Reader;
@@ -184,6 +188,38 @@ class Reader : public QDialog {
   QString strFind;
   void gotoCataList(QString htmlFile);
   int currentCataIndex = 0;
+  void startBackgroundTaskOpenFile();
+
+  TextChunkModel *chunkModel;
+  QVector<QString> m_textChunks;
+};
+
+class TextChunkModel : public QAbstractListModel {
+  Q_OBJECT
+ public:
+  explicit TextChunkModel(QObject *parent = nullptr);
+
+  // 定义角色枚举
+  enum CustomRoles {
+    TextRole = Qt::UserRole + 1  // 从UserRole开始分配自定义角色
+  };
+
+  // 必须实现的接口
+  int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+  QVariant data(const QModelIndex &index, int role) const override;
+  QHash<int, QByteArray> roleNames() const override;
+
+  // 业务方法
+  Q_INVOKABLE void splitContent(const QString &fullText);
+  Q_INVOKABLE void appendChunks(const QStringList &chunks);
+  Q_INVOKABLE void clear();
+
+ signals:
+  void chunksChanged(const QVector<QString> &chunks);
+
+ private:
+  QHash<int, QByteArray> m_roleNames;  // 存储角色定义
+  QStringList m_chunks;                // 存储分割后的文本块
 };
 
 #endif  // READER_H

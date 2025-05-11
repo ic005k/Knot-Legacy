@@ -389,8 +389,6 @@ MainWindow::MainWindow(QWidget *parent)
   init_Sensors();
   init_TotalData();
 
-  m_Reader->initReader();
-
   loading = false;
 
   QTreeWidget *tw = (QTreeWidget *)tabData->currentWidget();
@@ -429,6 +427,9 @@ MainWindow::MainWindow(QWidget *parent)
     m_Notes->MD2Html(currentMDFile);
     m_Notes->loadNoteToQML();
   }
+
+  // 延时执行
+  QTimer::singleShot(3000, this, [this]() { m_Reader->initReader(); });
 
   if (!isAndroid) splash->close();
 }

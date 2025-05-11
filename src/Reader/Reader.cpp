@@ -35,11 +35,14 @@ int maxBytes = 400000;
 int unzipMethod = 3; /* 1 system  2 QZipReader 3 ziplib */
 int zlibMethod = 1;
 int readerFontSize = 18;
-int epubFileMethod = 1;
+int epubFileMethod = 2;
 
 QByteArray bookFileData;
 
 Reader::Reader(QWidget *parent) : QDialog(parent) {
+  qmlRegisterType<TextChunkModel>("EBook.Models", 1, 0, "TextChunkModel");
+  chunkModel = new TextChunkModel(this);
+
   this->installEventFilter(this);
 
   if (!isAndroid) mw_one->ui->btnShareBook->hide();
@@ -254,10 +257,28 @@ void Reader::startOpenFile(QString openfile) {
       mw_one->showProgress();
     tmeShowEpubMsg->start(100);
 
-    mw_one->myReadEBookThread->start();
+    // mw_one->myReadEBookThread->start();
+    startBackgroundTaskOpenFile();
 
   } else
     return;
+}
+
+void Reader::startBackgroundTaskOpenFile() {
+  QString fullPath = ebookFile;  // 先构造完整路径
+
+  QFuture<void> future = QtConcurrent::run([=]() {
+    openFile(fullPath);  // 值捕获保证线程安全
+  });
+
+  // 可选：使用 QFutureWatcher 监控进度
+  QFutureWatcher<void> *watcher = new QFutureWatcher<void>(this);
+  connect(watcher, &QFutureWatcher<void>::finished, [=]() {
+    qDebug() << "Read ebook done:" << ebookFile;
+    readBookDone();
+    watcher->deleteLater();
+  });
+  watcher->setFuture(future);
 }
 
 void Reader::openFile(QString openfile) {
@@ -411,6 +432,7 @@ void Reader::openFile(QString openfile) {
       int count_1 = tempList.count();
       for (int i = 0; i < count_1; i++) {
         QString qfile = tempList.at(i);
+        qDebug() << "qfile=" << qfile;
         QFileInfo fi(qfile);
         if (fi.exists() && !tempHtmlList.contains(qfile)) {
           if (epubFileMethod == 1) {
@@ -898,9 +920,13 @@ void Reader::setEpubPagePosition(int index, QString htmlFile) {
 QString Reader::processHtml(QString htmlFile, bool isWriteFile) {
   if (!isEpub) return "";
 
+  QString strHtml = loadText(htmlFile);
+
+  return strHtml;
+
   QPlainTextEdit *plain_edit = new QPlainTextEdit;
   QTextEdit *text_edit = new QTextEdit;
-  QString strHtml = loadText(htmlFile);
+
   strHtml.replace("　", " ");
   strHtml.replace("<", "\n<");
   strHtml.replace(">", ">\n");
@@ -1012,6 +1038,8 @@ void Reader::setQMLHtml(QString htmlFile, QString htmlBuffer, QString skipID) {
   }
   htmlBuffer.append(strEndFlag);
   currentTxt = htmlBuffer;
+
+  // chunkModel->splitContent(htmlBuffer);
 
   mw_one->ui->qwReader->rootContext()->setContextProperty("isAni", false);
   QQuickItem *root = mw_one->ui->qwReader->rootObject();
@@ -2577,4 +2605,78 @@ void Reader::setTextAreaCursorPos(int nCursorPos) {
   root = mw_one->ui->qwReader->rootObject();
   QMetaObject::invokeMethod((QObject *)root, "setTextAreaCursorPos",
                             Q_ARG(QVariant, nCursorPos));
+}
+
+//===============================================================================================
+// TextChunkModel
+//===============================================================================================
+// TextChunkModel.cpp
+
+// 修改1：正确初始化
+TextChunkModel::TextChunkModel(QObject *parent) : QAbstractListModel(parent) {
+  // 初始化角色名
+  m_roleNames[TextRole] = "text";
+}
+
+// 修改2：正确的分割逻辑
+void TextChunkModel::splitContent(const QString &fullText) {
+  beginResetModel();  // 开始重置模型
+
+  m_chunks.clear();
+
+  // 使用完整段落匹配（含闭合标签）
+  static QRegularExpression regex(
+      R"(<p\b[^>]*>(.*?)<\/p>)",
+      QRegularExpression::CaseInsensitiveOption |
+          QRegularExpression::DotMatchesEverythingOption);
+
+  QRegularExpressionMatchIterator i = regex.globalMatch(fullText);
+  while (i.hasNext()) {
+    QRegularExpressionMatch match = i.next();
+    QString paragraph = match.captured(1);
+    // 清理HTML标签（简单示例）
+    paragraph.remove(QRegularExpression("<[^>]*>"));
+    m_chunks.append(paragraph);
+  }
+
+  endResetModel();  // 结束重置，触发视图更新
+}
+
+// 修改3：完善角色定义
+QHash<int, QByteArray> TextChunkModel::roleNames() const {
+  return {
+      {TextRole, "text"},           // 自定义角色
+      {Qt::DisplayRole, "display"}  // 保留默认角色
+  };
+}
+
+// 修改4：正确实现数据访问
+QVariant TextChunkModel::data(const QModelIndex &index, int role) const {
+  if (!index.isValid() || index.row() >= m_chunks.size()) return QVariant();
+
+  if (role == TextRole || role == Qt::DisplayRole)
+    return m_chunks.at(index.row());
+
+  return QVariant();
+}
+
+// 修改5：正确清空数据
+void TextChunkModel::clear() {
+  beginResetModel();
+  m_chunks.clear();
+  endResetModel();
+}
+
+// 修改6：正确实现追加方法
+void TextChunkModel::appendChunks(const QStringList &chunks) {
+  if (chunks.isEmpty()) return;
+
+  beginInsertRows(QModelIndex(), m_chunks.size(),
+                  m_chunks.size() + chunks.size() - 1);
+  m_chunks.append(chunks);
+  endInsertRows();
+}
+
+int TextChunkModel::rowCount(const QModelIndex &parent) const {
+  return parent.isValid() ? 0 : m_chunks.size();
 }

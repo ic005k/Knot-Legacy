@@ -1002,6 +1002,7 @@ public class MyActivity
     }
 
     android.os.Process.killProcess(android.os.Process.myPid());
+    getApplication().unregisterActivityLifecycleCallbacks(this); // 注销回调
 
     super.onDestroy();
     m_instance = null;
@@ -1017,10 +1018,12 @@ public class MyActivity
 
   @Override
   public void onActivityResumed(Activity activity) {
+
   }
 
   @Override
   public void onActivityPaused(Activity activity) {
+
   }
 
   @Override
