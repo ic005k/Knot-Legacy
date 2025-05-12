@@ -20,7 +20,7 @@ std::string toNormalizedPath(const QString &qtPath) {
 extern MainWindow *mw_one;
 extern QTabWidget *tabData;
 extern QString iniDir, searchStr, currentMDFile, privateDir, encPassword,
-    errorInfo;
+    errorInfo, strShowMsg;
 extern CategoryList *m_CategoryList;
 extern bool isEpub, isText, isPDF, loading, isDark, isAndroid, isEncrypt;
 extern int iPage, sPos, totallines, baseLines, htmlIndex, s_y1, s_m1, s_d1,
@@ -1816,6 +1816,7 @@ bool Method::decompressWithPassword(const QString &zipPath,
 
     qDebug() << "[SUCCESS] Extracted" << fileName << "Size:" << totalBytes
              << "bytes";
+    strShowMsg = QFileInfo(fileName).baseName();
   }
 
   zip.close();

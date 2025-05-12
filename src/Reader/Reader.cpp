@@ -262,8 +262,8 @@ void Reader::startOpenFile(QString openfile) {
       mw_one->showProgress();
     tmeShowEpubMsg->start(100);
 
-    // mw_one->myReadEBookThread->start();
-    startBackgroundTaskOpenFile();
+    mw_one->myReadEBookThread->start();
+    // startBackgroundTaskOpenFile();
 
   } else
     return;
@@ -280,6 +280,7 @@ void Reader::startBackgroundTaskOpenFile() {
   QFutureWatcher<void> *watcher = new QFutureWatcher<void>(this);
   connect(watcher, &QFutureWatcher<void>::finished, [=]() {
     qDebug() << "Read ebook done:" << ebookFile;
+
     readBookDone();
     watcher->deleteLater();
   });
@@ -1112,7 +1113,8 @@ QString Reader::processHtmlOld(QString htmlFile, bool isWriteFile) {
   QTextEdit *text_edit = new QTextEdit;
   text_edit->setPlainText(strHtml);
 
-  for (int i = 0; i < text_edit->document()->lineCount(); i++) {
+  int count = text_edit->document()->lineCount();
+  for (int i = 0; i < count; i++) {
     QString str = getTextEditLineText(text_edit, i);
     str = str.trimmed();
 
@@ -1228,8 +1230,6 @@ void Reader::setQMLHtml(QString htmlFile, QString htmlBuffer, QString skipID) {
       tr("Info") + " : " + fi.baseName() + "  " +
       m_Method->getFileSize(QFile(htmlFile).size(), 2));
 
-  qDebug() << "setQMLHtml:Html File=" << htmlFile;
-
   if (skipID != "") {
     setHtmlSkip(htmlFile, skipID);
   }
@@ -1237,6 +1237,8 @@ void Reader::setQMLHtml(QString htmlFile, QString htmlBuffer, QString skipID) {
   gotoCataList(htmlFile);
 
   setAni();
+
+  qDebug() << "setQMLHtml:Html File=" << htmlFile;
 }
 
 void Reader::setAni() {
@@ -2219,6 +2221,11 @@ void Reader::removeBookList() {
 }
 
 void Reader::readBookDone() {
+  isEBook = false;
+  isReadEBookEnd = true;
+  mw_one->ui->btnReader->setEnabled(true);
+  mw_one->ui->f_ReaderFun->setEnabled(true);
+
   if (isOpenBookListClick) {
     mw_one->on_btnBackBookList_clicked();
     isOpenBookListClick = false;
@@ -2228,9 +2235,7 @@ void Reader::readBookDone() {
     tmeShowEpubMsg->stop();
     mw_one->ui->lblEpubInfo->hide();
     mw_one->ui->pEpubProg->hide();
-    mw_one->ui->btnReader->setEnabled(true);
-    mw_one->ui->f_ReaderFun->setEnabled(true);
-    mw_one->on_DelayCloseProgressBar();
+    mw_one->closeProgress();
     isReadEBookEnd = true;
     ShowMessage *msg = new ShowMessage(mw_one);
     msg->showMsg("Knot", tr("The EPUB file was opened with an error."), 1);
@@ -2349,8 +2354,6 @@ void Reader::readBookDone() {
 
   saveReader("", false);
 
-  mw_one->on_DelayCloseProgressBar();
-
   if (!isInitReader) {
     if (!isPDF) {
       while (!mw_one->ui->btnReader->isEnabled())
@@ -2361,7 +2364,11 @@ void Reader::readBookDone() {
   } else
     isInitReader = false;
 
-  qDebug() << "read book done...";
+  if (isAndroid)
+    m_Method->closeAndroidProgressBar();
+  else
+    mw_one->closeProgress();
+  qDebug() << "read all book done...";
 }
 
 void Reader::setStatusBarHide() {
@@ -2939,4 +2946,19 @@ void TextChunkModel::appendChunks(const QStringList &chunks) {
 
 int TextChunkModel::rowCount(const QModelIndex &parent) const {
   return parent.isValid() ? 0 : m_chunks.size();
+}
+
+QVariantMap TextChunkModel::get(int index) const {
+  QVariantMap result;
+
+  // 检查索引是否有效
+  if (index < 0 || index >= m_chunks.size()) {
+    qWarning() << "Invalid index:" << index;
+    return result;  // 返回空对象
+  }
+
+  // 通过角色名填充数据（需与 roleNames() 中的定义一致）
+  result["text"] = m_chunks.at(index);  // 文本数据存储在 m_chunks
+
+  return result;
 }

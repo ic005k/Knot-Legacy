@@ -227,6 +227,7 @@ class TextChunkModel : public QAbstractListModel {
   Q_INVOKABLE void splitContent(const QString &fullText);
   Q_INVOKABLE void appendChunks(const QStringList &chunks);
   Q_INVOKABLE void clear();
+  Q_INVOKABLE QVariantMap get(int index) const;
 
   Q_INVOKABLE void splitContent1(const QString &fullText);
  signals:

@@ -382,8 +382,6 @@ class MainWindow : public QMainWindow {
 
   void execDeskShortcut();
 
-  void on_DelayCloseProgressBar();
-
   void setEncSyncStatusTip();
 
  protected:
@@ -794,8 +792,6 @@ class MainWindow : public QMainWindow {
   void on_btnGoPage_clicked();
 
   void on_hSlider_sliderReleased();
-
-  void on_CloseProgressBar();
 
   void on_btnShareBook_clicked();
 

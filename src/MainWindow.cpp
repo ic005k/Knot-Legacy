@@ -218,7 +218,6 @@ void ReadEBookThread::run() {
 void MainWindow::readEBookDone() {
   if (isEBook) {
     m_Reader->readBookDone();
-    isEBook = false;
   }
 
   if (isReport) {
@@ -4264,9 +4263,9 @@ static void JavaNotify_4() {
   mw_one->alertWindowsCount--;
 
   if (mw_one->alertWindowsCount == 0) {
-    if (mw_one->ui->frameMain->isHidden())
-      mw_one->m_ReceiveShare->closeAllChildWindows();
-
+    if (mw_one->ui->frameMain->isHidden()) {
+      // mw_one->m_ReceiveShare->closeAllChildWindows();
+    }
     QSettings Reg("/storage/emulated/0/.Knot/alarm.ini", QSettings::IniFormat);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Reg.setIniCodec("utf-8");
@@ -5837,22 +5836,6 @@ void MainWindow::on_btnGoPage_clicked() { m_ReaderSet->on_btnGoPage_clicked(); }
 
 void MainWindow::on_hSlider_sliderReleased() {
   m_ReaderSet->on_hSlider_sliderReleased();
-}
-
-void MainWindow::on_DelayCloseProgressBar() {
-  QTimer::singleShot(1000, this, SLOT(on_CloseProgressBar()));
-}
-
-void MainWindow::on_CloseProgressBar() {
-  if (isAndroid) {
-    m_Method->closeAndroidProgressBar();
-    qDebug() << "close android progressbar...";
-  } else {
-    mw_one->closeProgress();
-  }
-
-  mw_one->ui->btnReader->setEnabled(true);
-  mw_one->ui->f_ReaderFun->setEnabled(true);
 }
 
 void MainWindow::on_btnShareBook_clicked() { m_Reader->shareBook(); }
