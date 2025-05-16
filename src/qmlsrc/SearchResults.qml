@@ -14,6 +14,13 @@ ListView {
         return mdFile
     }
 
+    // 添加背景色
+    Rectangle {
+        anchors.fill: parent
+        color: isDark ? "#333" : "#fff"
+        z: -1
+    }
+
     delegate: ItemDelegate {
         width: listView.width
 
@@ -27,7 +34,7 @@ ListView {
         property bool isCurrent: ListView.isCurrentItem
 
         contentItem: ColumnLayout {
-            id:layout
+            id: layout
             spacing: 4
 
             Text {
@@ -37,7 +44,7 @@ ListView {
                 font.pointSize: fontSize
                 elide: Text.ElideRight
                 Layout.fillWidth: true
-                color: isCurrent ? "white" : "#212121" // 选中时文字变白
+                color: isCurrent ? "white" : isDark ? "#eeeeee" : "#212121" // 选中时文字变白
             }
 
             Text {
@@ -47,7 +54,7 @@ ListView {
                 wrapMode: Text.Wrap
                 maximumLineCount: 2
                 font.pointSize: fontSize - 1
-                color: isCurrent ? "#eeeeee" : "#495057" // 选中时浅灰色文字
+                color: isCurrent ? "#eeeeee" : isDark ? "#dddddd" : "#495057" // 选中时浅灰色文字
                 Layout.fillWidth: true
             }
 
@@ -95,7 +102,7 @@ ListView {
         anchors.centerIn: parent
         visible: listView.count === 0
         text: qsTr("No results were found")
-        color: "#bdc3c7"
+        color: isDark ? "#eeeeee" : "#bdc3c7"
         font.pixelSize: 18
     }
 
