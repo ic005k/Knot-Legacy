@@ -25,10 +25,13 @@
 #include <QPainter>
 #include <QPropertyAnimation>
 #include <QQuickWidget>
+#include <QSet>
 #include <QStandardPaths>
 #include <QString>
 #include <QTableWidget>
 #include <QTimer>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 #include <QWidget>
 
 /*
@@ -335,6 +338,9 @@ class Method : public QDialog {
                          const QString &password);
 
   void setOSFlag();
+
+  static void removeDuplicateTopItems(QTreeWidget *treeWidget,
+                                      const QList<int> &columns = {0});
 
  protected:
   bool eventFilter(QObject *watchDlgSearch, QEvent *evn) override;

@@ -2623,3 +2623,24 @@ void Method::setOSFlag() {
   else
     Reg.setValue("os", "desktop");
 }
+
+void Method::removeDuplicateTopItems(QTreeWidget *treeWidget,
+                                     const QList<int> &columns) {
+  QSet<QString> uniqueKeys;
+  // 倒序遍历顶层项
+  for (int i = treeWidget->topLevelItemCount() - 1; i >= 0; --i) {
+    QTreeWidgetItem *item = treeWidget->topLevelItem(i);
+    QStringList parts;
+    // 提取指定列的值
+    for (int col : columns) {
+      parts << item->text(col);
+    }
+    // 生成唯一键（例如 "Col1|Col2|Col3"）
+    QString key = parts.join("|");
+    if (uniqueKeys.contains(key)) {
+      delete item;
+    } else {
+      uniqueKeys.insert(key);
+    }
+  }
+}

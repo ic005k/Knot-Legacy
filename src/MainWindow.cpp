@@ -780,6 +780,7 @@ void MainWindow::init_TotalData() {
   setCurrentIndex(currentTabIndex);
   QTreeWidget *twCur = (QTreeWidget *)tabData->currentWidget();
   readData(twCur);
+
   ui->actionImport_Data->setEnabled(false);
   ui->actionExport_Data->setEnabled(false);
   ui->actionDel_Tab->setEnabled(false);
@@ -1385,6 +1386,10 @@ void MainWindow::drawDayChart() {
 
 void MainWindow::readData(QTreeWidget *tw) {
   tw->clear();
+
+  // QList<QTreeWidgetItem *> myTopItem;
+  QStringList myTopStrList;
+
   int iniFileCount = QDate::currentDate().year() - 2025 + 1 + 1;
   QString name = tw->objectName();
   QString ini_file;
@@ -1432,17 +1437,6 @@ void MainWindow::readData(QTreeWidget *tw) {
             topItem->setText(3, year);
           }
 
-          int lastTopIndex = tw->topLevelItemCount() - 1;
-          if (lastTopIndex >= 0) {
-            QTreeWidgetItem *lastTopItem = new QTreeWidgetItem;
-            lastTopItem = tw->topLevelItem(lastTopIndex);
-            if (lastTopItem->text(0) == topItem->text(0)) {
-              tw->takeTopLevelItem(lastTopIndex);
-            }
-          }
-
-          tw->addTopLevelItem(topItem);
-
           topItem->setTextAlignment(1, Qt::AlignHCenter | Qt::AlignVCenter);
           topItem->setTextAlignment(2, Qt::AlignRight | Qt::AlignVCenter);
 
@@ -1453,31 +1447,49 @@ void MainWindow::readData(QTreeWidget *tw) {
                                         QString::number(i + 1) + "-topAmount")
                                   .toString());
 
-          for (int j = 0; j < childCount; j++) {
-            QTreeWidgetItem *item11 = new QTreeWidgetItem(topItem);
-            item11->setText(
-                0, Reg.value("/" + group + "/" + QString::number(i + 1) +
-                             "-childTime" + QString::number(j))
-                       .toString());
-            item11->setText(
-                1, Reg.value("/" + group + "/" + QString::number(i + 1) +
-                             "-childAmount" + QString::number(j))
-                       .toString());
-            item11->setText(
-                2, Reg.value("/" + group + "/" + QString::number(i + 1) +
-                             "-childDesc" + QString::number(j))
-                       .toString());
-            item11->setText(
-                3, Reg.value("/" + group + "/" + QString::number(i + 1) +
-                             "-childDetails" + QString::number(j))
-                       .toString());
+          int lastTopIndex = tw->topLevelItemCount() - 1;
+          if (lastTopIndex >= 0) {
+            QTreeWidgetItem *lastTopItem = tw->topLevelItem(lastTopIndex);
+            if (lastTopItem->text(0) == topItem->text(0)) {
+              tw->takeTopLevelItem(lastTopIndex);
+            }
+          }
 
-            item11->setTextAlignment(1, Qt::AlignRight | Qt::AlignVCenter);
+          QString topStr = QString("%1|%2|%3|%4")
+                               .arg(topItem->text(0), topItem->text(1),
+                                    topItem->text(2), topItem->text(3));
+
+          if (!myTopStrList.contains(topStr)) {
+            tw->addTopLevelItem(topItem);
+            myTopStrList.append(topStr);
+
+            for (int j = 0; j < childCount; j++) {
+              QTreeWidgetItem *item11 = new QTreeWidgetItem(topItem);
+              item11->setText(
+                  0, Reg.value("/" + group + "/" + QString::number(i + 1) +
+                               "-childTime" + QString::number(j))
+                         .toString());
+              item11->setText(
+                  1, Reg.value("/" + group + "/" + QString::number(i + 1) +
+                               "-childAmount" + QString::number(j))
+                         .toString());
+              item11->setText(
+                  2, Reg.value("/" + group + "/" + QString::number(i + 1) +
+                               "-childDesc" + QString::number(j))
+                         .toString());
+              item11->setText(
+                  3, Reg.value("/" + group + "/" + QString::number(i + 1) +
+                               "-childDetails" + QString::number(j))
+                         .toString());
+
+              item11->setTextAlignment(1, Qt::AlignRight | Qt::AlignVCenter);
+            }
           }
         }
       }
     }
   }
+  // Method::removeDuplicateTopItems(tw, {0, 1, 2, 3});
 }
 
 void MainWindow::get_Today(QTreeWidget *tw) {
