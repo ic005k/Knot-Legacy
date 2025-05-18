@@ -327,7 +327,9 @@ void MainWindow::SaveFile(QString SaveType) {
       EditRecord::saveAdded();
     else
       EditRecord::saveModified();
+
     saveTab();
+
     if (!isDelData)
       EditRecord::saveMyClassification();
     else
@@ -1447,10 +1449,13 @@ void MainWindow::readData(QTreeWidget *tw) {
                                         QString::number(i + 1) + "-topAmount")
                                   .toString());
 
+          // 移除异项（时间相同，但频次处于累加的异常情况）
           int lastTopIndex = tw->topLevelItemCount() - 1;
           if (lastTopIndex >= 0) {
             QTreeWidgetItem *lastTopItem = tw->topLevelItem(lastTopIndex);
-            if (lastTopItem->text(0) == topItem->text(0)) {
+            // 时间相同但频次不同
+            if ((lastTopItem->text(0) == topItem->text(0)) &&
+                (lastTopItem->text(1) != topItem->text(1))) {
               tw->takeTopLevelItem(lastTopIndex);
             }
           }
