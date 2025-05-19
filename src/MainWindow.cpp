@@ -3,7 +3,7 @@
 #include "src/onedrive/qtonedriveauthorizationdialog.h"
 #include "ui_MainWindow.h"
 
-QString ver = "1.2.37";
+QString ver = "1.2.38";
 QString appName = "Knot";
 
 QList<QPointF> PointList;
