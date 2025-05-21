@@ -257,6 +257,8 @@ class NotesList : public QDialog {
 
   SearchModel m_searchModel;
   void startBackgroundTaskUpdateFilesIndex();
+  void saveNotesListIndex(int noteslistIndex);
+  int getSavedNotesListIndex(int notebookIndex);
 };
 
 class SearchMapper {

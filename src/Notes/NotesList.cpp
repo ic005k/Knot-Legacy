@@ -2296,12 +2296,19 @@ void NotesList::clickNoteBook() {
     }
   }
 
-  mw_one->m_NotesList->setNotesListCurrentIndex(-1);
-  mw_one->m_NotesList->setNoteLabel();
+  int noteslistIndex = getSavedNotesListIndex(index);
+  setNotesListCurrentIndex(noteslistIndex);
+  setNoteLabel();
+  clickNoteList();
 }
 
 void NotesList::clickNoteList() {
   int index = m_Method->getCurrentIndexFromQW(mw_one->ui->qwNoteList);
+  if (index < 0) {
+    currentMDFile = "";
+    return;
+  }
+
   QString strMD = m_Method->getText3(mw_one->ui->qwNoteList, index);
   currentMDFile = iniDir + strMD;
 
@@ -2316,7 +2323,6 @@ void NotesList::clickNoteList() {
   }
 
   QString noteName = m_Method->getText0(mw_one->ui->qwNoteList, index);
-
   mw_one->ui->lblNoteName->setText(noteName);
 
   tw->setCurrentItem(pNoteItems.at(index));
@@ -2338,6 +2344,26 @@ void NotesList::clickNoteList() {
   }
   saveRecentOpen();
   genCursorText();
+  saveNotesListIndex(index);
+}
+
+void NotesList::saveNotesListIndex(int noteslistIndex) {
+  QSettings Reg(privateDir + "noteslistindex.ini", QSettings::IniFormat);
+  int index = m_Method->getCurrentIndexFromQW(mw_one->ui->qwNoteBook);
+  if (index < 0) index = 0;
+  Reg.setValue(QString::number(index), QString::number(noteslistIndex));
+}
+
+int NotesList::getSavedNotesListIndex(int notebookIndex) {
+  QSettings Reg(privateDir + "noteslistindex.ini", QSettings::IniFormat);
+  int index = Reg.value(QString::number(notebookIndex), 0).toInt();
+  int count = m_Method->getCountFromQW(mw_one->ui->qwNoteList);
+  if (count > 0) {
+    if (index < 0) index = 0;
+  } else {
+    index = -1;
+  }
+  return index;
 }
 
 void NotesList::genRecentOpenMenu() {
