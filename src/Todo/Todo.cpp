@@ -526,7 +526,6 @@ void Todo::startTimerAlarm(QString text) {
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
   QAndroidJniObject jo = QAndroidJniObject::fromString(text);
-  // jo.callStaticMethod<int>("com.x/MyService", "startTimerAlarm", "()I");
 
   jo.callStaticMethod<int>("com.x/MyActivity", "startAlarm",
                            "(Ljava/lang/String;)I", jo.object<jstring>());
