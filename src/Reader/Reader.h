@@ -206,6 +206,8 @@ class Reader : public QDialog {
   // 样式存储
   QString m_bodyStyle;
   QHash<QString, QString> m_globalStyles;
+
+  QString updateContent();
 };
 
 class TextChunkModel : public QAbstractListModel {
