@@ -27,7 +27,7 @@ QStringList readTextList, htmlFiles, tempHtmlList, ncxList;
 QString strOpfPath, oldOpfPath, fileName, ebookFile, strTitle, catalogueFile,
     strShowMsg, strEpubTitle, strPercent;
 
-int iPage, sPos, totallines, totalPages, currentPage;
+int sPos, totallines, totalPages, currentPage;
 int baseLines = 50;  // txt文本分割
 int htmlIndex = 0;
 int minBytes = 200000;
@@ -519,7 +519,6 @@ void Reader::openFile(QString openfile) {
       isText = true;
       isEpub = false;
       isPDF = false;
-      iPage = 0;
       sPos = 0;
 
       totallines = readTextList.count();
@@ -621,12 +620,12 @@ void Reader::saveReader(QString BookmarkText, bool isSetBookmark) {
 
   if (isText) {
     if (isSetBookmark) {
-      Reg.setValue("/Bookmark/iPage" + bookmarkSn, iPage - baseLines);
+      Reg.setValue("/Bookmark/currentPage" + bookmarkSn, currentPage - 1);
       Reg.setValue("/Bookmark/Name" + bookmarkSn, BookmarkText);
       Reg.setValue("/Bookmark/VPos" + bookmarkSn, getVPos());
 
     } else {
-      Reg.setValue("/Reader/iPage", iPage - baseLines);
+      Reg.setValue("/Reader/currentPage", currentPage - 1);
     }
   }
 
@@ -1305,7 +1304,7 @@ void Reader::goBookReadPosition() {
 #endif
 
     if (isText) {
-      iPage = Reg.value("/Reader/iPage", 0).toULongLong();
+      currentPage = Reg.value("/Reader/currentPage", -1).toULongLong();
       on_btnPageNext_clicked();
       showInfo();
     }
@@ -2486,7 +2485,8 @@ void Reader::clickBookmarkList(int i) {
   Reg.setIniCodec("utf-8");
 #endif
   if (isText) {
-    iPage = Reg.value("/Bookmark/iPage" + QString::number(index)).toInt();
+    currentPage =
+        Reg.value("/Bookmark/currentPage" + QString::number(index)).toInt();
     on_btnPageNext_clicked();
     textPos = Reg.value("/Bookmark/VPos" + QString::number(index)).toReal();
   }
