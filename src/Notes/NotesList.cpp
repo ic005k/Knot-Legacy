@@ -288,7 +288,7 @@ void NotesList::on_btnRename_clicked() {
       mw_one->ui->editDetails->verticalScrollBar()->styleSheet());
   m_Method->setSCrollPro(edit);
 
-  if (edit->toPlainText().trimmed().length() == 0) {
+  if (edit->toPlainText().trimmed() == tr("Untitled Note")) {
     edit->setPlainText(mw_one->m_Notes->new_title);
   }
 
@@ -1911,6 +1911,9 @@ void NotesList::on_actionAdd_Note_triggered() {
   mw_one->on_btnEditNote_clicked();
 
   setNoteLabel();
+
+  renameCurrentItem(tr("Untitled Note"));
+  saveNotesList();
 }
 
 void NotesList::on_actionDel_Note_triggered() {
