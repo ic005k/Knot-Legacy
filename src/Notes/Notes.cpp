@@ -1034,7 +1034,7 @@ void Notes::syncToWebDAV() {
 
 bool Notes::isSetNewNoteTitle() {
   QString title = mw_one->ui->lblNoteName->text();
-  if (title.trimmed() == tr("Untitled Note")) {
+  if (title.trimmed() == "无标题笔记" || title.trimmed() == "Untitled Note") {
     return true;
   }
 

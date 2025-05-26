@@ -288,7 +288,8 @@ void NotesList::on_btnRename_clicked() {
       mw_one->ui->editDetails->verticalScrollBar()->styleSheet());
   m_Method->setSCrollPro(edit);
 
-  if (edit->toPlainText().trimmed() == tr("Untitled Note")) {
+  if (edit->toPlainText().trimmed() == "无标题笔记" ||
+      edit->toPlainText().trimmed() == "Untitled Note") {
     edit->setPlainText(mw_one->m_Notes->new_title);
   }
 
