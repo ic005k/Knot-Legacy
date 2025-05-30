@@ -1,3 +1,13 @@
+# Knot-Legacy - Qt5 Maintenance Branch
+
+> **Maintenance Status**  
+> ⚠️ This repository receives **critical security fixes only**. No new features will be added.  
+> All active development has moved to: [Knot (Qt6)](https://github.com/ic005k/Knot)
+
+[![Legacy](https://img.shields.io/badge/status-maintenance_only-yellow)](https://github.com/ic005k/Knot)
+
+---
+
 # Knot - Minimalist Cross-Scenario Recording Tool
 
 ![Android Version](https://img.shields.io/badge/Android-6.0%2B-brightgreen)
