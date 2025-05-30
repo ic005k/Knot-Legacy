@@ -116,9 +116,9 @@ Follow these steps (menu names may vary slightly across devices):
 ## 📥 Download & Installation
 **Latest Version Acquisition:**
 - Scan QR code (Recommended for Android)  
-  ![Download QR Code](https://github.com/ic005k/Knot/blob/main/res/apk.png)  
-- [GitHub Releases](https://github.com/ic005k/Knot/releases)
-- [API](https://api.github.com/repos/ic005k/Knot/releases/latest)
+  ![Download QR Code](https://github.com/ic005k/Knot-Legacy/blob/main/res/apk.png)  
+- [GitHub Releases](https://github.com/ic005k/Knot-Legacy/releases)
+- [API](https://api.github.com/repos/ic005k/Knot-Legacy/releases/latest)
 
 ## 🔒 Data Security Architecture
 ```mermaid
